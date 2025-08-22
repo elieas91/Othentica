@@ -62,16 +62,23 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 items-center">
+          <div className="hidden md:flex space-x-8 items-center ml-auto">
             {navItems.map((item) => (
               <div key={item.path} className="relative">
                 {item.hasDropdown ? (
                   <div
                     className="relative"
                     onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                    onMouseLeave={() => setIsAboutDropdownOpen(false)}
+                    onMouseLeave={() => {
+                      // Add a small delay to allow moving to dropdown
+                      setTimeout(() => {
+                        if (!document.querySelector('.dropdown-menu:hover')) {
+                          setIsAboutDropdownOpen(false);
+                        }
+                      }, 100);
+                    }}
                   >
-                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800">
+                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 font-poppins">
                       <span>{item.label}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -79,12 +86,18 @@ const Navigation = () => {
                     </button>
                     
                     {isAboutDropdownOpen && (
-                      <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2">
+                      <div 
+                        className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 dropdown-menu"
+                        onMouseEnter={() => setIsAboutDropdownOpen(true)}
+                        onMouseLeave={() => {
+                          setTimeout(() => setIsAboutDropdownOpen(false), 100);
+                        }}
+                      >
                         {item.dropdownItems.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-4 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors"
+                            className="block px-4 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
                           </Link>
@@ -95,7 +108,7 @@ const Navigation = () => {
                 ) : (
                   <Link
                     to={item.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-poppins ${
                       isActive(item.path)
                         ? 'text-pink-500 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20'
                         : 'text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800'
@@ -111,7 +124,7 @@ const Navigation = () => {
           {/* Theme Toggle and CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Theme Toggle Button */}
-            <button
+            {/* <button
               onClick={toggleTheme}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               aria-label="Toggle theme"
@@ -125,15 +138,15 @@ const Navigation = () => {
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                 </svg>
               )}
-            </button>
+            </button> */}
 
             {/* CTA Button */}
-            <Link
+            {/* <Link
               to="/contact"
               className="bg-pink-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-600 transition-colors shadow-md"
             >
               Start Your Journey
-            </Link>
+            </Link> */}
           </div>
 
           {/* Mobile menu button */}
@@ -178,7 +191,7 @@ const Navigation = () => {
                 <div key={item.path}>
                   {item.hasDropdown ? (
                     <div>
-                      <div className="px-3 py-2 text-base font-medium text-blue-900 dark:text-gray-100">
+                      <div className="px-3 py-2 text-base font-medium text-blue-900 dark:text-gray-100 font-poppins">
                         {item.label}
                       </div>
                       <div className="pl-6 space-y-1">
@@ -186,7 +199,7 @@ const Navigation = () => {
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-3 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 transition-colors"
+                            className="block px-3 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 transition-colors font-poppins"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -197,7 +210,7 @@ const Navigation = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                      className={`block px-3 py-2 rounded-md text-base font-medium transition-colors font-poppins ${
                         isActive(item.path)
                           ? 'text-pink-500 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20'
                           : 'text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800'

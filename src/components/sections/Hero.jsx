@@ -11,8 +11,8 @@ const Hero = () => {
       
       {/* Content */}
       <div className="relative z-10 max-w-4xl">
-        <h1 className="text-5xl lg:text-7xl font-bold text-primary dark:text-white mb-8 leading-tight">
-          Wellness Rooted in Authentic Living
+        <h1 className="capitalize text-5xl lg:text-7xl font-bold text-primary dark:text-white mb-8 leading-tight">
+          Step into your authentic self
         </h1>
         <p className="text-xl lg:text-2xl text-blue-900 dark:text-gray-200 mb-10 leading-relaxed max-w-3xl">
           Empowering your mind, body, and spirit with balance. Discover the transformative power of authentic wellness practices.

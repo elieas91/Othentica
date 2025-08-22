@@ -26,7 +26,14 @@ export default {
           950: '#172554',
         },
         primary: '#023051',
-      }
+        secondary: '#d77644',
+        accent: '#f4dfc4',
+        neutral: '#fff5e7',
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
     },
   },
   plugins: [],
