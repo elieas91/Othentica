@@ -1,7 +1,7 @@
-import Performance from "../assets/img/services/performance.png";
-import Relax from "../assets/img/services/relax.png";
-import Challenge from "../assets/img/services/challenge.png";
-import Bridging from "../assets/img/services/bridging.png";
+import Performance from "../assets/img/services/performance.webp";
+import Relax from "../assets/img/services/relax.webp";
+import Challenge from "../assets/img/services/challenge.webp";
+import Bridging from "../assets/img/services/bridging.webp";
 
 export const servicesData = [
   {

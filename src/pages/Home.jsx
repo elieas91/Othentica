@@ -4,8 +4,8 @@ import Philosophy from '../components/sections/Philosophy';
 import MobileShowcase from '../components/sections/MobileShowcase';
 import Services from '../components/sections/Services';
 import Testimonials from '../components/sections/Testimonials';
+import Clients from '../components/sections/Clients';
 import Blog from '../components/sections/Blog';
-import StayConnected from '../components/sections/StayConnected';
 
 const Home = () => {
   return (
@@ -16,7 +16,7 @@ const Home = () => {
       <Services />
       <Testimonials />
       <Blog />
-      <StayConnected />
+      <Clients />
     </div>
   );
 };

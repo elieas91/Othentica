@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button';
-import Flame from '../../assets/img/flame.png';
-import Phone from '../../assets/img/phone.png';
-import App1 from '../../assets/img/app-1.png';
-import App2 from '../../assets/img/app-2.png';
+import Flame from '../../assets/img/flame.webp';
+import Phone from '../../assets/img/phone.webp';
+import App1 from '../../assets/img/app-1.webp';
+import App2 from '../../assets/img/app-2.webp';
 import { mobileServicesData } from '../../data/mobileServicesData';
 
 const MobileShowcase = () => {
@@ -23,15 +23,15 @@ const MobileShowcase = () => {
   const currentService = mobileServicesData[currentServiceIndex];
 
   return (
-    <section className="py-24 px-8 lg:px-16 bg-neutral dark:bg-gray-800">
+    <section className="py-16 px-8 lg:px-16 bg-neutral dark:bg-gray-800">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
         {/* Left Text with Carousel */}
         <div className="space-y-8">
           <div className="min-h-[200px] flex flex-col justify-center">
-            <h2 className="text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white transition-all duration-700 ease-in-out">
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral transition-all duration-700 ease-in-out">
               {currentService.title}
             </h2>
-            <p className="text-lg lg:text-xl text-blue-900 dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
+            <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
               {currentService.description}
             </p>
             
@@ -54,8 +54,8 @@ const MobileShowcase = () => {
                 onClick={() => setCurrentServiceIndex(index)}
                 className={`w-4 h-4 rounded-full transition-all duration-300 ${
                   index === currentServiceIndex
-                    ? 'bg-blue-600 dark:bg-blue-400 scale-125'
-                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    ? 'bg-secondary dark:bg-blue-400 scale-125'
+                    : 'bg-accent dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
                 }`}
                 aria-label={`Go to service ${index + 1}`}
               />

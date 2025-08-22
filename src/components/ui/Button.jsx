@@ -8,13 +8,13 @@ const Button = ({
   className = '',
   type = 'button'
 }) => {
-  const baseClasses = 'rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900';
+  const baseClasses = 'rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-primary';
   
   const variants = {
-    primary: 'bg-primary text-white hover:bg-primary/80 focus:ring-primary shadow-md hover:shadow-lg',
+    primary: 'bg-primary text-neutral hover:bg-primary/80 focus:ring-primary shadow-md hover:shadow-lg',
     accent: 'bg-accent text-primary hover:bg-accent/80 focus:ring-accent shadow-md hover:shadow-lg',
-    secondary: 'bg-secondary text-white hover:bg-secondary/80 focus:ring-secondary shadow-md hover:shadow-lg',
-    outline: 'border-2 border-pink-500 text-pink-500 dark:text-pink-400 hover:bg-pink-500 hover:text-white dark:hover:bg-pink-500 dark:hover:text-white'
+    secondary: 'bg-secondary text-neutral hover:bg-secondary/80 focus:ring-secondary shadow-md hover:shadow-lg',
+    outline: 'border-2 border-pink-500 text-pink-500 dark:text-pink-400 hover:bg-pink-500 hover:text-neutral dark:hover:bg-pink-500 dark:hover:text-neutral'
   };
 
   const sizes = {

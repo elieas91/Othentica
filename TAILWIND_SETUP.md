@@ -57,7 +57,7 @@ The main CSS file now includes Tailwind directives:
 
 ### Basic Classes
 ```jsx
-<div className="bg-blue-500 text-white p-4 rounded-lg shadow-md">
+<div className="bg-blue-500 text-neutral p-4 rounded-lg shadow-md">
   Hello Tailwind!
 </div>
 ```
@@ -80,7 +80,7 @@ The main CSS file now includes Tailwind directives:
 ```css
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+    @apply px-4 py-2 bg-blue-500 text-neutral rounded hover:bg-blue-600;
   }
 }
 ```

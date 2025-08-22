@@ -20,10 +20,10 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-xl">
-        <h1 className="capitalize text-5xl lg:text-7xl font-bold text-neutral dark:text-white mb-8 leading-tight">
+        <h1 className="capitalize text-5xl lg:text-7xl font-bold text-white dark:text-white mb-8 leading-tight">
           Step into your authentic self
         </h1>
-        <p className="text-xl lg:text-2xl text-neutral dark:text-gray-200 mb-10 leading-relaxed max-w-3xl">
+        <p className="text-xl lg:text-2xl text-white dark:text-gray-200 mb-10 leading-relaxed max-w-3xl">
           Empowering your mind, body, and spirit with balance. Discover the
           transformative power of authentic wellness practices.
         </p>

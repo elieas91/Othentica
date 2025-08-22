@@ -1,80 +1,125 @@
-import React, { useState } from 'react';
-import { testimonialsData } from '../../data/testimonialsData';
+import React, { useState, useEffect } from 'react';
+import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
+import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
+import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonialsData.length);
-  };
+  // Auto-rotate through testimonials every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialsData.length);
+    }, 4000);
 
-  const prevTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length);
-  };
+    return () => clearInterval(interval);
+  });
+
+  const testimonialsData = [
+    {
+      id: 1,
+      quote: "Othentica helped me find peace and energy again.",
+      author: "Client Name"
+    },
+    {
+      id: 2,
+      quote: "The wellness coaching transformed my approach to self-care.",
+      author: "Sarah Johnson"
+    },
+    {
+      id: 3,
+      quote: "Mindful living has never been more accessible than with Othentica.",
+      author: "Michael Chen"
+    }
+  ];
+
+  const imageCardsData = [
+    {
+      id: 1,
+      image: Testimonial1,
+      title: "Embracing Nature",
+      subtitle: "Ermbnsa, LoevevtenmDos"
+    },
+    {
+      id: 2,
+      image: Testimonial2,
+      title: "The Power of Mindful Living",
+      subtitle: "Thuja-velsaks.crver teqpine"
+    },
+    {
+      id: 3,
+      image: Testimonial3,
+      title: "Crystal Healing",
+      subtitle: "Natural energy and balance"
+    }
+  ];
+
+  const currentImageCards = [
+    imageCardsData[currentIndex],
+    imageCardsData[(currentIndex + 1) % imageCardsData.length]
+  ];
 
   return (
-    <section className="py-24 px-8 lg:px-16 bg-white dark:bg-gray-900">
+    <section className="py-16 px-8 lg:px-16 bg-neutral-50">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side - Content */}
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Side - Testimonial with Carousel */}
           <div className="text-left">
-            <h2 className="text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white mb-8">
-              What Our Clients Say
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-8">
+              Testimonials
             </h2>
-            <p className="text-xl text-blue-900 dark:text-gray-200 mb-8 leading-relaxed">
-              Discover how our wellness services have transformed lives and brought positive change to our community.
-            </p>
             
-            {/* Navigation Dots */}
-            <div className="flex space-x-3 mb-8">
+            {/* Carousel Content */}
+            <div className="min-h-[200px] flex flex-col justify-center">
+              <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out">
+                "{testimonialsData[currentIndex].quote}"
+              </blockquote>
+              <cite className="text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
+                – {testimonialsData[currentIndex].author}
+              </cite>
+            </div>
+            
+            {/* Carousel Indicators */}
+            <div className="flex space-x-3 mt-8">
               {testimonialsData.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-4 h-4 rounded-full transition-colors ${
-                    index === currentIndex ? 'bg-pink-500' : 'bg-gray-300 dark:bg-gray-600'
+                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                    index === currentIndex
+                      ? 'bg-secondary scale-125'
+                      : 'bg-accent hover:bg-gray-400'
                   }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>
-            
-            {/* Navigation Arrows */}
-            <div className="flex space-x-4">
-              <button
-                onClick={prevTestimonial}
-                className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-gray-400 hover:text-pink-500 hover:shadow-xl transition-all duration-300"
-              >
-                ‹
-              </button>
-              <button
-                onClick={nextTestimonial}
-                className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-gray-400 hover:text-pink-500 hover:shadow-xl transition-all duration-300"
-              >
-                ›
-              </button>
-            </div>
           </div>
           
-          {/* Right Side - Testimonial with Flame Background */}
-          <div className="relative">
-            <div className="bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 rounded-3xl p-12 relative shadow-2xl overflow-hidden">
-              {/* Flame-like background elements */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-300/20 via-red-400/20 to-pink-500/20"></div>
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-yellow-300/30 to-orange-400/30 rounded-full blur-xl"></div>
-              <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-br from-pink-400/30 to-red-500/30 rounded-full blur-xl"></div>
-              <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-to-br from-orange-300/20 to-red-400/20 rounded-full blur-lg"></div>
-              
-              {/* Testimonial Content */}
-              <div className="relative z-10 text-center">
-                <div className="text-6xl text-white/80 mb-6">"</div>
-                <blockquote className="text-xl lg:text-2xl text-white mb-8 leading-relaxed font-medium">
-                  {testimonialsData[currentIndex].quote}
-                </blockquote>
-                <cite className="text-lg text-white/90 font-semibold">
-                  – {testimonialsData[currentIndex].author}
-                </cite>
+          {/* Right Side - Two Image Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {currentImageCards.map((card, index) => (
+              <div 
+                key={`${card.id}-${currentIndex}-${index}`}
+                className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out"
+              >
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src={card.image} 
+                    alt={card.title}
+                    className="w-full h-full object-cover sepia-[0.3]"
+                  />
+                </div>
+                <div className="p-6 text-start">
+                  <h3 className="text-xl font-bold text-primary mb-2">
+                    {card.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {card.subtitle}
+                  </p>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

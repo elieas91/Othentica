@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../contexts/useTheme';
-import Logo from '../../assets/img/logo.png';
+import Logo from '../../assets/img/logo.webp';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,7 +79,7 @@ const Navigation = () => {
                       }, 100);
                     }}
                   >
-                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins">
+                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins">
                       <span>{item.label}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -98,7 +98,7 @@ const Navigation = () => {
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-4 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-700 transition-colors font-poppins"
+                            className="block px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
                           </Link>
@@ -111,8 +111,8 @@ const Navigation = () => {
                     to={item.path}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-poppins ${
                       isActive(item.path)
-                        ? 'text-white dark:text-secondary bg-secondary dark:bg-secondary/20'
-                        : 'text-blue-900 dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800'
+                        ? 'text-neutral dark:text-secondary bg-secondary dark:bg-secondary/20'
+                        : 'text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800'
                     }`}
                   >
                     {item.label}
@@ -144,7 +144,7 @@ const Navigation = () => {
             {/* CTA Button */}
             {/* <Link
               to="/contact"
-              className="bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors shadow-md"
+              className="bg-secondary text-neutral px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors shadow-md"
             >
               Start Your Journey
             </Link> */}
@@ -171,7 +171,7 @@ const Navigation = () => {
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary focus:outline-none focus:text-secondary"
+              className="text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary focus:outline-none focus:text-secondary"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -187,12 +187,12 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-primary border-t border-gray-200 dark:border-gray-700">
               {navItems.map((item) => (
                 <div key={item.path}>
                   {item.hasDropdown ? (
                     <div>
-                      <div className="px-3 py-2 text-base font-medium text-blue-900 dark:text-gray-100 font-poppins">
+                      <div className="px-3 py-2 text-base font-medium text-primary dark:text-gray-100 font-poppins">
                         {item.label}
                       </div>
                       <div className="pl-6 space-y-1">
@@ -200,7 +200,7 @@ const Navigation = () => {
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-3 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
+                            className="block px-3 py-2 text-sm text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -214,7 +214,7 @@ const Navigation = () => {
                       className={`block px-3 py-2 rounded-md text-base font-medium transition-colors font-poppins ${
                         isActive(item.path)
                           ? 'text-secondary dark:text-secondary bg-accent dark:bg-secondary/20'
-                          : 'text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800'
+                          : 'text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800'
                       }`}
                       onClick={() => setIsMenuOpen(false)}
                     >

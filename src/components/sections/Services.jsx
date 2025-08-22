@@ -5,13 +5,13 @@ import Button from "../ui/Button";
 
 const Services = () => {
   return (
-    <section className="py-24 px-8 lg:px-16 bg-neutral dark:bg-gray-900">
+    <section className="py-16 px-8 lg:px-16 bg-neutral dark:bg-primary">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
-          <h2 className="text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white mb-8">
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
             Our Services
           </h2>
-          <p className="text-xl text-blue-900 dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
             Discover our comprehensive approach to wellness that nurtures every
             aspect of your being.
           </p>
@@ -31,10 +31,10 @@ const Services = () => {
                     className="mx-auto w-20 h-20 object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-4">
+                <h3 className="text-xl font-semibold text-primary dark:text-neutral mb-4">
                   {service.title}
                 </h3>
-                <p className="text-blue-900 dark:text-gray-200 mb-8 leading-relaxed">
+                <p className="text-primary dark:text-gray-200 mb-8 leading-relaxed">
                   {service.description}
                 </p>
               </div>

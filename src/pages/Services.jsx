@@ -5,13 +5,13 @@ import Button from '../components/ui/Button';
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-pink-50 dark:bg-gray-900 py-20 px-8 lg:px-16">
+    <div className="min-h-screen bg-pink-50 dark:bg-primary py-20 px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-5xl lg:text-6xl font-bold text-blue-900 dark:text-white mb-6">
+          <h1 className="text-5xl lg:text-6xl font-bold text-primary dark:text-neutral mb-6">
             Our Services
           </h1>
-          <p className="text-xl text-blue-900 dark:text-gray-200 max-w-3xl mx-auto">
+          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto">
             Discover our comprehensive approach to wellness that nurtures every aspect of your being.
           </p>
         </div>
@@ -20,10 +20,10 @@ const Services = () => {
           {servicesData.map((service) => (
             <Card key={service.id} className="text-center">
               <div className="text-6xl mb-6">{service.icon}</div>
-              <h3 className="text-2xl font-semibold text-blue-900 dark:text-white mb-4">
+              <h3 className="text-2xl font-semibold text-primary dark:text-neutral mb-4">
                 {service.title}
               </h3>
-              <p className="text-blue-900 dark:text-gray-200 mb-6 leading-relaxed">
+              <p className="text-primary dark:text-gray-200 mb-6 leading-relaxed">
                 {service.description}
               </p>
               <Button variant="secondary" className="w-full">
@@ -34,10 +34,10 @@ const Services = () => {
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-12 text-center">
-          <h2 className="text-3xl font-bold text-blue-900 dark:text-white mb-6">
+          <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
             Ready to Start Your Journey?
           </h2>
-          <p className="text-lg text-blue-900 dark:text-gray-200 mb-8">
+          <p className="text-lg text-primary dark:text-gray-200 mb-8">
             Book a consultation and discover how our services can transform your wellness journey.
           </p>
           <Button variant="primary" size="lg">
