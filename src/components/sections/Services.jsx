@@ -5,7 +5,7 @@ import Button from "../ui/Button";
 
 const Services = () => {
   return (
-    <section className="py-24 px-8 lg:px-16 bg-pink-50 dark:bg-gray-900">
+    <section className="py-24 px-8 lg:px-16 bg-neutral dark:bg-gray-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold text-blue-900 dark:text-white mb-8">
@@ -32,7 +32,7 @@ const Services = () => {
                   {service.description}
                 </p>
               </div>
-              <Button variant="secondary" className="w-full mt-auto">
+              <Button variant="accent" className="w-full mt-auto">
                 {service.buttonText}
               </Button>
             </Card>
