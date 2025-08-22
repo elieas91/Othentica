@@ -51,7 +51,7 @@ const Navigation = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`bg-white dark:bg-gray-900 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+    <nav className={`bg-neutral dark:bg-primary shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
       isVisible ? 'translate-y-0' : '-translate-y-full'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -78,7 +78,7 @@ const Navigation = () => {
                       }, 100);
                     }}
                   >
-                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 font-poppins">
+                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins">
                       <span>{item.label}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -97,7 +97,7 @@ const Navigation = () => {
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-4 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors font-poppins"
+                            className="block px-4 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
                           </Link>
@@ -110,8 +110,8 @@ const Navigation = () => {
                     to={item.path}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-poppins ${
                       isActive(item.path)
-                        ? 'text-pink-500 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20'
-                        : 'text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800'
+                        ? 'text-white dark:text-secondary bg-secondary dark:bg-secondary/20'
+                        : 'text-blue-900 dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800'
                     }`}
                   >
                     {item.label}
@@ -143,7 +143,7 @@ const Navigation = () => {
             {/* CTA Button */}
             {/* <Link
               to="/contact"
-              className="bg-pink-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-pink-600 transition-colors shadow-md"
+              className="bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors shadow-md"
             >
               Start Your Journey
             </Link> */}
@@ -170,7 +170,7 @@ const Navigation = () => {
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 focus:outline-none focus:text-pink-500"
+              className="text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary focus:outline-none focus:text-secondary"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -199,7 +199,7 @@ const Navigation = () => {
                           <Link
                             key={dropdownItem.path}
                             to={dropdownItem.path}
-                            className="block px-3 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800 transition-colors font-poppins"
+                            className="block px-3 py-2 text-sm text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -212,8 +212,8 @@ const Navigation = () => {
                       to={item.path}
                       className={`block px-3 py-2 rounded-md text-base font-medium transition-colors font-poppins ${
                         isActive(item.path)
-                          ? 'text-pink-500 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20'
-                          : 'text-blue-900 dark:text-gray-100 hover:text-pink-500 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-gray-800'
+                          ? 'text-secondary dark:text-secondary bg-accent dark:bg-secondary/20'
+                          : 'text-blue-900 dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800'
                       }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
