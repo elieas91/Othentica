@@ -11,9 +11,9 @@ const Button = ({
   const baseClasses = 'rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900';
   
   const variants = {
-    primary: 'bg-pink-500 text-white hover:bg-pink-600 focus:ring-pink-500 shadow-md hover:shadow-lg',
+    primary: 'bg-primary text-white hover:bg-primary/80 focus:ring-primary shadow-md hover:shadow-lg',
     accent: 'bg-accent text-primary hover:bg-accent/80 focus:ring-accent shadow-md hover:shadow-lg',
-    secondary: 'bg-pink-200 dark:bg-pink-800 text-blue-900 dark:text-white hover:bg-pink-300 dark:hover:bg-pink-700 focus:ring-pink-500',
+    secondary: 'bg-secondary text-white hover:bg-secondary/80 focus:ring-secondary shadow-md hover:shadow-lg',
     outline: 'border-2 border-pink-500 text-pink-500 dark:text-pink-400 hover:bg-pink-500 hover:text-white dark:hover:bg-pink-500 dark:hover:text-white'
   };
 
