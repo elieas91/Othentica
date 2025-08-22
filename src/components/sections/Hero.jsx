@@ -5,16 +5,15 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-start px-8 lg:px-16">
       {/* Background Image */}
-      <div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          backgroundImage:
-            "url(https://www.shutterstock.com/image-photo/wide-angle-panorama-autumn-forestmisty-260nw-1195159864.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <video
+          className="w-full h-full object-cover"
+          src="/src/assets/video/hero/othentica-flame-animation.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
         <div className="absolute inset-0 bg-black bg-opacity-10 dark:bg-opacity-20"></div>
       </div>
 

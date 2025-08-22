@@ -24,7 +24,13 @@ const Services = () => {
               className="text-center hover:scale-105 transition-transform duration-300 h-full"
             >
               <div className="flex flex-col flex-grow">
-                <div className="text-5xl mb-6">{service.icon}</div>
+                <div className="text-5xl mb-6">
+                  <img
+                    src={service.icon}
+                    alt={service.title}
+                    className="mx-auto w-20 h-20 object-contain"
+                  />
+                </div>
                 <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-4">
                   {service.title}
                 </h3>
