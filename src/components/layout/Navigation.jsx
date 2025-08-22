@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../contexts/useTheme';
+import Logo from '../../assets/img/logo.png';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,7 +59,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <img src="/src/assets/img/logo.png" alt="Othentica Logo" className="h-14 w-auto" />
+            <img src={Logo} alt="Othentica Logo" className="h-14 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
