@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../ui/Button";
+import Animation from "../../assets/video/hero/othentica-flame-animation.mp4";
 
 const Hero = () => {
   return (
@@ -8,7 +9,7 @@ const Hero = () => {
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <video
           className="w-full h-full object-cover"
-          src="/src/assets/video/hero/othentica-flame-animation.mp4"
+          src={Animation}
           autoPlay
           loop
           muted

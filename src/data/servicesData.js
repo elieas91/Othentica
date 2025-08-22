@@ -1,7 +1,12 @@
+import Performance from "../assets/img/services/performance.png";
+import Relax from "../assets/img/services/relax.png";
+import Challenge from "../assets/img/services/challenge.png";
+import Bridging from "../assets/img/services/bridging.png";
+
 export const servicesData = [
   {
     id: 1,
-    icon: "/src/assets/img/services/performance.png",
+    icon: Performance,
     title: "Fuel your performance",
     description:
       "Strategies and practices to boost energy, focus, and resilience in your daily life.",
@@ -9,7 +14,7 @@ export const servicesData = [
   },
   {
     id: 2,
-    icon: "/src/assets/img/services/relax.png",
+    icon: Relax,
     title: "Relax",
     description:
       "Guided methods to release stress, recharge, and restore balance to your body and mind.",
@@ -17,7 +22,7 @@ export const servicesData = [
   },
   {
     id: 3,
-    icon: "/src/assets/img/services/challenge.png",
+    icon: Challenge,
     title: "Challenge",
     description:
       "Engaging activities and mindset tools that push you to grow beyond your comfort zone.",
@@ -25,7 +30,7 @@ export const servicesData = [
   },
   {
     id: 4,
-    icon: "/src/assets/img/services/bridging.png",
+    icon: Bridging,
     title: "Bridging",
     description:
       "Helping you connect the gap between where you are and where you want to be in your wellness journey.",
