@@ -1,21 +1,61 @@
 import React from "react";
 import Button from "../ui/Button";
-import Animation from "../../assets/video/hero/othentica-flame-animation.webm";
+import Logo from "../../assets/img/logo.webp";
+import Flame from "../../assets/img/flame.webp";
 
 const Hero = () => {
+  // Flame configuration array
+  const flames = [
+    // Left center area flames (moved toward center, higher up)
+    { id: 1, position: "top-1/4 left-1/3", size: "w-8", opacity: "opacity-60", animation: "animate-flame-1" },
+    { id: 2, position: "top-1/4 left-2/5", size: "w-6", opacity: "opacity-40", animation: "animate-flame-2" },
+    { id: 3, position: "top-1/3 left-1/3", size: "w-7", opacity: "opacity-70", animation: "animate-flame-3" },
+    { id: 4, position: "top-2/5 left-2/5", size: "w-5", opacity: "opacity-85", animation: "animate-flame-4" },
+    { id: 5, position: "top-1/2 left-2/5", size: "w-10", opacity: "opacity-55", animation: "animate-flame-5" },
+    
+    // Center area flames (expanded center zone, higher up)
+    { id: 6, position: "top-1/4 left-1/2", size: "w-7", opacity: "opacity-45", animation: "animate-flame-6" },
+    { id: 7, position: "top-1/3 left-1/2", size: "w-8", opacity: "opacity-55", animation: "animate-flame-7" },
+    { id: 8, position: "top-1/4 left-1/2", size: "w-6", opacity: "opacity-60", animation: "animate-flame-8" },
+    
+    // Right center area flames (moved toward center, over logo area, higher up)
+    { id: 9, position: "top-1/3 right-1/3", size: "w-5", opacity: "opacity-90", animation: "animate-flame-9" },
+    { id: 10, position: "top-1/2 right-2/5", size: "w-10", opacity: "opacity-65", animation: "animate-flame-10" },
+    { id: 11, position: "top-1/4 right-1/3", size: "w-6", opacity: "opacity-70", animation: "animate-flame-11" },
+    { id: 12, position: "top-1/3 right-2/5", size: "w-7", opacity: "opacity-40", animation: "animate-flame-12" },
+    { id: 13, position: "top-1/4 right-1/3", size: "w-5", opacity: "opacity-80", animation: "animate-flame-13" },
+    
+    // Logo area overlay flames (centered over logo, higher up)
+    { id: 14, position: "top-1/3 right-1/3", size: "w-7", opacity: "opacity-80", animation: "animate-flame-14" },
+    { id: 15, position: "top-1/2 right-1/3", size: "w-8", opacity: "opacity-70", animation: "animate-flame-15" }
+  ];
+
   return (
-    <section className="relative min-h-screen flex items-center justify-start px-8 lg:px-16">
-      {/* Background Image */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
-        <video
-          className="w-full h-full object-cover"
-          src={Animation}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-10 dark:bg-opacity-20 "></div>
+    <section className="relative min-h-screen flex items-center justify-start px-8 lg:px-16 overflow-hidden">
+      {/* Animated Background with Logo and Flames */}
+      <div className="absolute inset-0 w-full h-full">
+        {/* Main Logo with Scale Animation */}
+        <div className="absolute inset-0 flex items-center justify-end pr-16">
+          <img
+            src={Logo}
+            alt="Othentica Logo"
+            className="w-1/2 h-auto opacity-20 animate-logo-scale"
+          />
+        </div>
+
+        {/* Multiple Animated Flames */}
+        {flames.map((flame) => (
+          <div key={flame.id} className={`absolute ${flame.position} ${flame.animation}`}>
+            <img
+              src={Flame}
+              alt={`Flame ${flame.id}`}
+              className={`${flame.size} h-auto ${flame.opacity} blur-sm`}
+            />
+          </div>
+        ))}
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-10 dark:bg-opacity-20"></div>
       </div>
 
       {/* Content */}

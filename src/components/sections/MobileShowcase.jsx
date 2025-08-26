@@ -46,19 +46,25 @@ const MobileShowcase = () => {
             </div>
           </div>
           
-          {/* Carousel Indicators - moved to left side and made bigger */}
+          {/* Carousel Indicators - Flame style */}
           <div className="flex justify-start space-x-3">
             {mobileServicesData.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentServiceIndex(index)}
-                className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                className={`w-8 h-8 transition-all duration-300 ${
                   index === currentServiceIndex
-                    ? 'bg-secondary dark:bg-blue-400 scale-125'
-                    : 'bg-accent dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    ? 'opacity-100 scale-110'
+                    : 'opacity-30 hover:opacity-60'
                 }`}
                 aria-label={`Go to service ${index + 1}`}
-              />
+              >
+                <img 
+                  src={Flame} 
+                  alt={`Service ${index + 1}`}
+                  className="w-full h-full object-contain"
+                />
+              </button>
             ))}
           </div>
         </div>
@@ -104,12 +110,12 @@ const MobileShowcase = () => {
           </div>
           
           {/* Floating Elements */}
-          <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full animate-bounce">
+          {/* <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full animate-bounce">
             <img src={Flame} alt="Othentica" />
           </div>
           <div className="absolute -bottom-4 -left-4 w-6 h-6 rounded-full animate-pulse">
             <img src={Flame} alt="Othentica" />
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
