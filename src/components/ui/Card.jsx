@@ -4,7 +4,7 @@ const Card = ({ children, className = '' }) => {
   return (
     <div
       className={`rounded-2xl p-6 transition-all duration-300 flex flex-col
-  hover:bg-white hover:dark:bg-gray-800 hover:shadow-professional hover:shadow-xl-professional ${className}`}
+    hover:shadow-professional hover:shadow-xl-professional ${className}`}
     >
       {children}
     </div>
