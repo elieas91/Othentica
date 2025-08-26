@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../ui/Button";
 import Logo from "../../assets/img/logo.webp";
 import Flame from "../../assets/img/flame.webp";
-import HeroBg from "../../assets/img/hero_bg.webp";
+import HeroBg from "../../assets/img/hero_bg2.webp";
 
 const Hero = () => {
   // Flame configuration array
