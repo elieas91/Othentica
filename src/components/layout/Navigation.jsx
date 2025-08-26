@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../contexts/useTheme';
 import Logo from '../../assets/img/logo.webp';
 
@@ -9,7 +9,52 @@ const Navigation = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
+
+  // Function to handle About dropdown navigation
+  const handleAboutNavigation = (path) => {
+    const [route, section] = path.split('#');
+    
+    if (route === '/about') {
+      if (section) {
+        // If we're already on the about page, scroll to section
+        if (location.pathname === '/about') {
+          const element = document.getElementById(section);
+          if (element) {
+            const offset = 80; // Account for fixed navigation height
+            const elementPosition = element.offsetTop - offset;
+            window.scrollTo({
+              top: elementPosition,
+              behavior: 'smooth'
+            });
+          }
+        } else {
+          // Navigate to about page and then scroll to section
+          navigate('/about');
+          // Wait for navigation to complete, then scroll
+          setTimeout(() => {
+            const element = document.getElementById(section);
+            if (element) {
+              const offset = 80; // Account for fixed navigation height
+              const elementPosition = element.offsetTop - offset;
+              window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+              });
+            }
+          }, 100);
+        }
+      } else {
+        // Just navigate to about page
+        navigate('/about');
+      }
+    }
+    
+    // Close dropdowns
+    setIsAboutDropdownOpen(false);
+    setIsMenuOpen(false);
+  };
 
   // Scroll event handler
   useEffect(() => {
@@ -79,7 +124,10 @@ const Navigation = () => {
                       }, 100);
                     }}
                   >
-                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins">
+                    <button 
+                      onClick={() => handleAboutNavigation('/about')}
+                      className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
+                    >
                       <span>{item.label}</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -95,13 +143,13 @@ const Navigation = () => {
                         }}
                       >
                         {item.dropdownItems.map((dropdownItem) => (
-                          <Link
+                          <button
                             key={dropdownItem.path}
-                            to={dropdownItem.path}
-                            className="block px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
+                            onClick={() => handleAboutNavigation(dropdownItem.path)}
+                            className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
-                          </Link>
+                          </button>
                         ))}
                       </div>
                     )}
@@ -192,19 +240,24 @@ const Navigation = () => {
                 <div key={item.path}>
                   {item.hasDropdown ? (
                     <div>
-                      <div className="px-3 py-2 text-base font-medium text-primary dark:text-gray-100 font-poppins">
+                      <button
+                        onClick={() => handleAboutNavigation('/about')}
+                        className="w-full text-left px-3 py-2 text-base font-medium text-primary dark:text-gray-100 font-poppins hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors"
+                      >
                         {item.label}
-                      </div>
+                      </button>
                       <div className="pl-6 space-y-1">
                         {item.dropdownItems.map((dropdownItem) => (
-                          <Link
+                          <button
                             key={dropdownItem.path}
-                            to={dropdownItem.path}
-                            className="block px-3 py-2 text-sm text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
-                            onClick={() => setIsMenuOpen(false)}
+                            onClick={() => {
+                              handleAboutNavigation(dropdownItem.path);
+                              setIsMenuOpen(false);
+                            }}
+                            className="block w-full text-left px-3 py-2 text-sm text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
-                          </Link>
+                          </button>
                         ))}
                       </div>
                     </div>

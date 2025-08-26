@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../ui/Button";
 import Logo from "../../assets/img/logo.webp";
 import Flame from "../../assets/img/flame.webp";
+import HeroBg from "../../assets/img/hero_bg.webp";
 
 const Hero = () => {
   // Flame configuration array
@@ -25,13 +26,13 @@ const Hero = () => {
     { id: 12, position: "top-1/3 right-2/5", size: "w-7", opacity: "opacity-40", animation: "animate-flame-12" },
     { id: 13, position: "top-1/4 right-1/3", size: "w-5", opacity: "opacity-80", animation: "animate-flame-13" },
     
-    // Logo area overlay flames (centered over logo, higher up)
-    { id: 14, position: "top-1/3 right-1/3", size: "w-7", opacity: "opacity-80", animation: "animate-flame-14" },
-    { id: 15, position: "top-1/2 right-1/3", size: "w-8", opacity: "opacity-70", animation: "animate-flame-15" }
+    // Logo area overlay flames (centered over logo, higher up) - fully clear with 100% opacity
+    { id: 14, position: "top-1/3 right-1/3", size: "w-7", opacity: "opacity-80", animation: "animate-flame-14", noBlur: true },
+    { id: 15, position: "top-1/2 right-1/3", size: "w-8", opacity: "opacity-80", animation: "animate-flame-15", noBlur: true }
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-start px-8 lg:px-16 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-start px-8 lg:px-16 overflow-hidden" style={{ backgroundImage: `url(${HeroBg})` }}>
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
         {/* Main Logo with Scale Animation */}
@@ -49,7 +50,7 @@ const Hero = () => {
             <img
               src={Flame}
               alt={`Flame ${flame.id}`}
-              className={`${flame.size} h-auto ${flame.opacity} blur-sm`}
+              className={`${flame.size} h-auto ${flame.opacity} ${flame.noBlur ? '' : 'blur-sm'}`}
             />
           </div>
         ))}
