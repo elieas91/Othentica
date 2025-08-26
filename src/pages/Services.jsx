@@ -12,14 +12,21 @@ const Services = () => {
             Our Services
           </h1>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto">
-            Discover our comprehensive approach to wellness that nurtures every aspect of your being.
+            Discover our comprehensive approach to wellness that nurtures every
+            aspect of your being.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {servicesData.map((service) => (
             <Card key={service.id} className="text-center">
-              <div className="text-6xl mb-6">{service.icon}</div>
+              <div className="text-6xl mb-6">
+                <img
+                  src={service.icon}
+                  alt={service.title}
+                  className="mx-auto w-20 h-20 object-contain"
+                />
+              </div>
               <h3 className="text-2xl font-semibold text-primary dark:text-neutral mb-4">
                 {service.title}
               </h3>
@@ -38,7 +45,8 @@ const Services = () => {
             Ready to Start Your Journey?
           </h2>
           <p className="text-lg text-primary dark:text-gray-200 mb-8">
-            Book a consultation and discover how our services can transform your wellness journey.
+            Book a consultation and discover how our services can transform your
+            wellness journey.
           </p>
           <Button variant="primary" size="lg">
             Book Consultation
