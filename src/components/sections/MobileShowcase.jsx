@@ -4,10 +4,19 @@ import Flame from '../../assets/img/flame.webp';
 import Phone from '../../assets/img/phone.webp';
 import App1 from '../../assets/img/app-1.webp';
 import App2 from '../../assets/img/app-2.webp';
+import App3 from '../../assets/img/app-3.webp';
+import App4 from '../../assets/img/app-4.webp';
+import App5 from '../../assets/img/app-5.webp';
+import App6 from '../../assets/img/app-6.webp';
+import App7 from '../../assets/img/app-7.webp';
+import App8 from '../../assets/img/app-8.webp';
 import { mobileServicesData } from '../../data/mobileServicesData';
 
 const MobileShowcase = () => {
   const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+
+  // Array of all app images
+  const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
 
   // Auto-rotate through services every 4 seconds
   useEffect(() => {
@@ -21,6 +30,11 @@ const MobileShowcase = () => {
   }, []);
 
   const currentService = mobileServicesData[currentServiceIndex];
+  
+  // Get the current app image based on service index
+  const currentAppImage = appImages[currentServiceIndex % appImages.length];
+  // Get a different image for the second phone (offset by 1)
+  const secondPhoneImage = appImages[(currentServiceIndex + 1) % appImages.length];
 
   return (
     <section className="py-16 px-8 lg:px-16 bg-neutral dark:bg-gray-800">
@@ -82,9 +96,9 @@ const MobileShowcase = () => {
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
               <div className="w-full h-full rounded-3xl flex justify-center items-center">
                 <img 
-                  src={App1} 
+                  src={currentAppImage} 
                   alt="App interface" 
-                  className="w-[92%] h-[97%] object-contain"
+                  className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
                 />
               </div>
             </div>
@@ -101,9 +115,9 @@ const MobileShowcase = () => {
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
               <div className="w-full h-full rounded-3xl flex justify-center items-center">
                 <img 
-                  src={App2} 
+                  src={secondPhoneImage} 
                   alt="App interface" 
-                  className="w-[92%] h-[97%] object-contain"
+                  className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
                 />
               </div>
             </div>

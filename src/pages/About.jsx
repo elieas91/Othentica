@@ -1,173 +1,116 @@
-import React from 'react';
-import Button from '../components/ui/Button';
+import React, { useEffect } from 'react';
+import Banner from '../components/ui/Banner';
+import AboutContent from '../components/sections/AboutContent';
+import ParallaxSection from '../components/ui/ParallaxSection';
+import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
+import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
+import BridgingImg from '../assets/img/about/para-1.webp';
+import PerformanceImg from '../assets/img/about/para-2.webp';
 
 const About = () => {
+  // Handle direct navigation to sections (e.g., /about#mission)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      // Remove the # symbol
+      const sectionId = hash.substring(1);
+      // Wait for the page to fully render, then scroll to section
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const offset = 80; // Account for fixed navigation height
+          const elementPosition = element.offsetTop - offset;
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  }, []);
+
+  const handleLearnMore = () => {
+    // Scroll to the content section
+    const contentSection = document.querySelector('.about-content');
+    if (contentSection) {
+      contentSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-primary">
-      {/* Hero Section - Large */}
-      <section className="py-16 px-8 lg:px-16 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-primary dark:to-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Large Image */}
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-pink-200 to-pink-300 dark:from-pink-800 dark:to-pink-900 rounded-3xl overflow-hidden shadow-2xl">
-                {/* Placeholder for wellness image */}
-                <div className="w-full h-full bg-gradient-to-br from-pink-300 to-pink-400 dark:from-pink-700 dark:to-pink-800 flex items-center justify-center">
-                  <div className="text-8xl">🌿</div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right Side - Text Block */}
-            <div className="space-y-8">
-              <h1 className="text-5xl lg:text-6xl font-bold text-primary dark:text-neutral leading-tight">
-                We believe wellness equals happiness.
-              </h1>
-              <p className="text-xl lg:text-2xl text-primary dark:text-gray-200 leading-relaxed">
-                And no matter where you're looking to excel, we're here to help you forge your pathway to authentic living. Meet the team who's spent years creating breakthroughs and transforming lives through holistic wellness.
-              </p>
-              <Button variant="outline" className="text-lg px-8 py-4">
-                Meet Our Team
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-neutral dark:bg-primary">
+      <Banner
+        title="About Othentica"
+        subtitle="Crafting Digital Excellence"
+        description="We are a passionate team of innovators dedicated to transforming ideas into exceptional digital experiences. Our commitment to quality, creativity, and cutting-edge technology drives everything we do."
+        buttonText=""
+        buttonVariant="accent"
+        buttonOnClick={handleLearnMore}
+        backgroundImage={PhilosophyBg}
+      />
+      
+      <AboutContent 
+        // title="Driving Purpose Forward"
+        title="Mission"
+        description="At Othentica, our mission is to empower businesses through innovative digital solutions that drive growth and create meaningful connections. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
+        imageSrc={PhilosophyBg}
+        videoSrc={FlameVideo}
+        imageAlt="Othentica Mobile App"
+        showFloatingCircles={true}
+        showGradients={true}
+        showPlayButton={true}
+        flipped={false}
+        sectionId="mission"
+      />
 
-      {/* Mission Section - Small */}
-      <section id="mission" className="py-16 px-8 lg:px-16 bg-white dark:bg-primary">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-primary dark:text-neutral mb-6">Our Mission</h2>
-          <p className="text-xl text-primary dark:text-gray-200 leading-relaxed max-w-3xl mx-auto">
-            To empower individuals to discover their authentic selves through personalized wellness guidance, 
-            creating lasting transformation in mind, body, and spirit.
-          </p>
-        </div>
-      </section>
+      {/* Parallax Section 1 */}
+      <ParallaxSection 
+        imageSrc={BridgingImg}
+        imageAlt="Digital Innovation"
+        height="h-[80vh]"
+        overlayOpacity="bg-neutral/20"
+        speed={0.3}
+      >
+      </ParallaxSection>
 
-      {/* Vision Section - Large */}
-      <section id="vision" className="py-16 px-8 lg:px-16 bg-pink-50 dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Text Block */}
-            <div className="space-y-6">
-              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral">
-                Our Vision
-              </h2>
-              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-                We envision a world where every individual has access to authentic wellness practices that honor their unique journey. 
-                A world where people live in harmony with their true nature, embracing balance, purpose, and inner peace.
-              </p>
-              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-                Through our comprehensive approach to wellness, we're building a community of empowered individuals 
-                who inspire others to live authentically and create positive change in the world.
-              </p>
-            </div>
-            
-            {/* Right Side - Large Image */}
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-pink-200 to-pink-300 dark:from-pink-800 dark:to-pink-900 rounded-3xl overflow-hidden shadow-2xl">
-                {/* Placeholder for vision image */}
-                <div className="w-full h-full bg-gradient-to-br from-pink-300 to-pink-400 dark:from-pink-700 dark:to-pink-800 flex items-center justify-center">
-                  <div className="text-8xl">🌟</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AboutContent 
+        // title="Driving Purpose Forward"
+        title="Vision"
+        description="At Othentica, our vision is to be a leading provider of innovative digital solutions that empower businesses to achieve their goals in an ever-evolving digital landscape. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
+        imageSrc={PhilosophyBg}
+        videoSrc={FlameVideo}
+        imageAlt="Othentica Mobile App"
+        showFloatingCircles={true}
+        showGradients={true}
+        showPlayButton={true}
+        flipped={true}
+        sectionId="vision"
+      />
 
-      {/* Values Section - Small */}
-      <section id="values" className="py-16 px-8 lg:px-16 bg-white dark:bg-primary">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-primary dark:text-neutral mb-6">Our Core Values</h2>
-            <p className="text-xl text-primary dark:text-gray-200 leading-relaxed max-w-3xl mx-auto">
-              The principles that guide everything we do and every life we touch.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 bg-pink-50 dark:bg-gray-800 rounded-2xl">
-              <div className="text-5xl mb-4">💚</div>
-              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-4">Authenticity</h3>
-              <p className="text-primary dark:text-gray-200 leading-relaxed">
-                We believe in being true to ourselves and helping others discover their authentic nature.
-              </p>
-            </div>
-            
-            <div className="text-center p-8 bg-pink-50 dark:bg-gray-800 rounded-2xl">
-              <div className="text-5xl mb-4">⚖️</div>
-              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-4">Balance</h3>
-              <p className="text-primary dark:text-gray-200 leading-relaxed">
-                We promote harmony between mind, body, and spirit for holistic wellness.
-              </p>
-            </div>
-            
-            <div className="text-center p-8 bg-pink-50 dark:bg-gray-800 rounded-2xl">
-              <div className="text-5xl mb-4">🌱</div>
-              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-4">Growth</h3>
-              <p className="text-primary dark:text-gray-200 leading-relaxed">
-                We encourage continuous learning and personal development on the wellness journey.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Parallax Section 2 */}
+      {/* <ParallaxSection 
+        imageSrc={PerformanceImg}
+        imageAlt="Performance Excellence"
+        height="h-[80vh]"
+        overlayOpacity="bg-neutral/20"
+        speed={0.3}
+      >
+      </ParallaxSection> */}
 
-      {/* Story Section - Large */}
-      <section className="py-16 px-8 lg:px-16 bg-gradient-to-br from-pink-100 to-pink-50 dark:from-gray-800 dark:to-primary">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Side - Large Image */}
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-pink-200 to-pink-300 dark:from-pink-800 dark:to-pink-900 rounded-3xl overflow-hidden shadow-2xl">
-                {/* Placeholder for story image */}
-                <div className="w-full h-full bg-gradient-to-br from-pink-300 to-pink-400 dark:from-pink-700 dark:to-pink-800 flex items-center justify-center">
-                  <div className="text-8xl">📖</div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right Side - Text Block */}
-            <div className="space-y-6">
-              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral">
-                Our Story
-              </h2>
-              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-                Founded in 2020, Othentica emerged from a deep understanding that true wellness goes beyond 
-                physical health. We recognized that authentic living requires harmony between mind, body, and spirit.
-              </p>
-              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-                Our team of wellness experts combines ancient wisdom with modern practices, creating 
-                personalized approaches that honor each individual's unique journey. We've helped hundreds 
-                of people discover their authentic selves and create lasting positive change.
-              </p>
-              <Button variant="primary" className="text-lg px-8 py-4">
-                Learn More About Us
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AboutContent 
+        // title="Driving Purpose Forward"
+        title="Values"
+        description="At Othentica, our values are the foundation of our culture and guide our decisions. We believe in integrity, innovation, and collaboration, and we strive to create a positive impact through our work."
+        imageSrc={PhilosophyBg}
+        videoSrc={FlameVideo}
+        imageAlt="Othentica Mobile App"
+        showFloatingCircles={true}
+        showGradients={true}
+        showPlayButton={true}
+        flipped={false}
+        sectionId="values"
+      />
 
-      {/* CTA Section - Small */}
-      <section className="py-16 px-8 lg:px-16 bg-white dark:bg-primary">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-primary dark:text-neutral mb-6">Ready to Start Your Journey?</h2>
-          <p className="text-xl text-primary dark:text-gray-200 leading-relaxed mb-8">
-            Join our community of wellness seekers and discover the power of authentic living.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="primary" className="text-lg px-8 py-4">
-              Book a Consultation
-            </Button>
-            <Button variant="outline" className="text-lg px-8 py-4">
-              Explore Our Services
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

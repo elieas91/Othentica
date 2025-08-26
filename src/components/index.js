@@ -1,6 +1,8 @@
 // UI Components
 export { default as Button } from './ui/Button';
 export { default as Card } from './ui/Card';
+export { default as Banner } from './ui/Banner';
+export { default as ParallaxSection } from './ui/ParallaxSection';
 
 // Layout Components
 export { default as Layout } from './layout/Layout';
@@ -15,3 +17,4 @@ export { default as Services } from './sections/Services';
 export { default as Testimonials } from './sections/Testimonials';
 export { default as Blog } from './sections/Blog';
 export { default as Clients } from './sections/Clients';
+export { default as AboutContent } from './sections/AboutContent';
