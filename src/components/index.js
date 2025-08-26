@@ -3,6 +3,7 @@ export { default as Button } from './ui/Button';
 export { default as Card } from './ui/Card';
 export { default as Banner } from './ui/Banner';
 export { default as ParallaxSection } from './ui/ParallaxSection';
+export { default as SEO } from './ui/SEO';
 
 // Layout Components
 export { default as Layout } from './layout/Layout';
