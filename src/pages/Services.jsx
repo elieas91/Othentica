@@ -1,11 +1,11 @@
-import React from 'react';
-import { servicesData } from '../data/servicesData';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
+import React from "react";
+import { servicesData } from "../data/servicesData";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-pink-50 dark:bg-primary py-20 px-8 lg:px-16">
+    <div className="min-h-screen bg-neutral dark:bg-primary py-20 px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-5xl lg:text-6xl font-bold text-primary dark:text-neutral mb-6">
@@ -40,7 +40,7 @@ const Services = () => {
           ))}
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-12 text-center">
+        <div className="bg-neutral dark:bg-primary rounded-2xl p-12 text-center">
           <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
             Ready to Start Your Journey?
           </h2>
@@ -48,7 +48,7 @@ const Services = () => {
             Book a consultation and discover how our services can transform your
             wellness journey.
           </p>
-          <Button variant="primary" size="lg">
+          <Button variant="primary" size="large">
             Book Consultation
           </Button>
         </div>

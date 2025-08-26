@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import Button from '../components/ui/Button';
+import React, { useState } from "react";
+import Button from "../components/ui/Button";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
+    console.log("Contact form submitted:", formData);
     // Handle form submission
   };
 
   return (
-    <div className="min-h-screen bg-pink-50 dark:bg-primary py-20 px-8 lg:px-16">
+    <div className="min-h-screen bg-neutral dark:bg-primary py-20 px-8 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-5xl lg:text-6xl font-bold text-primary dark:text-neutral mb-6">
@@ -33,14 +33,19 @@ const Contact = () => {
             Ready to start your wellness journey? We'd love to hear from you.
           </p>
         </div>
-        
+
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
-            <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">Send us a Message</h2>
+            <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
+              Send us a Message
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-primary dark:text-neutral mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-primary dark:text-neutral mb-2"
+                >
                   Name
                 </label>
                 <input
@@ -53,9 +58,12 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-primary dark:text-neutral mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-primary dark:text-neutral mb-2"
+                >
                   Email
                 </label>
                 <input
@@ -68,9 +76,12 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-primary dark:text-neutral mb-2">
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium text-primary dark:text-neutral mb-2"
+                >
                   Subject
                 </label>
                 <input
@@ -83,9 +94,12 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-primary dark:text-neutral mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-primary dark:text-neutral mb-2"
+                >
                   Message
                 </label>
                 <textarea
@@ -98,50 +112,74 @@ const Contact = () => {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
-              
+
               <Button type="submit" variant="primary" className="w-full">
                 Send Message
               </Button>
             </form>
           </div>
-          
+
           {/* Contact Information */}
           <div className="space-y-8">
             <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
-              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">Contact Information</h3>
+              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">
+                Contact Information
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
                   <div className="text-2xl">📍</div>
                   <div>
-                    <p className="font-medium text-primary dark:text-neutral">Address</p>
-                    <p className="text-primary dark:text-gray-200">123 Wellness Way, Mindful City, MC 12345</p>
+                    <p className="font-medium text-primary dark:text-neutral">
+                      Address
+                    </p>
+                    <p className="text-primary dark:text-gray-200">
+                      123 Wellness Way, Mindful City, MC 12345
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                   <div className="text-2xl">📧</div>
                   <div>
-                    <p className="font-medium text-primary dark:text-neutral">Email</p>
-                    <p className="text-primary dark:text-gray-200">hello@othentica.com</p>
+                    <p className="font-medium text-primary dark:text-neutral">
+                      Email
+                    </p>
+                    <p className="text-primary dark:text-gray-200">
+                      hello@othentica.com
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                   <div className="text-2xl">📞</div>
                   <div>
-                    <p className="font-medium text-primary dark:text-neutral">Phone</p>
-                    <p className="text-primary dark:text-gray-200">+1 (555) 123-4567</p>
+                    <p className="font-medium text-primary dark:text-neutral">
+                      Phone
+                    </p>
+                    <p className="text-primary dark:text-gray-200">
+                      +1 (555) 123-4567
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
-              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">Office Hours</h3>
+              <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">
+                Office Hours
+              </h3>
               <div className="space-y-2 text-primary dark:text-gray-200">
-                <p><span className="font-medium">Monday - Friday:</span> 9:00 AM - 6:00 PM</p>
-                <p><span className="font-medium">Saturday:</span> 10:00 AM - 4:00 PM</p>
-                <p><span className="font-medium">Sunday:</span> Closed</p>
+                <p>
+                  <span className="font-medium">Monday - Friday:</span> 9:00 AM
+                  - 6:00 PM
+                </p>
+                <p>
+                  <span className="font-medium">Saturday:</span> 10:00 AM - 4:00
+                  PM
+                </p>
+                <p>
+                  <span className="font-medium">Sunday:</span> Closed
+                </p>
               </div>
             </div>
           </div>
