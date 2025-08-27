@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import SEO from '../components/ui/SEO';
 import Banner from '../components/ui/Banner';
 import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
@@ -9,6 +10,40 @@ import BridgingImg2 from '../assets/img/about/para-2.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 
 const About = () => {
+  // SEO data for about page
+  const seoData = {
+    title: "About Othentica - Our Mission, Vision & Values",
+    description: "Learn about Othentica's mission to empower businesses through innovative digital solutions. Discover our vision for digital transformation and the core values that drive our culture of excellence.",
+    keywords: "about Othentica, company mission, company vision, company values, digital innovation company, technology company, mobile app development company, digital transformation services",
+    image: "/src/assets/img/philosophy/philo-bg.webp",
+    url: "https://othentica.com/about",
+    type: "website",
+    canonical: "https://othentica.com/about",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About Othentica",
+      "description": "Learn about Othentica's mission, vision, and values in digital innovation and mobile app development",
+      "url": "https://othentica.com/about",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Othentica",
+        "description": "Digital innovation company specializing in mobile app development and digital transformation",
+        "url": "https://othentica.com",
+        "logo": "https://othentica.com/src/assets/img/logo.webp",
+        "foundingDate": "2020",
+        "slogan": "Crafting Digital Excellence",
+        "knowsAbout": [
+          "Mobile App Development",
+          "Digital Transformation",
+          "Web Development",
+          "Technology Innovation",
+          "Creative Excellence"
+        ]
+      }
+    }
+  };
+
   // Handle direct navigation to sections (e.g., /about#mission)
   useEffect(() => {
     const hash = window.location.hash;
@@ -40,6 +75,8 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-neutral dark:bg-primary">
+      <SEO {...seoData} />
+      
       <Banner
         title="About Othentica"
         subtitle="Crafting Digital Excellence"
