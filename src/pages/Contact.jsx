@@ -36,7 +36,7 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
+          <div className="bg-neutral dark:bg-gray-800 rounded-2xl p-8 shadow-professional">
             <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
               Send us a Message
             </h2>
@@ -55,7 +55,7 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full px-4 py-3 border bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -73,7 +73,7 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full px-4 py-3 border bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -91,7 +91,7 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full px-4 py-3 border bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -109,7 +109,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
+                  className="w-full px-4 py-3 border bg-transparent border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white dark:bg-gray-700 text-primary dark:text-neutral placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -121,7 +121,7 @@ const Contact = () => {
 
           {/* Contact Information */}
           <div className="space-y-8">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
+            <div className="bg-neutral dark:bg-gray-800 rounded-2xl p-8 shadow-professional ">
               <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">
                 Contact Information
               </h3>
@@ -164,7 +164,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
+            <div className="bg-neutral dark:bg-gray-800 rounded-2xl p-8 shadow-professional">
               <h3 className="text-2xl font-bold text-primary dark:text-neutral mb-6">
                 Office Hours
               </h3>
