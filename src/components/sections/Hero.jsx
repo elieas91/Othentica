@@ -1,8 +1,11 @@
 import React from 'react';
 import Button from '../ui/Button';
 import Logo from '../../assets/img/logo.webp';
+import Logo_o from '../../assets/img/logo_o.webp';
 import Flame from '../../assets/img/flame.webp';
 import HeroBg from '../../assets/img/hero_bg2.webp';
+import HeroBg2 from '../../assets/img/hero_bg3.webp';
+import HeroBg3 from '../../assets/img/hero_bg3v2.webp';
 
 const Hero = () => {
   // Flame configuration array
@@ -125,9 +128,9 @@ const Hero = () => {
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-start px-8 lg:px-16 overflow-hidden"
+      className="relative min-h-[90vh] flex items-center justify-start px-8 lg:px-16 overflow-hidden"
       style={{
-        backgroundImage: `url(${HeroBg})`,
+        backgroundImage: `url(${HeroBg3})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -136,29 +139,31 @@ const Hero = () => {
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
         {/* Main Logo with Scale Animation */}
-        <div className="absolute inset-0 flex items-center justify-end pr-16">
+        {/* <div className="absolute inset-0 flex items-center justify-end pr-28 pt-0">
           <img
-            src={Logo}
+            src={Logo_o}
             alt="Othentica Logo"
-            className="w-1/2 h-auto opacity-20 animate-logo-scale"
+            className="w-1/3 h-auto opacity-20 animate-logo-scale"
           />
-        </div>
+        </div> */}
 
         {/* Multiple Animated Flames */}
-        {flames.map((flame) => (
-          <div
-            key={flame.id}
-            className={`absolute ${flame.position} ${flame.animation}`}
-          >
-            <img
-              src={Flame}
-              alt={`Flame ${flame.id}`}
-              className={`${flame.size} h-auto ${flame.opacity} ${
-                flame.noBlur ? '' : 'blur-sm'
-              }`}
-            />
-          </div>
-        ))}
+        <div className="absolute inset-0 w-full h-full translate-x-20">
+          {flames.map((flame) => (
+            <div
+              key={flame.id}
+              className={`absolute ${flame.position} ${flame.animation}`}
+            >
+              <img
+                src={Flame}
+                alt={`Flame ${flame.id}`}
+                className={`${flame.size} h-auto ${flame.opacity} ${
+                  flame.noBlur ? '' : 'blur-sm'
+                }`}
+              />
+            </div>
+          ))}
+        </div>
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-10 dark:bg-opacity-20"></div>
