@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 
-const ParallaxSection = ({ 
-  imageSrc, 
-  imageAlt, 
-  height = "h-96", 
+const ParallaxSection = ({
+  imageSrc,
+  imageAlt,
+  height = 'h-96',
   overlay = true,
-  overlayOpacity = "bg-black/30",
+  overlayOpacity = 'bg-black/30',
   children,
-  className = "",
-  speed = 0.5
+  className = '',
+  speed = 0.5,
 }) => {
   const parallaxRef = useRef(null);
 
@@ -28,21 +28,19 @@ const ParallaxSection = ({
   return (
     <div className={`relative overflow-hidden ${height} ${className}`}>
       {/* Parallax Background Image */}
-      <div 
+      <div
         ref={parallaxRef}
         className="absolute inset-0 w-full h-[200%] bg-cover bg-center bg-no-repeat"
-        style={{ 
+        style={{
           backgroundImage: `url(${imageSrc})`,
-          top: '-50%'
+          top: '-100%',
         }}
         aria-label={imageAlt}
       />
-      
+
       {/* Overlay */}
-      {overlay && (
-        <div className={`absolute inset-0 ${overlayOpacity}`} />
-      )}
-      
+      {overlay && <div className={`absolute inset-0 ${overlayOpacity}`} />}
+
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center h-full">
         {children}

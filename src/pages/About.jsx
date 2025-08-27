@@ -5,6 +5,7 @@ import ParallaxSection from '../components/ui/ParallaxSection';
 import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
 import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
 import BridgingImg from '../assets/img/about/para-1.webp';
+import BridgingImg2 from '../assets/img/about/para-2.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 
 const About = () => {
@@ -22,7 +23,7 @@ const About = () => {
           const elementPosition = element.offsetTop - offset;
           window.scrollTo({
             top: elementPosition,
-            behavior: 'smooth'
+            behavior: 'smooth',
           });
         }
       }, 100);
@@ -48,8 +49,8 @@ const About = () => {
         buttonOnClick={handleLearnMore}
         backgroundImage={PhilosophyBg}
       />
-      
-      <AboutContent 
+
+      <AboutContent
         // title="Driving Purpose Forward"
         title="Mission"
         description="At Othentica, our mission is to empower businesses through innovative digital solutions that drive growth and create meaningful connections. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
@@ -63,17 +64,15 @@ const About = () => {
         sectionId="mission"
       />
 
-      {/* Parallax Section 1 */}
-      <ParallaxSection 
-        imageSrc={BridgingImg}
+      <ParallaxSection
+        imageSrc={BridgingImg2}
         imageAlt="Digital Innovation"
-        height="h-[80vh]"
+        height="h-[85vh]"
         overlayOpacity="bg-neutral/20"
         speed={0.3}
-      >
-      </ParallaxSection>
+      ></ParallaxSection>
 
-      <AboutContent 
+      <AboutContent
         // title="Driving Purpose Forward"
         title="Vision"
         description="At Othentica, our vision is to be a leading provider of innovative digital solutions that empower businesses to achieve their goals in an ever-evolving digital landscape. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
@@ -97,7 +96,7 @@ const About = () => {
       >
       </ParallaxSection> */}
 
-      <AboutContent 
+      <AboutContent
         // title="Driving Purpose Forward"
         title="Values"
         description="At Othentica, our values are the foundation of our culture and guide our decisions. We believe in integrity, innovation, and collaboration, and we strive to create a positive impact through our work."
@@ -110,7 +109,6 @@ const About = () => {
         flipped={false}
         sectionId="values"
       />
-
     </div>
   );
 };
