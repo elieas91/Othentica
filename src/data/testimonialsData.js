@@ -1,9 +1,9 @@
 import Testimonial1 from '../assets/img/testimonials/testimonial-1.webp';
 import Testimonial2 from '../assets/img/testimonials/testimonial-2.webp';
 import Testimonial3 from '../assets/img/testimonials/testimonial-3.webp';
-import Testimonial4 from '../assets/img/testimonials/Testimonial-4.webp';
-import Testimonial5 from '../assets/img/testimonials/Testimonial-5.webp';
-import Testimonial6 from '../assets/img/testimonials/Testimonial-6.webp';
+import Testimonial4 from '../assets/img/testimonials/testimonial-4.webp';
+import Testimonial5 from '../assets/img/testimonials/testimonial-5.webp';
+import Testimonial6 from '../assets/img/testimonials/testimonial-6.webp';
 
 export const testimonialsData = [
   {
