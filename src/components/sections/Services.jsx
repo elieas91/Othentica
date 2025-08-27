@@ -1,11 +1,11 @@
-import React from "react";
-import { servicesData } from "../../data/servicesData";
-import Card from "../ui/Card";
-import Button from "../ui/Button";
+import React from 'react';
+import { servicesData } from '../../data/servicesData';
+import Card from '../ui/Card';
+import Button from '../ui/Button';
 
 const Services = () => {
   return (
-    <section className="py-16 px-8 lg:px-16 bg-neutral dark:bg-primary">
+    <section className="py-16 px-8 lg:px-16 bg-white dark:bg-primary">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">

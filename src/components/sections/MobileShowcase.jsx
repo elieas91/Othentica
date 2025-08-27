@@ -21,8 +21,8 @@ const MobileShowcase = () => {
   // Auto-rotate through services every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentServiceIndex((prevIndex) => 
-        (prevIndex + 1) % mobileServicesData.length
+      setCurrentServiceIndex(
+        (prevIndex) => (prevIndex + 1) % mobileServicesData.length
       );
     }, 4000);
 
@@ -30,14 +30,15 @@ const MobileShowcase = () => {
   }, []);
 
   const currentService = mobileServicesData[currentServiceIndex];
-  
+
   // Get the current app image based on service index
   const currentAppImage = appImages[currentServiceIndex % appImages.length];
   // Get a different image for the second phone (offset by 1)
-  const secondPhoneImage = appImages[(currentServiceIndex + 1) % appImages.length];
+  const secondPhoneImage =
+    appImages[(currentServiceIndex + 1) % appImages.length];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-neutral dark:bg-gray-800">
+    <section className="py-16 px-8 lg:px-16 bg-pastel-pink dark:bg-gray-800">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
         {/* Left Text with Carousel */}
         <div className="space-y-8">
@@ -48,7 +49,7 @@ const MobileShowcase = () => {
             <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
               {currentService.description}
             </p>
-            
+
             {/* Buttons inside carousel content */}
             <div className="flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-700 ease-in-out">
               <Button variant="secondary" size="large">
@@ -59,7 +60,7 @@ const MobileShowcase = () => {
               </Button>
             </div>
           </div>
-          
+
           {/* Carousel Indicators - Flame style */}
           <div className="flex justify-start space-x-3">
             {mobileServicesData.map((_, index) => (
@@ -73,8 +74,8 @@ const MobileShowcase = () => {
                 }`}
                 aria-label={`Go to service ${index + 1}`}
               >
-                <img 
-                  src={Flame} 
+                <img
+                  src={Flame}
                   alt={`Service ${index + 1}`}
                   className="w-full h-full object-contain"
                 />
@@ -82,47 +83,47 @@ const MobileShowcase = () => {
             ))}
           </div>
         </div>
-        
+
         {/* Right Mobile Phone */}
         <div className="relative flex justify-center">
           {/* Background Phone Frame - larger and angled */}
           <div className="relative transform -rotate-12 scale-75">
-            <img 
-              src={Phone} 
-              alt="Smartphone mockup" 
+            <img
+              src={Phone}
+              alt="Smartphone mockup"
               className="w-80 h-auto drop-shadow-2xl opacity-80"
             />
             {/* App content overlay inside the phone screen */}
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
               <div className="w-full h-full rounded-3xl flex justify-center items-center">
-                <img 
-                  src={currentAppImage} 
-                  alt="App interface" 
+                <img
+                  src={currentAppImage}
+                  alt="App interface"
                   className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
                 />
               </div>
             </div>
           </div>
-          
+
           {/* Foreground Phone Frame - smaller and overlapping */}
           <div className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20">
-            <img 
-              src={Phone} 
-              alt="Smartphone mockup" 
+            <img
+              src={Phone}
+              alt="Smartphone mockup"
               className="w-80 h-auto drop-shadow-2xl"
             />
             {/* App content overlay inside the phone screen */}
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
               <div className="w-full h-full rounded-3xl flex justify-center items-center">
-                <img 
-                  src={secondPhoneImage} 
-                  alt="App interface" 
+                <img
+                  src={secondPhoneImage}
+                  alt="App interface"
                   className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
                 />
               </div>
             </div>
           </div>
-          
+
           {/* Floating Elements */}
           {/* <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full animate-bounce">
             <img src={Flame} alt="Othentica" />

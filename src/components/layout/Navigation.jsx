@@ -15,7 +15,7 @@ const Navigation = () => {
   // Function to handle About dropdown navigation
   const handleAboutNavigation = (path) => {
     const [route, section] = path.split('#');
-    
+
     if (route === '/about') {
       if (section) {
         // If we're already on the about page, scroll to section
@@ -26,7 +26,7 @@ const Navigation = () => {
             const elementPosition = element.offsetTop - offset;
             window.scrollTo({
               top: elementPosition,
-              behavior: 'smooth'
+              behavior: 'smooth',
             });
           }
         } else {
@@ -40,7 +40,7 @@ const Navigation = () => {
               const elementPosition = element.offsetTop - offset;
               window.scrollTo({
                 top: elementPosition,
-                behavior: 'smooth'
+                behavior: 'smooth',
               });
             }
           }, 100);
@@ -50,7 +50,7 @@ const Navigation = () => {
         navigate('/about');
       }
     }
-    
+
     // Close dropdowns
     setIsAboutDropdownOpen(false);
     setIsMenuOpen(false);
@@ -60,7 +60,7 @@ const Navigation = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Show navigation when scrolling up or at the top
       if (currentScrollY < lastScrollY || currentScrollY < 100) {
         setIsVisible(true);
@@ -68,38 +68,40 @@ const Navigation = () => {
         // Hide navigation when scrolling down
         setIsVisible(false);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { 
-      path: '/about', 
+    {
+      path: '/about',
       label: 'About',
       hasDropdown: true,
       dropdownItems: [
         { path: '/about#mission', label: 'Mission' },
         { path: '/about#vision', label: 'Vision' },
-        { path: '/about#values', label: 'Values' }
-      ]
+        { path: '/about#values', label: 'Values' },
+      ],
     },
     { path: '/services', label: 'Services' },
     { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' }
+    { path: '/contact', label: 'Contact' },
   ];
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`bg-neutral dark:bg-primary shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <nav
+      className={`bg-white dark:bg-primary shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -124,18 +126,28 @@ const Navigation = () => {
                       }, 100);
                     }}
                   >
-                    <button 
+                    <button
                       onClick={() => handleAboutNavigation('/about')}
                       className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
                     >
                       <span>{item.label}</span>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
-                    
+
                     {isAboutDropdownOpen && (
-                      <div 
+                      <div
                         className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 dropdown-menu"
                         onMouseEnter={() => setIsAboutDropdownOpen(true)}
                         onMouseLeave={() => {
@@ -145,7 +157,9 @@ const Navigation = () => {
                         {item.dropdownItems.map((dropdownItem) => (
                           <button
                             key={dropdownItem.path}
-                            onClick={() => handleAboutNavigation(dropdownItem.path)}
+                            onClick={() =>
+                              handleAboutNavigation(dropdownItem.path)
+                            }
                             className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
@@ -207,11 +221,23 @@ const Navigation = () => {
               aria-label="Toggle theme"
             >
               {isDark ? (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               ) : (
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                 </svg>
               )}
@@ -221,11 +247,26 @@ const Navigation = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary focus:outline-none focus:text-secondary"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>

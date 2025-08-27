@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -25,6 +22,14 @@ export default {
           900: '#1e3a8a',
           950: '#172554',
         },
+        pastel: {
+          peach: '#FFE5D9',
+          pink: '#F9D5D3',
+          lavender: '#E6D7F5',
+          blue: '#CFE8F6',
+          mint: '#B8E5D0',
+          yellow: '#FDF1B8',
+        },
         primary: '#023051',
         secondary: '#d77644',
         accent: '#f4dfc4',
@@ -37,5 +42,4 @@ export default {
     },
   },
   plugins: [],
-}
-
+};

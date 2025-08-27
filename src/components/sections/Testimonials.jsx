@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Flame from '../../assets/img/flame.webp';
 import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
 import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
 import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
@@ -18,49 +19,50 @@ const Testimonials = () => {
   const testimonialsData = [
     {
       id: 1,
-      quote: "Othentica helped me find peace and energy again.",
-      author: "Client Name"
+      quote: 'Othentica helped me find peace and energy again.',
+      author: 'Client Name',
     },
     {
       id: 2,
-      quote: "The wellness coaching transformed my approach to self-care.",
-      author: "Sarah Johnson"
+      quote: 'The wellness coaching transformed my approach to self-care.',
+      author: 'Sarah Johnson',
     },
     {
       id: 3,
-      quote: "Mindful living has never been more accessible than with Othentica.",
-      author: "Michael Chen"
-    }
+      quote:
+        'Mindful living has never been more accessible than with Othentica.',
+      author: 'Michael Chen',
+    },
   ];
 
   const imageCardsData = [
     {
       id: 1,
       image: Testimonial1,
-      title: "Embracing Nature",
-      subtitle: "Ermbnsa, LoevevtenmDos"
+      title: 'Embracing Nature',
+      subtitle: 'Ermbnsa, LoevevtenmDos',
     },
     {
       id: 2,
       image: Testimonial2,
-      title: "The Power of Mindful Living",
-      subtitle: "Thuja-velsaks.crver teqpine"
+      title: 'The Power of Mindful Living',
+      subtitle: 'Thuja-velsaks.crver teqpine',
     },
     {
       id: 3,
       image: Testimonial3,
-      title: "Crystal Healing",
-      subtitle: "Natural energy and balance"
-    }
+      title: 'Crystal Healing',
+      subtitle: 'Natural energy and balance',
+    },
   ];
 
   const currentImageCards = [
     imageCardsData[currentIndex],
-    imageCardsData[(currentIndex + 1) % imageCardsData.length]
+    imageCardsData[(currentIndex + 1) % imageCardsData.length],
   ];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-neutral-50">
+    <section className="py-16 px-8 lg:px-16 bg-pastel-blue">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Side - Testimonial with Carousel */}
@@ -68,7 +70,7 @@ const Testimonials = () => {
             <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-8">
               Testimonials
             </h2>
-            
+
             {/* Carousel Content */}
             <div className="min-h-[200px] flex flex-col justify-center">
               <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out">
@@ -78,34 +80,40 @@ const Testimonials = () => {
                 – {testimonialsData[currentIndex].author}
               </cite>
             </div>
-            
+
             {/* Carousel Indicators */}
             <div className="flex space-x-3 mt-8">
               {testimonialsData.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
+                  className={`w-8 h-8 transition-all duration-300 ${
                     index === currentIndex
-                      ? 'bg-secondary scale-125'
-                      : 'bg-accent hover:bg-gray-400'
+                      ? 'opacity-100 scale-110'
+                      : 'opacity-30 hover:opacity-60'
                   }`}
                   aria-label={`Go to testimonial ${index + 1}`}
-                />
+                >
+                  <img
+                    src={Flame}
+                    alt={`Testimonial ${index + 1}`}
+                    className="w-full h-full object-contain"
+                  />
+                </button>
               ))}
             </div>
           </div>
-          
+
           {/* Right Side - Two Image Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {currentImageCards.map((card, index) => (
-              <div 
+              <div
                 key={`${card.id}-${currentIndex}-${index}`}
                 className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out"
               >
                 <div className="h-48 overflow-hidden">
-                  <img 
-                    src={card.image} 
+                  <img
+                    src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover sepia-[0.3]"
                   />
@@ -114,9 +122,7 @@ const Testimonials = () => {
                   <h3 className="text-xl font-bold text-primary mb-2">
                     {card.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    {card.subtitle}
-                  </p>
+                  <p className="text-gray-600 text-sm">{card.subtitle}</p>
                 </div>
               </div>
             ))}
