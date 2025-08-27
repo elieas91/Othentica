@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { clientsData } from '../../data/clientsData';
+import Flame from '../../assets/img/flame.webp';
 
 const Clients = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,32 +14,33 @@ const Clients = () => {
     const interval = setInterval(() => {
       setCurrentIndex(
         (prevIndex) =>
-          (prevIndex + 1) % Math.ceil(clientsData.length / itemsPerView)
+          (prevIndex + 1) % (clientsData.length - itemsPerView + 1)
       );
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [shouldUseCarousel]);
+  }, [shouldUseCarousel, clientsData.length, itemsPerView]);
 
   const nextSlide = () => {
     if (!shouldUseCarousel) return;
+    const maxIndex = clientsData.length - itemsPerView;
     setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex + 1) % Math.ceil(clientsData.length / itemsPerView)
+      (prevIndex) => (prevIndex + 1) % (maxIndex + 1)
     );
   };
 
   const prevSlide = () => {
     if (!shouldUseCarousel) return;
+    const maxIndex = clientsData.length - itemsPerView;
     setCurrentIndex((prevIndex) => {
-      const maxIndex = Math.ceil(clientsData.length / itemsPerView) - 1;
       return prevIndex === 0 ? maxIndex : prevIndex - 1;
     });
   };
 
   const goToSlide = (index) => {
     if (!shouldUseCarousel) return;
-    setCurrentIndex(index);
+    const maxIndex = clientsData.length - itemsPerView;
+    setCurrentIndex(Math.min(index, maxIndex));
   };
 
   if (!shouldUseCarousel) {
@@ -80,10 +82,8 @@ const Clients = () => {
   }
 
   // Carousel layout for more than 6 clients
-  const totalSlides = Math.ceil(clientsData.length / itemsPerView);
-  const startIndex = currentIndex * itemsPerView;
-  const endIndex = Math.min(startIndex + itemsPerView, clientsData.length);
-  const currentClients = clientsData.slice(startIndex, endIndex);
+  const totalSlides = clientsData.length - itemsPerView + 1;
+  const currentClients = clientsData.slice(currentIndex, currentIndex + itemsPerView);
 
   return (
     <section className="py-16 px-8 lg:px-16 bg-neutral">
@@ -98,7 +98,7 @@ const Clients = () => {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative max-w-4xl mx-auto">
+        <div className="relative max-w-6xl mx-auto">
           {/* Carousel Track */}
           <div className="overflow-hidden">
             <div className="flex transition-transform duration-700 ease-in-out">
@@ -170,13 +170,19 @@ const Clients = () => {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-8 h-8 transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-blue-600 dark:bg-blue-400 scale-125'
-                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                    ? 'opacity-100 scale-110'
+                    : 'opacity-30 hover:opacity-60'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
-              />
+              >
+                <img
+                  src={Flame}
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-full object-contain"
+                />
+              </button>
             ))}
           </div>
         </div>
