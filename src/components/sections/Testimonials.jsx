@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Flame from '../../assets/img/flame.webp';
-import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
-import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
-import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
+import { testimonialsData } from '../../data/testimonialsData';
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,50 +14,8 @@ const Testimonials = () => {
     return () => clearInterval(interval);
   });
 
-  const testimonialsData = [
-    {
-      id: 1,
-      quote: 'Othentica helped me find peace and energy again.',
-      author: 'Client Name',
-    },
-    {
-      id: 2,
-      quote: 'The wellness coaching transformed my approach to self-care.',
-      author: 'Sarah Johnson',
-    },
-    {
-      id: 3,
-      quote:
-        'Mindful living has never been more accessible than with Othentica.',
-      author: 'Michael Chen',
-    },
-  ];
-
-  const imageCardsData = [
-    {
-      id: 1,
-      image: Testimonial1,
-      title: 'Embracing Nature',
-      subtitle: 'Ermbnsa, LoevevtenmDos',
-    },
-    {
-      id: 2,
-      image: Testimonial2,
-      title: 'The Power of Mindful Living',
-      subtitle: 'Thuja-velsaks.crver teqpine',
-    },
-    {
-      id: 3,
-      image: Testimonial3,
-      title: 'Crystal Healing',
-      subtitle: 'Natural energy and balance',
-    },
-  ];
-
-  const currentImageCards = [
-    imageCardsData[currentIndex],
-    imageCardsData[(currentIndex + 1) % imageCardsData.length],
-  ];
+  // Get the two image cards for the current testimonial
+  const currentImageCards = testimonialsData[currentIndex].images;
 
   return (
     <section className="py-16 px-8 lg:px-16 bg-pastel-blue">
