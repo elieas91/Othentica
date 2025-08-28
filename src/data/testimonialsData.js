@@ -110,7 +110,7 @@ export const testimonialCategories = [
   },
   {
     id: 'energy',
-    name: 'Energy & Vitality',
+    name: 'Energy & Vitality', 
     images: ['testimonial-4', 'testimonial-3'],
     description: 'Enhanced energy and emotional mastery',
     count: 3
