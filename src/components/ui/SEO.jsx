@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import Logo from '../../assets/img/logo.webp';
 
-const SEO = ({ 
-  title, 
-  description, 
-  keywords, 
-  image, 
-  url, 
+const SEO = ({
+  title = null,
+  description = null,
+  keywords = null,
+  image = null,
+  url = null,
   type = 'website',
   structuredData = null,
   canonical = null
@@ -13,13 +14,13 @@ const SEO = ({
   const fullTitle = title ? `${title} | Othentica` : 'Othentica - Digital Innovation & Mobile App Development';
   const defaultDescription = 'Othentica is a leading digital innovation company specializing in mobile app development, web solutions, and digital transformation services. We help businesses achieve their digital goals with cutting-edge technology and creative excellence.';
   const defaultKeywords = 'digital innovation, mobile app development, web development, digital transformation, technology solutions, creative excellence, business growth, digital strategy';
-  const defaultImage = '/src/assets/img/logo.webp';
+  const defaultImage = Logo;
   const baseUrl = 'https://othentica.com'; // Update this with your actual domain
 
   useEffect(() => {
     // Update document title
     document.title = fullTitle;
-    
+
     // Update or create meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
@@ -28,7 +29,7 @@ const SEO = ({
       document.head.appendChild(metaDescription);
     }
     metaDescription.content = description || defaultDescription;
-    
+
     // Update or create meta keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (!metaKeywords) {
@@ -37,7 +38,7 @@ const SEO = ({
       document.head.appendChild(metaKeywords);
     }
     metaKeywords.content = keywords || defaultKeywords;
-    
+
     // Update or create Open Graph meta tags
     const ogTags = [
       { property: 'og:title', content: fullTitle },
@@ -48,7 +49,7 @@ const SEO = ({
       { property: 'og:site_name', content: 'Othentica' },
       { property: 'og:locale', content: 'en_US' }
     ];
-    
+
     ogTags.forEach(tag => {
       let ogTag = document.querySelector(`meta[property="${tag.property}"]`);
       if (!ogTag) {
@@ -58,7 +59,7 @@ const SEO = ({
       }
       ogTag.content = tag.content;
     });
-    
+
     // Update or create Twitter Card meta tags
     const twitterTags = [
       { name: 'twitter:card', content: 'summary_large_image' },
@@ -66,7 +67,7 @@ const SEO = ({
       { name: 'twitter:description', content: description || defaultDescription },
       { name: 'twitter:image', content: image || defaultImage }
     ];
-    
+
     twitterTags.forEach(tag => {
       let twitterTag = document.querySelector(`meta[name="${tag.name}"]`);
       if (!twitterTag) {
@@ -76,7 +77,7 @@ const SEO = ({
       }
       twitterTag.content = tag.content;
     });
-    
+
     // Update or create robots meta tag
     let metaRobots = document.querySelector('meta[name="robots"]');
     if (!metaRobots) {
@@ -85,7 +86,7 @@ const SEO = ({
       document.head.appendChild(metaRobots);
     }
     metaRobots.content = 'index, follow';
-    
+
     // Update or create author meta tag
     let metaAuthor = document.querySelector('meta[name="author"]');
     if (!metaAuthor) {
@@ -94,7 +95,7 @@ const SEO = ({
       document.head.appendChild(metaAuthor);
     }
     metaAuthor.content = 'Othentica';
-    
+
     // Update or create canonical link
     if (canonical) {
       let canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -105,13 +106,13 @@ const SEO = ({
       }
       canonicalLink.href = canonical;
     }
-    
+
     // Add structured data
     if (structuredData) {
       // Remove existing structured data
       const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
       existingScripts.forEach(script => script.remove());
-      
+
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.textContent = JSON.stringify(structuredData);
@@ -120,14 +121,14 @@ const SEO = ({
       // Add default organization structured data
       const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
       existingScripts.forEach(script => script.remove());
-      
+
       const defaultStructuredData = {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Othentica",
         "description": "Digital innovation company specializing in mobile app development and digital transformation",
         "url": baseUrl,
-        "logo": `${baseUrl}/src/assets/img/logo.webp`,
+        "logo": `${baseUrl}${Logo}`,
         "sameAs": [
           "https://linkedin.com/company/othentica",
           "https://twitter.com/othentica"
@@ -138,13 +139,13 @@ const SEO = ({
           "email": "info@othentica.com"
         }
       };
-      
+
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.textContent = JSON.stringify(defaultStructuredData);
       document.head.appendChild(script);
     }
-    
+
     // Cleanup function
     return () => {
       // Reset title to default

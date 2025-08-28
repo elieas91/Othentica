@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Flame from '../../assets/img/flame.webp';
-import { testimonialsData } from '../../data/testimonialsData';
+import { testimonialsData } from '../../data/testimonialsData_new';
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

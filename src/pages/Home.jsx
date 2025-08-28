@@ -7,6 +7,7 @@ import Services from '../components/sections/Services';
 import Testimonials from '../components/sections/Testimonials';
 import Blog from '../components/sections/Blog';
 import Clients from '../components/sections/Clients';
+import Logo from '../assets/img/logo.webp';
 
 const Home = () => {
   // SEO data for homepage
@@ -14,7 +15,7 @@ const Home = () => {
     title: "Digital Innovation & Mobile App Development",
     description: "Othentica is a leading digital innovation company specializing in mobile app development, web solutions, and digital transformation services. We help businesses achieve their digital goals with cutting-edge technology and creative excellence.",
     keywords: "digital innovation, mobile app development, web development, digital transformation, technology solutions, creative excellence, business growth, digital strategy, mobile apps, web applications, software development",
-    image: "/src/assets/img/logo.webp",
+    image: Logo,
     url: "https://othentica.com",
     type: "website",
     structuredData: {
@@ -33,7 +34,7 @@ const Home = () => {
         "name": "Othentica",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://othentica.com/src/assets/img/logo.webp"
+          "url": Logo
         }
       }
     }

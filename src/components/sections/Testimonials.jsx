@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Flame from '../../assets/img/flame.webp';
+import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
+import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
+import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
+import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
+import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
+import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
 import { testimonialsData, testimonialCategories } from '../../data/testimonialsData';
 
 const Testimonials = () => {
@@ -21,7 +27,15 @@ const Testimonials = () => {
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName) => {
-    return `/src/assets/img/testimonials/${imageName}.webp`;
+    const imageMap = {
+      'testimonial-1': Testimonial1,
+      'testimonial-2': Testimonial2,
+      'testimonial-3': Testimonial3,
+      'testimonial-4': Testimonial4,
+      'testimonial-5': Testimonial5,
+      'testimonial-6': Testimonial6,
+    };
+    return imageMap[imageName] || Testimonial1; // fallback to first image
   };
 
   // Function to truncate quote to 2 lines

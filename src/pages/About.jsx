@@ -6,8 +6,9 @@ import ParallaxSection from '../components/ui/ParallaxSection';
 import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
 import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
 import BridgingImg from '../assets/img/about/para-1.webp';
-import BridgingImg2 from '../assets/img/about/para-2.webp';
+import BridgingImg2 from '../assets/img/services/bridging.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
+import Logo from '../assets/img/logo.webp';
 
 const About = () => {
   // SEO data for about page
@@ -15,7 +16,7 @@ const About = () => {
     title: "About Othentica - Our Mission, Vision & Values",
     description: "Learn about Othentica's mission to empower businesses through innovative digital solutions. Discover our vision for digital transformation and the core values that drive our culture of excellence.",
     keywords: "about Othentica, company mission, company vision, company values, digital innovation company, technology company, mobile app development company, digital transformation services",
-    image: "/src/assets/img/philosophy/philo-bg.webp",
+    image: PhilosophyBg,
     url: "https://othentica.com/about",
     type: "website",
     canonical: "https://othentica.com/about",
@@ -30,7 +31,7 @@ const About = () => {
         "name": "Othentica",
         "description": "Digital innovation company specializing in mobile app development and digital transformation",
         "url": "https://othentica.com",
-        "logo": "https://othentica.com/src/assets/img/logo.webp",
+        "logo": Logo,
         "foundingDate": "2020",
         "slogan": "Crafting Digital Excellence",
         "knowsAbout": [
