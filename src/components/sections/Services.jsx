@@ -2,6 +2,7 @@ import React from 'react';
 import { servicesData } from '../../data/servicesData';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
+import Flame from '../../assets/img/flame.webp';
 
 const Services = () => {
   return (
@@ -12,7 +13,7 @@ const Services = () => {
           {/* Main Flame Image with Bounce Animation */}
           <div className="w-16 h-20 lg:w-20 lg:h-24 relative animate-bounce">
             <img 
-              src="/src/assets/img/flame.webp" 
+              src={Flame} 
               alt="Flame" 
               className="w-full h-full object-contain"
             />
