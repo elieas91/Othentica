@@ -10,76 +10,91 @@ import App5 from '../../assets/img/app-5.webp';
 import App6 from '../../assets/img/app-6.webp';
 import App7 from '../../assets/img/app-7.webp';
 import App8 from '../../assets/img/app-8.webp';
-import { mobileServicesData } from '../../data/mobileServicesData';
+import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1.png';
+import { mobileAppStepsData } from '../../data/mobileAppStepsData';
 
 const MobileShowcase = () => {
-  const [currentServiceIndex, setCurrentServiceIndex] = useState(0);
+  const [currentStepIndex, setcurrentStepIndex] = useState(0);
+  const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
 
   // Array of all app images
   const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
 
-  // Auto-rotate through services every 4 seconds
+  // Auto-rotate through app images every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentServiceIndex(
-        (prevIndex) => (prevIndex + 1) % mobileServicesData.length
+      setCurrentAppImageIndex(
+        (prevIndex) => (prevIndex + 1) % appImages.length
       );
     }, 4000);
-
     return () => clearInterval(interval);
   }, []);
 
-  const currentService = mobileServicesData[currentServiceIndex];
+  const currentStep = mobileAppStepsData[currentStepIndex];
 
-  // Get the current app image based on service index
-  const currentAppImage = appImages[currentServiceIndex % appImages.length];
-  // Get a different image for the second phone (offset by 1)
+  // Both app images change at the same time, but show different images
+  const currentAppImage = appImages[currentAppImageIndex % appImages.length];
   const secondPhoneImage =
-    appImages[(currentServiceIndex + 1) % appImages.length];
+    appImages[(currentAppImageIndex + 1) % appImages.length];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-pastel-pink dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
+    <section
+      className="py-16 px-8 lg:px-16 bg-white dark:bg-gray-800 relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${LogoPattern})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '60px 100px', // 60px 100px for logo pattern v2
+      }}
+    >
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
         {/* Left Text with Carousel */}
-        <div className="space-y-8">
+        <div
+          className={`bg-white rounded-xl shadow-lg p-8 relative z-20 ${
+            currentStep.buttonText ? 'space-y-8' : ''
+          }`}
+          style={{ backgroundColor: 'rgba(255,255,255,1)' }}
+        >
           <div className="min-h-[200px] flex flex-col justify-center">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral transition-all duration-700 ease-in-out">
-              {currentService.title}
+              {currentStep.title}
             </h2>
             <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
-              {currentService.description}
+              {currentStep.description}
             </p>
 
             {/* Buttons inside carousel content */}
             <div className="flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-700 ease-in-out">
-              <Button variant="secondary" size="large">
-                Download App
-              </Button>
-              <Button variant="accent" size="large">
+              {currentStep.buttonText ? (
+                <Button variant="secondary" size="large">
+                  {currentStep.buttonText}
+                </Button>
+              ) : null}
+
+              {/* <Button variant="accent" size="large">
                 Learn More
-              </Button>
+              </Button> */}
             </div>
           </div>
 
-          {/* Carousel Indicators - Flame style */}
-          <div className="flex justify-start space-x-3">
-            {mobileServicesData.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentServiceIndex(index)}
-                className={`w-8 h-8 transition-all duration-300 ${
-                  index === currentServiceIndex
-                    ? 'opacity-100 scale-110'
-                    : 'opacity-30 hover:opacity-60'
-                }`}
-                aria-label={`Go to service ${index + 1}`}
-              >
-                <img
-                  src={Flame}
-                  alt={`Service ${index + 1}`}
-                  className="w-full h-full object-contain"
-                />
-              </button>
+          {/* Carousel Indicators - Numbered style with lines between circles */}
+          <div className="flex items-center">
+            {mobileAppStepsData.map((_, index) => (
+              <React.Fragment key={index}>
+                <button
+                  onClick={() => setcurrentStepIndex(index)}
+                  className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
+                    index === currentStepIndex
+                      ? 'bg-primary text-white scale-110 opacity-100'
+                      : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
+                  }`}
+                  aria-label={`Go to step ${index + 1}`}
+                >
+                  <span>{index + 1}</span>
+                </button>
+                {index < mobileAppStepsData.length - 1 && (
+                  <div className="w-8 h-0.5 bg-gray-300 mx-2" />
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>

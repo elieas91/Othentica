@@ -14,88 +14,75 @@ const Testimonials = () => {
     return () => clearInterval(interval);
   });
 
-  return (
-    <section className="py-20 px-8 lg:px-16 bg-pastel-blue">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-6xl font-bold text-primary mb-6">
-            What Our Clients Say
-          </h2>
-          <p className="text-xl text-primary/80 max-w-2xl mx-auto">
-            Discover the transformative experiences of those who have journeyed with us
-          </p>
-        </div>
+  // Get the two image cards for the current testimonial
+  const currentImageCards = testimonialsData[currentIndex].images;
 
-        {/* Testimonial Carousel */}
-        <div className="relative">
-          {/* Main Testimonial Card */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 lg:p-16 shadow-2xl border border-white/20 mb-12">
-            <div className="min-h-[300px] flex flex-col justify-center items-center text-center">
-              {/* Quote Icon */}
-              <div className="text-6xl text-primary/20 mb-8">"</div>
-              
-              {/* Testimonial Quote */}
-              <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out max-w-4xl">
-                {testimonialsData[currentIndex].quote}
+  return (
+    <section className="py-16 px-8 lg:px-16 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Side - Testimonial with Carousel */}
+          <div className="text-left">
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-8">
+              Testimonials
+            </h2>
+
+            {/* Carousel Content */}
+            <div className="min-h-[200px] flex flex-col justify-center">
+              <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out">
+                "{testimonialsData[currentIndex].quote}"
               </blockquote>
-              
-              {/* Author */}
               <cite className="text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
                 – {testimonialsData[currentIndex].author}
               </cite>
             </div>
-          </div>
 
-          {/* Enhanced Carousel Indicators with Flames */}
-          <div className="flex justify-center space-x-4">
-            {testimonialsData.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`group transition-all duration-500 ${
-                  index === currentIndex
-                    ? 'scale-125 opacity-100'
-                    : 'scale-100 opacity-40 hover:opacity-80 hover:scale-110'
-                }`}
-                aria-label={`Go to testimonial ${index + 1}`}
-              >
-                <div className="relative">
+            {/* Carousel Indicators */}
+            <div className="flex space-x-3 mt-8">
+              {testimonialsData.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-8 h-8 transition-all duration-300 ${
+                    index === currentIndex
+                      ? 'opacity-100 scale-110'
+                      : 'opacity-30 hover:opacity-60'
+                  }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                >
                   <img
                     src={Flame}
                     alt={`Testimonial ${index + 1}`}
-                    className={`w-10 h-10 object-contain transition-all duration-300 ${
-                      index === currentIndex ? 'animate-pulse' : ''
-                    }`}
+                    className="w-full h-full object-contain"
                   />
-                </div>
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={() => setCurrentIndex((prevIndex) => 
-              prevIndex === 0 ? testimonialsData.length - 1 : prevIndex - 1
-            )}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
-            aria-label="Previous testimonial"
-          >
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          <button
-            onClick={() => setCurrentIndex((prevIndex) => 
-              (prevIndex + 1) % testimonialsData.length
-            )}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
-            aria-label="Next testimonial"
-          >
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* Right Side - Two Image Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {currentImageCards.map((card, index) => (
+              <div
+                key={`${card.id}-${currentIndex}-${index}`}
+                className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out"
+              >
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="w-full h-full object-cover sepia-[0.3]"
+                  />
+                </div>
+                <div className="p-6 text-start">
+                  <h3 className="text-xl font-bold text-primary mb-2">
+                    {card.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">{card.subtitle}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
