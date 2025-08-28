@@ -1,3 +1,6 @@
+import yogaPoseImg from '../assets/img/contact/yoga-pose.webp';
+import tarekImg from '../assets/img/contact/tarek.webp';
+
 export const teamData = [
   {
     id: 1,
@@ -5,7 +8,7 @@ export const teamData = [
     role: "Personal Coach",
     description: "Personal Coaching for a Healthier, Happier You",
     subtitle: "Empower your wellness journey",
-    image: "/src/assets/img/contact/yoga-pose.webp",
+    image: yogaPoseImg,
     socialMedia: {
       instagram: "@Hiba",
       facebook: "Hiba",
@@ -19,7 +22,7 @@ export const teamData = [
     role: "Wellness Specialist",
     description: "Transform Your Life Through Mindful Practices",
     subtitle: "Discover inner peace and balance",
-    image: "/src/assets/img/contact/tarek.webp",
+    image: tarekImg,
     socialMedia: {
       instagram: "@Tarek",
       facebook: "Tarek",
