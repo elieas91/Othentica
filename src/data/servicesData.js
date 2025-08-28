@@ -1,39 +1,44 @@
-import Performance from "../assets/img/services/performance.webp";
-import Relax from "../assets/img/services/relax.webp";
-import Challenge from "../assets/img/services/challenge.webp";
-import Bridging from "../assets/img/services/bridging.webp";
+// import Performance from '../assets/img/services/performance.webp';
+// import Relax from '../assets/img/services/relax.webp';
+// import Challenge from '../assets/img/services/challenge.webp';
+// import Bridging from '../assets/img/services/bridging.webp';
+
+import App from '../assets/img/services/app.webp';
+import OneToOne from '../assets/img/services/one_to_one.webp';
+import Programs from '../assets/img/services/programs.webp';
+import Talks from '../assets/img/services/talks.webp';
 
 export const servicesData = [
   {
     id: 1,
-    icon: Performance,
-    title: "Fuel your performance",
+    icon: App,
+    title: 'The Othentica App',
     description:
-      "Strategies and practices to boost energy, focus, and resilience in your daily life.",
-    buttonText: "Explore",
+      'One-of-its-kind wellness app that makes growth simple and engaging. With gamified learning, quick science-backed practices, daily “mind cookies” and inspiring stories, Othentica helps you build focus, energy, and balance at work and beyond.',
+    buttonText: 'Explore',
   },
   {
     id: 2,
-    icon: Relax,
-    title: "Relax",
+    icon: Programs,
+    title: 'Tailored Programs',
     description:
-      "Guided methods to release stress, recharge, and restore balance to your body and mind.",
-    buttonText: "Explore",
+      'Corporate Health training journeys designed to reduce life pressures, build resilience, and spark thriving performance — delivered face-to-face, online, or blended with the ability to help organizations track growth and impact.',
+    buttonText: 'Explore',
   },
   {
     id: 3,
-    icon: Challenge,
-    title: "Challenge",
+    icon: Talks,
+    title: 'Talks & Workshops',
     description:
-      "Engaging activities and mindset tools that push you to grow beyond your comfort zone.",
-    buttonText: "Explore",
+      'Engaging sessions on brain health, resilience, and corporate health trends, inspiring teams to shift from coping to thriving.',
+    buttonText: 'Explore',
   },
   {
     id: 4,
-    icon: Bridging,
-    title: "Bridging",
+    icon: OneToOne,
+    title: '1:1 Guidance',
     description:
-      "Helping you connect the gap between where you are and where you want to be in your wellness journey.",
-    buttonText: "Explore",
+      'Personalized support through brain health coaching and training methods to help individuals become truly unstuckable.',
+    buttonText: 'Explore',
   },
 ];
