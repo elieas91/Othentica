@@ -5,7 +5,7 @@ import Philosophy from '../components/sections/Philosophy';
 import MobileShowcase from '../components/sections/MobileShowcase';
 import Services from '../components/sections/Services';
 import Testimonials from '../components/sections/Testimonials';
-import Blog from '../components/sections/Blog';
+import SocialMedia from '../components/sections/Blog';
 import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
 
@@ -48,7 +48,7 @@ const Home = () => {
       <MobileShowcase />
       <Services />
       <Testimonials />
-      <Blog />
+      <SocialMedia />
       <Clients />
     </div>
   );

@@ -5,8 +5,6 @@ import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
 import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
 import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
-import BridgingImg from '../assets/img/about/para-1.webp';
-import BridgingImg2 from '../assets/img/services/bridging.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 import Logo from '../assets/img/logo.webp';
 
@@ -75,7 +73,7 @@ const About = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral dark:bg-primary">
+    <div className="min-h-screen dark:bg-primary">
       <SEO {...seoData} />
       
       <Banner
@@ -103,7 +101,7 @@ const About = () => {
       />
 
       <ParallaxSection
-        imageSrc={BridgingImg2}
+        imageSrc={PerformanceImg}
         imageAlt="Digital Innovation"
         height="h-[85vh]"
         overlayOpacity="bg-neutral/20"

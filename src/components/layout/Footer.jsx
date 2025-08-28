@@ -16,8 +16,7 @@ const Footer = () => {
             <p className="text-gray-100 mb-6 leading-relaxed">
               Your authentic wellness companion. We're dedicated to helping you discover genuine wellness solutions that work for your unique journey.
             </p>
-            <div className="flex space-x-4">
-              {/* LinkedIn */}
+            {/* <div className="flex space-x-4">
               <a 
                 href="https://linkedin.com/company/othentica" 
                 target="_blank" 
@@ -28,7 +27,6 @@ const Footer = () => {
                 <FaLinkedin className="text-neutral text-lg" />
               </a>
               
-              {/* YouTube */}
               <a 
                 href="https://youtube.com/@othentica" 
                 target="_blank" 
@@ -39,7 +37,6 @@ const Footer = () => {
                 <FaYoutube className="text-neutral text-lg" />
               </a>
               
-              {/* Instagram */}
               <a 
                 href="https://instagram.com/othentica" 
                 target="_blank" 
@@ -50,7 +47,6 @@ const Footer = () => {
                 <FaInstagram className="text-neutral text-lg" />
               </a>
               
-              {/* Facebook */}
               <a 
                 href="https://facebook.com/othentica" 
                 target="_blank" 
@@ -60,7 +56,7 @@ const Footer = () => {
               >
                 <FaFacebook className="text-neutral text-lg" />
               </a>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}

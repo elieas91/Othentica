@@ -35,18 +35,16 @@ const AboutContent = ({
             {showFloatingCircles && (
               <div
                 className={`${
-                  flipped ? 'left-[-5rem] rotate-90 top-[84%]' : 'right-0'
-                } absolute bottom-0 hidden h-20 w-20 translate-x-1/2 translate-y-1/2 md:block`}
+                  flipped ? 'left-[-10%] rotate-[45deg] top-[50%]' : 'right-0 rotate-[-45deg]'
+                } absolute bottom-0 hidden h-80 w-10 translate-x-1/2 translate-y-1/2 md:block`}
                 style={{ background: '#3470cb' }}
               >
-                <div className="absolute h-20 w-20 -translate-y-1/2 translate-x-1/2 rounded-full bg-neutral"></div>
-                <div className="absolute h-20 w-20 -translate-x-1/2 translate-y-1/2 rounded-full bg-neutral"></div>
               </div>
             )}
 
             {/* Image Container */}
             <div
-              className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl md:aspect-video"
+              className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[8rem] md:aspect-video"
               style={{ background: '#3470cb' }}
             >
               {/* Mobile Image */}
@@ -128,7 +126,7 @@ const AboutContent = ({
           } pb-10`}
         >
           <div className="flex h-auto w-full md:w-1/3">
-            <div className="relative flex aspect-video w-full translate-x-0 items-center justify-center overflow-hidden rounded-2xl bg-contrast py-10">
+            <div className="relative flex aspect-video w-full translate-x-0 items-center justify-center overflow-hidden rounded-[8rem] bg-contrast py-10">
               {/* Video */}
               <video
                 loop

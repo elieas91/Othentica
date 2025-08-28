@@ -48,6 +48,8 @@ const Navigation = () => {
       } else {
         // Just navigate to about page
         navigate('/about');
+        // Ensure page starts from top when navigating to about page
+        window.scrollTo(0, 0);
       }
     }
 

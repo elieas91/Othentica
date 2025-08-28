@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const Blog = () => {
+const SocialMedia = () => {
   const [instagramData, setInstagramData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('instagram');
 
   // Fetch Instagram data from Behold API
   useEffect(() => {
@@ -47,6 +48,122 @@ const Blog = () => {
       : caption;
   };
 
+  // Mock data for other social platforms
+  const socialPlatforms = {
+    instagram: {
+      name: 'Instagram',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      ),
+      color: 'bg-gradient-to-r from-purple-500 to-pink-500',
+      hoverColor: 'hover:from-purple-600 hover:to-pink-600',
+      data: instagramData
+    },
+    facebook: {
+      name: 'Facebook',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      ),
+      color: 'bg-blue-600',
+      hoverColor: 'hover:bg-blue-700',
+      data: {
+        username: 'othentica',
+        followers: 1250,
+        posts: 89,
+        recentPosts: [
+          {
+            id: 'fb1',
+            content: 'Excited to share our latest insights on personal development and authentic living!',
+            timestamp: '2025-01-15T10:00:00+0000',
+            likes: 45,
+            comments: 12,
+            shares: 8
+          },
+          {
+            id: 'fb2',
+            content: 'Join us for our upcoming workshop on building meaningful relationships.',
+            timestamp: '2025-01-12T14:30:00+0000',
+            likes: 67,
+            comments: 23,
+            shares: 15
+          }
+        ]
+      }
+    },
+    linkedin: {
+      name: 'LinkedIn',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      ),
+      color: 'bg-blue-700',
+      hoverColor: 'hover:bg-blue-800',
+      data: {
+        username: 'othentica',
+        connections: 890,
+        posts: 156,
+        recentPosts: [
+          {
+            id: 'li1',
+            content: 'Professional development is not just about skills, it\'s about authentic growth.',
+            timestamp: '2025-01-14T09:00:00+0000',
+            reactions: 89,
+            comments: 34,
+            shares: 22
+          },
+          {
+            id: 'li2',
+            content: 'Building a strong personal brand starts with understanding your core values.',
+            timestamp: '2025-01-10T11:15:00+0000',
+            reactions: 156,
+            comments: 67,
+            shares: 45
+          }
+        ]
+      }
+    },
+    youtube: {
+      name: 'YouTube',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      ),
+      color: 'bg-red-600',
+      hoverColor: 'hover:bg-red-700',
+      data: {
+        username: 'Othentica',
+        subscribers: 2340,
+        videos: 67,
+        recentVideos: [
+          {
+            id: 'yt1',
+            title: 'The Art of Authentic Living',
+            description: 'Discover how to live authentically in today\'s world.',
+            timestamp: '2025-01-13T16:00:00+0000',
+            views: 1240,
+            likes: 89,
+            duration: '12:34'
+          },
+          {
+            id: 'yt2',
+            title: 'Building Meaningful Relationships',
+            description: 'Learn the key principles of building lasting connections.',
+            timestamp: '2025-01-08T14:30:00+0000',
+            views: 2156,
+            likes: 156,
+            duration: '18:45'
+          }
+        ]
+      }
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -54,7 +171,7 @@ const Blog = () => {
         <div className="flex items-center justify-center min-h-96">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-primary text-lg">Loading Instagram feed...</p>
+            <p className="text-primary text-lg">Loading social media content...</p>
           </div>
         </div>
       </section>
@@ -72,7 +189,7 @@ const Blog = () => {
               Failed to Load
             </h2>
             <p className="text-primary/70 mb-4">
-              {error || 'Unable to load Instagram data'}
+              {error || 'Unable to load social media data'}
             </p>
             <button
               onClick={() => window.location.reload()}
@@ -86,58 +203,39 @@ const Blog = () => {
     );
   }
 
-  return (
-    <section className="py-16 bg-white">
-      <style jsx>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .h-120 {
-          height: 30rem;
-        }
-      `}</style>
-
-      <div>
-        {/* Profile Header */}
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center mb-8">
-            <img
-              src={instagramData.profilePictureUrl}
-              alt={instagramData.username}
-              className="w-24 h-24 rounded-full border-4 border-primary shadow-lg"
-            />
-          </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-4">
-            @{instagramData.username}
-          </h2>
-          <div className="flex justify-center space-x-8 text-primary/80">
-            <span className="text-lg">
-              <span className="font-bold">{instagramData.posts.length}</span>{' '}
-              posts
-            </span>
-            <span className="text-lg">
-              <span className="font-bold">{instagramData.followersCount}</span>{' '}
-              followers
-            </span>
-            <span className="text-lg">
-              <span className="font-bold">{instagramData.followsCount}</span>{' '}
-              following
-            </span>
-          </div>
-        </div>
-
-        {/* Instagram Gallery - Full Width with Hover Expansion */}
+  const renderTabContent = () => {
+    const platform = socialPlatforms[activeTab];
+    
+    if (activeTab === 'instagram') {
+      return (
         <div className="w-screen">
+          {/* Instagram Profile Header */}
+          <div className="text-center mb-20">
+            <div className="flex items-center justify-center mb-8">
+              <img
+                src={instagramData.profilePictureUrl}
+                alt={instagramData.username}
+                className="w-24 h-24 rounded-full border-4 border-primary shadow-lg"
+              />
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-4">
+              @{instagramData.username}
+            </h2>
+            <div className="flex justify-center space-x-8 text-primary/80">
+              <span className="text-lg">
+                <span className="font-bold">{instagramData.posts.length}</span>{' '}
+                posts
+              </span>
+              <span className="text-lg">
+                <span className="font-bold">{instagramData.followersCount}</span>{' '}
+                followers
+              </span>
+              <span className="text-lg">
+                <span className="font-bold">{instagramData.followsCount}</span>{' '}
+                following
+              </span>
+            </div>
+          </div>
           <div className="hidden lg:flex gap-2 overflow-hidden rounded-2xl shadow-2xl w-screen">
             {instagramData.posts.map((post) => (
               <div
@@ -295,16 +393,156 @@ const Blog = () => {
             </div>
           </div>
         </div>
+      );
+    }
 
-        {/* Hover Indicator */}
+    // Render content for other platforms
+    return (
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            {/* <div className="text-6xl mb-4">{platform.icon}</div> */}
+            <h2 className="text-3xl font-bold text-primary mb-2">
+              @{platform.data.username}
+            </h2>
+            <div className="flex justify-center space-x-8 text-primary/80">
+              {activeTab === 'facebook' && (
+                <>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.followers}</span> followers
+                  </span>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.posts}</span> posts
+                  </span>
+                </>
+              )}
+              {activeTab === 'linkedin' && (
+                <>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.connections}</span> connections
+                  </span>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.posts}</span> posts
+                  </span>
+                </>
+              )}
+              {activeTab === 'youtube' && (
+                <>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.subscribers}</span> subscribers
+                  </span>
+                  <span className="text-lg">
+                    <span className="font-bold">{platform.data.videos}</span> videos
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid gap-6">
+            {activeTab === 'facebook' && platform.data.recentPosts.map((post) => (
+              <div key={post.id} className="bg-gray-50 rounded-xl p-6">
+                <p className="text-gray-800 mb-4">{post.content}</p>
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{formatDate(post.timestamp)}</span>
+                  <div className="flex space-x-4">
+                    <span>👍 {post.likes}</span>
+                    <span>💬 {post.comments}</span>
+                    <span>🔄 {post.shares}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {activeTab === 'linkedin' && platform.data.recentPosts.map((post) => (
+              <div key={post.id} className="bg-gray-50 rounded-xl p-6">
+                <p className="text-gray-800 mb-4">{post.content}</p>
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{formatDate(post.timestamp)}</span>
+                  <div className="flex space-x-4">
+                    <span>👍 {post.reactions}</span>
+                    <span>💬 {post.comments}</span>
+                    <span>🔄 {post.shares}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {activeTab === 'youtube' && platform.data.recentVideos.map((video) => (
+              <div key={video.id} className="bg-gray-50 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h3>
+                <p className="text-gray-600 mb-4">{video.description}</p>
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>{formatDate(video.timestamp)}</span>
+                  <div className="flex space-x-4">
+                    <span>👁️ {video.views}</span>
+                    <span>👍 {video.likes}</span>
+                    <span>⏱️ {video.duration}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <section className="py-16 bg-white">
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .line-clamp-3 {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .h-120 {
+          height: 30rem;
+        }
+      `}</style>
+
+      {/* Social Media Tabs */}
+      <div className="flex justify-center mb-12">
+        <div className="bg-gray-100 rounded-2xl p-2 shadow-lg flex gap-3">
+          {Object.entries(socialPlatforms).map(([key, platform]) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center ${
+                activeTab === key
+                  ? `${platform.color} text-white shadow-lg transform scale-105`
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
+              }`}
+            >
+              <span className="mr-2">{platform.icon}</span>
+              {platform.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {renderTabContent()}
+
+      {/* Hover Indicator - Only show for Instagram */}
+      {activeTab === 'instagram' && (
         <div className="text-center mt-8">
           <p className="text-primary text-sm">
             Hover over any image to expand and reveal details
           </p>
         </div>
-      </div>
+      )}
     </section>
   );
 };
 
-export default Blog;
+export default SocialMedia;

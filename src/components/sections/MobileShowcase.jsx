@@ -18,7 +18,8 @@ const MobileShowcase = () => {
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
 
   // Array of all app images
-  const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
+  // const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
+  const appImages = [App1];
 
   // Auto-rotate through app images every 4 seconds
   useEffect(() => {
@@ -40,16 +41,33 @@ const MobileShowcase = () => {
   return (
     <section
       className="py-16 px-8 lg:px-16 bg-white dark:bg-gray-800 relative overflow-hidden"
-      style={{
-        backgroundImage: `url(${LogoPattern})`,
-        backgroundRepeat: 'repeat',
-        backgroundSize: '60px 100px', // 60px 100px for logo pattern v2
-      }}
     >
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
+      {/* Background layer with logo pattern */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `url(${LogoPattern})`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '60px 111.5px',
+          opacity: 0.4,
+        }}
+      />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Section Title */}
+        <div className="text-center mb-2">
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
+            Mobile App Showcase
+          </h2>
+          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+            Experience our innovative mobile solutions that transform ideas into exceptional digital experiences
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
         {/* Left Text with Carousel */}
         <div
-          className={`bg-white rounded-xl shadow-lg p-8 relative z-20 ${
+          className={`bg-white rounded-xl shadow-2xl p-8 relative z-20 ${
             currentStep.buttonText ? 'space-y-8' : ''
           }`}
           style={{ backgroundColor: 'rgba(255,255,255,1)' }}
@@ -102,15 +120,20 @@ const MobileShowcase = () => {
         {/* Right Mobile Phone */}
         <div className="relative flex justify-center">
           {/* Background Phone Frame - larger and angled */}
-          <div className="relative transform -rotate-12 scale-75">
+          <div className="relative transform -rotate-12 scale-75" style={{
+            filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))'
+          }}>
             <img
               src={Phone}
               alt="Smartphone mockup"
-              className="w-80 h-auto drop-shadow-2xl opacity-80"
+              className="w-80 h-auto shadow-professional opacity-80"
+              style={{
+                filter: 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1))'
+              }}
             />
             {/* App content overlay inside the phone screen */}
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
-              <div className="w-full h-full rounded-3xl flex justify-center items-center">
+              <div className="w-full h-full rounded-3xl flex justify-center items-center" >
                 <img
                   src={currentAppImage}
                   alt="App interface"
@@ -121,11 +144,16 @@ const MobileShowcase = () => {
           </div>
 
           {/* Foreground Phone Frame - smaller and overlapping */}
-          <div className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20">
+          <div className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20" style={{
+            filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))'
+          }}>
             <img
               src={Phone}
               alt="Smartphone mockup"
-              className="w-80 h-auto drop-shadow-2xl"
+              className="w-80 h-auto"
+              style={{
+                filter: 'drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.15))'
+              }}
             />
             {/* App content overlay inside the phone screen */}
             <div className="absolute inset-0 flex items-center justify-center z-[-1]">
@@ -146,6 +174,7 @@ const MobileShowcase = () => {
           <div className="absolute -bottom-4 -left-4 w-6 h-6 rounded-full animate-pulse">
             <img src={Flame} alt="Othentica" />
           </div> */}
+        </div>
         </div>
       </div>
     </section>

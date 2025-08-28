@@ -14,7 +14,7 @@ const Banner = ({
 }) => {
   return (
     <div 
-      className={`relative min-h-[60vh] flex items-center justify-center overflow-hidden ${className}`}
+      className={`relative min-h-[100vh] flex items-center justify-center overflow-hidden ${className}`}
       style={{
         backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
         backgroundSize: 'cover',
