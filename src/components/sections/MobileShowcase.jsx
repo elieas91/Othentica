@@ -10,7 +10,7 @@ import App5 from '../../assets/img/app-5.webp';
 import App6 from '../../assets/img/app-6.webp';
 import App7 from '../../assets/img/app-7.webp';
 import App8 from '../../assets/img/app-8.webp';
-import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1.png';
+import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.png';
 import { mobileAppStepsData } from '../../data/mobileAppStepsData';
 
 const MobileShowcase = () => {
@@ -18,8 +18,7 @@ const MobileShowcase = () => {
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
 
   // Array of all app images
-  // const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
-  const appImages = [App1];
+  const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
 
   // Auto-rotate through app images every 4 seconds
   useEffect(() => {
@@ -46,7 +45,7 @@ const MobileShowcase = () => {
         style={{
           backgroundImage: `url(${LogoPattern})`,
           backgroundRepeat: 'repeat',
-          backgroundSize: '147px 297px',
+          backgroundSize: '264px 297px',
           opacity: 0.4,
         }}
       />

@@ -6,7 +6,10 @@ import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
 import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
 import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
 import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
-import { testimonialsData, testimonialCategories } from '../../data/testimonialsData';
+import {
+  testimonialsData,
+  testimonialCategories,
+} from '../../data/testimonialsData';
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,7 +26,9 @@ const Testimonials = () => {
 
   // Get the current testimonial and its category
   const currentTestimonial = testimonialsData[currentIndex];
-  const currentCategory = testimonialCategories.find(cat => cat.id === currentTestimonial.categoryId);
+  const currentCategory = testimonialCategories.find(
+    (cat) => cat.id === currentTestimonial.categoryId
+  );
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName) => {
@@ -43,14 +48,14 @@ const Testimonials = () => {
     const words = quote.split(' ');
     const lineLength = 60; // Approximate characters per line
     const maxChars = lineLength * 2;
-    
+
     if (quote.length <= maxChars) {
       return { truncated: quote, needsTruncation: false };
     }
-    
+
     let truncated = '';
     let charCount = 0;
-    
+
     for (let i = 0; i < words.length; i++) {
       if (charCount + words[i].length + 1 <= maxChars) {
         truncated += (truncated ? ' ' : '') + words[i];
@@ -59,20 +64,22 @@ const Testimonials = () => {
         break;
       }
     }
-    
+
     return { truncated: truncated + '...', needsTruncation: true };
   };
 
   // Function to toggle quote expansion
   const toggleQuoteExpansion = (testimonialId) => {
-    setExpandedQuotes(prev => ({
+    setExpandedQuotes((prev) => ({
       ...prev,
-      [testimonialId]: !prev[testimonialId]
+      [testimonialId]: !prev[testimonialId],
     }));
   };
 
   // Get truncated quote for current testimonial
-  const { truncated, needsTruncation } = truncateQuote(currentTestimonial.quote);
+  const { truncated, needsTruncation } = truncateQuote(
+    currentTestimonial.quote
+  );
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
@@ -100,22 +107,31 @@ const Testimonials = () => {
 
             {/* Carousel Content */}
             <div className="min-h-[200px] flex flex-col justify-center">
-              <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out">
+              <blockquote
+                className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
+                style={{ display: 'inline' }}
+              >
                 "{isExpanded ? currentTestimonial.quote : truncated}"
+                {needsTruncation && (
+                  <button
+                    onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
+                    className="ml-2 text-primary/80 hover:text-primary font-medium text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
+                    style={{ display: 'inline', verticalAlign: 'baseline' }}
+                  >
+                    {isExpanded ? 'Read Less' : 'Read More'}
+                  </button>
+                )}
               </blockquote>
-              
-              {/* Read More Link */}
-              {needsTruncation && (
-                <button
-                  onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
-                  className="text-primary/80 hover:text-primary font-medium text-lg mb-4 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
-                >
-                  {isExpanded ? 'Read Less' : 'Read More'}
-                </button>
-              )}
-              
+
               <cite className="text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
-                – {currentTestimonial.author}
+                <span className="flex items-center gap-3">
+                  <img
+                    src={getTestimonialImagePath(currentTestimonial.image)}
+                    alt={currentTestimonial.author}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-primary/30 shadow"
+                  />
+                  <span>– {currentTestimonial.author}</span>
+                </span>
               </cite>
             </div>
 

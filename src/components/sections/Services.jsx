@@ -23,39 +23,40 @@ const Services = () => {
       /> */}
 
       {/* Flame Animation in Top Right Corner */}
+
       <div className="absolute top-4 right-4 lg:top-8 lg:right-8 z-10">
         <div className="relative">
           {/* Main Flame Image with Bounce Animation */}
-          <div className="w-16 h-20 lg:w-20 lg:h-24 relative animate-bounce">
+          {/* <div className="w-16 h-20 lg:w-20 lg:h-24 relative animate-bounce">
             <img
               src={Flame}
               alt="Flame"
               className="w-full h-full object-contain"
             />
-          </div>
+          </div> */}
 
           {/* Glow Effect Behind the Flame */}
-          <div
+          {/* <div
             className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full animate-pulse opacity-60 blur-sm"
             style={{ animationDuration: '2s' }}
           ></div>
           <div
             className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent rounded-full animate-ping opacity-40 blur-md"
             style={{ animationDelay: '0.5s' }}
-          ></div>
+          ></div> */}
 
           {/* Additional Glow Layers */}
-          <div
+          {/* <div
             className="absolute -top-2 -left-1 w-18 h-22 lg:w-22 lg:h-26 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full animate-pulse opacity-50 blur-sm"
             style={{ animationDuration: '1.5s' }}
           ></div>
           <div
             className="absolute -top-1 -right-1 w-16 h-20 lg:w-18 lg:h-22 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent rounded-full animate-pulse opacity-40 blur-sm"
             style={{ animationDuration: '2.5s' }}
-          ></div>
+          ></div> */}
 
           {/* Sparkle Effects */}
-          <div
+          {/* <div
             className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 rounded-full animate-ping opacity-80"
             style={{ animationDelay: '0.5s' }}
           ></div>
@@ -66,7 +67,7 @@ const Services = () => {
           <div
             className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 rounded-full animate-ping opacity-70"
             style={{ animationDelay: '1.5s' }}
-          ></div>
+          ></div> */}
         </div>
       </div>
 
