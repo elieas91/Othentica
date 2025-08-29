@@ -175,7 +175,11 @@ const Hero = () => {
           Step into your authentic self
         </h1>
         <p className="text-xl lg:text-2xl text-white dark:text-gray-200 mb-10 leading-relaxed max-w-3xl">
-          Wellness is optional. Health is essential.<br/>Corporate health is the evolution.<br/>It's the foundation of energy, resilience, and performance.
+          Wellness is optional. Health is essential.
+          <br />
+          Corporate health is the evolution.
+          <br />
+          It's the foundation of energy, resilience, and performance.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button variant="accent" size="large">

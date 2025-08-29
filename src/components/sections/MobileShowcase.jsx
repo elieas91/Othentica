@@ -39,20 +39,18 @@ const MobileShowcase = () => {
     appImages[(currentAppImageIndex + 1) % appImages.length];
 
   return (
-    <section
-      className="py-16 px-8 lg:px-16 bg-white dark:bg-gray-800 relative overflow-hidden"
-    >
+    <section className="py-16 px-8 lg:px-16 bg-white dark:bg-gray-800 relative overflow-hidden">
       {/* Background layer with logo pattern */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${LogoPattern})`,
           backgroundRepeat: 'repeat',
-          backgroundSize: '60px 111.5px',
+          backgroundSize: '147px 297px',
           opacity: 0.4,
         }}
       />
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Title */}
         <div className="text-center mb-2">
@@ -60,121 +58,130 @@ const MobileShowcase = () => {
             Mobile App Showcase
           </h2>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Experience our innovative mobile solutions that transform ideas into exceptional digital experiences
+            Experience our innovative mobile solutions that transform ideas into
+            exceptional digital experiences
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-20 items-center">
-        {/* Left Text with Carousel */}
-        <div
-          className={`bg-white rounded-xl shadow-2xl p-8 relative z-20 ${
-            currentStep.buttonText ? 'space-y-8' : ''
-          }`}
-          style={{ backgroundColor: 'rgba(255,255,255,1)' }}
-        >
-          <div className="min-h-[200px] flex flex-col justify-center">
-            <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral transition-all duration-700 ease-in-out">
-              {currentStep.title}
-            </h2>
-            <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
-              {currentStep.description}
-            </p>
+          {/* Left Text with Carousel */}
+          <div
+            className={`bg-white rounded-xl shadow-2xl p-8 relative z-20 ${
+              currentStep.buttonText ? 'space-y-8' : ''
+            }`}
+            style={{ backgroundColor: 'rgba(255,255,255,1)' }}
+          >
+            <div className="min-h-[200px] flex flex-col justify-center">
+              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral transition-all duration-700 ease-in-out">
+                {currentStep.title}
+              </h2>
+              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
+                {currentStep.description}
+              </p>
 
-            {/* Buttons inside carousel content */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-700 ease-in-out">
-              {currentStep.buttonText ? (
-                <Button variant="secondary" size="large">
-                  {currentStep.buttonText}
-                </Button>
-              ) : null}
+              {/* Buttons inside carousel content */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-700 ease-in-out">
+                {currentStep.buttonText ? (
+                  <Button variant="secondary" size="large">
+                    {currentStep.buttonText}
+                  </Button>
+                ) : null}
 
-              {/* <Button variant="accent" size="large">
+                {/* <Button variant="accent" size="large">
                 Learn More
               </Button> */}
-            </div>
-          </div>
-
-          {/* Carousel Indicators - Numbered style with lines between circles */}
-          <div className="flex items-center">
-            {mobileAppStepsData.map((_, index) => (
-              <React.Fragment key={index}>
-                <button
-                  onClick={() => setcurrentStepIndex(index)}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
-                    index === currentStepIndex
-                      ? 'bg-primary text-white scale-110 opacity-100'
-                      : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
-                  }`}
-                  aria-label={`Go to step ${index + 1}`}
-                >
-                  <span>{index + 1}</span>
-                </button>
-                {index < mobileAppStepsData.length - 1 && (
-                  <div className="w-8 h-0.5 bg-gray-300 mx-2" />
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Mobile Phone */}
-        <div className="relative flex justify-center">
-          {/* Background Phone Frame - larger and angled */}
-          <div className="relative transform -rotate-12 scale-75" style={{
-            filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))'
-          }}>
-            <img
-              src={Phone}
-              alt="Smartphone mockup"
-              className="w-80 h-auto shadow-professional opacity-80"
-              style={{
-                filter: 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1))'
-              }}
-            />
-            {/* App content overlay inside the phone screen */}
-            <div className="absolute inset-0 flex items-center justify-center z-[-1]">
-              <div className="w-full h-full rounded-3xl flex justify-center items-center" >
-                <img
-                  src={currentAppImage}
-                  alt="App interface"
-                  className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
-                />
               </div>
             </div>
-          </div>
 
-          {/* Foreground Phone Frame - smaller and overlapping */}
-          <div className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20" style={{
-            filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))'
-          }}>
-            <img
-              src={Phone}
-              alt="Smartphone mockup"
-              className="w-80 h-auto"
-              style={{
-                filter: 'drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.15))'
-              }}
-            />
-            {/* App content overlay inside the phone screen */}
-            <div className="absolute inset-0 flex items-center justify-center z-[-1]">
-              <div className="w-full h-full rounded-3xl flex justify-center items-center">
-                <img
-                  src={secondPhoneImage}
-                  alt="App interface"
-                  className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
-                />
-              </div>
+            {/* Carousel Indicators - Numbered style with lines between circles */}
+            <div className="flex items-center">
+              {mobileAppStepsData.map((_, index) => (
+                <React.Fragment key={index}>
+                  <button
+                    onClick={() => setcurrentStepIndex(index)}
+                    className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
+                      index === currentStepIndex
+                        ? 'bg-primary text-white scale-110 opacity-100'
+                        : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
+                    }`}
+                    aria-label={`Go to step ${index + 1}`}
+                  >
+                    <span>{index + 1}</span>
+                  </button>
+                  {index < mobileAppStepsData.length - 1 && (
+                    <div className="w-8 h-0.5 bg-gray-300 mx-2" />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
           </div>
 
-          {/* Floating Elements */}
-          {/* <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full animate-bounce">
+          {/* Right Mobile Phone */}
+          <div className="relative flex justify-center">
+            {/* Background Phone Frame - larger and angled */}
+            <div
+              className="relative transform -rotate-12 scale-75"
+              style={{
+                filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))',
+              }}
+            >
+              <img
+                src={Phone}
+                alt="Smartphone mockup"
+                className="w-80 h-auto shadow-professional opacity-80"
+                style={{
+                  filter:
+                    'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1))',
+                }}
+              />
+              {/* App content overlay inside the phone screen */}
+              <div className="absolute inset-0 flex items-center justify-center z-[-1]">
+                <div className="w-full h-full rounded-3xl flex justify-center items-center">
+                  <img
+                    src={currentAppImage}
+                    alt="App interface"
+                    className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Foreground Phone Frame - smaller and overlapping */}
+            <div
+              className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20"
+              style={{
+                filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))',
+              }}
+            >
+              <img
+                src={Phone}
+                alt="Smartphone mockup"
+                className="w-80 h-auto"
+                style={{
+                  filter:
+                    'drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.15))',
+                }}
+              />
+              {/* App content overlay inside the phone screen */}
+              <div className="absolute inset-0 flex items-center justify-center z-[-1]">
+                <div className="w-full h-full rounded-3xl flex justify-center items-center">
+                  <img
+                    src={secondPhoneImage}
+                    alt="App interface"
+                    className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Elements */}
+            {/* <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full animate-bounce">
             <img src={Flame} alt="Othentica" />
           </div>
           <div className="absolute -bottom-4 -left-4 w-6 h-6 rounded-full animate-pulse">
             <img src={Flame} alt="Othentica" />
           </div> */}
-        </div>
+          </div>
         </div>
       </div>
     </section>
