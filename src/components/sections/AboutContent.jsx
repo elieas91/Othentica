@@ -35,11 +35,12 @@ const AboutContent = ({
             {showFloatingCircles && (
               <div
                 className={`${
-                  flipped ? 'left-[-10%] rotate-[45deg] top-[50%]' : 'right-0 rotate-[-45deg]'
+                  flipped
+                    ? 'left-[-10%] rotate-[45deg] top-[50%]'
+                    : 'right-0 rotate-[-45deg]'
                 } absolute bottom-0 hidden h-80 w-10 translate-x-1/2 translate-y-1/2 md:block`}
                 style={{ background: '#3470cb' }}
-              >
-              </div>
+              ></div>
             )}
 
             {/* Image Container */}
