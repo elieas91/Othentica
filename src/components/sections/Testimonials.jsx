@@ -6,7 +6,10 @@ import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
 import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
 import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
 import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
-import { testimonialsData, testimonialCategories } from '../../data/testimonialsData';
+import {
+  testimonialsData,
+  testimonialCategories,
+} from '../../data/testimonialsData';
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,7 +26,21 @@ const Testimonials = () => {
 
   // Get the current testimonial and its category
   const currentTestimonial = testimonialsData[currentIndex];
-  const currentCategory = testimonialCategories.find(cat => cat.id === currentTestimonial.categoryId);
+  const currentCategory = testimonialCategories.find(
+    (cat) => cat.id === currentTestimonial.categoryId
+  );
+
+  // Get two different categories for the right side images
+  const getTwoDifferentCategories = () => {
+    if (testimonialCategories.length < 2) return [currentCategory];
+    // Pick current category and next one (wrap around)
+    const currentIdx = testimonialCategories.findIndex(
+      (cat) => cat.id === currentCategory.id
+    );
+    const nextIdx = (currentIdx + 1) % testimonialCategories.length;
+    return [testimonialCategories[currentIdx], testimonialCategories[nextIdx]];
+  };
+  const categoriesForImages = getTwoDifferentCategories();
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName) => {
@@ -43,14 +60,14 @@ const Testimonials = () => {
     const words = quote.split(' ');
     const lineLength = 60; // Approximate characters per line
     const maxChars = lineLength * 2;
-    
+
     if (quote.length <= maxChars) {
       return { truncated: quote, needsTruncation: false };
     }
-    
+
     let truncated = '';
     let charCount = 0;
-    
+
     for (let i = 0; i < words.length; i++) {
       if (charCount + words[i].length + 1 <= maxChars) {
         truncated += (truncated ? ' ' : '') + words[i];
@@ -59,24 +76,26 @@ const Testimonials = () => {
         break;
       }
     }
-    
+
     return { truncated: truncated + '...', needsTruncation: true };
   };
 
   // Function to toggle quote expansion
   const toggleQuoteExpansion = (testimonialId) => {
-    setExpandedQuotes(prev => ({
+    setExpandedQuotes((prev) => ({
       ...prev,
-      [testimonialId]: !prev[testimonialId]
+      [testimonialId]: !prev[testimonialId],
     }));
   };
 
   // Get truncated quote for current testimonial
-  const { truncated, needsTruncation } = truncateQuote(currentTestimonial.quote);
+  const { truncated, needsTruncation } = truncateQuote(
+    currentTestimonial.quote
+  );
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-gradient-to-br from-neutral/40 via-accent/10 to-white relative overflow-hidden">
+    <section className="py-16 px-8 lg:px-16 bg-neutral overflow-hidden">
       {/* Subtle background pattern overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
@@ -100,22 +119,31 @@ const Testimonials = () => {
 
             {/* Carousel Content */}
             <div className="min-h-[200px] flex flex-col justify-center">
-              <blockquote className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out">
+              <blockquote
+                className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
+                style={{ display: 'inline' }}
+              >
                 "{isExpanded ? currentTestimonial.quote : truncated}"
+                {needsTruncation && (
+                  <button
+                    onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
+                    className="ml-2 text-primary/80 hover:text-primary font-medium text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
+                    style={{ display: 'inline', verticalAlign: 'baseline' }}
+                  >
+                    {isExpanded ? 'Read Less' : 'Read More'}
+                  </button>
+                )}
               </blockquote>
-              
-              {/* Read More Link */}
-              {needsTruncation && (
-                <button
-                  onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
-                  className="text-primary/80 hover:text-primary font-medium text-lg mb-4 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
-                >
-                  {isExpanded ? 'Read Less' : 'Read More'}
-                </button>
-              )}
-              
+
               <cite className="text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
-                – {currentTestimonial.author}
+                <span className="flex items-center gap-3">
+                  <img
+                    src={getTestimonialImagePath(currentTestimonial.image)}
+                    alt={currentTestimonial.author}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 shadow"
+                  />
+                  <span>– {currentTestimonial.author}</span>
+                </span>
               </cite>
             </div>
 
@@ -142,33 +170,36 @@ const Testimonials = () => {
             </div>
           </div>
 
-          {/* Right Side - Category Images */}
+          {/* Right Side - Two Images from Different Categories */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {currentCategory?.images.map((imageName, index) => (
-              <div
-                key={`${currentCategory.id}-${imageName}-${index}`}
-                className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl"
-              >
-                <div className="h-64 overflow-hidden">
-                  <img
-                    src={getTestimonialImagePath(imageName)}
-                    alt={`${currentCategory.name} - ${imageName}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div className="p-6 text-start bg-gradient-to-br from-primary/5 to-primary/10">
-                  <h3 className="text-xl font-bold text-primary mb-2">
-                    {currentCategory.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {currentCategory.description}
-                  </p>
-                  <div className="mt-3 text-xs text-primary/70 font-medium">
-                    {currentCategory.count} testimonials
+            {categoriesForImages.map((cat, idx) => {
+              // Pick the first image from each category
+              const imageName = cat.images[0];
+              return (
+                <div
+                  key={`${cat.id}-${imageName}-${idx}`}
+                  className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                >
+                  <div className="h-64 w-full relative">
+                    <img
+                      src={getTestimonialImagePath(imageName)}
+                      alt={`${cat.name} - ${imageName}`}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      style={{ minHeight: '100%', minWidth: '100%' }}
+                    />
+                  </div>
+                  <div className="p-6 text-start">
+                    <h3 className="text-xl font-bold text-primary mb-2">
+                      {cat.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{cat.description}</p>
+                    <div className="mt-3 text-xs text-primary/70 font-medium">
+                      {cat.count} testimonials
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

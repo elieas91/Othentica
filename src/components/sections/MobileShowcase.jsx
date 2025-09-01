@@ -3,14 +3,14 @@ import Button from '../ui/Button';
 // import Flame from '../../assets/img/flame.webp';
 import Phone from '../../assets/img/phone.webp';
 import App1 from '../../assets/img/app-1.webp';
-// import App2 from '../../assets/img/app-2.webp';
-// import App3 from '../../assets/img/app-3.webp';
-// import App4 from '../../assets/img/app-4.webp';
-// import App5 from '../../assets/img/app-5.webp';
-// import App6 from '../../assets/img/app-6.webp';
-// import App7 from '../../assets/img/app-7.webp';
-// import App8 from '../../assets/img/app-8.webp';
-import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1.png';
+import App2 from '../../assets/img/app-2.webp';
+import App3 from '../../assets/img/app-3.webp';
+import App4 from '../../assets/img/app-4.webp';
+import App5 from '../../assets/img/app-5.webp';
+import App6 from '../../assets/img/app-6.webp';
+import App7 from '../../assets/img/app-7.webp';
+import App8 from '../../assets/img/app-8.webp';
+import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.png';
 import { mobileAppStepsData } from '../../data/mobileAppStepsData';
 
 const MobileShowcase = () => {
@@ -18,8 +18,7 @@ const MobileShowcase = () => {
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
 
   // Array of all app images
-  // const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
-  const appImages = [App1];
+  const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
 
   // Auto-rotate through app images every 4 seconds
   useEffect(() => {
@@ -29,7 +28,7 @@ const MobileShowcase = () => {
       );
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [appImages.length]);
 
   const currentStep = mobileAppStepsData[currentStepIndex];
 
@@ -46,7 +45,7 @@ const MobileShowcase = () => {
         style={{
           backgroundImage: `url(${LogoPattern})`,
           backgroundRepeat: 'repeat',
-          backgroundSize: '147px 297px',
+          backgroundSize: '900px 895px',
           opacity: 0.4,
         }}
       />
@@ -101,7 +100,7 @@ const MobileShowcase = () => {
                     onClick={() => setcurrentStepIndex(index)}
                     className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
                       index === currentStepIndex
-                        ? 'bg-primary text-white scale-110 opacity-100'
+                        ? 'bg-secondary text-white scale-110 opacity-100'
                         : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
                     }`}
                     aria-label={`Go to step ${index + 1}`}
@@ -157,10 +156,6 @@ const MobileShowcase = () => {
                 src={Phone}
                 alt="Smartphone mockup"
                 className="w-80 h-auto"
-                style={{
-                  filter:
-                    'drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.15))',
-                }}
               />
               {/* App content overlay inside the phone screen */}
               <div className="absolute inset-0 flex items-center justify-center z-[-1]">

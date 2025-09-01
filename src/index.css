@@ -1,7 +1,8 @@
 /* Local Font Declarations */
 @font-face {
   font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat,Poppins/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Montserrat/Montserrat-VariableFont_wght.ttf')
+    format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -9,7 +10,8 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat,Poppins/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Montserrat/Montserrat-Italic-VariableFont_wght.ttf')
+    format('truetype');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -17,7 +19,8 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Regular.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Regular.ttf')
+    format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -25,7 +28,8 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Medium.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Medium.ttf')
+    format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -33,7 +37,8 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-SemiBold.ttf')
+    format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -41,7 +46,8 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Bold.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Bold.ttf')
+    format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -49,7 +55,8 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Black.ttf') format('truetype');
+  src: url('./assets/fonts/Montserrat,Poppins/Poppins/Poppins-Black.ttf')
+    format('truetype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -59,12 +66,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -73,10 +79,15 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
-    @apply  dark:bg-primary text-primary dark:text-gray-100 transition-colors duration-200;
+    @apply dark:bg-primary text-primary dark:text-gray-100 transition-colors duration-200;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 700;
     line-height: 1.2;
   }
@@ -86,45 +97,47 @@
   .bg-pink-50 {
     background-color: #fdf2f8;
   }
-  
+
   .bg-pink-100 {
     background-color: #fce7f3;
   }
-  
+
   .bg-pink-200 {
     background-color: #fbcfe8;
   }
-  
+
   .bg-pink-300 {
     background-color: #f9a8d4;
   }
-  
+
   .text-primary {
     color: #1e3a8a;
   }
-  
+
   .ring-pink-500 {
     --tw-ring-color: #ec4899;
   }
 
   /* Professional shadows */
   .shadow-professional {
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
   .shadow-xl-professional {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
   /* Hero Animations */
   @keyframes logo-scale {
-    0% { 
-      transform: scale(1); 
-      opacity: 0.8; 
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
     }
-    100% { 
-      transform: scale(1.1); 
-      opacity: 0.9; 
+    100% {
+      transform: scale(1.1);
+      opacity: 0.9;
     }
   }
 
@@ -259,10 +272,20 @@
   }
 
   @keyframes flame-25 {
-    0% { transform: translateX(-100px) translateY(0) rotate(0deg); opacity: 0; }
-    14% { opacity: 0.6; }
-    86% { opacity: 0.6; }
-    100% { transform: translateX(calc(100vw + 100px)) translateY(38px) rotate(90deg); opacity: 0; }
+    0% {
+      transform: translateX(-100px) translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.6;
+    }
+    86% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateX(calc(100vw + 100px)) translateY(38px) rotate(90deg);
+      opacity: 0;
+    }
   }
 
   /* Additional flame movement animations */
@@ -415,7 +438,7 @@
 
   .animate-flame-scale-30 {
     animation: flame-scale-30 2.9s ease-in-out infinite;
-    animation-delay: 2.0s;
+    animation-delay: 2s;
   }
 
   .animate-flame-scale-31 {
@@ -429,7 +452,7 @@
   }
 
   .animate-flame-scale-33 {
-    animation: flame-scale-33 3.0s ease-in-out infinite;
+    animation: flame-scale-33 3s ease-in-out infinite;
     animation-delay: 3.2s;
   }
 
@@ -440,196 +463,455 @@
 
   .animate-flame-scale-35 {
     animation: flame-scale-35 3.3s ease-in-out infinite;
-    animation-delay: 4.0s;
+    animation-delay: 4s;
   }
 
   /* Additional flame keyframes */
   @keyframes flame-7 {
-  0% { transform: translateX(-60px) translateY(120px) rotate(0deg); opacity: 0; }
-  20% { opacity: 0.45; }
-  80% { opacity: 0.45; }
-  100% { transform: translateX(-60px) translateY(-110vh) rotate(180deg); opacity: 0; }
+    0% {
+      transform: translateX(-60px) translateY(120px) rotate(0deg);
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.45;
+    }
+    80% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translateX(-60px) translateY(-110vh) rotate(180deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-8 {
-  0% { transform: translateX(80px) translateY(140px) rotate(0deg); opacity: 0; }
-  25% { opacity: 0.55; }
-  75% { opacity: 0.55; }
-  100% { transform: translateX(80px) translateY(-120vh) rotate(-270deg); opacity: 0; }
+    0% {
+      transform: translateX(80px) translateY(140px) rotate(0deg);
+      opacity: 0;
+    }
+    25% {
+      opacity: 0.55;
+    }
+    75% {
+      opacity: 0.55;
+    }
+    100% {
+      transform: translateX(80px) translateY(-120vh) rotate(-270deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-9 {
-  0% { transform: translateX(-80px) translateY(160px) rotate(0deg); opacity: 0; }
-  15% { opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translateX(-80px) translateY(-130vh) rotate(90deg); opacity: 1; }
+    0% {
+      transform: translateX(-80px) translateY(160px) rotate(0deg);
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-80px) translateY(-130vh) rotate(90deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-10 {
-  0% { transform: translateX(100px) translateY(180px) rotate(0deg); opacity: 0; }
-  30% { opacity: 1; }
-  70% { opacity: 1; }
-  100% { transform: translateX(100px) translateY(-150vh) rotate(-90deg); opacity: 1; }
+    0% {
+      transform: translateX(100px) translateY(180px) rotate(0deg);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100px) translateY(-150vh) rotate(-90deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-11 {
-  0% { transform: translateX(-120px) translateY(200px) rotate(0deg); opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translateX(-120px) translateY(-170vh) rotate(360deg); opacity: 1; }
+    0% {
+      transform: translateX(-120px) translateY(200px) rotate(0deg);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-120px) translateY(-170vh) rotate(360deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-12 {
-  0% { transform: translateX(140px) translateY(220px) rotate(0deg); opacity: 0; }
-  25% { opacity: 1; }
-  75% { opacity: 1; }
-  100% { transform: translateX(140px) translateY(-190vh) rotate(-180deg); opacity: 1; }
+    0% {
+      transform: translateX(140px) translateY(220px) rotate(0deg);
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    75% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(140px) translateY(-190vh) rotate(-180deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-13 {
-  0% { transform: translateX(-160px) translateY(240px) rotate(0deg); opacity: 0; }
-  18% { opacity: 1; }
-  82% { opacity: 1; }
-  100% { transform: translateX(-160px) translateY(-210vh) rotate(270deg); opacity: 1; }
+    0% {
+      transform: translateX(-160px) translateY(240px) rotate(0deg);
+      opacity: 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    82% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-160px) translateY(-210vh) rotate(270deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-14 {
-  0% { transform: translateX(180px) translateY(260px) rotate(0deg); opacity: 1; }
-  22% { opacity: 1; }
-  78% { opacity: 1; }
-  100% { transform: translateX(180px) translateY(-230vh) rotate(-360deg); opacity: 1; }
+    0% {
+      transform: translateX(180px) translateY(260px) rotate(0deg);
+      opacity: 1;
+    }
+    22% {
+      opacity: 1;
+    }
+    78% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(180px) translateY(-230vh) rotate(-360deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-15 {
-  0% { transform: translateX(-200px) translateY(280px) rotate(0deg); opacity: 1; }
-  16% { opacity: 1; }
-  84% { opacity: 1; }
-  100% { transform: translateX(-200px) translateY(-250vh) rotate(180deg); opacity: 1; }
+    0% {
+      transform: translateX(-200px) translateY(280px) rotate(0deg);
+      opacity: 1;
+    }
+    16% {
+      opacity: 1;
+    }
+    84% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-200px) translateY(-250vh) rotate(180deg);
+      opacity: 1;
+    }
   }
 
   @keyframes flame-16 {
-  0% { transform: translateX(220px) translateY(300px) rotate(0deg); opacity: 0; }
-  28% { opacity: 0.45; }
-  72% { opacity: 0.45; }
-  100% { transform: translateX(220px) translateY(-270vh) rotate(-270deg); opacity: 0; }
+    0% {
+      transform: translateX(220px) translateY(300px) rotate(0deg);
+      opacity: 0;
+    }
+    28% {
+      opacity: 0.45;
+    }
+    72% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translateX(220px) translateY(-270vh) rotate(-270deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-17 {
-  0% { transform: translateX(-240px) translateY(320px) rotate(0deg); opacity: 0; }
-  12% { opacity: 0.75; }
-  88% { opacity: 0.75; }
-  100% { transform: translateX(-240px) translateY(-290vh) rotate(90deg); opacity: 0; }
+    0% {
+      transform: translateX(-240px) translateY(320px) rotate(0deg);
+      opacity: 0;
+    }
+    12% {
+      opacity: 0.75;
+    }
+    88% {
+      opacity: 0.75;
+    }
+    100% {
+      transform: translateX(-240px) translateY(-290vh) rotate(90deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-18 {
-  0% { transform: translateX(260px) translateY(340px) rotate(0deg); opacity: 0; }
-  26% { opacity: 0.5; }
-  74% { opacity: 0.5; }
-  100% { transform: translateX(260px) translateY(-310vh) rotate(-90deg); opacity: 0; }
+    0% {
+      transform: translateX(260px) translateY(340px) rotate(0deg);
+      opacity: 0;
+    }
+    26% {
+      opacity: 0.5;
+    }
+    74% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(260px) translateY(-310vh) rotate(-90deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-19 {
-  0% { transform: translateX(-280px) translateY(360px) rotate(0deg); opacity: 0; }
-  19% { opacity: 0.6; }
-  81% { opacity: 0.6; }
-  100% { transform: translateX(-280px) translateY(-330vh) rotate(180deg); opacity: 0; }
+    0% {
+      transform: translateX(-280px) translateY(360px) rotate(0deg);
+      opacity: 0;
+    }
+    19% {
+      opacity: 0.6;
+    }
+    81% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateX(-280px) translateY(-330vh) rotate(180deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-20 {
-  0% { transform: translateX(300px) translateY(380px) rotate(0deg); opacity: 0; }
-  24% { opacity: 0.45; }
-  76% { opacity: 0.45; }
-  100% { transform: translateX(300px) translateY(-350vh) rotate(-180deg); opacity: 0; }
+    0% {
+      transform: translateX(300px) translateY(380px) rotate(0deg);
+      opacity: 0;
+    }
+    24% {
+      opacity: 0.45;
+    }
+    76% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: translateX(300px) translateY(-350vh) rotate(-180deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-21 {
-  0% { transform: translateX(-320px) translateY(400px) rotate(0deg); opacity: 0; }
-  17% { opacity: 0.55; }
-  83% { opacity: 0.55; }
-  100% { transform: translateX(-320px) translateY(-370vh) rotate(270deg); opacity: 0; }
+    0% {
+      transform: translateX(-320px) translateY(400px) rotate(0deg);
+      opacity: 0;
+    }
+    17% {
+      opacity: 0.55;
+    }
+    83% {
+      opacity: 0.55;
+    }
+    100% {
+      transform: translateX(-320px) translateY(-370vh) rotate(270deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-22 {
-  0% { transform: translateX(340px) translateY(420px) rotate(0deg); opacity: 0; }
-  21% { opacity: 0.65; }
-  79% { opacity: 0.65; }
-  100% { transform: translateX(340px) translateY(-390vh) rotate(-90deg); opacity: 0; }
+    0% {
+      transform: translateX(340px) translateY(420px) rotate(0deg);
+      opacity: 0;
+    }
+    21% {
+      opacity: 0.65;
+    }
+    79% {
+      opacity: 0.65;
+    }
+    100% {
+      transform: translateX(340px) translateY(-390vh) rotate(-90deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-23 {
-  0% { transform: translateX(-360px) translateY(440px) rotate(0deg); opacity: 0; }
-  23% { opacity: 0.4; }
-  77% { opacity: 0.4; }
-  100% { transform: translateX(-360px) translateY(-410vh) rotate(180deg); opacity: 0; }
+    0% {
+      transform: translateX(-360px) translateY(440px) rotate(0deg);
+      opacity: 0;
+    }
+    23% {
+      opacity: 0.4;
+    }
+    77% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translateX(-360px) translateY(-410vh) rotate(180deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-24 {
-  0% { transform: translateX(380px) translateY(460px) rotate(0deg); opacity: 0; }
-  27% { opacity: 0.5; }
-  73% { opacity: 0.5; }
-  100% { transform: translateX(380px) translateY(-430vh) rotate(-270deg); opacity: 0; }
+    0% {
+      transform: translateX(380px) translateY(460px) rotate(0deg);
+      opacity: 0;
+    }
+    27% {
+      opacity: 0.5;
+    }
+    73% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateX(380px) translateY(-430vh) rotate(-270deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-25 {
-  0% { transform: translateX(-400px) translateY(480px) rotate(0deg); opacity: 0; }
-  14% { opacity: 0.6; }
-  86% { opacity: 0.6; }
-  100% { transform: translateX(-400px) translateY(-450vh) rotate(90deg); opacity: 0; }
+    0% {
+      transform: translateX(-400px) translateY(480px) rotate(0deg);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.6;
+    }
+    86% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateX(-400px) translateY(-450vh) rotate(90deg);
+      opacity: 0;
+    }
   }
 
   @keyframes flame-scale-25 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.34); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.34);
+    }
   }
 
   /* Additional flame scaling keyframes 26-35 */
   @keyframes flame-scale-26 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.18); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.18);
+    }
   }
 
   @keyframes flame-scale-27 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.22); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.22);
+    }
   }
 
   @keyframes flame-scale-28 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.16); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.16);
+    }
   }
 
   @keyframes flame-scale-29 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.25); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.25);
+    }
   }
 
   @keyframes flame-scale-30 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.20); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
   }
 
   @keyframes flame-scale-31 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.23); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.23);
+    }
   }
 
   @keyframes flame-scale-32 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.19); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.19);
+    }
   }
 
   @keyframes flame-scale-33 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.21); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.21);
+    }
   }
 
   @keyframes flame-scale-34 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.17); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.17);
+    }
   }
 
   @keyframes flame-scale-35 {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.24); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.24);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-30px); /* small gentle lift */
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite; /* slow + smooth */
   }
 }

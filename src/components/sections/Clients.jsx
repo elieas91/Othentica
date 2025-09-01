@@ -19,7 +19,7 @@ const Clients = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [shouldUseCarousel, clientsData.length, itemsPerView]);
+  }, [shouldUseCarousel, itemsPerView]);
 
   const nextSlide = () => {
     if (!shouldUseCarousel) return;
@@ -37,11 +37,7 @@ const Clients = () => {
     });
   };
 
-  const goToSlide = (index) => {
-    if (!shouldUseCarousel) return;
-    const maxIndex = clientsData.length - itemsPerView;
-    setCurrentIndex(Math.min(index, maxIndex));
-  };
+
 
   if (!shouldUseCarousel) {
     // Static flexbox layout for 6 or fewer clients
@@ -82,7 +78,6 @@ const Clients = () => {
   }
 
   // Carousel layout for more than 6 clients
-  const totalSlides = clientsData.length - itemsPerView + 1;
   const currentClients = clientsData.slice(currentIndex, currentIndex + itemsPerView);
 
   return (

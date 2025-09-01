@@ -151,7 +151,7 @@ const SEO = ({
       // Reset title to default
       document.title = 'Othentica';
     };
-  }, [title, description, keywords, image, url, type, structuredData, canonical]);
+  }, [title, description, keywords, image, url, type, structuredData, canonical, defaultImage, fullTitle]);
 
   // This component doesn't render anything visible
   return null;
