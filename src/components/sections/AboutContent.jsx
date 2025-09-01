@@ -1,4 +1,5 @@
 import React from 'react';
+import Bridge from '../../assets/img/about/bridge.png'; 
 
 const AboutContent = ({
   title = 'Driving Purpose Forward',
@@ -34,7 +35,7 @@ const AboutContent = ({
             {/* Floating Circles */}
             {showFloatingCircles && (
               <img
-                src="/src/assets/img/about/bridge.png"
+                src={Bridge}
                 alt="Bridge"
                 className={`${
                   flipped
