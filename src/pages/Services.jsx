@@ -2,7 +2,6 @@ import React from 'react';
 import { servicesData } from '../data/servicesData';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
-import ServiceCard from '../components/ui/ServiceCard';
 import ServiceBlock from '../components/ui/ServiceBlock';
 import Banner from '../components/ui/Banner';
 import Testimonial1 from '../assets/img/testimonials/testimonial-1.webp';
