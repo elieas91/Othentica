@@ -16,10 +16,11 @@ export const servicesData = [
     icon: App,
     title: 'The Othentica App',
     description:
-      'One-of-its-kind wellness app that makes growth simple and engaging. With gamified learning, quick science-backed practices, daily “mind cookies” and inspiring stories, Othentica helps you build focus, energy, and balance at work and beyond.',
+      'One-of-its-kind wellness app that makes growth simple and engaging. With gamified learning, quick science-backed practices, daily "mind cookies" and inspiring stories, Othentica helps you build focus, energy, and balance at work and beyond.',
     buttonText: 'Explore',
     image1: Image1,
     image2: Image2,
+    backgroundType: 'image', 
   },
   {
     id: 2,
@@ -30,6 +31,8 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: Image1,
     image2: Image2,
+    backgroundType: 'color',
+    backgroundColor: '#e0f2fe', // Light blue
   },
   {
     id: 3,
@@ -40,6 +43,7 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: Image1,
     image2: Image2,
+    backgroundType: 'image', 
   },
   {
     id: 4,
@@ -50,5 +54,7 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: Image1,
     image2: Image2,
+    backgroundType: 'color',
+    backgroundColor: '#f0fdf4', // Light green
   },
 ];

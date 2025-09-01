@@ -28,7 +28,7 @@ const MobileShowcase = () => {
       );
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [appImages.length]);
 
   const currentStep = mobileAppStepsData[currentStepIndex];
 

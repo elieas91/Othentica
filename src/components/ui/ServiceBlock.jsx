@@ -17,18 +17,29 @@ const ServiceBlock = ({ service, index }) => {
         />
       </div>
 
-      {/* Text Side with Background Image */}
+      {/* Text Side with Conditional Background */}
       <div
         className={`w-full md:w-1/2 p-8 relative flex flex-col justify-center ${
           isEven ? 'md:order-2' : 'md:order-1'
         }`}
       >
-        {/* Background image behind text */}
-        <img
-          src={service.image2}
-          alt="Background"
-          className="absolute inset-0 w-full h-[400px] object-cover opacity-40 z-0"
-        />
+        {/* Conditional Background: Based on backgroundType field */}
+        {service.backgroundType === 'image' ? (
+          // Background image behind text
+          <img
+            src={service.image2}
+            alt="Background"
+            className="absolute inset-0 w-full h-[400px] object-cover opacity-40 z-0"
+          />
+        ) : (
+          // Custom solid background color
+          <div 
+            className="absolute inset-0 w-full h-[400px] z-0 rounded-lg"
+            style={{
+              backgroundColor: service.backgroundColor || '#f3f4f6'
+            }}
+          ></div>
+        )}
 
         {/* Content */}
         <div className="relative z-10">
