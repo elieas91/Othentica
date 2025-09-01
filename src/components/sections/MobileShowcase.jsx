@@ -156,10 +156,7 @@ const MobileShowcase = () => {
                 src={Phone}
                 alt="Smartphone mockup"
                 className="w-80 h-auto"
-                style={{
-                  filter:
-                    'drop-shadow(0 20px 20px rgba(0, 0, 0, 0.2)) drop-shadow(0 8px 8px rgba(0, 0, 0, 0.15))',
-                }}
+                
               />
               {/* App content overlay inside the phone screen */}
               <div className="absolute inset-0 flex items-center justify-center z-[-1]">

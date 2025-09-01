@@ -27,20 +27,20 @@ const Philosophy = () => {
             </h2>
             <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
               At Othentica, we talk about <b>Corporate Health</b> because
-              wellness is no longer enough. Wellness often feels like an add-on
-              — a yoga class here, a stress tip there. But health? Health is
+              wellness is no longer enough. Wellness often feels like an add-on,
+               a yoga class here, a stress tip there. But health? Health is
               essential.
             </p>
             <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
               <b>Corporate Health is the evolution of wellness.</b>
               <br />
               It's not a perk. It's the foundation of energy, resilience, and
-              performance. Our approach goes deeper — into{' '}
-              <b>brain health, nutrition, and human connection</b> — so that
+              performance. Our approach goes deeper, into{' '}
+              <b>brain health, nutrition, and human connection</b>, so that
               people don't just manage life's pressures, they rise above them.
             </p>
             <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-              When humans are truly healthy, they don't just cope. They thrive —
+              When humans are truly healthy, they don't just cope. They thrive,
               and so do their workplaces, families, and communities.
             </p>
           </div>

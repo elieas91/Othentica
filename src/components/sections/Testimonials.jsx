@@ -30,6 +30,16 @@ const Testimonials = () => {
     (cat) => cat.id === currentTestimonial.categoryId
   );
 
+  // Get two different categories for the right side images
+  const getTwoDifferentCategories = () => {
+    if (testimonialCategories.length < 2) return [currentCategory];
+    // Pick current category and next one (wrap around)
+    const currentIdx = testimonialCategories.findIndex(cat => cat.id === currentCategory.id);
+    const nextIdx = (currentIdx + 1) % testimonialCategories.length;
+    return [testimonialCategories[currentIdx], testimonialCategories[nextIdx]];
+  };
+  const categoriesForImages = getTwoDifferentCategories();
+
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName) => {
     const imageMap = {
@@ -158,33 +168,38 @@ const Testimonials = () => {
             </div>
           </div>
 
-          {/* Right Side - Category Images */}
+          {/* Right Side - Two Images from Different Categories */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {currentCategory?.images.map((imageName, index) => (
-              <div
-                key={`${currentCategory.id}-${imageName}-${index}`}
-                className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl"
-              >
-                <div className="h-64 overflow-hidden">
-                  <img
-                    src={getTestimonialImagePath(imageName)}
-                    alt={`${currentCategory.name} - ${imageName}`}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div className="p-6 text-start bg-gradient-to-br from-primary/5 to-primary/10">
-                  <h3 className="text-xl font-bold text-primary mb-2">
-                    {currentCategory.name}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    {currentCategory.description}
-                  </p>
-                  <div className="mt-3 text-xs text-primary/70 font-medium">
-                    {currentCategory.count} testimonials
+            {categoriesForImages.map((cat, idx) => {
+              // Pick the first image from each category
+              const imageName = cat.images[0];
+              return (
+                <div
+                  key={`${cat.id}-${imageName}-${idx}`}
+                  className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                >
+                  <div className="h-64 w-full relative">
+                    <img
+                      src={getTestimonialImagePath(imageName)}
+                      alt={`${cat.name} - ${imageName}`}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      style={{ minHeight: '100%', minWidth: '100%' }}
+                    />
+                  </div>
+                  <div className="p-6 text-start">
+                    <h3 className="text-xl font-bold text-primary mb-2">
+                      {cat.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {cat.description}
+                    </p>
+                    <div className="mt-3 text-xs text-primary/70 font-medium">
+                      {cat.count} testimonials
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
