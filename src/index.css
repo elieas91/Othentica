@@ -632,4 +632,18 @@
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.24); }
   }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-30px); /* small gentle lift */
+    }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite; /* slow + smooth */
+  }
+
 }

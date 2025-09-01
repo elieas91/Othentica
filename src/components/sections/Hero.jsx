@@ -5,7 +5,7 @@ import Logo_o from '../../assets/img/logo_o.webp';
 import Flame from '../../assets/img/flame.webp';
 import HeroBg from '../../assets/img/hero_bg2.webp';
 import HeroBg2 from '../../assets/img/hero_bg3.webp';
-import HeroBg3 from '../../assets/img/hero_bg3v2.webp';
+import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
 
 const Hero = () => {
   // Flame configuration array
@@ -138,15 +138,14 @@ const Hero = () => {
     >
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
-        {/* Main Logo with Scale Animation */}
-        {/* <div className="absolute inset-0 flex items-center justify-end pr-28 pt-0">
+        {/* O Logo with Scale Animation */}
+        <div className="absolute inset-0 flex items-start justify-end pr-[150px] pt-20 animate-float">
           <img
             src={Logo_o}
             alt="Othentica Logo"
-            className="w-1/3 h-auto opacity-20 animate-logo-scale"
+            className="w-1/3 h-auto"
           />
-        </div> */}
-
+        </div>
         {/* Multiple Animated Flames */}
         <div className="absolute inset-0 w-full h-full translate-x-20">
           {flames.map((flame) => (
@@ -164,7 +163,6 @@ const Hero = () => {
             </div>
           ))}
         </div>
-
         {/* Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-10 dark:bg-opacity-20"></div>
       </div>
