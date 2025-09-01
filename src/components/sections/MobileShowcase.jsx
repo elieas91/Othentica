@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button';
-import Flame from '../../assets/img/flame.webp';
+// import Flame from '../../assets/img/flame.webp';
 import Phone from '../../assets/img/phone.webp';
 import App1 from '../../assets/img/app-1.webp';
-import App2 from '../../assets/img/app-2.webp';
-import App3 from '../../assets/img/app-3.webp';
-import App4 from '../../assets/img/app-4.webp';
-import App5 from '../../assets/img/app-5.webp';
-import App6 from '../../assets/img/app-6.webp';
-import App7 from '../../assets/img/app-7.webp';
-import App8 from '../../assets/img/app-8.webp';
+// import App2 from '../../assets/img/app-2.webp';
+// import App3 from '../../assets/img/app-3.webp';
+// import App4 from '../../assets/img/app-4.webp';
+// import App5 from '../../assets/img/app-5.webp';
+// import App6 from '../../assets/img/app-6.webp';
+// import App7 from '../../assets/img/app-7.webp';
+// import App8 from '../../assets/img/app-8.webp';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1.png';
 import { mobileAppStepsData } from '../../data/mobileAppStepsData';
 
