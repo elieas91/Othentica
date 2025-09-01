@@ -45,7 +45,7 @@ const MobileShowcase = () => {
         style={{
           backgroundImage: `url(${LogoPattern})`,
           backgroundRepeat: 'repeat',
-          backgroundSize: '264px 297px',
+          backgroundSize: '900px 895px',
           opacity: 0.4,
         }}
       />
@@ -100,7 +100,7 @@ const MobileShowcase = () => {
                     onClick={() => setcurrentStepIndex(index)}
                     className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
                       index === currentStepIndex
-                        ? 'bg-primary text-white scale-110 opacity-100'
+                        ? 'bg-secondary text-white scale-110 opacity-100'
                         : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
                     }`}
                     aria-label={`Go to step ${index + 1}`}
@@ -156,7 +156,6 @@ const MobileShowcase = () => {
                 src={Phone}
                 alt="Smartphone mockup"
                 className="w-80 h-auto"
-                
               />
               {/* App content overlay inside the phone screen */}
               <div className="absolute inset-0 flex items-center justify-center z-[-1]">

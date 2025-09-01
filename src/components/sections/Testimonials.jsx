@@ -34,7 +34,9 @@ const Testimonials = () => {
   const getTwoDifferentCategories = () => {
     if (testimonialCategories.length < 2) return [currentCategory];
     // Pick current category and next one (wrap around)
-    const currentIdx = testimonialCategories.findIndex(cat => cat.id === currentCategory.id);
+    const currentIdx = testimonialCategories.findIndex(
+      (cat) => cat.id === currentCategory.id
+    );
     const nextIdx = (currentIdx + 1) % testimonialCategories.length;
     return [testimonialCategories[currentIdx], testimonialCategories[nextIdx]];
   };
@@ -93,7 +95,7 @@ const Testimonials = () => {
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-gradient-to-br from-neutral/40 via-accent/10 to-white relative overflow-hidden">
+    <section className="py-16 px-8 lg:px-16 bg-neutral overflow-hidden">
       {/* Subtle background pattern overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
@@ -138,7 +140,7 @@ const Testimonials = () => {
                   <img
                     src={getTestimonialImagePath(currentTestimonial.image)}
                     alt={currentTestimonial.author}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-primary/30 shadow"
+                    className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 shadow"
                   />
                   <span>– {currentTestimonial.author}</span>
                 </span>
@@ -190,9 +192,7 @@ const Testimonials = () => {
                     <h3 className="text-xl font-bold text-primary mb-2">
                       {cat.name}
                     </h3>
-                    <p className="text-gray-600 text-sm">
-                      {cat.description}
-                    </p>
+                    <p className="text-gray-600 text-sm">{cat.description}</p>
                     <div className="mt-3 text-xs text-primary/70 font-medium">
                       {cat.count} testimonials
                     </div>

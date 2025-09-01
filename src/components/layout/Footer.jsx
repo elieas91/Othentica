@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLinkedin, FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
+import WhiteLogo from '../../assets/img/logo_white.webp';
 
 const Footer = () => {
   return (
@@ -10,7 +11,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3>
+            {/* <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3> */}
+            <img
+              src={WhiteLogo}
+              alt="Othentica Logo"
+              className="h-10 w-auto mb-6"
+            />
             <p className="text-gray-100 mb-6 leading-relaxed">
               Your authentic wellness companion. We're dedicated to helping you
               discover genuine wellness solutions that work for your unique
@@ -61,9 +67,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold text-neutral mb-4">
-              Quick Links
-            </h4>
+            <h4 className="text-lg font-bold text-neutral mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
                 <Link to="/">Home</Link>
@@ -82,9 +86,7 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-semibold text-neutral mb-4">
-              Services
-            </h4>
+            <h4 className="text-lg font-bold text-neutral mb-4">Services</h4>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
                 <Link to="/services">Wellness Coaching</Link>
