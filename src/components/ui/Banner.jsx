@@ -7,6 +7,8 @@ const Banner = ({
   description,
   buttonText,
   buttonVariant = 'accent',
+  hasGradientTransparentBottom = true,
+  minHeight = 'min-h-[100vh]',
   buttonOnClick,
   backgroundImage,
   backgroundImages,
@@ -18,7 +20,7 @@ const Banner = ({
     Array.isArray(backgroundImages) && backgroundImages.length > 0;
   return (
     <div
-      className={`relative min-h-[100vh] flex items-center justify-center overflow-hidden ${className}`}
+      className={`relative ${minHeight} flex items-center justify-center overflow-hidden ${className}`}
       style={
         hasMultipleImages
           ? undefined
@@ -92,7 +94,11 @@ const Banner = ({
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white dark:from-primary to-transparent z-30"></div>
+      {hasGradientTransparentBottom ? (
+        <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white dark:from-primary to-transparent z-30"></div>
+      ) : (
+        <div className="absolute bottom-0 left-0 w-full h-16 bg-white dark:bg-primary z-30"></div>
+      )}
     </div>
   );
 };
