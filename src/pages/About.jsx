@@ -5,6 +5,12 @@ import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
 import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
 import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
+import MissionVideo from '../assets/video/mission-vision-values/mission.mp4';
+import MissionImg from '../assets/img/mission-vision-values/mission.webp';
+import VisionVideo from '../assets/video/mission-vision-values/vision.mp4';
+import VisionImg from '../assets/img/mission-vision-values/vision.webp';
+import ValuesVideo from '../assets/video/mission-vision-values/values.mp4';
+import ValuesImg from '../assets/img/mission-vision-values/values.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 import Logo from '../assets/img/logo.webp';
 import { teamData } from '../data/teamData';
@@ -12,36 +18,40 @@ import { teamData } from '../data/teamData';
 const About = () => {
   // SEO data for about page
   const seoData = {
-    title: "About Othentica - Our Mission, Vision & Values",
-    description: "Learn about Othentica's mission to empower businesses through innovative digital solutions. Discover our vision for digital transformation and the core values that drive our culture of excellence.",
-    keywords: "about Othentica, company mission, company vision, company values, digital innovation company, technology company, mobile app development company, digital transformation services",
+    title: 'About Othentica - Our Mission, Vision & Values',
+    description:
+      "Learn about Othentica's mission to empower businesses through innovative digital solutions. Discover our vision for digital transformation and the core values that drive our culture of excellence.",
+    keywords:
+      'about Othentica, company mission, company vision, company values, digital innovation company, technology company, mobile app development company, digital transformation services',
     image: PhilosophyBg,
-    url: "https://othentica.com/about",
-    type: "website",
-    canonical: "https://othentica.com/about",
+    url: 'https://othentica.com/about',
+    type: 'website',
+    canonical: 'https://othentica.com/about',
     structuredData: {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      "name": "About Othentica",
-      "description": "Learn about Othentica's mission, vision, and values in digital innovation and mobile app development",
-      "url": "https://othentica.com/about",
-      "mainEntity": {
-        "@type": "Organization",
-        "name": "Othentica",
-        "description": "Digital innovation company specializing in mobile app development and digital transformation",
-        "url": "https://othentica.com",
-        "logo": Logo,
-        "foundingDate": "2020",
-        "slogan": "Crafting Digital Excellence",
-        "knowsAbout": [
-          "Mobile App Development",
-          "Digital Transformation",
-          "Web Development",
-          "Technology Innovation",
-          "Creative Excellence"
-        ]
-      }
-    }
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: 'About Othentica',
+      description:
+        "Learn about Othentica's mission, vision, and values in digital innovation and mobile app development",
+      url: 'https://othentica.com/about',
+      mainEntity: {
+        '@type': 'Organization',
+        name: 'Othentica',
+        description:
+          'Digital innovation company specializing in mobile app development and digital transformation',
+        url: 'https://othentica.com',
+        logo: Logo,
+        foundingDate: '2020',
+        slogan: 'Crafting Digital Excellence',
+        knowsAbout: [
+          'Mobile App Development',
+          'Digital Transformation',
+          'Web Development',
+          'Technology Innovation',
+          'Creative Excellence',
+        ],
+      },
+    },
   };
 
   // Handle direct navigation to sections (e.g., /about#mission)
@@ -76,11 +86,11 @@ const About = () => {
   return (
     <div className="min-h-screen dark:bg-primary">
       <SEO {...seoData} />
-      
+
       <Banner
         title="About Othentica"
         subtitle="Crafting Digital Excellence"
-        description="We are a passionate team of innovators dedicated to transforming ideas into exceptional digital experiences. Our commitment to quality, creativity, and cutting-edge technology drives everything we do."
+        description="Othentica is a gamified wellness app that guides people to step into their authentic selves by balancing mind, body, and purpose through brain-health-based tools and experiences."
         buttonText=""
         buttonVariant="accent"
         buttonOnClick={handleLearnMore}
@@ -91,12 +101,12 @@ const About = () => {
         // title="Driving Purpose Forward"
         title="Mission"
         description="At Othentica, our mission is to empower businesses through innovative digital solutions that drive growth and create meaningful connections. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
-        imageSrc={PhilosophyBg}
-        videoSrc={FlameVideo}
+        imageSrc={MissionImg}
+        videoSrc={MissionVideo}
         imageAlt="Othentica Mobile App"
         showFloatingCircles={true}
         showGradients={true}
-        showPlayButton={true}
+        showPlayButton={false}
         flipped={false}
         sectionId="mission"
       />
@@ -113,12 +123,12 @@ const About = () => {
         // title="Driving Purpose Forward"
         title="Vision"
         description="At Othentica, our vision is to be a leading provider of innovative digital solutions that empower businesses to achieve their goals in an ever-evolving digital landscape. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
-        imageSrc={PhilosophyBg}
-        videoSrc={FlameVideo}
+        imageSrc={VisionImg}
+        videoSrc={VisionVideo}
         imageAlt="Othentica Mobile App"
         showFloatingCircles={true}
         showGradients={true}
-        showPlayButton={true}
+        showPlayButton={false}
         flipped={true}
         sectionId="vision"
       />
@@ -137,33 +147,34 @@ const About = () => {
         // title="Driving Purpose Forward"
         title="Values"
         description="At Othentica, our values are the foundation of our culture and guide our decisions. We believe in integrity, innovation, and collaboration, and we strive to create a positive impact through our work."
-        imageSrc={PhilosophyBg}
-        videoSrc={FlameVideo}
+        imageSrc={ValuesImg}
+        videoSrc={ValuesVideo}
         imageAlt="Othentica Mobile App"
         showFloatingCircles={true}
         showGradients={true}
-        showPlayButton={true}
+        showPlayButton={false}
         flipped={false}
         sectionId="values"
       />
 
       {/* Team Section */}
-      <section className="pt-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-20 px-0 sm:px-2 lg:px-4">
+        <div className="max-w-[85%] mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary dark:text-neutral mb-4">Meet the Team</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Ready to start your wellness journey? We'd love to hear from you. Our team is here to help you achieve your goals and create meaningful connections.
-            </p>
+            <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
+              Meet the Founders
+            </h2>
           </div>
-          
+
           {/* Team Members */}
           {teamData.map((member, index) => (
             <div
               key={member.id}
-              className={`flex flex-row items-center gap-4 px-24 mx-auto pt-10 ${
+              className={`flex flex-row items-center gap-10 px-4 mx-auto pt-10 ${
                 index % 2 !== 0 ? 'p-0' : 'pt-20'
-              } ${index % 2 === 0 ? ' bg-white mb-16 p-8' : 'bg-white'} rounded-2xl `}
+              } ${
+                index % 2 === 0 ? ' bg-white mb-16 p-4' : 'bg-white'
+              } rounded-2xl `}
             >
               {/* Text Content - Position changes based on flipped property */}
               <div
@@ -171,25 +182,40 @@ const About = () => {
                   member.flipped ? 'order-2' : 'order-1'
                 }`}
               >
-                <h3 className="text-xl font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
+                <h3 className="text-5xl font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
                   {member.subtitle}
                 </h3>
-                <h1 className="text-7xl font-bold text-primary font-sans dark:text-neutral mb-6">
-                  {member.description}
+                <h1 className="text-xl text-primary font-sans dark:text-neutral mb-6">
+                  {Array.isArray(member.description) &&
+                    member.description.map((paragraph, index) => (
+                      <p key={index} className={index === 0 ? '' : 'mt-3'}>
+                        {paragraph}
+                      </p>
+                    ))}
+
+                  {/* Name and role */}
+                  <p className="mt-6">— {member.name}</p>
+                  {Array.isArray(member.role) ? (
+                    member.role.map((role, idx) => <p key={idx}>{role}</p>)
+                  ) : (
+                    <p>{member.role}</p>
+                  )}
                 </h1>
               </div>
 
               {/* Image Section - Position changes based on flipped property */}
-              <div className={`w-1/2 ${member.flipped ? 'order-1' : 'order-2'}`}>
+              <div
+                className={`w-1/2 ${member.flipped ? 'order-1' : 'order-2'}`}
+              >
                 <div className="relative h-fit overflow-hidden rounded-lg">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover"
+                    className="w-2/3 object-cover"
                   />
                   {/* Social Media Buttons */}
                   <div
-                    className={`absolute top-1/2 transform -translate-y-[60%] space-y-3 ${
+                    className={`absolute top-1/2 transform -translate-y-[0%] space-y-3 ${
                       member.flipped ? 'left-[10%]' : 'right-0 -translate-x-1/2'
                     }`}
                   >

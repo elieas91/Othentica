@@ -1,13 +1,12 @@
 import React from 'react';
 import { servicesData } from '../data/servicesData';
-import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import ServiceBlock from '../components/ui/ServiceBlock';
 import Banner from '../components/ui/Banner';
-import Testimonial1 from '../assets/img/testimonials/testimonial-1.webp';
-import Testimonial2 from '../assets/img/testimonials/testimonial-2.webp';
-import Testimonial3 from '../assets/img/testimonials/testimonial-3.webp';
-import Testimonial4 from '../assets/img/testimonials/testimonial-4.webp';
+import CorporateHealth from '../assets/img/services/corporate_health.webp';
+import OneToOneGuidance from '../assets/img/services/one_to_one_img.webp';
+import Workshop from '../assets/img/services/workshop.webp';
+import TailoredPrograms from '../assets/img/services/programs_img.webp';
 
 const Services = () => {
   return (
@@ -17,21 +16,36 @@ const Services = () => {
           title="Our Services"
           description="Discover our comprehensive approach to wellness that nurtures every aspect of your being"
           backgroundImages={[
-            Testimonial1,
-            Testimonial2,
-            Testimonial3,
-            Testimonial4,
+            CorporateHealth,
+            OneToOneGuidance,
+            Workshop,
+            TailoredPrograms,
           ]}
         />
       </div>
-      <div className="min-h-screen bg-neutral dark:bg-primary py-20 px-8 lg:px-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="container mx-auto">
-            {servicesData.map((service, index) => (
-              <ServiceBlock key={service.id} service={service} index={index} />
-            ))}
-          </div>
+      <div className="min-h-screen bg-neutral dark:bg-primary pb-20">
+        {servicesData.map((service, index) => {
+          const bgColors = ['bg-white', 'bg-neutral'];
+          const bgColor = bgColors[index % bgColors.length];
+          return (
+            <section
+              key={service.id}
+              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] ${bgColor} py-20`}
+            >
+              {/* Keep content centered */}
+              <div className="max-w mx-auto">
+                <ServiceBlock service={service} index={index} />
+              </div>
+              <div className="w-full flex justify-center items-center mt-32">
+                <blockquote className="text-center italic text-2xl text-gray-700 max-w-2xl">
+                  {`"${service.quotation}"`}
+                </blockquote>
+              </div>
+            </section>
+          );
+        })}
 
+        <div className="max-w-7xl mx-auto">
           <div className="bg-neutral dark:bg-primary rounded-2xl p-12 text-center">
             <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
               Ready to Start Your Journey?

@@ -18,9 +18,7 @@ const Footer = () => {
               className="h-10 w-auto mb-6"
             />
             <p className="text-gray-100 mb-6 leading-relaxed">
-              Your authentic wellness companion. We're dedicated to helping you
-              discover genuine wellness solutions that work for your unique
-              journey.
+              Your map to clarity, resilience, and growth.
             </p>
             <div className="flex space-x-4">
               <a

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Button from '../components/ui/Button';
 import Banner from '../components/ui/Banner';
-import BannerBg from '../assets/img/contact/banner.webp';
+import BannerBg from '../assets/img/contact/contact_us_map.webp';
+import ContactUs from '../components/ui/ContactUs';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -25,15 +26,22 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen dark:bg-primary">
+    <div className="relative min-h-screen dark:bg-primary">
       <Banner
         title="Contact Us"
         subtitle="Get in Touch"
-        description="Ready to start your digital transformation journey? We'd love to hear from you. Our team is here to help you achieve your goals and create meaningful digital experiences."
+        description=""
         buttonText=""
         buttonVariant="accent"
+        hasGradientTransparentBottom={false}
+        minHeight="min-h-[60vh]"
         backgroundImage={BannerBg}
       />
+
+      {/* ContactUs overlapping top half */}
+      <div className="relative z-40 w-[70%] mx-auto -mt-48">
+        <ContactUs />
+      </div>
 
       <div className="py-20 px-8 lg:px-16">
         <div className="max-w-7xl mx-auto">
