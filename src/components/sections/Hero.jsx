@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '../ui/Button';
-import Logo from '../../assets/img/logo.webp';
+// import Logo from '../../assets/img/logo.webp';
 import Logo_o from '../../assets/img/logo_o.webp';
 import Flame from '../../assets/img/flame.webp';
-import HeroBg from '../../assets/img/hero_bg2.webp';
-import HeroBg2 from '../../assets/img/hero_bg3.webp';
+// import HeroBg from '../../assets/img/hero_bg2.webp';
+// import HeroBg2 from '../../assets/img/hero_bg3.webp';
 import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
 
 const Hero = () => {
@@ -139,7 +139,7 @@ const Hero = () => {
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
         {/* O Logo with Scale Animation */}
-        <div className="absolute inset-0 flex items-start justify-end pr-[150px] pt-20 animate-float">
+        <div className="absolute inset-0 flex items-start justify-end left-[25rem] animate-float">
           <img
             src={Logo_o}
             alt="Othentica Logo"

@@ -158,8 +158,8 @@ const About = () => {
       />
 
       {/* Team Section */}
-      <section className="pt-20 px-0 sm:px-2 lg:px-4">
-        <div className="max-w-[85%] mx-auto">
+      <section className="pt-20 px-0 ">
+        <div className="max-w-[90%] w-full mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
               Meet the Founders
@@ -185,10 +185,10 @@ const About = () => {
                 <h3 className="text-5xl font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
                   {member.subtitle}
                 </h3>
-                <h1 className="text-xl text-primary font-sans dark:text-neutral mb-6">
+                <h1 className="text-xl font-normal text-primary font-sans dark:text-neutral mb-6">
                   {Array.isArray(member.description) &&
                     member.description.map((paragraph, index) => (
-                      <p key={index} className={index === 0 ? '' : 'mt-3'}>
+                      <p key={index} className={index === 0 ? '' : 'mt-3' }>
                         {paragraph}
                       </p>
                     ))}
@@ -207,11 +207,16 @@ const About = () => {
               <div
                 className={`w-1/2 ${member.flipped ? 'order-1' : 'order-2'}`}
               >
-                <div className="relative h-fit overflow-hidden rounded-lg">
+                <div className="relative h-fit overflow-hidden rounded-lg flex justify-center items-center">
                   <img
                     src={member.image}
                     alt={member.name}
                     className="w-2/3 object-cover"
+                    style={{
+                      filter: 'blur(1px)',
+                      maskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 70%)',
+                      WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at center, black 60%, transparent 70%)'
+                    }}
                   />
                   {/* Social Media Buttons */}
                   <div
@@ -265,6 +270,19 @@ const About = () => {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="py-20 bg-white border-b-2 border-gray-200">
+        <div className="w-full px-4 text-center">
+          <div className="border-2 h-[25vh] flex justify-center items-center border-gray-300 rounded-2xl p-8 shadow-lg bg-gradient-to-br from-white to-gray-50 mx-4">
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Ready to transform your digital presence? Let's work together to bring your vision to life. 
+              Our team of experts is here to help you navigate the digital landscape and create solutions 
+              that drive real results for your business.
+            </p>
+          </div>
         </div>
       </section>
     </div>
