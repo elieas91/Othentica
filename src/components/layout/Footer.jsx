@@ -17,7 +17,7 @@ const Footer = () => {
               alt="Othentica Logo"
               className="h-10 w-auto mb-6"
             />
-            <p className="text-gray-100 mb-6 leading-relaxed">
+            <p className="text-gray-100 mb-6 font-bold leading-relaxed">
               Your map to clarity, resilience, and growth.
             </p>
             <div className="flex space-x-4">
@@ -124,7 +124,7 @@ const Footer = () => {
                 className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out text-sm font-medium"
               >
                 Powered By{' '}
-                <span className="text-secondary hover:text-accent transition-colors duration-300">
+                <span className="uppercase text-secondary hover:text-accent transition-colors duration-300">
                   Horiverde
                 </span>
               </a>

@@ -95,7 +95,7 @@ const Testimonials = () => {
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-neutral overflow-hidden">
+    <section className="py-16 px-8 lg:px-16 bg-white overflow-hidden">
       {/* Subtle background pattern overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>

@@ -5,7 +5,7 @@ const ContactUs = () => {
     name: '',
     email: '',
     phone: '',
-    company: '',
+    subject: '',
     message: '',
   });
 
@@ -17,7 +17,7 @@ const ContactUs = () => {
     e.preventDefault();
     // Handle form submission (e.g., send to API)
     alert('Message sent!');
-    setForm({ name: '', email: '', phone: '', company: '', message: '' });
+    setForm({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
   return (
@@ -64,11 +64,11 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500">Company</label>
+            <label className="block text-sm text-gray-500">Subject</label>
             <input
               type="text"
-              name="company"
-              value={form.company}
+              name="subject"
+              value={form.subject}
               onChange={handleChange}
               className="w-full border-b border-gray-300 py-2 focus:outline-none"
             />

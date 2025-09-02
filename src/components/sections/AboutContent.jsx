@@ -1,5 +1,5 @@
 import React from 'react';
-import Bridge from '../../assets/img/about/bridge.png'; 
+// import Bridge from '../../assets/img/about/bridge.png'; 
 
 const AboutContent = ({
   title = 'Driving Purpose Forward',
@@ -7,7 +7,7 @@ const AboutContent = ({
   imageSrc,
   videoSrc,
   imageAlt = 'Othentica Content',
-  showFloatingCircles = true,
+  // showFloatingCircles = true, // Currently unused but kept for future implementation
   showGradients = true,
   showPlayButton = true,
   flipped = false,
@@ -33,17 +33,6 @@ const AboutContent = ({
             }`}
           >
             {/* Floating Circles */}
-            {showFloatingCircles && (
-              <img
-                src={Bridge}
-                alt="Bridge"
-                className={`${
-                  flipped
-                    ? 'left-[-10%] rotate-[45deg] top-[50%]'
-                    : 'right-0 rotate-[-45deg]'
-                } absolute bottom-0 hidden h-80 w-10 translate-x-1/2 translate-y-1/2 md:block object-cover`}
-              />
-            )}
 
             {/* Image Container */}
             <div
@@ -113,7 +102,7 @@ const AboutContent = ({
               {title}
             </h2>
             <div className="prose">
-              <p>{description}</p>
+              <p className="text-lg">{description}</p>
             </div>
           </div>
         </div>
