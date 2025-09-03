@@ -98,7 +98,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-bold text-neutral mb-4">Quick Links</h4>
+            <h3 className="text-lg font-bold text-neutral mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
                 <Link to="/">Home</Link>
@@ -117,7 +117,7 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="text-lg font-bold text-neutral mb-4">Services</h4>
+            <h3 className="text-lg font-bold text-neutral mb-4">Services</h3>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
                 <Link to="/services">Wellness Coaching</Link>

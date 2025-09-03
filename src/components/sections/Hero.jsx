@@ -194,10 +194,12 @@ const Hero = () => {
           It's the foundation of energy, resilience, and performance.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button variant="accent" size="large">
-            <Link to="/about" target="_blank">
-              Onboard your Team
-            </Link>
+          <Button 
+            variant="accent" 
+            size="large"
+            onClick={() => window.open('/about', '_blank')}
+          >
+            Onboard your Team
           </Button>
           <Button 
             variant="secondary" 

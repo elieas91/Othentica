@@ -130,7 +130,7 @@ const Navigation = () => {
                   >
                     <button
                       onClick={() => handleAboutNavigation('/about')}
-                      className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
+                      className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
                     >
                       <span>{item.label}</span>
                       <svg
@@ -162,7 +162,7 @@ const Navigation = () => {
                             onClick={() =>
                               handleAboutNavigation(dropdownItem.path)
                             }
-                            className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
+                            className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
                           >
                             {dropdownItem.label}
                           </button>
@@ -175,8 +175,8 @@ const Navigation = () => {
                     to={item.path}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-poppins ${
                       isActive(item.path)
-                        ? 'text-neutral dark:text-secondary bg-secondary dark:bg-secondary/20'
-                        : 'text-primary dark:text-gray-100 hover:text-neutral dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800'
+                        ? 'text-white dark:text-secondary bg-secondary dark:bg-secondary/20'
+                        : 'text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800'
                     }`}
                   >
                     {item.label}

@@ -20,10 +20,12 @@ const DownloadAppCard = () => {
         <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
           Get it now and stay connected wherever you go!
         </p>
-        <Button variant="secondary" size="large">
-          <Link to="/contact" target="_blank" className="w-full">
-              Book a Demo
-          </Link>
+        <Button 
+          variant="secondary" 
+          size="large"
+          onClick={() => window.open('/contact', '_blank')}
+        >
+          Book a Demo
         </Button>
       </div>
 
@@ -33,6 +35,7 @@ const DownloadAppCard = () => {
           href="https://play.google.com/store/apps/details?id=your.app.id"
           target="_blank"
           rel="noopener noreferrer"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <img
             src={GooglePlayBadge}
@@ -46,6 +49,7 @@ const DownloadAppCard = () => {
           href="https://apps.apple.com/app/idyourappid"
           target="_blank"
           rel="noopener noreferrer"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <img
             src={AppStoreBadge}
