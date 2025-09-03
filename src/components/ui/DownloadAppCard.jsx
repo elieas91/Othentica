@@ -1,5 +1,6 @@
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.png';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.png';
+import Button from './Button';
 
 const DownloadAppCard = () => {
   return (
@@ -18,8 +19,12 @@ const DownloadAppCard = () => {
         <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
           Get it now and stay connected wherever you go!
         </p>
+        <Button variant="secondary" size="large">
+          Book a Demo
+        </Button>
       </div>
-      <div className="flex flex-row items-center gap-4">
+
+      <div className="flex flex-row items-center gap-4 mt-6">
         {/* Google Play */}
         <a
           href="https://play.google.com/store/apps/details?id=your.app.id"

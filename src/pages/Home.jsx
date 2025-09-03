@@ -8,6 +8,7 @@ import Testimonials from '../components/sections/Testimonials';
 import SocialMedia from '../components/sections/Blog';
 import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
+import Security from '../components/sections/Security';
 
 const Home = () => {
   // SEO data for homepage
@@ -51,6 +52,7 @@ const Home = () => {
       <MobileShowcase />
       <Services />
       <Testimonials />
+      <Security />
       <SocialMedia />
       <Clients />
     </div>

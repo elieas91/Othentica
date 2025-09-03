@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../ui/Button';
 // import Logo from '../../assets/img/logo.webp';
 import Logo_o from '../../assets/img/logo_o.webp';
+import Logo_o_white from '../../assets/img/logo_o_white.webp';
 import Flame from '../../assets/img/flame.webp';
 // import HeroBg from '../../assets/img/hero_bg2.webp';
 // import HeroBg2 from '../../assets/img/hero_bg3.webp';
@@ -141,7 +142,7 @@ const Hero = () => {
         {/* O Logo with Scale Animation */}
         <div className="absolute inset-0 flex items-start justify-end left-[25rem] animate-float">
           <img
-            src={Logo_o}
+            src={Logo_o_white}
             alt="Othentica Logo"
             className="w-1/3 h-auto"
           />
@@ -181,10 +182,10 @@ const Hero = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button variant="accent" size="large">
-            Start Your Journey
+            Onboard your Team
           </Button>
           <Button variant="secondary" size="large">
-            Learn More
+            What is Othentica
           </Button>
         </div>
       </div>
