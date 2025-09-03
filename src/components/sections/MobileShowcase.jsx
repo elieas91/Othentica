@@ -11,11 +11,9 @@ import App6 from '../../assets/img/app-6.webp';
 import App7 from '../../assets/img/app-7.webp';
 import App8 from '../../assets/img/app-8.webp';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.png';
-import { mobileAppStepsData } from '../../data/mobileAppStepsData';
 import DownloadAppCard from '../ui/DownloadAppCard';
 
 const MobileShowcase = () => {
-  const [currentStepIndex, setcurrentStepIndex] = useState(0);
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
 
   // Array of all app images
@@ -30,8 +28,6 @@ const MobileShowcase = () => {
     }, 4000);
     return () => clearInterval(interval);
   }, [appImages.length]);
-
-  const currentStep = mobileAppStepsData[currentStepIndex];
 
   // Both app images change at the same time, but show different images
   const currentAppImage = appImages[currentAppImageIndex % appImages.length];
