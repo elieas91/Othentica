@@ -65,7 +65,7 @@ export const servicesData = [
   {
     id: 4,
     icon: OneToOne,
-    title: '1 to 1 Guidance',
+    title: '1:1 Guidance',
     description:
       'Personalized support through brain health coaching and training methods to help individuals become truly unstuckable.',
     descriptionBulletPoints: [

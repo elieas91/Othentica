@@ -23,14 +23,14 @@ const Services = () => {
           ]}
         />
       </div>
-      <div className="min-h-screen bg-neutral dark:bg-primary pb-20">
+      <div className="min-h-screen bg-white dark:bg-primary pb-20">
         {servicesData.map((service, index) => {
-          const bgColors = ['bg-white', 'bg-neutral'];
-          const bgColor = bgColors[index % bgColors.length];
+          // const bgColors = ['bg-white', 'bg-neutral'];
+          // const bgColor = bgColors[index % bgColors.length]; // Currently unused but kept for future styling
           return (
             <section
               key={service.id}
-              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] ${bgColor} py-20`}
+              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw]  py-20`}
             >
               {/* Keep content centered */}
               <div className="max-w mx-auto">

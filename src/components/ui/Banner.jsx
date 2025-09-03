@@ -12,6 +12,8 @@ const Banner = ({
   buttonOnClick,
   backgroundImage,
   backgroundImages,
+  hasTransparentSides = false,
+  hasOverlay = true,
   className = '',
   children,
 }) => {
@@ -21,19 +23,23 @@ const Banner = ({
   return (
     <div
       className={`relative ${minHeight} flex items-center justify-center overflow-hidden ${className}`}
-      style={
-        hasMultipleImages
-          ? undefined
-          : {
-              backgroundImage: backgroundImage
-                ? `url(${backgroundImage})`
-                : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-            }
-      }
     >
+      {/* Background image with optional transparency mask */}
+      {!hasMultipleImages && backgroundImage && (
+        <div 
+          className="absolute inset-0 w-full h-full"
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            ...(hasTransparentSides && {
+              maskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+            })
+          }}
+        ></div>
+      )}
       {/* Multi-image background as columns on larger screens, and as rows on mobile screens */}
       {hasMultipleImages && (
         <div className="absolute inset-0 w-full h-full flex flex-col md:flex-row z-0">
@@ -56,7 +62,12 @@ const Banner = ({
       )}
 
       {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-accent/40 dark:from-primary/90 dark:via-primary/70 dark:to-accent/50 z-10"></div>
+      {hasOverlay && (
+        <div className="absolute inset-0 z-10">
+          {/* Enhanced overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto">

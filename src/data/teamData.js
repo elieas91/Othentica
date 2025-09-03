@@ -1,4 +1,4 @@
-import yogaPoseImg from '../assets/img/contact/yoga-pose.webp';
+// import yogaPoseImg from '../assets/img/contact/yoga-pose.webp'; // Currently unused but kept for future implementation
 import Hiba from '../assets/img/contact/hiba.webp';
 import tarekImg from '../assets/img/contact/tarek.webp';
 
