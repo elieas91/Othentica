@@ -8,8 +8,6 @@ import WorkshopImg2 from '../assets/img/services/workshop_2.webp';
 import OneToOneImg from '../assets/img/services/one_to_one_img.webp';
 import AppImg from '../assets/img/services/app_img.webp';
 import AppImgLong from '../assets/img/services/app_img_long.webp';
-import Image1 from '../assets/img/services/testImage1.jpeg';
-import Image2 from '../assets/img/services/testImage2.jpg';
 
 export const servicesData = [
   {
@@ -27,7 +25,7 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: AppImg,
     image2: AppImgLong,
-    backgroundType: 'image',
+    backgroundColor: '#e0f2fe', //light blue
   },
   {
     id: 2,
@@ -44,8 +42,7 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: ProgramsImg,
     image2: ProgramsImg,
-    backgroundType: 'color',
-    backgroundColor: '#e0f2fe', // Light blue
+    backgroundColor: '#b6dcdd', //light turquoise
   },
   {
     id: 3,
@@ -58,11 +55,11 @@ export const servicesData = [
       'Designed to inspire teams and foster thriving cultures',
       'Encourage a shift from coping to thriving',
     ],
-    quotation: 'From coping to thriving — together.',
+    quotation: 'From coping to thriving, together.',
     buttonText: 'Explore',
     image1: WorkshopImg,
     image2: WorkshopImg2,
-    backgroundType: 'image',
+    backgroundColor: '#f3e8ff', //pastel lavender
   },
   {
     id: 4,
@@ -79,7 +76,6 @@ export const servicesData = [
     buttonText: 'Explore',
     image1: OneToOneImg,
     image2: OneToOneImg,
-    backgroundType: 'color',
-    backgroundColor: '#f0fdf4', // Light green
+    backgroundColor: '#ffe9e0', //warm pastel peach
   },
 ];

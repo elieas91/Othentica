@@ -26,7 +26,7 @@ const Banner = ({
     >
       {/* Background image with optional transparency mask */}
       {!hasMultipleImages && backgroundImage && (
-        <div 
+        <div
           className="absolute inset-0 w-full h-full"
           style={{
             backgroundImage: `url(${backgroundImage})`,
@@ -34,9 +34,11 @@ const Banner = ({
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             ...(hasTransparentSides && {
-              maskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
-            })
+              maskImage:
+                'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+              WebkitMaskImage:
+                'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+            }),
           }}
         ></div>
       )}

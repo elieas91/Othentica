@@ -2,7 +2,7 @@ import React from 'react';
 // import { useState } from 'react'; // Currently unused but kept for future form implementation
 import Button from '../components/ui/Button';
 import Banner from '../components/ui/Banner';
-import BannerBg from '../assets/img/contact/contact_us_map.webp';
+import BannerBg from '../assets/img/contact/dubai_bg.webp';
 import ContactUs from '../components/ui/ContactUs';
 
 const Contact = () => {
@@ -38,8 +38,8 @@ const Contact = () => {
           hasGradientTransparentBottom={false}
           minHeight="min-h-[80vh]"
           backgroundImage={BannerBg}
-          hasTransparentSides={true}
-          hasOverlay={false}
+          hasTransparentSides={false}
+          hasOverlay={true}
         />
       </div>
 

@@ -8,16 +8,19 @@ const ServiceBlock = ({ service, index }) => {
       <div className="flex flex-col md:flex-row items-center my-12 relative min-h-[500px]">
         {/* Image Side */}
         <div
-          className={`w-full md:w-1/2 relative z-10 ${
+          className={`w-full relative z-10 ${
             isEven ? 'md:order-2' : 'md:order-1'
           }`}
         >
           {/* Main Image */}
-          <img
-            src={service.image1}
-            alt={service.title}
-            className="max-h-[600px] shadow-lg"
-          />
+          <div className="w-full h-[600px] flex items-center justify-center">
+            <img
+              src={service.image1}
+              alt={service.title}
+              className="w-full h-full object-cover shadow-lg"
+              style={{ maxHeight: '600px' }}
+            />
+          </div>
         </div>
 
         {/* Text Side with Conditional Background */}
@@ -28,23 +31,12 @@ const ServiceBlock = ({ service, index }) => {
               : 'md:order-2 md:-ml-32 items-end'
           }`}
         >
-          {/* Conditional Background: Based on backgroundType field */}
-          {service.backgroundType === 'image' ? (
-            // Background image behind text
-            <img
-              src={service.image2}
-              alt="Background"
-              className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
-            />
-          ) : (
-            // Custom solid background color
-            <div
-              className="absolute inset-0 w-full h-full z-0"
-              style={{
-                backgroundColor: service.backgroundColor || '#f3f4f6',
-              }}
-            ></div>
-          )}
+          <div
+            className="absolute inset-0 w-full h-full z-0"
+            style={{
+              backgroundColor: service.backgroundColor || '#f3f4f6',
+            }}
+          ></div>
 
           {/* Content */}
           <div className="relative z-10 flex flex-col justify-start w-[85%] h-auto">
