@@ -12,6 +12,7 @@ import App7 from '../../assets/img/app-7.webp';
 import App8 from '../../assets/img/app-8.webp';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.png';
 import { mobileAppStepsData } from '../../data/mobileAppStepsData';
+import DownloadAppCard from '../ui/DownloadAppCard';
 
 const MobileShowcase = () => {
   const [currentStepIndex, setcurrentStepIndex] = useState(0);
@@ -63,58 +64,7 @@ const MobileShowcase = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-20 items-center">
-          {/* Left Text with Carousel */}
-          <div
-            className={`bg-white rounded-xl shadow-2xl p-8 relative z-20 ${
-              currentStep.buttonText ? 'space-y-8' : ''
-            }`}
-            style={{ backgroundColor: 'rgba(255,255,255,1)' }}
-          >
-            <div className="min-h-[200px] flex flex-col justify-center">
-              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral transition-all duration-700 ease-in-out">
-                {currentStep.title}
-              </h2>
-              <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 transition-all duration-700 ease-in-out">
-                {currentStep.description}
-              </p>
-
-              {/* Buttons inside carousel content */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-700 ease-in-out">
-                {currentStep.buttonText ? (
-                  <Button variant="secondary" size="large">
-                    {currentStep.buttonText}
-                  </Button>
-                ) : null}
-
-                {/* <Button variant="accent" size="large">
-                Learn More
-              </Button> */}
-              </div>
-            </div>
-
-            {/* Carousel Indicators - Numbered style with lines between circles */}
-            <div className="flex items-center">
-              {mobileAppStepsData.map((_, index) => (
-                <React.Fragment key={index}>
-                  <button
-                    onClick={() => setcurrentStepIndex(index)}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg transition-all duration-300 ${
-                      index === currentStepIndex
-                        ? 'bg-secondary text-white scale-110 opacity-100'
-                        : 'bg-gray-300 text-primary opacity-30 hover:opacity-60'
-                    }`}
-                    aria-label={`Go to step ${index + 1}`}
-                  >
-                    <span>{index + 1}</span>
-                  </button>
-                  {index < mobileAppStepsData.length - 1 && (
-                    <div className="w-8 h-0.5 bg-gray-300 mx-2" />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-
+          <DownloadAppCard />
           {/* Right Mobile Phone */}
           <div className="relative flex justify-center">
             {/* Background Phone Frame - larger and angled */}

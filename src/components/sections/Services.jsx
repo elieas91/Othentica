@@ -74,11 +74,11 @@ const Services = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Our Services
+            Our Solutions
           </h2>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Discover our comprehensive approach to wellness that nurtures every
-            aspect of your being.
+            Discover our comprehensive approach to Corporate Health that
+            nurtures every aspect of your being.
           </p>
         </div>
 

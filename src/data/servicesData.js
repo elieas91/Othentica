@@ -22,10 +22,10 @@ export const servicesData = [
       'Builds focus, energy, and balance at work and beyond',
     ],
     quotation: 'Wellness made simple, engaging, and gamified.',
-    buttonText: 'Explore',
+    buttonText: 'Explore Solution',
     image1: AppImg,
     image2: AppImgLong,
-    backgroundType: 'image',
+    backgroundColor: '#e0f2fe', //light blue
   },
   {
     id: 2,
@@ -39,11 +39,10 @@ export const servicesData = [
       'Helps organizations track growth and performance impact',
     ],
     quotation: 'Resilience and performance, built to last.',
-    buttonText: 'Explore',
+    buttonText: 'Explore Solution',
     image1: ProgramsImg,
     image2: ProgramsImg,
-    backgroundType: 'color',
-    backgroundColor: '#e0f2fe', // Light blue
+    backgroundColor: '#b6dcdd', //light turquoise
   },
   {
     id: 3,
@@ -56,11 +55,11 @@ export const servicesData = [
       'Designed to inspire teams and foster thriving cultures',
       'Encourage a shift from coping to thriving',
     ],
-    quotation: 'From coping to thriving — together.',
-    buttonText: 'Explore',
+    quotation: 'From coping to thriving, together.',
+    buttonText: 'Explore Solution',
     image1: WorkshopImg,
     image2: WorkshopImg2,
-    backgroundType: 'image',
+    backgroundColor: '#f3e8ff', //pastel lavender
   },
   {
     id: 4,
@@ -74,10 +73,9 @@ export const servicesData = [
       'Supports lasting resilience and “unstuckable” growth',
     ],
     quotation: 'Break free. Grow stronger. Be Unstuckable.',
-    buttonText: 'Explore',
+    buttonText: 'Explore Solution',
     image1: OneToOneImg,
     image2: OneToOneImg,
-    backgroundType: 'color',
-    backgroundColor: '#f0fdf4', // Light green
+    backgroundColor: '#ffe9e0', //warm pastel peach
   },
 ];
