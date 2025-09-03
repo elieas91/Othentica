@@ -1,6 +1,7 @@
-import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.png';
-import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.png';
+import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
+import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const DownloadAppCard = () => {
   return (
@@ -20,7 +21,9 @@ const DownloadAppCard = () => {
           Get it now and stay connected wherever you go!
         </p>
         <Button variant="secondary" size="large">
-          Book a Demo
+          <Link to="/contact" target="_blank" className="w-full">
+              Book a Demo
+          </Link>
         </Button>
       </div>
 

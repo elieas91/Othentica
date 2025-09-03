@@ -1,14 +1,27 @@
 import React from 'react';
 import Button from '../ui/Button';
 // import Logo from '../../assets/img/logo.webp';
-import Logo_o from '../../assets/img/logo_o.webp';
 import Logo_o_white from '../../assets/img/logo_o_white.webp';
 import Flame from '../../assets/img/flame.webp';
 // import HeroBg from '../../assets/img/hero_bg2.webp';
 // import HeroBg2 from '../../assets/img/hero_bg3.webp';
+import { Link } from 'react-router-dom';
 import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
 
 const Hero = () => {
+  // Function to handle smooth scrolling to philosophy section
+  const handleScrollToPhilosophy = () => {
+    const element = document.getElementById('philosophy');
+    if (element) {
+      const offset = 80; // Account for fixed navigation height
+      const elementPosition = element.offsetTop - offset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   // Flame configuration array
   const flames = [
     // Left center area flames (moved toward center, higher up)
@@ -182,9 +195,15 @@ const Hero = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button variant="accent" size="large">
-            Onboard your Team
+            <Link to="/about" target="_blank">
+              Onboard your Team
+            </Link>
           </Button>
-          <Button variant="secondary" size="large">
+          <Button 
+            variant="secondary" 
+            size="large"
+            onClick={handleScrollToPhilosophy}
+          >
             What is Othentica
           </Button>
         </div>

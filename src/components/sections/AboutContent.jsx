@@ -1,5 +1,4 @@
 import React from 'react';
-// import Bridge from '../../assets/img/about/bridge.png'; 
 
 const AboutContent = ({
   title = 'Driving Purpose Forward',

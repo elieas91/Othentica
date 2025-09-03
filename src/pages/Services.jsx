@@ -7,6 +7,7 @@ import CorporateHealth from '../assets/img/services/corporate_health.webp';
 import OneToOneGuidance from '../assets/img/services/one_to_one_img.webp';
 import Workshop from '../assets/img/services/workshop.webp';
 import TailoredPrograms from '../assets/img/services/programs_img.webp';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
   return (
@@ -30,6 +31,7 @@ const Services = () => {
           return (
             <section
               key={service.id}
+              id={service.sectionId}
               className={`relative w-screen left-1/2 right-1/2 -mx-[50vw]  py-20`}
             >
               {/* Keep content centered */}
@@ -55,7 +57,9 @@ const Services = () => {
               your wellness journey.
             </p>
             <Button variant="primary" size="large">
-              Book Consultation
+              <Link to="/contact" target="_blank">
+                Book Consultation
+              </Link>
             </Button>
           </div>
         </div>

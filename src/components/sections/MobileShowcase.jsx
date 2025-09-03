@@ -10,7 +10,7 @@ import App5 from '../../assets/img/app-5.webp';
 import App6 from '../../assets/img/app-6.webp';
 import App7 from '../../assets/img/app-7.webp';
 import App8 from '../../assets/img/app-8.webp';
-import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.png';
+import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.webp';
 import DownloadAppCard from '../ui/DownloadAppCard';
 
 const MobileShowcase = () => {

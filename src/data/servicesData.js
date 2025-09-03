@@ -12,6 +12,7 @@ import AppImgLong from '../assets/img/services/app_img_long.webp';
 export const servicesData = [
   {
     id: 1,
+    sectionId: 'app',
     icon: App,
     title: 'The Othentica App',
     description:
@@ -29,6 +30,7 @@ export const servicesData = [
   },
   {
     id: 2,
+    sectionId: 'programs',
     icon: Programs,
     title: 'Tailored Programs',
     description:
@@ -46,6 +48,7 @@ export const servicesData = [
   },
   {
     id: 3,
+    sectionId: 'talks',
     icon: Talks,
     title: 'Talks & Workshops',
     description:
@@ -63,6 +66,7 @@ export const servicesData = [
   },
   {
     id: 4,
+    sectionId: 'one-to-one',
     icon: OneToOne,
     title: '1:1 Guidance',
     description:

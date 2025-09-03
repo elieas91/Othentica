@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLinkedin, FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
 import WhiteLogo from '../../assets/img/logo_white.webp';
+import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
+import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
 
 const Footer = () => {
   return (
@@ -20,6 +22,37 @@ const Footer = () => {
             <p className="text-gray-100 mb-6 font-bold leading-relaxed">
               Your map to clarity, resilience, and growth.
             </p>
+            
+            {/* App Store Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+              <Link
+                to="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block hover:scale-105 transition-transform duration-300 ease-in-out"
+                aria-label="Download on the App Store"
+              >
+                <img
+                  src={AppStoreBadge}
+                  alt="Download on the App Store"
+                  className="h-12 w-auto"
+                />
+              </Link>
+              <Link
+                to="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block hover:scale-105 transition-transform duration-300 ease-in-out"
+                aria-label="Get it on Google Play"
+              >
+                <img
+                  src={GooglePlayBadge}
+                  alt="Get it on Google Play"
+                  className="h-12 w-auto"
+                />
+              </Link>
+            </div>
+            
             <div className="flex space-x-4">
               <a
                 href="https://linkedin.com/company/othentica"

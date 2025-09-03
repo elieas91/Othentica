@@ -8,10 +8,10 @@ export const clientsData = [
     logo: Horiverde,
     industry: "Wellness & Health"
   },
-  {
-    id: 2,
-    name: "IGI",
-    logo: IGI,
-    industry: "Technology"
-  },
+  // {
+  //   id: 2,
+  //   name: "IGI",
+  //   logo: IGI,
+  //   industry: "Technology"
+  // },
 ];

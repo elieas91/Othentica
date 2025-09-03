@@ -88,7 +88,7 @@ const Clients = () => {
             Our Clients
           </h2>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Trusted by leading companies across various industries
+            Trusted by leading organizations worldwide
           </p>
         </div>
 
