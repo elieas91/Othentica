@@ -8,8 +8,6 @@ import WorkshopImg2 from '../assets/img/services/workshop_2.webp';
 import OneToOneImg from '../assets/img/services/one_to_one_img.webp';
 import AppImg from '../assets/img/services/app_img.webp';
 import AppImgLong from '../assets/img/services/app_img_long.webp';
-import Image1 from '../assets/img/services/testImage1.jpeg';
-import Image2 from '../assets/img/services/testImage2.jpg';
 
 export const servicesData = [
   {
