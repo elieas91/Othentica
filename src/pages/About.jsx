@@ -16,6 +16,21 @@ import Logo from '../assets/img/logo.webp';
 import { teamData } from '../data/teamData';
 
 const About = () => {
+  // Preload critical images for better LCP
+  useEffect(() => {
+    const preloadImage = (src) => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    };
+
+    // Preload critical images for better LCP
+    preloadImage(PhilosophyBg); // Banner background image
+    preloadImage(MissionImg); // Mission section image
+  }, []);
+
   // SEO data for about page
   const seoData = {
     title: 'About Othentica - Our Mission, Vision & Values',

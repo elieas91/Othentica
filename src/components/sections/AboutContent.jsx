@@ -1,4 +1,6 @@
 import React from 'react';
+import OptimizedImage from '../ui/OptimizedImage';
+import OptimizedVideo from '../ui/OptimizedVideo';
 
 const AboutContent = ({
   title = 'Driving Purpose Forward',
@@ -38,29 +40,17 @@ const AboutContent = ({
               className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[8rem] md:aspect-video"
               style={{ background: '#3470cb' }}
             >
-              {/* Mobile Image */}
+              {/* Optimized Image - Single responsive image */}
               {imageSrc && (
-                <img
+                <OptimizedImage
                   alt={imageAlt}
-                  loading="lazy"
-                  width="600"
-                  height="600"
-                  decoding="async"
-                  className="absolute inset-0 block h-full w-full object-cover md:hidden"
-                  src={imageSrc}
-                />
-              )}
-
-              {/* Desktop Image */}
-              {imageSrc && (
-                <img
-                  alt={imageAlt}
-                  loading="lazy"
+                  loading={sectionId === "mission" ? "eager" : "lazy"}
+                  fetchPriority={sectionId === "mission" ? "high" : "auto"}
                   width="1600"
                   height="900"
-                  decoding="async"
-                  className="absolute inset-0 hidden h-full w-full object-cover md:block"
+                  className="absolute inset-0 h-full w-full object-cover"
                   src={imageSrc}
+                  sizes="(max-width: 768px) 100vw, 66vw"
                 />
               )}
 
@@ -118,16 +108,11 @@ const AboutContent = ({
         >
           <div className="flex h-auto w-full md:w-1/3">
             <div className="relative flex aspect-video w-full translate-x-0 items-center justify-center overflow-hidden rounded-[8rem] bg-contrast py-10">
-              {/* Video */}
-              <video
-                loop
-                muted
-                playsInline
-                autoPlay
-                preload="metadata"
-                className="absolute inset-0 h-full w-full object-cover"
+              {/* Video - Optimized loading with intersection observer */}
+              <OptimizedVideo
                 src={videoSrc}
-              ></video>
+                className="absolute inset-0 h-full w-full"
+              />
 
               {/* Desktop Gradient */}
               {showGradients && (
