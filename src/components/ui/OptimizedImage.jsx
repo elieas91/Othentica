@@ -17,7 +17,7 @@ const OptimizedImage = ({
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [ref, isIntersecting, hasIntersected] = useIntersectionObserver();
+  const [ref, hasIntersected] = useIntersectionObserver();
 
   const handleLoad = () => {
     setImageLoaded(true);
