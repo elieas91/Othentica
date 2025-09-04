@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../ui/Button';
 // import Logo from '../../assets/img/logo.webp';
-import Logo_o_white from '../../assets/img/logo_o_white.webp';
+import Logo_o_white from '../../assets/img/logo_o.webp';
 import Flame from '../../assets/img/flame.webp';
 // import HeroBg from '../../assets/img/hero_bg2.webp';
 // import HeroBg2 from '../../assets/img/hero_bg3.webp';
@@ -194,15 +194,15 @@ const Hero = () => {
           It's the foundation of energy, resilience, and performance.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button 
-            variant="accent" 
+          <Button
+            variant="accent"
             size="large"
             onClick={() => window.open('/about', '_blank')}
           >
             Onboard your Team
           </Button>
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             size="large"
             onClick={handleScrollToPhilosophy}
           >
