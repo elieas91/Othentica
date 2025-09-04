@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import WhatsAppButton from './WhatsappButton';
+import apiService from '../../services/api';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
@@ -22,7 +23,7 @@ const ContactUs = () => {
     setSubmitStatus(null);
 
     try {
-      const response = await fetch('https://api.othentica-app.com/api/contact', {
+      const response = await fetch(`${apiService.baseURL}/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

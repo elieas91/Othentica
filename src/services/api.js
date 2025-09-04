@@ -1,4 +1,20 @@
-const API_BASE_URL = 'http://localhost:3001/api';
+// Determine API base URL based on environment
+const getApiBaseUrl = () => {
+  // If environment variable is set, use it
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // In production (when deployed), API is on subdomain
+  if (import.meta.env.PROD) {
+    return 'https://api.othentica-app.com/api';
+  }
+  
+  // In development, use localhost
+  return 'http://localhost:3001/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiService {
   constructor() {

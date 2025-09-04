@@ -241,7 +241,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
               &times;
             </button>
             <TestimonialForm
-              onSubmit={(data) => {
+              onSubmit={() => {
                 // Handle form submission here (e.g., send to API, show success, etc.)
                 setShowForm(false);
               }}

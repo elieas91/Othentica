@@ -1,15 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import apiService from '../services/api';
-
-const AuthContext = createContext();
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+import { AuthContext } from './AuthContextInstance';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,8 +13,8 @@ export const AuthProvider = ({ children }) => {
         try {
           const userData = await apiService.getProfile();
           setUser(userData);
-        } catch (error) {
-          console.error('Auth check failed:', error);
+        } catch (err) {
+          console.error('Auth check failed:', err);
           apiService.removeToken();
         }
       }
@@ -42,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         return { success: false, error: data.error };
       }
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Network error' };
     }
   };
@@ -56,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         return { success: false, error: data.error };
       }
-    } catch (error) {
+    } catch {
       return { success: false, error: 'Network error' };
     }
   };
