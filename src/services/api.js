@@ -7,7 +7,7 @@ const getApiBaseUrl = () => {
   
   // In production (when deployed), API is on subdomain
   if (import.meta.env.PROD) {
-    return 'https://api.othentica-app.com/api';
+    return 'https://othentica-app.com/api';
   }
   
   // In development, use localhost
