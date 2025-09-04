@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import WhatsAppButton from './WhatsappButton';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
@@ -84,10 +85,10 @@ const ContactUs = () => {
               className="w-full border-b border-gray-300 py-2 focus:outline-none resize-none"
             />
           </div>
-          <div className="md:col-span-2 flex justify-end mt-4">
+          <div className="md:col-span-2 flex justify-end mt-4 gap-x-4">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-md flex items-center"
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center"
             >
               <svg
                 width="24"
@@ -101,6 +102,7 @@ const ContactUs = () => {
                 <path d="M22 2L15 22L11 13L2 9L22 2Z" />
               </svg>
             </button>
+            <WhatsAppButton className="w-14 h-14" />
           </div>
         </form>
       </div>

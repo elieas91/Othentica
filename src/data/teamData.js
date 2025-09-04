@@ -1,5 +1,5 @@
 // import yogaPoseImg from '../assets/img/contact/yoga-pose.webp'; // Currently unused but kept for future implementation
-import Hiba from '../assets/img/contact/hiba.webp';
+import Hiba from '../assets/img/contact/hiba-2.webp';
 import tarekImg from '../assets/img/contact/tarek.webp';
 
 export const teamData = [
