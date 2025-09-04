@@ -6,14 +6,18 @@ import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
 import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
 import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
 import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
+import Button from '../ui/Button';
 import {
   testimonialsData,
   testimonialCategories,
 } from '../../data/testimonialsData';
 
+import TestimonialForm from '../ui/TestimonialForm';
+
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedQuotes, setExpandedQuotes] = useState({});
+  const [showForm, setShowForm] = useState(false);
 
   // Auto-rotate through testimonials every 4 seconds
   useEffect(() => {
@@ -144,6 +148,13 @@ const Testimonials = () => {
                   />
                   <span>– {currentTestimonial.author}</span>
                 </span>
+                <Button
+                  variant="secondary"
+                  className="mt-8"
+                  onClick={() => setShowForm(true)}
+                >
+                  Add your Testimonial
+                </Button>
               </cite>
             </div>
 
@@ -203,6 +214,26 @@ const Testimonials = () => {
           </div>
         </div>
       </div>
+      {/* Testimonial Form Modal */}
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 relative w-full max-w-md mx-4">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-2xl font-bold"
+              onClick={() => setShowForm(false)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <TestimonialForm
+              onSubmit={(data) => {
+                // Handle form submission here (e.g., send to API, show success, etc.)
+                setShowForm(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 };
