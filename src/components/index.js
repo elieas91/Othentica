@@ -21,4 +21,4 @@ export { default as Services } from './sections/Services';
 export { default as Testimonials } from './sections/Testimonials';
 export { default as SocialMedia } from './sections/Blog';
 export { default as Clients } from './sections/Clients';
-export { default as AboutContent } from './sections/AboutContent';
+export { default as AboutContent } from './sections/AboutContent_old';

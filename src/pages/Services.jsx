@@ -2,19 +2,20 @@ import React from 'react';
 import { servicesData } from '../data/servicesData';
 import Button from '../components/ui/Button';
 import ServiceBlock from '../components/ui/ServiceBlock';
-import Banner from '../components/ui/Banner';
+import CarouselBanner from '../components/ui/CarouselBanner';
 import CorporateHealth from '../assets/img/services/corporate_health.webp';
 import OneToOneGuidance from '../assets/img/services/one_to_one_img.webp';
 import Workshop from '../assets/img/services/workshop.webp';
 import TailoredPrograms from '../assets/img/services/programs_img.webp';
 import Testimonials from '../components/sections/Testimonials';
+import FlameSolid from '../assets/img/flame-outline.webp';
 import { Link } from 'react-router-dom';
 
 const Services = () => {
   return (
     <>
       <div className="min-h-screen dark:bg-primary">
-        <Banner
+        <CarouselBanner
           title="Our Services"
           description="Discover our comprehensive approach to wellness that nurtures every aspect of your being"
           backgroundImages={[
@@ -25,7 +26,7 @@ const Services = () => {
           ]}
         />
       </div>
-      <div className="min-h-screen bg-white dark:bg-primary pb-20">
+      <div className="min-h-screen  dark:bg-primary pb-20">
         {servicesData.map((service, index) => {
           // const bgColors = ['bg-white', 'bg-neutral'];
           // const bgColor = bgColors[index % bgColors.length]; // Currently unused but kept for future styling
@@ -44,18 +45,34 @@ const Services = () => {
             <section
               key={service.id}
               id={service.sectionId}
-              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw]  py-20`}
+              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] py-4`}
             >
               {/* Keep content centered */}
               <div className="max-w mx-auto">
                 <ServiceBlock service={service} index={index} />
               </div>
-              <Testimonials showPics={false} currentCategoryId={categoryId} />
-              <div className="w-full flex justify-center items-center mt-32">
+              <div className="w-full flex justify-center items-center mt-32 mb-24">
                 <blockquote className="text-center italic text-2xl text-gray-700 max-w-2xl font-semibold">
                   {`"${service.quotation}"`}
                 </blockquote>
               </div>
+              <Testimonials showPics={false} currentCategoryId={categoryId} />
+              {index !== 3 && 
+                <>
+                {/* Single Flame Decoration - Alternating sides */}
+                <div className="absolute w-full h-[24rem]">
+                  <img
+                    src={FlameSolid}
+                    alt="Flame decoration"
+                    className={`absolute top-[-24rem] w-[50rem] h-[50rem] opacity-40 pointer-events-none object-contain ${
+                      index % 2 === 0 
+                        ? 'right-[-18rem] -translate-x-[1/2]' 
+                        : 'left-0 -translate-x-1/2'
+                    }`}
+                  />
+                </div>
+                </>
+              }
             </section>
           );
         })}

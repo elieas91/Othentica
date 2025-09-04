@@ -26,7 +26,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: AppImg,
     image2: AppImgLong,
-    backgroundColor: '#FBC76D',
+    backgroundColor: '#FEF0DC',
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: ProgramsImg,
     image2: ProgramsImg,
-    backgroundColor: '#FCD292',
+    backgroundColor: '#FEF0DC',
   },
   {
     id: 3,
@@ -62,7 +62,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: WorkshopImg,
     image2: WorkshopImg2,
-    backgroundColor: '#FDE1B8',
+    backgroundColor: '#FEF0DC',
   },
   {
     id: 4,

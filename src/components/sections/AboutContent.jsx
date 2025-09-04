@@ -1,6 +1,5 @@
 import React from 'react';
-import OptimizedImage from '../ui/OptimizedImage';
-import OptimizedVideo from '../ui/OptimizedVideo';
+
 
 const AboutContent = ({
   title = 'Driving Purpose Forward',
@@ -8,155 +7,77 @@ const AboutContent = ({
   imageSrc,
   videoSrc,
   imageAlt = 'Othentica Content',
+  floatingImageSrc, // Separate image for floating circle
+  floatingImageAlt = 'Floating Circle Image',
+  backgroundImageSrc, // Background image for text section
+  backgroundImageAlt = 'Background Image',
   // showFloatingCircles = true, // Currently unused but kept for future implementation
   showGradients = true,
   showPlayButton = true,
   flipped = false,
   sectionId,
+  index = 0, // Add index prop for alternating layout
 }) => {
+  // Determine if this is an even or odd index for alternating layout
+  const isEven = index % 2 === 0;
+  const shouldFlip = flipped || !isEven; // Use flipped prop or alternate based on index
+
   return (
     <>
-      {/* Main Content Section */}
-      <div className="about-content container mx-auto pt-10" id={sectionId}>
-        {/* <h1 className="text-5xl font-bold text-primary dark:text-neutral mb-8">
-          {title}
-        </h1> */}
-        <div className="flex flex-col md:flex-row relative">
-          {/* Connector Line - Only visible when flipped */}
-          {flipped && (
-            <div className="absolute top-1/2 left-1/3 w-1/3 h-2 bg-gradient-to-r from-[#3470cb] via-[#3470cb] to-transparent hidden md:block z-0 rounded-r-full"></div>
+      <div className="about-content flex items-center justify-center container mx-auto pt-10 h-screen my-36" id={sectionId}>
+        {/* Image section - positioned based on alternating layout */}
+        <div className={`w-1/2 overflow-hidden h-screen ${shouldFlip ? 'rounded-r-3xl order-2' : 'rounded-l-3xl order-1'} relative`}>
+          {videoSrc && showPlayButton ? (
+            <video 
+              src={videoSrc} 
+              autoPlay 
+              muted 
+              loop 
+              className="h-full w-full object-cover"
+              poster={imageSrc}
+            />
+          ) : (
+            <img src={imageSrc} alt={imageAlt} className="h-full w-full object-cover"/>
           )}
-
-          {/* Image Section */}
-          <div
-            className={`relative flex w-full items-end overflow-visible md:w-2/3 ${
-              flipped ? 'md:order-last' : 'md:order-first'
-            }`}
-          >
-            {/* Floating Circles */}
-
-            {/* Image Container */}
-            <div
-              className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[8rem] md:aspect-video"
-              style={{ background: '#3470cb' }}
-            >
-              {/* Optimized Image - Single responsive image */}
-              {imageSrc && (
-                <OptimizedImage
-                  alt={imageAlt}
-                  loading={sectionId === "mission" ? "eager" : "lazy"}
-                  fetchPriority={sectionId === "mission" ? "high" : "auto"}
-                  width="1600"
-                  height="900"
-                  className="absolute inset-0 h-full w-full object-cover"
-                  src={imageSrc}
-                  sizes="(max-width: 768px) 100vw, 66vw"
-                />
-              )}
-
-              {/* Mobile Gradient */}
-              {showGradients && (
-                <div
-                  className="absolute inset-x-0 bottom-0 top-2/3 block md:hidden"
-                  style={{
-                    background:
-                      'linear-gradient(to bottom, transparent 0%, #3470cb 100%)',
-                  }}
-                ></div>
-              )}
-
-              {/* Desktop Gradient */}
-              {showGradients && (
-                <div
-                  className="absolute inset-0 hidden md:block"
-                  style={{
-                    background: `${
-                      flipped
-                        ? 'linear-gradient(to bottom left, transparent 70%, #3470cb 90%)'
-                        : 'linear-gradient(to bottom right, transparent 70%, #3470cb 90%)'
-                    }`,
-                  }}
-                ></div>
-              )}
+          
+          {/* Play button overlay for video */}
+          {videoSrc && showPlayButton && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
+                <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
             </div>
-          </div>
-
-          {/* Text Section */}
-          <div
-            className={`relative z-10 w-full py-5 md:w-1/3 md:p-10 xl:p-20 ${
-              flipped ? 'md:order-first' : 'md:order-last'
-            }`}
-          >
-            <h2 className="text-4xl font-bold text-primary dark:text-neutral mb-4">
-              {title}
-            </h2>
-            <div className="prose">
-              <p className="text-lg">{description}</p>
-            </div>
+          )}
+        </div>
+        
+        {/* Floating circular image - always centered */}
+        <div className="absolute bg-white rounded-full w-[16rem] h-[16rem] flex items-center justify-center left-1/2 transform -translate-x-1/2 z-10">
+          <img src={floatingImageSrc || imageSrc} alt={floatingImageAlt} className="h-full w-full object-cover rounded-full"/>
+        </div>
+        
+        {/* Content section - positioned based on alternating layout */}
+        <div className={`w-1/2 px-40 flex flex-col justify-center items-center gap-8 bg-accent h-screen ${shouldFlip ? 'rounded-l-3xl order-1' : 'rounded-r-3xl order-2'} ${showGradients ? 'bg-gradient-to-br from-accent to-accent/80' : ''} relative overflow-hidden`}>
+          {/* Background image with low opacity and overlay */}
+          {backgroundImageSrc && (
+            <>
+              <img 
+                src={backgroundImageSrc} 
+                alt={backgroundImageAlt} 
+                className="absolute inset-0 w-full h-full object-cover opacity-50"
+              />
+              <div className="absolute inset-0 bg-black/40"></div>
+            </>
+          )}
+          
+          {/* Content with relative positioning to appear above background */}
+          <div className="relative z-10 flex flex-col gap-4 text-center">
+            <h2 className="text-4xl font-bold text-white">{title}</h2>
+            <p className="text-xl text-center text-white">{description}</p>
           </div>
         </div>
       </div>
-
-      {/* Video Showcase Section */}
-      {videoSrc && (
-        <div
-          className={`flex ${
-            flipped
-              ? 'justify-start pr-10 pl-[4.5rem]'
-              : 'justify-end pl-10 pr-[4.5rem]'
-          } pb-10`}
-        >
-          <div className="flex h-auto w-full md:w-1/3">
-            <div className="relative flex aspect-video w-full translate-x-0 items-center justify-center overflow-hidden rounded-[8rem] bg-contrast py-10">
-              {/* Video - Optimized loading with intersection observer */}
-              <OptimizedVideo
-                src={videoSrc}
-                className="absolute inset-0 h-full w-full"
-              />
-
-              {/* Desktop Gradient */}
-              {showGradients && (
-                <div
-                  className="absolute inset-0 hidden md:block"
-                  style={{
-                    background: `${
-                      flipped
-                        ? 'linear-gradient(to top right, transparent 70%, #3470cb 90%)'
-                        : 'linear-gradient(to top left, transparent 70%, #3470cb 90%)'
-                    }`,
-                  }}
-                ></div>
-              )}
-
-              {/* Mobile Gradient */}
-              {showGradients && (
-                <div
-                  className="absolute inset-0 block md:hidden"
-                  style={{
-                    background:
-                      'linear-gradient(to top, transparent 50%, #3470cb 100%)',
-                  }}
-                ></div>
-              )}
-
-              {/* Play Button */}
-              {showPlayButton && (
-                <button className="cursor-pointer group inline-flex items-center justify-center gap-2 font-medium text-center tracking-wide rounded-full duration-500 bg-white/10 hover:bg-white/20 text-white backdrop-blur w-auto text-xs md:text-sm py-3 md:py-4 px-6 md:px-8 relative z-10">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="transparent"
-                    className="flex h-6 w-6 fill-current"
-                  >
-                    <title>Play</title>
-                    <path d="M17.2335 11.1362C17.895 11.5221 17.895 12.4779 17.2335 12.8638L6.50387 19.1227C5.83721 19.5116 5 19.0308 5 18.259V5.74104C5 4.96925 5.83721 4.48838 6.50387 4.87726L17.2335 11.1362Z"></path>
-                  </svg>
-                  <span>Watch video</span>
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

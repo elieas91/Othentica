@@ -1,7 +1,16 @@
+import React, { useState } from 'react';
 import Flame from '../../assets/img/flame.webp';
+import Modal from './Modal';
+import Button from './Button';
+import WhatsAppButton from './WhatsappButton';
+import Tooltip from './Tooltip';
 
 const ServiceBlock = ({ service, index }) => {
   const isEven = index % 2 === 0; // alternate layout
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -39,7 +48,7 @@ const ServiceBlock = ({ service, index }) => {
           ></div>
 
           {/* Content */}
-          <div className="relative z-10 flex flex-col justify-start w-[85%] h-auto">
+          <div className="relative z-10 flex flex-col justify-start w-[85%] h-auto top-[6rem]">
             <div className="flex items-center mb-4">
               <img
                 src={service.icon}
@@ -48,7 +57,7 @@ const ServiceBlock = ({ service, index }) => {
               />
               <h2 className="text-3xl font-bold">{service.title}</h2>
             </div>
-            <ul className="text-gray-600 text-xl leading-[2.5rem]">
+            <ul className="text-gray-600 text-xl px-4 leading-[2.5rem]">
               {service.descriptionBulletPoints.map((point, idx) => (
                 <li key={idx} className="flex items-start mb-2">
                   <img
@@ -60,9 +69,122 @@ const ServiceBlock = ({ service, index }) => {
                 </li>
               ))}
             </ul>
+
+            {/* CTA Buttons */}
+            <div className="flex justify-start items-center gap-6 mt-8 px-10">
+              <div className="flex items-baseline gap-4">
+                                 {/* Flame Button */}
+                 <Tooltip content={`Learn more about ${service.title}`} position="top">
+                   <button
+                     onClick={openModal}
+                     className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
+                     aria-label={`Learn more about ${service.title}`}
+                   >
+                  <div className="relative group cursor-pointer">
+                    <div className="w-16 h-20 lg:w-20 lg:h-16 relative">
+                      <img
+                        src={Flame}
+                        alt="Learn More"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+
+                    {/* Static glow effects - no animations */}
+                    {/* <div
+                      className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full opacity-60 blur-sm"
+                    ></div> */}
+                    <div
+                      className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"
+                    ></div>
+
+                    <div
+                      className="absolute -top-2 -left-1 w-18 h-22 lg:w-22 lg:h-26 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"
+                    ></div>
+                    <div
+                      className="absolute -top-1 -right-1 w-16 h-20 lg:w-18 lg:h-22 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"
+                    ></div>
+
+                    <div
+                      className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"
+                    ></div>
+                    <div
+                      className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"
+                    ></div>
+                                         <div
+                       className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"
+                     ></div>
+                   </div>
+                   </button>
+                 </Tooltip>
+
+                {/* WhatsApp Button */}
+                <div className="relative group cursor-pointer transition-transform hover:scale-105">
+                  <WhatsAppButton 
+                    className="w-16 h-16 lg:w-12 lg:h-12"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Service Info Modal */}
+      <Modal isOpen={isModalOpen} onClose={closeModal} title={service.title}>
+        <div className="space-y-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center mb-4">
+              <img
+                src={service.icon}
+                alt={service.title}
+                className="w-16 h-16 object-contain mr-4"
+              />
+              <h3 className="text-2xl font-bold text-primary dark:text-neutral">
+                {service.title}
+              </h3>
+            </div>
+            <p className="text-lg text-primary dark:text-gray-200 leading-relaxed">
+              {service.description}
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-xl font-semibold text-primary dark:text-neutral mb-3">
+              Key Features:
+            </h4>
+            <div className="space-y-3">
+              {service.descriptionBulletPoints.map((point, index) => (
+                <div key={index} className="flex items-start">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                  <span className="text-primary dark:text-gray-200">{point}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+            <p className="text-center italic text-orange-700 dark:text-orange-300 font-medium text-lg">
+              "{service.quotation}"
+            </p>
+          </div>
+
+          <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-primary dark:text-gray-200 mb-4">
+              Ready to get started with {service.title}?
+            </p>
+            <Button 
+              variant="primary" 
+              onClick={() => {
+                closeModal();
+                window.location.href = '/contact';
+              }}
+              className="px-8 py-3"
+            >
+              Book Consultation
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

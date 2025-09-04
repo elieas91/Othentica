@@ -4,13 +4,19 @@ import Banner from '../components/ui/Banner';
 import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
 import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
-import FlameVideo from '../assets/video/hero/othentica-flame-animation.webm';
 import MissionVideo from '../assets/video/mission-vision-values/mission.mp4';
 import MissionImg from '../assets/img/mission-vision-values/mission.webp';
 import VisionVideo from '../assets/video/mission-vision-values/vision.mp4';
 import VisionImg from '../assets/img/mission-vision-values/vision.webp';
 import ValuesVideo from '../assets/video/mission-vision-values/values.mp4';
 import ValuesImg from '../assets/img/mission-vision-values/values.webp';
+// Import additional images for floating circles and backgrounds
+import MissionFloatingImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different images
+import VisionFloatingImg from '../assets/img/mission-vision-values/vision.webp';
+import ValuesFloatingImg from '../assets/img/mission-vision-values/values.webp';
+import MissionBgImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different background images
+import VisionBgImg from '../assets/img/mission-vision-values/vision.webp';
+import ValuesBgImg from '../assets/img/mission-vision-values/values.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 import Logo from '../assets/img/logo.webp';
 import MeetTheFounders from '../components/sections/MeetTheFounders';
@@ -119,37 +125,45 @@ const About = () => {
         imageAlt="Digital Innovation"
         height="h-[80vh]"
         imageOffset="-150%"
-        overlayOpacity="bg-neutral/20"
+        overlayOpacity="bg-black/20"
         speed={0.3}
         className="mt-14"
       ></ParallaxSection>
 
       <AboutContent
-        // title="Driving Purpose Forward"
         title="Mission"
         description="At Othentica, our mission is to empower businesses through innovative digital solutions that drive growth and create meaningful connections. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
-        imageSrc={MissionImg}
+        imageSrc={ValuesImg}
         videoSrc={MissionVideo}
-        imageAlt="Othentica Mobile App"
+        imageAlt="Othentica Mission"
+        floatingImageSrc={MissionFloatingImg}
+        floatingImageAlt="Mission Floating Circle"
+        backgroundImageSrc={VisionBgImg}
+        backgroundImageAlt="Mission Background"
         showFloatingCircles={true}
         showGradients={true}
         showPlayButton={false}
         flipped={false}
         sectionId="mission"
+        index={0}
       />
 
       <AboutContent
-        // title="Driving Purpose Forward"
         title="Vision"
         description="At Othentica, our vision is to be a leading provider of innovative digital solutions that empower businesses to achieve their goals in an ever-evolving digital landscape. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
         imageSrc={VisionImg}
         videoSrc={VisionVideo}
-        imageAlt="Othentica Mobile App"
+        imageAlt="Othentica Vision"
+        floatingImageSrc={ValuesFloatingImg}
+        floatingImageAlt="Vision Floating Circle"
+        backgroundImageSrc={MissionBgImg}
+        backgroundImageAlt="Vision Background"
         showFloatingCircles={true}
         showGradients={true}
         showPlayButton={false}
         flipped={true}
         sectionId="vision"
+        index={1}
       />
 
       {/* Parallax Section 2 */}
@@ -163,17 +177,21 @@ const About = () => {
       </ParallaxSection> */}
 
       <AboutContent
-        // title="Driving Purpose Forward"
         title="Values"
         description="At Othentica, our values are the foundation of our culture and guide our decisions. We believe in integrity, innovation, and collaboration, and we strive to create a positive impact through our work."
-        imageSrc={ValuesImg}
+        imageSrc={MissionImg}
         videoSrc={ValuesVideo}
-        imageAlt="Othentica Mobile App"
+        imageAlt="Othentica Values"
+        floatingImageSrc={VisionFloatingImg}
+        floatingImageAlt="Values Floating Circle"
+        backgroundImageSrc={ValuesBgImg}
+        backgroundImageAlt="Values Background"
         showFloatingCircles={true}
         showGradients={true}
         showPlayButton={false}
         flipped={false}
         sectionId="values"
+        index={2}
       />
 
       {/* Call to Action Section */}

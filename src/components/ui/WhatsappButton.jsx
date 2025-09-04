@@ -1,4 +1,4 @@
-import WhatsappIcon from '../../assets/img/whatsapp_icon.png';
+import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
 
 const WhatsAppButton = ({ className = '' }) => {
   const phoneNumber = '971503680320';
@@ -16,7 +16,7 @@ const WhatsAppButton = ({ className = '' }) => {
       src={WhatsappIcon}
       alt="WhatsApp"
       onClick={handleClick}
-      className={className}
+      className={`${className} cursor-pointer`}
       style={{
         cursor: 'pointer',
         zIndex: 1000,

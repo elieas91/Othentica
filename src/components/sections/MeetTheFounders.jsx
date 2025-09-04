@@ -1,7 +1,7 @@
 import { teamData } from '../../data/teamData';
-import LinkedInIcon from '../../assets/img/linkedin_icon.png';
-import WhatsappIcon from '../../assets/img/whatsapp_icon.png';
-import EmailIcon from '../../assets/img/email_icon.png';
+import LinkedInIcon from '../../assets/img/linkedin_icon.webp';
+import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
+import EmailIcon from '../../assets/img/email_icon.webp';
 
 const MeetTheFounders = () => {
   return (
