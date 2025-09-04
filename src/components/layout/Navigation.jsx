@@ -86,6 +86,7 @@ const Navigation = () => {
       label: 'About',
       hasDropdown: true,
       dropdownItems: [
+        { path: '/about#meet', label: 'Meet the Founders' },
         { path: '/about#mission', label: 'Mission' },
         { path: '/about#vision', label: 'Vision' },
         { path: '/about#values', label: 'Values' },

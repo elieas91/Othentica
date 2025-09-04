@@ -172,8 +172,8 @@ const About = () => {
         sectionId="values"
       />
 
-      {/* Team Section */}
-      <section className="pt-20 px-0 ">
+      {/* Meet the Founders Section */}
+      <section className="pt-20 px-0" id="meet">
         <div className="max-w-[90%] w-full mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
