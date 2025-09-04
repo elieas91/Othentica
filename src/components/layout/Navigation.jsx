@@ -6,6 +6,7 @@ import Logo from '../../assets/img/logo.webp';
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
@@ -13,7 +14,7 @@ const Navigation = () => {
   const { isDark, toggleTheme } = useTheme();
 
   // Function to handle About dropdown navigation
-  const handleAboutNavigation = (path) => {
+  const handleDropdownNavigation = (path, dropdownType) => {
     const [route, section] = path.split('#');
 
     if (route === '/about') {
@@ -30,7 +31,7 @@ const Navigation = () => {
             });
           }
         } else {
-          // Navigate to about page and then scroll to section
+          // Navigate to about page and then scroll
           navigate('/about');
           // Wait for navigation to complete, then scroll
           setTimeout(() => {
@@ -48,13 +49,46 @@ const Navigation = () => {
       } else {
         // Just navigate to about page
         navigate('/about');
-        // Ensure page starts from top when navigating to about page
+        window.scrollTo(0, 0);
+      }
+    } else if (route === '/services') {
+      if (section) {
+        // If we're already on the services page, scroll to section
+        if (location.pathname === '/services') {
+          const element = document.getElementById(section);
+          if (element) {
+            const offset = 80;
+            const elementPosition = element.offsetTop - offset;
+            window.scrollTo({
+              top: elementPosition,
+              behavior: 'smooth',
+            });
+          }
+        } else {
+          // Navigate to services page and then scroll
+          navigate('/services');
+          setTimeout(() => {
+            const element = document.getElementById(section);
+            if (element) {
+              const offset = 80;
+              const elementPosition = element.offsetTop - offset;
+              window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth',
+              });
+            }
+          }, 100);
+        }
+      } else {
+        // Just navigate to services page
+        navigate('/services');
         window.scrollTo(0, 0);
       }
     }
 
     // Close dropdowns
-    setIsAboutDropdownOpen(false);
+    if (dropdownType === 'about') setIsAboutDropdownOpen(false);
+    if (dropdownType === 'services') setIsServicesDropdownOpen(false);
     setIsMenuOpen(false);
   };
 
@@ -92,7 +126,17 @@ const Navigation = () => {
         { path: '/about#values', label: 'Values' },
       ],
     },
-    { path: '/services', label: 'Services' },
+    {
+      path: '/services',
+      label: 'Services',
+      hasDropdown: true,
+      dropdownItems: [
+        { path: '/services#app', label: 'The Othentica App' },
+        { path: '/services#programs', label: 'Tailored Programs' },
+        { path: '/services#talks', label: 'Talks & Workshops' },
+        { path: '/services#one-to-one', label: '1:1 Guidance' },
+      ],
+    },
     // { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
   ];
@@ -114,65 +158,84 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8 items-center ml-auto">
-            {navItems.map((item) => (
-              <div key={item.path} className="relative">
-                {item.hasDropdown ? (
-                  <div
-                    className="relative"
-                    onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                    onMouseLeave={() => {
-                      // Add a small delay to allow moving to dropdown
-                      setTimeout(() => {
-                        if (!document.querySelector('.dropdown-menu:hover')) {
-                          setIsAboutDropdownOpen(false);
-                        }
-                      }, 100);
-                    }}
-                  >
-                    <button
-                      onClick={() => handleAboutNavigation('/about')}
-                      className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
+            {navItems.map((item) => {
+              if (item.hasDropdown) {
+                const isDropdownOpen =
+                  item.path === '/about'
+                    ? isAboutDropdownOpen
+                    : isServicesDropdownOpen;
+                const setDropdownOpen =
+                  item.path === '/about'
+                    ? setIsAboutDropdownOpen
+                    : setIsServicesDropdownOpen;
+                const dropdownType =
+                  item.path === '/about' ? 'about' : 'services';
+                return (
+                  <div key={item.path} className="relative">
+                    <div
+                      className="relative"
+                      onMouseEnter={() => setDropdownOpen(true)}
+                      onMouseLeave={() => {
+                        setTimeout(() => {
+                          if (!document.querySelector('.dropdown-menu:hover')) {
+                            setDropdownOpen(false);
+                          }
+                        }, 100);
+                      }}
                     >
-                      <span>{item.label}</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                      <button
+                        onClick={() =>
+                          handleDropdownNavigation(item.path, dropdownType)
+                        }
+                        className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-800 font-poppins"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
+                        <span>{item.label}</span>
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </button>
 
-                    {isAboutDropdownOpen && (
-                      <div
-                        className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 dropdown-menu"
-                        onMouseEnter={() => setIsAboutDropdownOpen(true)}
-                        onMouseLeave={() => {
-                          setTimeout(() => setIsAboutDropdownOpen(false), 100);
-                        }}
-                      >
-                        {item.dropdownItems.map((dropdownItem) => (
-                          <button
-                            key={dropdownItem.path}
-                            onClick={() =>
-                              handleAboutNavigation(dropdownItem.path)
-                            }
-                            className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
-                          >
-                            {dropdownItem.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                      {isDropdownOpen && (
+                        <div
+                          className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-2 dropdown-menu"
+                          onMouseEnter={() => setDropdownOpen(true)}
+                          onMouseLeave={() => {
+                            setTimeout(() => setDropdownOpen(false), 100);
+                          }}
+                        >
+                          {item.dropdownItems.map((dropdownItem) => (
+                            <button
+                              key={dropdownItem.path}
+                              onClick={() =>
+                                handleDropdownNavigation(
+                                  dropdownItem.path,
+                                  dropdownType
+                                )
+                              }
+                              className="block w-full text-left px-4 py-2 text-sm text-primary dark:text-gray-100 hover:text-white dark:hover:text-secondary hover:bg-secondary dark:hover:bg-gray-700 transition-colors font-poppins"
+                            >
+                              {dropdownItem.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                ) : (
+                );
+              } else {
+                return (
                   <Link
+                    key={item.path}
                     to={item.path}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors font-poppins ${
                       isActive(item.path)
@@ -182,9 +245,9 @@ const Navigation = () => {
                   >
                     {item.label}
                   </Link>
-                )}
-              </div>
-            ))}
+                );
+              }
+            })}
           </div>
 
           {/* Theme Toggle and CTA Button */}
@@ -280,12 +343,16 @@ const Navigation = () => {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-primary border-t border-gray-200 dark:border-gray-700">
-              {navItems.map((item) => (
-                <div key={item.path}>
-                  {item.hasDropdown ? (
-                    <div>
+              {navItems.map((item) => {
+                if (item.hasDropdown) {
+                  const dropdownType =
+                    item.path === '/about' ? 'about' : 'services';
+                  return (
+                    <div key={item.path}>
                       <button
-                        onClick={() => handleAboutNavigation('/about')}
+                        onClick={() =>
+                          handleDropdownNavigation(item.path, dropdownType)
+                        }
                         className="w-full text-left px-3 py-2 text-base font-medium text-primary dark:text-gray-100 font-poppins hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors"
                       >
                         {item.label}
@@ -295,7 +362,10 @@ const Navigation = () => {
                           <button
                             key={dropdownItem.path}
                             onClick={() => {
-                              handleAboutNavigation(dropdownItem.path);
+                              handleDropdownNavigation(
+                                dropdownItem.path,
+                                dropdownType
+                              );
                               setIsMenuOpen(false);
                             }}
                             className="block w-full text-left px-3 py-2 text-sm text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary hover:bg-accent dark:hover:bg-gray-800 transition-colors font-poppins"
@@ -305,8 +375,11 @@ const Navigation = () => {
                         ))}
                       </div>
                     </div>
-                  ) : (
+                  );
+                } else {
+                  return (
                     <Link
+                      key={item.path}
                       to={item.path}
                       className={`block px-3 py-2 rounded-md text-base font-medium transition-colors font-poppins ${
                         isActive(item.path)
@@ -317,9 +390,9 @@ const Navigation = () => {
                     >
                       {item.label}
                     </Link>
-                  )}
-                </div>
-              ))}
+                  );
+                }
+              })}
             </div>
           </div>
         )}
