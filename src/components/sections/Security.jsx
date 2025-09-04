@@ -19,7 +19,8 @@ const Security = () => {
           {securityData.map((security) => (
             <Card
               key={security.id}
-              className="text-center hover:scale-105 transition-transform duration-300 h-full group"
+              showHoverShadow={false}
+              className="text-center h-full group"
             >
               <div className="flex flex-col flex-grow">
                 <div className="text-5xl mb-6">
