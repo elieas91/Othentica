@@ -38,11 +38,15 @@ const MeetTheFounders = () => {
                   ))}
 
                 {/* Name and role */}
-                <p className="mt-6">— {member.name}</p>
+                <p className="mt-6 font-bold">— {member.name}</p>
                 {Array.isArray(member.role) ? (
-                  member.role.map((role, idx) => <p key={idx}>{role}</p>)
+                  member.role.map((role, idx) => (
+                    <p key={idx} className="font-bold">
+                      {role}
+                    </p>
+                  ))
                 ) : (
-                  <p>{member.role}</p>
+                  <p className="font-bold">{member.role}</p>
                 )}
               </h1>
             </div>

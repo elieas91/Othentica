@@ -27,6 +27,7 @@ export const teamData = [
     id: 2,
     name: 'Tarek Aad',
     role: ['Co-founder & COO', 'Founder at Mindful Crowd'],
+    subtitle: 'A Message from our COO',
     description: [
       'Every story has a beginning, and for Tarek, it started with a simple but powerful question: How does stress turn into weight gain?',
       'For years, he heard people say “it’s the stress”, but no one could explain the science behind it. That curiosity became a calling. In 2016, Tarek began researching, blending his background in nursing with certifications in mind-body eating coaching, stress mastery, and mindfulness.',
