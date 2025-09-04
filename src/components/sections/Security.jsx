@@ -24,7 +24,7 @@ const Security = () => {
               <div className="flex flex-col flex-grow">
                 <div className="text-5xl mb-6">
                   <img
-                    src={App}
+                    src={security.icon}
                     alt={security.title}
                     className="mx-auto w-20 h-20 object-contain"
                   />
