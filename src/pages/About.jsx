@@ -176,7 +176,7 @@ const About = () => {
 
       {/* Call to Action Section */}
       <div className="w-full px-4 text-center py-20">
-        <div className="h-[25vh] justify-center items-center p-8 mx-4">
+        <div className="h-[25vh] justify-center items-center p-8 mx-4 font-bold">
           <p className="text-lg text-gray-700 leading-relaxed">
             Ready to transform your digital presence?
           </p>
