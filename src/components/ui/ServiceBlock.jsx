@@ -32,7 +32,7 @@ const ServiceBlock = ({ service, index }) => {
           }`}
         >
           <div
-            className="absolute inset-0 w-full h-full z-0"
+            className="absolute left-1/2 top-0 -translate-x-1/2 w-[200%] h-full z-0"
             style={{
               backgroundColor: service.backgroundColor || '#f3f4f6',
             }}
