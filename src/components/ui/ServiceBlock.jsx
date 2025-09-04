@@ -17,7 +17,7 @@ const ServiceBlock = ({ service, index }) => {
             <img
               src={service.image1}
               alt={service.title}
-              className="w-full h-full object-cover shadow-lg"
+              className="w-full h-full object-cover shadow-lg rounded-2xl"
               style={{ maxHeight: '600px' }}
             />
           </div>
@@ -32,7 +32,7 @@ const ServiceBlock = ({ service, index }) => {
           }`}
         >
           <div
-            className="absolute left-1/2 top-0 -translate-x-1/2 w-[200%] h-full z-0"
+            className="absolute left-1/2 top-0 -translate-x-1/2 w-[200%] h-full z-0 rounded-2xl"
             style={{
               backgroundColor: service.backgroundColor || '#f3f4f6',
             }}

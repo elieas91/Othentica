@@ -7,6 +7,7 @@ import CorporateHealth from '../assets/img/services/corporate_health.webp';
 import OneToOneGuidance from '../assets/img/services/one_to_one_img.webp';
 import Workshop from '../assets/img/services/workshop.webp';
 import TailoredPrograms from '../assets/img/services/programs_img.webp';
+import Testimonials from '../components/sections/Testimonials';
 import { Link } from 'react-router-dom';
 
 const Services = () => {
@@ -28,6 +29,17 @@ const Services = () => {
         {servicesData.map((service, index) => {
           // const bgColors = ['bg-white', 'bg-neutral'];
           // const bgColor = bgColors[index % bgColors.length]; // Currently unused but kept for future styling
+          let categoryId;
+          if (service.sectionId === 'app') {
+            categoryId = 'the-othentica-app';
+          } else if (service.sectionId === 'programs') {
+            categoryId = 'tailored-programs';
+          } else if (service.sectionId === 'talks') {
+            categoryId = 'talks-workshops';
+          } else if (service.sectionId === 'one-to-one') {
+            categoryId = 'one-to-one-guidance';
+          }
+
           return (
             <section
               key={service.id}
@@ -38,8 +50,9 @@ const Services = () => {
               <div className="max-w mx-auto">
                 <ServiceBlock service={service} index={index} />
               </div>
+              <Testimonials showPics={false} currentCategoryId={categoryId} />
               <div className="w-full flex justify-center items-center mt-32">
-                <blockquote className="text-center italic text-2xl text-gray-700 max-w-2xl">
+                <blockquote className="text-center italic text-2xl text-gray-700 max-w-2xl font-semibold">
                   {`"${service.quotation}"`}
                 </blockquote>
               </div>

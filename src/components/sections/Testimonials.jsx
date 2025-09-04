@@ -14,28 +14,37 @@ import {
 
 import TestimonialForm from '../ui/TestimonialForm';
 
-const Testimonials = () => {
+const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedQuotes, setExpandedQuotes] = useState({});
   const [showForm, setShowForm] = useState(false);
 
+  // Filter testimonials based on category if provided
+  const filteredTestimonials = currentCategoryId
+    ? testimonialsData.filter((t) => t.categoryId == currentCategoryId)
+    : testimonialsData;
+
   // Auto-rotate through testimonials every 4 seconds
   useEffect(() => {
+    if (filteredTestimonials.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonialsData.length);
+      setCurrentIndex(
+        (prevIndex) => (prevIndex + 1) % filteredTestimonials.length
+      );
     }, 4000);
 
     return () => clearInterval(interval);
-  });
+  }, [filteredTestimonials.length]);
 
   // Get the current testimonial and its category
-  const currentTestimonial = testimonialsData[currentIndex];
+  const currentTestimonial = filteredTestimonials[currentIndex];
   const currentCategory = testimonialCategories.find(
-    (cat) => cat.id === currentTestimonial.categoryId
+    (cat) => cat.id === currentTestimonial?.categoryId
   );
 
   // Get two different categories for the right side images
   const getTwoDifferentCategories = () => {
+    if (!currentCategory) return [];
     if (testimonialCategories.length < 2) return [currentCategory];
     // Pick current category and next one (wrap around)
     const currentIdx = testimonialCategories.findIndex(
@@ -63,7 +72,7 @@ const Testimonials = () => {
   const truncateQuote = (quote) => {
     const words = quote.split(' ');
     const lineLength = 60; // Approximate characters per line
-    const maxChars = lineLength * 2;
+    const maxChars = showPics ? lineLength * 2 : lineLength * 7;
 
     if (quote.length <= maxChars) {
       return { truncated: quote, needsTruncation: false };
@@ -105,7 +114,11 @@ const Testimonials = () => {
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
       <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(244,223,196,0.03)_0%,transparent_50%)]"></div>
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div
+          className={`grid ${
+            showPics ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
+          } gap-12 items-start`}
+        >
           {/* Left Side - Testimonial with Carousel */}
           <div className="text-left">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-8">
@@ -160,7 +173,7 @@ const Testimonials = () => {
 
             {/* Carousel Indicators */}
             <div className="flex space-x-3 mt-8">
-              {testimonialsData.map((_, index) => (
+              {filteredTestimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
@@ -182,36 +195,38 @@ const Testimonials = () => {
           </div>
 
           {/* Right Side - Two Images from Different Categories */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {categoriesForImages.map((cat, idx) => {
-              // Pick the first image from each category
-              const imageName = cat.images[0];
-              return (
-                <div
-                  key={`${cat.id}-${imageName}-${idx}`}
-                  className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
-                >
-                  <div className="h-64 w-full relative">
-                    <img
-                      src={getTestimonialImagePath(imageName)}
-                      alt={`${cat.name} - ${imageName}`}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      style={{ minHeight: '100%', minWidth: '100%' }}
-                    />
-                  </div>
-                  <div className="p-6 text-start">
-                    <h3 className="text-xl font-bold text-primary mb-2">
-                      {cat.name}
-                    </h3>
-                    <p className="text-gray-600 text-sm">{cat.description}</p>
-                    <div className="mt-3 text-xs text-primary/70 font-medium">
-                      {cat.count} testimonials
+          {showPics && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {categoriesForImages.map((cat, idx) => {
+                // Pick the first image from each category
+                const imageName = cat.images[0];
+                return (
+                  <div
+                    key={`${cat.id}-${imageName}-${idx}`}
+                    className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                  >
+                    <div className="h-64 w-full relative">
+                      <img
+                        src={getTestimonialImagePath(imageName)}
+                        alt={`${cat.name} - ${imageName}`}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        style={{ minHeight: '100%', minWidth: '100%' }}
+                      />
+                    </div>
+                    <div className="p-6 text-start">
+                      <h3 className="text-xl font-bold text-primary mb-2">
+                        {cat.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm">{cat.description}</p>
+                      <div className="mt-3 text-xs text-primary/70 font-medium">
+                        {cat.count} testimonials
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
       {/* Testimonial Form Modal */}
