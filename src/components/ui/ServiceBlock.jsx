@@ -23,7 +23,7 @@ const ServiceBlock = ({ service, index }) => {
           </div>
         </div>
 
-        {/* Text Side with Conditional Background */}
+        {/* Text Side with Background */}
         <div
           className={`w-full md:w-3/4 h-[600px] object-cover p-8 pb-64 flex flex-col justify-center relative top-[5rem]  ${
             isEven
@@ -32,7 +32,7 @@ const ServiceBlock = ({ service, index }) => {
           }`}
         >
           <div
-            className="absolute inset-0 w-full h-full z-0"
+            className="absolute left-1/2 top-0 -translate-x-1/2 w-[200%] h-full z-0"
             style={{
               backgroundColor: service.backgroundColor || '#f3f4f6',
             }}
