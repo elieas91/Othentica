@@ -9,6 +9,7 @@ const ParallaxSection = ({
   children,
   className = '',
   speed = 0.5,
+  imageOffset = '-100%',
 }) => {
   const parallaxRef = useRef(null);
 
@@ -33,7 +34,7 @@ const ParallaxSection = ({
         className="absolute inset-0 w-full h-[200%] bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${imageSrc})`,
-          top: '-100%',
+          top: imageOffset,
         }}
         aria-label={imageAlt}
       />

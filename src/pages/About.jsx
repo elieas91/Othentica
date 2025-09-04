@@ -114,6 +114,16 @@ const About = () => {
 
       <MeetTheFounders />
 
+      <ParallaxSection
+        imageSrc={PerformanceImg}
+        imageAlt="Digital Innovation"
+        height="h-[80vh]"
+        imageOffset="-150%"
+        overlayOpacity="bg-neutral/20"
+        speed={0.3}
+        className="mt-14"
+      ></ParallaxSection>
+
       <AboutContent
         // title="Driving Purpose Forward"
         title="Mission"
@@ -127,14 +137,6 @@ const About = () => {
         flipped={false}
         sectionId="mission"
       />
-
-      <ParallaxSection
-        imageSrc={PerformanceImg}
-        imageAlt="Digital Innovation"
-        height="h-[85vh]"
-        overlayOpacity="bg-neutral/20"
-        speed={0.3}
-      ></ParallaxSection>
 
       <AboutContent
         // title="Driving Purpose Forward"
