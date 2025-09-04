@@ -32,6 +32,12 @@ const MeetTheFounders = () => {
               <h3 className="text-5xl font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
                 {member.subtitle}
               </h3>
+              {/* Name in outlined box */}
+              <div className="inline-block border-2 w-1/4 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
+                <span className="text-xl font-bold text-primary dark:text-neutral">
+                  {member.name}
+                </span>
+              </div>
               <h1 className="text-xl font-normal text-primary font-sans dark:text-neutral mb-6">
                 {Array.isArray(member.description) &&
                   member.description.map((paragraph, index) => (
@@ -41,7 +47,7 @@ const MeetTheFounders = () => {
                   ))}
 
                 {/* Name and role */}
-                <p className="mt-6 font-bold">— {member.name}</p>
+                <p className="mt-6 font-bold">{member.name}</p>
                 {Array.isArray(member.role) ? (
                   member.role.map((role, idx) => (
                     <p key={idx} className="font-bold">
