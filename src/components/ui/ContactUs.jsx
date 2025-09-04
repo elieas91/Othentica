@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import WhatsAppButton from './WhatsappButton';
 import apiService from '../../services/api';
+import Swal from 'sweetalert2';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
@@ -11,7 +12,6 @@ const ContactUs = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,7 +20,6 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
     try {
       const response = await fetch(`${apiService.baseURL}/contact`, {
@@ -34,14 +33,40 @@ const ContactUs = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSubmitStatus('success');
+        // Show success alert
+        Swal.fire({
+          title: 'Message Sent!',
+          text: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
+          icon: 'success',
+          confirmButtonText: 'Great!',
+          confirmButtonColor: '#3b82f6',
+          timer: 5000,
+          timerProgressBar: true,
+          showConfirmButton: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
         setForm({ name: '', email: '', phone: '', subject: '', message: '' });
       } else {
-        setSubmitStatus('error');
+        // Show error alert
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, there was an error sending your message. Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+          confirmButtonColor: '#ef4444'
+        });
         console.error('Error:', data.error);
       }
     } catch (error) {
-      setSubmitStatus('error');
+      // Show network error alert
+      Swal.fire({
+        title: 'Connection Error!',
+        text: 'Please check your internet connection and try again.',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#ef4444'
+      });
       console.error('Network error:', error);
     } finally {
       setIsSubmitting(false);
@@ -56,28 +81,6 @@ const ContactUs = () => {
           Send us a Message
         </h2>
         
-        {/* Status Messages */}
-        {submitStatus === 'success' && (
-          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              Thank you! Your message has been sent successfully. We'll get back to you soon.
-            </div>
-          </div>
-        )}
-        
-        {submitStatus === 'error' && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              Sorry, there was an error sending your message. Please try again later.
-            </div>
-          </div>
-        )}
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
