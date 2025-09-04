@@ -26,7 +26,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: AppImg,
     image2: AppImgLong,
-    backgroundColor: '#e0f2fe', //light blue
+    backgroundColor: '#FBC76D',
   },
   {
     id: 2,
@@ -44,7 +44,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: ProgramsImg,
     image2: ProgramsImg,
-    backgroundColor: '#b6dcdd', //light turquoise
+    backgroundColor: '#FCD292',
   },
   {
     id: 3,
@@ -62,7 +62,7 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: WorkshopImg,
     image2: WorkshopImg2,
-    backgroundColor: '#f3e8ff', //pastel lavender
+    backgroundColor: '#FDE1B8',
   },
   {
     id: 4,
@@ -80,6 +80,6 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: OneToOneImg,
     image2: OneToOneImg,
-    backgroundColor: '#ffe9e0', //warm pastel peach
+    backgroundColor: '#FEF0DC',
   },
 ];
