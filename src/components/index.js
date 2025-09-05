@@ -7,6 +7,7 @@ export { default as SEO } from './ui/SEO';
 export { default as ScrollToTop } from './ui/ScrollToTop';
 export { default as OptimizedImage } from './ui/OptimizedImage';
 export { default as OptimizedVideo } from './ui/OptimizedVideo';
+export { default as AnimateOnScroll } from './ui/AnimateOnScroll';
 
 // Layout Components
 export { default as Layout } from './layout/Layout';

@@ -3,27 +3,35 @@ import LinkedInIcon from '../../assets/img/linkedin_icon.webp';
 import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
 import EmailIcon from '../../assets/img/email_icon.webp';
 import WhatsAppButton from '../ui/WhatsappButton';
+import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const MeetTheFounders = () => {
   return (
     <section className="pt-20 px-0" id="meet">
       <div className="max-w-[90%] w-full mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
-            Meet the Founders
-          </h2>
-        </div>
+        <AnimateOnScroll animation="fadeInUp" delay={100}>
+          <div className="text-center mb-16">
+            <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
+              Meet the Founders
+            </h2>
+          </div>
+        </AnimateOnScroll>
 
         {/* Team Members */}
         {teamData.map((member, index) => (
-          <div
+          <AnimateOnScroll 
             key={member.id}
-            className={`flex flex-row items-center gap-10 px-4 mx-auto pt-10 ${
-              index % 2 !== 0 ? 'p-0' : 'pt-20'
-            } ${
-              index % 2 === 0 ? ' bg-white mb-16 p-4' : 'bg-white'
-            } rounded-2xl `}
+            animation={index % 2 === 0 ? "fadeInLeft" : "fadeInRight"} 
+            delay={200 + (index * 200)}
+            duration={800}
           >
+            <div
+              className={`flex flex-row items-center gap-10 px-4 mx-auto pt-10 ${
+                index % 2 !== 0 ? 'p-0' : 'pt-20'
+              } ${
+                index % 2 === 0 ? ' bg-white mb-16 p-4' : 'bg-white'
+              } rounded-2xl `}
+            >
             {/* Text Content - Position changes based on flipped property */}
             <div
               className={`flex flex-col w-1/2 ${
@@ -114,6 +122,7 @@ const MeetTheFounders = () => {
               </div>
             </div>
           </div>
+          </AnimateOnScroll>
         ))}
       </div>
     </section>

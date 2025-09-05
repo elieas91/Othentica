@@ -914,4 +914,111 @@
   .animate-float {
     animation: float 3s ease-in-out infinite; /* slow + smooth */
   }
+
+  /* Custom smooth animations for AnimateOnScroll */
+  @keyframes fadeInUpSmooth {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDownSmooth {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeftSmooth {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInRightSmooth {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleInSmooth {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideUpSmooth {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDownSmooth {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced transition classes for smoother animations */
+  .animate-fadeInUpSmooth {
+    animation: fadeInUpSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-fadeInDownSmooth {
+    animation: fadeInDownSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-fadeInLeftSmooth {
+    animation: fadeInLeftSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-fadeInRightSmooth {
+    animation: fadeInRightSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-scaleInSmooth {
+    animation: scaleInSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-slideUpSmooth {
+    animation: slideUpSmooth 0.6s ease-out forwards;
+  }
+
+  .animate-slideDownSmooth {
+    animation: slideDownSmooth 0.6s ease-out forwards;
+  }
 }

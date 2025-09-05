@@ -1,22 +1,23 @@
 import React, { useEffect } from 'react';
 import SEO from '../components/ui/SEO';
 import Banner from '../components/ui/Banner';
-import AboutContent from '../components/sections/AboutContent';
+// import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
-import PhilosophyBg from '../assets/img/philosophy/philo-bg.webp';
-import MissionVideo from '../assets/video/mission-vision-values/mission.mp4';
+import AnimateOnScroll from '../components/ui/AnimateOnScroll';
+import PhilosophyBg from '../assets/img/philosophy/aboutUsBanner.webp';
+// import MissionVideo from '../assets/video/mission-vision-values/mission.mp4';
 import MissionImg from '../assets/img/mission-vision-values/mission.webp';
-import VisionVideo from '../assets/video/mission-vision-values/vision.mp4';
-import VisionImg from '../assets/img/mission-vision-values/vision.webp';
-import ValuesVideo from '../assets/video/mission-vision-values/values.mp4';
-import ValuesImg from '../assets/img/mission-vision-values/values.webp';
+// import VisionVideo from '../assets/video/mission-vision-values/vision.mp4';
+// import VisionImg from '../assets/img/mission-vision-values/vision.webp';
+// import ValuesVideo from '../assets/video/mission-vision-values/values.mp4';
+// import ValuesImg from '../assets/img/mission-vision-values/values.webp';
 // Import additional images for floating circles and backgrounds
-import MissionFloatingImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different images
-import VisionFloatingImg from '../assets/img/mission-vision-values/vision.webp';
-import ValuesFloatingImg from '../assets/img/mission-vision-values/values.webp';
-import MissionBgImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different background images
-import VisionBgImg from '../assets/img/mission-vision-values/vision.webp';
-import ValuesBgImg from '../assets/img/mission-vision-values/values.webp';
+// import MissionFloatingImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different images
+// import VisionFloatingImg from '../assets/img/mission-vision-values/vision.webp';
+// import ValuesFloatingImg from '../assets/img/mission-vision-values/values.webp';
+// import MissionBgImg from '../assets/img/mission-vision-values/mission.webp'; // You can replace with different background images
+// import VisionBgImg from '../assets/img/mission-vision-values/vision.webp';
+// import ValuesBgImg from '../assets/img/mission-vision-values/values.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 import Logo from '../assets/img/logo.webp';
 import MeetTheFounders from '../components/sections/MeetTheFounders';
@@ -119,27 +120,35 @@ const About = () => {
         backgroundImage={PhilosophyBg}
       />
 
-      <MeetTheFounders />
+      <AnimateOnScroll animation="fadeInUp" delay={200}>
+        <MeetTheFounders />
+      </AnimateOnScroll>
 
-      <ParallaxSection
-        imageSrc={PerformanceImg}
-        imageAlt="Digital Innovation"
-        height="h-[80vh]"
-        imageOffset="-150%"
-        overlayOpacity="bg-black/20"
-        speed={0.3}
-        className="mt-14"
-      ></ParallaxSection>
+      <AnimateOnScroll animation="fadeIn" delay={100}>
+        <ParallaxSection
+          imageSrc={PerformanceImg}
+          imageAlt="Digital Innovation"
+          height="h-[80vh]"
+          imageOffset="-150%"
+          overlayOpacity="bg-black/20"
+          speed={0.3}
+          className="mt-14"
+        ></ParallaxSection>
+      </AnimateOnScroll>
 
-      <div className="max-w-[90%] w-full mx-auto mt-32">
-        <div className="text-center mb-16">
-          <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
-            Mission Vision Values
-          </h2>
+      <AnimateOnScroll animation="fadeInUp" delay={300}>
+        <div className="max-w-[90%] w-full mx-auto mt-32">
+          <div className="text-center mb-16">
+            <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
+              Mission Vision Values
+            </h2>
+          </div>
         </div>
-      </div>
+      </AnimateOnScroll>
 
-      <CarouselMVV className="my-24" />
+      <AnimateOnScroll animation="scaleIn" delay={400} duration={800}>
+        <CarouselMVV className="my-24" />
+      </AnimateOnScroll>
 
       {/* <AboutContent
         title="Mission"

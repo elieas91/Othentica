@@ -11,6 +11,8 @@ const CarouselMVV = ({ className = '' }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const carouselRef = useRef(null);
   const hasInitialized = useRef(false);
+  const wheelTimeoutRef = useRef(null);
+  const wheelAccumulator = useRef(0);
 
   // Auto-duplicate items to create more cards
   const duplicateItems = (items, times = 2) => {
@@ -47,6 +49,15 @@ const CarouselMVV = ({ className = '' }) => {
       return () => clearTimeout(timer);
     }
   }, []);
+
+  // Cleanup wheel timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (wheelTimeoutRef.current) {
+        clearTimeout(wheelTimeoutRef.current);
+      }
+    };
+  }, []);
   
   // Responsive translateZ values
   const getTranslateZ = () => {
@@ -80,20 +91,44 @@ const CarouselMVV = ({ className = '' }) => {
     setCurrentIndex(index);
   };
 
-  // Mouse wheel navigation
+  // Mouse wheel navigation with debouncing and threshold
   const handleWheel = (e) => {
     e.preventDefault();
-    if (e.deltaY > 0) {
-      goToNext();
-    } else {
-      goToPrev();
+    
+    // Clear existing timeout
+    if (wheelTimeoutRef.current) {
+      clearTimeout(wheelTimeoutRef.current);
     }
+    
+    // Accumulate scroll delta
+    wheelAccumulator.current += e.deltaY;
+    
+    // Set threshold for navigation (adjust this value to make it more/less sensitive)
+    const scrollThreshold = 100;
+    
+    // If accumulated scroll exceeds threshold, navigate
+    if (Math.abs(wheelAccumulator.current) >= scrollThreshold) {
+      if (wheelAccumulator.current > 0) {
+        goToNext();
+      } else {
+        goToPrev();
+      }
+      // Reset accumulator
+      wheelAccumulator.current = 0;
+    }
+    
+    // Reset accumulator after a delay if no more scroll events
+    wheelTimeoutRef.current = setTimeout(() => {
+      wheelAccumulator.current = 0;
+    }, 150);
   };
 
   // Touch/Mouse drag handling
   const handleStart = (e) => {
     setIsDragging(true);
     setStartX(e.type === 'mousedown' ? e.clientX : e.touches[0].clientX);
+    // Reset wheel accumulator when starting drag
+    wheelAccumulator.current = 0;
   };
 
   const handleMove = (e) => {
@@ -108,7 +143,8 @@ const CarouselMVV = ({ className = '' }) => {
     const endX = e.type === 'mouseup' ? e.clientX : e.changedTouches[0].clientX;
     const diff = startX - endX;
     
-    if (Math.abs(diff) > 50) {
+    // Increased threshold for more intentional drags
+    if (Math.abs(diff) > 80) {
       if (diff > 0) {
         goToNext();
       } else {
@@ -166,7 +202,7 @@ const CarouselMVV = ({ className = '' }) => {
                 onClick={() => goToSlide(index)}
               >
                 <div
-                  className="carousel-3d-item-content"
+                  className="carousel-3d-item-content "
                   style={{
                     backgroundImage: `url(${slide.image})`,
                   }}
