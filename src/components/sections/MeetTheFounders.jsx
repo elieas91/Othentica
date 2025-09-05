@@ -2,6 +2,7 @@ import { teamData } from '../../data/teamData';
 import LinkedInIcon from '../../assets/img/linkedin_icon.webp';
 import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
 import EmailIcon from '../../assets/img/email_icon.webp';
+import WhatsAppButton from '../ui/WhatsappButton';
 
 const MeetTheFounders = () => {
   return (
@@ -33,7 +34,7 @@ const MeetTheFounders = () => {
                 {member.subtitle}
               </h3>
               {/* Name in outlined box */}
-              <div className="inline-block border-2 w-1/4 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
+              <div className="self-start border-2 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
                 <span className="text-xl font-bold text-primary dark:text-neutral">
                   {member.name}
                 </span>
@@ -83,28 +84,32 @@ const MeetTheFounders = () => {
                   }`}
                 >
                   {/* LinkedIn Button */}
-                  <div className="w-36 h-12 bg-[#007ebb] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2">
-                    <img src={LinkedInIcon} width="35" />
+                  <a
+                    href={member.socialMedia.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-36 h-12 bg-[#007ebb] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2"
+                  >
+                    <img src={LinkedInIcon} className="w-8" />
                     <span className="text-white font-semibold text-sm">
-                      {member.socialMedia.linkedin}
+                      LinkedIn
                     </span>
-                  </div>
+                  </a>
 
-                  {/* Whatsapp Button */}
-                  <div className="w-36 h-12 bg-[#26d044] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2">
-                    <img src={WhatsappIcon} width="35" />
-                    <span className="text-white font-semibold text-sm">
-                      {member.socialMedia.instagram}
-                    </span>
-                  </div>
+                  <WhatsAppButton type="rectangle" />
 
                   {/* Email Button */}
-                  <div className="w-36 h-12 bg-[#d77644] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2">
-                    <img src={EmailIcon} width="35" />
+                  <a
+                    href={`mailto:${member.socialMedia.email}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-36 h-12 bg-[#d77644] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2"
+                  >
+                    <img src={EmailIcon} className="w-8" />
                     <span className="text-white font-semibold text-sm">
-                      {member.socialMedia.instagram}
+                      Email
                     </span>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
