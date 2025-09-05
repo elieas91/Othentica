@@ -121,9 +121,10 @@ const Navigation = () => {
       hasDropdown: true,
       dropdownItems: [
         { path: '/about#meet', label: 'Meet the Founders' },
-        { path: '/about#mission', label: 'Mission' },
-        { path: '/about#vision', label: 'Vision' },
-        { path: '/about#values', label: 'Values' },
+        {
+          path: '/about#mission-vision-values',
+          label: 'Mission Vision Values',
+        },
       ],
     },
     {

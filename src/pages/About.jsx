@@ -20,6 +20,7 @@ import ValuesBgImg from '../assets/img/mission-vision-values/values.webp';
 import PerformanceImg from '../assets/img/about/para-2.webp';
 import Logo from '../assets/img/logo.webp';
 import MeetTheFounders from '../components/sections/MeetTheFounders';
+import CarouselMVV from '../components/ui/CarouselMVV/CarouselMVV';
 
 const About = () => {
   // Preload critical images for better LCP
@@ -130,7 +131,17 @@ const About = () => {
         className="mt-14"
       ></ParallaxSection>
 
-      <AboutContent
+      <div className="max-w-[90%] w-full mx-auto mt-32">
+        <div className="text-center mb-16">
+          <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
+            Mission Vision Values
+          </h2>
+        </div>
+      </div>
+
+      <CarouselMVV className="my-24" />
+
+      {/* <AboutContent
         title="Mission"
         description="At Othentica, our mission is to empower businesses through innovative digital solutions that drive growth and create meaningful connections. We combine cutting-edge technology with creative excellence to transform your vision into digital reality, helping you achieve your goals in an ever-evolving digital landscape."
         imageSrc={ValuesImg}
@@ -164,7 +175,7 @@ const About = () => {
         flipped={true}
         sectionId="vision"
         index={1}
-      />
+      /> */}
 
       {/* Parallax Section 2 */}
       {/* <ParallaxSection 
@@ -176,7 +187,7 @@ const About = () => {
       >
       </ParallaxSection> */}
 
-      <AboutContent
+      {/* <AboutContent
         title="Values"
         description="At Othentica, our values are the foundation of our culture and guide our decisions. We believe in integrity, innovation, and collaboration, and we strive to create a positive impact through our work."
         imageSrc={MissionImg}
@@ -192,7 +203,7 @@ const About = () => {
         flipped={false}
         sectionId="values"
         index={2}
-      />
+      /> */}
     </div>
   );
 };
