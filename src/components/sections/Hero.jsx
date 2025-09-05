@@ -197,7 +197,7 @@ const Hero = () => {
           <Button
             variant="accent"
             size="large"
-            onClick={() => window.open('/about', '_blank')}
+            onClick={() => window.open('/contact', '_blank')}
           >
             Onboard your Team
           </Button>
