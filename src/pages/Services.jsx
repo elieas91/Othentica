@@ -19,6 +19,7 @@ const Services = () => {
 
   // Intersection Observer for banner animation
   useEffect(() => {
+    const currentBannerRef = bannerRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -31,19 +32,20 @@ const Services = () => {
       }
     );
 
-    if (bannerRef.current) {
-      observer.observe(bannerRef.current);
+    if (currentBannerRef) {
+      observer.observe(currentBannerRef);
     }
 
     return () => {
-      if (bannerRef.current) {
-        observer.unobserve(bannerRef.current);
+      if (currentBannerRef) {
+        observer.unobserve(currentBannerRef);
       }
     };
   }, []);
 
   // Intersection Observer for CTA section
   useEffect(() => {
+    const currentCtaRef = ctaRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -56,13 +58,13 @@ const Services = () => {
       }
     );
 
-    if (ctaRef.current) {
-      observer.observe(ctaRef.current);
+    if (currentCtaRef) {
+      observer.observe(currentCtaRef);
     }
 
     return () => {
-      if (ctaRef.current) {
-        observer.unobserve(ctaRef.current);
+      if (currentCtaRef) {
+        observer.unobserve(currentCtaRef);
       }
     };
   }, []);

@@ -16,7 +16,7 @@ const CarouselMVV = ({ className = '' }) => {
   const duplicateItems = (items, times = 2) => {
     const duplicated = [];
     for (let i = 0; i < times; i++) {
-      items.forEach((item, index) => {
+      items.forEach((item) => {
         duplicated.push({
           ...item,
           id: `${item.id}-${i}`,

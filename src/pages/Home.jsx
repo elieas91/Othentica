@@ -29,6 +29,7 @@ const Home = () => {
 
   // Intersection Observer for Hero section
   useEffect(() => {
+    const currentRef = heroRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -41,53 +42,217 @@ const Home = () => {
       }
     );
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
 
-  // Generic intersection observer for other sections
-  const createSectionObserver = (sectionName, ref) => {
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setVisibleSections(prev => new Set([...prev, sectionName]));
-          }
-        },
-        {
-          threshold: 0.2,
-          rootMargin: '0px 0px -50px 0px'
+  // Individual intersection observers for each section
+  useEffect(() => {
+    const currentRef = testimonialsRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'testimonials']));
         }
-      );
-
-      if (ref.current) {
-        observer.observe(ref.current);
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
       }
+    );
 
-      return () => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = philosophyRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'philosophy']));
         }
-      };
-    }, []);
-  };
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
 
-  // Create observers for each section
-  createSectionObserver('testimonials', testimonialsRef);
-  createSectionObserver('philosophy', philosophyRef);
-  createSectionObserver('mobileShowcase', mobileShowcaseRef);
-  createSectionObserver('features', featuresRef);
-  createSectionObserver('services', servicesRef);
-  createSectionObserver('secondTestimonials', secondTestimonialsRef);
-  createSectionObserver('clients', clientsRef);
-  createSectionObserver('security', securityRef);
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = mobileShowcaseRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'mobileShowcase']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = featuresRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'features']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = servicesRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'services']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = secondTestimonialsRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'secondTestimonials']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = clientsRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'clients']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentRef = securityRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => new Set([...prev, 'security']));
+        }
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
 
   // SEO data for homepage
   const seoData = {
