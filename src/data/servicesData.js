@@ -6,7 +6,7 @@ import ProgramsImg from '../assets/img/services/programs_img.webp';
 import WorkshopImg from '../assets/img/services/workshop.webp';
 import WorkshopImg2 from '../assets/img/services/workshop_2.webp';
 import OneToOneImg from '../assets/img/services/one_to_one_img.webp';
-import AppImg from '../assets/img/services/app_img_new.webp';
+import AppImg from '../assets/img/services/app_img_new_2.webp';
 import AppImgLong from '../assets/img/services/app_img_long.webp';
 
 export const servicesData = [
