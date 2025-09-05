@@ -9,6 +9,7 @@ import SocialMedia from '../components/sections/Blog';
 import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';
+import FeaturesAndBenefits from '../components/sections/FeaturesAndBenefits';
 
 const Home = () => {
   // SEO data for homepage
@@ -50,6 +51,7 @@ const Home = () => {
       <Testimonials />
       <Philosophy />
       <MobileShowcase />
+      <FeaturesAndBenefits />
       <Services />
       <Testimonials />
       <Security />
