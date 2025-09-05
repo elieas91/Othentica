@@ -193,25 +193,6 @@ const About = () => {
         sectionId="values"
         index={2}
       />
-
-      {/* Call to Action Section */}
-      <div className="w-full px-4 text-center py-20">
-        <div className="h-[25vh] justify-center items-center p-8 mx-4 font-bold">
-          <p className="text-lg text-gray-700 leading-relaxed">
-            Ready to transform your digital presence?
-          </p>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            Let's work together to bring your vision to life.
-          </p>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            Our team of experts is here to help you navigate the digital
-            landscape
-          </p>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            and create solutions that drive real results for your business.
-          </p>
-        </div>
-      </div>
     </div>
   );
 };
