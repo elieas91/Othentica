@@ -20,13 +20,14 @@ const DownloadAppCard = () => {
         <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
           Get it to begin your journey today!
         </p>
-        <Button
-          variant="secondary"
-          size="large"
-          onClick={() => window.open('/contact', '_blank')}
-        >
-          Book a Demo
-        </Button>
+        <Link to="/contact" target="_blank">
+          <Button
+            variant="secondary"
+            size="large"
+          >
+            Book a Demo
+          </Button>
+        </Link>
       </div>
 
       <div className="flex flex-row items-center gap-4 mt-6">

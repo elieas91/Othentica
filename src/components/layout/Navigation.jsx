@@ -123,7 +123,7 @@ const Navigation = () => {
         { path: '/about#meet', label: 'Meet the Founders' },
         {
           path: '/about#mission-vision-values',
-          label: 'Mission Vision Values',
+          label: 'About Us',
         },
       ],
     },

@@ -1,19 +1,103 @@
-/* Blur + scaling for inactive slides */
-.swiper-slide {
-  transition: transform 0.3s ease, filter 0.3s ease;
-  filter: blur(3px) brightness(0.7);
-  transform: scale(0.9);
+/* 3D Carousel Container */
+.carousel-3d-container {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  max-width: 1200px;
+  margin: 0 auto;
+  perspective: 1500px;
+  overflow: hidden;
+  user-select: none;
 }
 
-.swiper-slide-active {
-  filter: blur(0) brightness(1);
-  transform: scale(1);
-  z-index: 10;
+.carousel-3d-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
 }
 
-/* Custom rectangular navigation buttons */
-.custom-prev,
-.custom-next {
+.carousel-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: none !important; /* Force no transition initially */
+}
+
+.carousel-3d.loaded {
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 3D Carousel Items */
+.carousel-3d-item {
+  cursor: pointer;
+  position: absolute;
+  width: 700px;
+  height: 400px;
+  left: 50%;
+  top: 50%;
+  margin-left: -350px;
+  margin-top: -200px;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.carousel-3d-item-content {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.carousel-3d-item:hover .carousel-3d-item-content {
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-3d-item.active .carousel-3d-item-content {
+  transform: scale(1.1);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);;
+}
+
+/* Overlay for text content */
+.carousel-3d-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 2rem 1.5rem 1.5rem;
+  color: white;
+  transform: translateZ(1px);
+}
+
+.carousel-3d-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-3d-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Navigation Buttons */
+.carousel-3d-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -22,23 +106,172 @@
   font-size: 2rem;
   font-weight: bold;
   border: none;
-  padding: 0.5rem 1rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 20;
-  transition: background 0.3s ease, transform 0.2s ease;
-  border-radius: 1rem; /* rectangle with slight rounding */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.custom-prev:hover,
-.custom-next:hover {
-  background: #e5e5e5;
-  transform: translateY(-50%) scale(1.05);
+.carousel-3d-nav:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.custom-prev {
-  left: -3rem; /* adjust as needed */
+.carousel-3d-nav-icon {
+  width: 60px;
+  height: 60px;
+  filter: brightness(0) saturate(100%) invert(45%) sepia(78%) saturate(1352%) hue-rotate(346deg) brightness(91%) contrast(87%); /* Makes the icon secondary color (#d77644) */
+  transition: transform 0.3s ease;
 }
 
-.custom-next {
-  right: -3rem; /* adjust as needed */
+.carousel-3d-prev:hover .carousel-3d-nav-icon {
+  transform: rotate(180deg) scale(1.1);
+}
+
+.carousel-3d-next:hover .carousel-3d-nav-icon {
+  transform: rotate(0deg) scale(1.1);
+}
+
+.carousel-3d-prev {
+  left: 20px;
+}
+
+.carousel-3d-prev .carousel-3d-nav-icon {
+  transform: rotate(180deg); /* Rotate compass to point left */
+}
+
+.carousel-3d-next {
+  right: 20px;
+}
+
+.carousel-3d-next .carousel-3d-nav-icon {
+  transform: rotate(0deg); /* Keep compass pointing right */
+}
+
+/* Thumbnail Indicators */
+.carousel-3d-thumbnails {
+  position: absolute;
+  bottom:5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.carousel-3d-thumbnail {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: none;
+  padding: 0;
+}
+
+.carousel-3d-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.carousel-3d-thumbnail:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.carousel-3d-thumbnail.active {
+  border-color: white;
+  transform: scale(1.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-3d-thumbnail:hover img {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .carousel-3d-container {
+    height: 350px;
+    max-width: 100%;
+    perspective: 1200px;
+  }
+  
+  .carousel-3d-item {
+    cursor: pointer;
+    width: 500px;
+    height: 300px;
+    margin-left: -250px;
+    margin-top: -150px;
+  }
+  
+  .carousel-3d-title {
+    font-size: 1.2rem;
+  }
+  
+  .carousel-3d-description {
+    font-size: 0.8rem;
+  }
+  
+  .carousel-3d-nav {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .carousel-3d-prev {
+    left: 10px;
+  }
+  
+  .carousel-3d-next {
+    right: 10px;
+  }
+  
+  .carousel-3d-thumbnails {
+    bottom: 10px;
+  }
+  
+  .carousel-3d-thumbnail {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-3d-container {
+    height: 300px;
+    perspective: 1000px;
+  }
+  
+  .carousel-3d-item {
+    cursor: pointer;
+    width: 400px;
+    height: 240px;
+    margin-left: -200px;
+    margin-top: -120px;
+  }
+  
+  .carousel-3d-overlay {
+    padding: 1.5rem 1rem 1rem;
+  }
+  
+  .carousel-3d-title {
+    font-size: 1rem;
+  }
+  
+  .carousel-3d-description {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+  }
 }

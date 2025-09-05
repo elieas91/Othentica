@@ -144,15 +144,12 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex space-x-6 text-sm">
-              {/* <Link to="/privacy" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
+              <Link to="/privacy" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
-                Terms of Service
-              </Link> */}
-              <p className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
+              <Link to="#" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
                 Terms & Conditions
-              </p>
+              </Link>
               <a
                 href="https://horiverde.com"
                 target="_blank"

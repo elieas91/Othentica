@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Flame from '../../assets/img/flame.webp';
 import Modal from './Modal';
 import Button from './Button';
@@ -8,27 +8,103 @@ import Tooltip from './Tooltip';
 const ServiceBlock = ({ service, index }) => {
   const isEven = index % 2 === 0; // alternate layout
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // Intersection Observer for scroll animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Reset animation when out of view to allow re-triggering
+          setIsVisible(false);
+        }
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the element is visible
+        rootMargin: '0px 0px -50px 0px' // Start animation slightly before fully visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
-      <div className="flex flex-col md:flex-row items-center my-12 relative min-h-[500px]">
+      <div ref={sectionRef} className="flex flex-col md:flex-row items-center my-12 relative min-h-[500px]">
         {/* Image Side */}
         <div
-          className={`w-full relative z-10 ${
+          className={`w-full relative z-10  ${
             isEven ? 'md:order-2' : 'md:order-1'
           }`}
         >
           {/* Main Image */}
-          <div className="w-full h-[600px] flex items-center justify-center">
-            <img
-              src={service.image1}
-              alt={service.title}
-              className="w-full h-full object-cover shadow-lg rounded-2xl"
-              style={{ maxHeight: '600px' }}
-            />
+          <div className="w-full h-[600px] bg-[#e4e4e4] flex items-center justify-center">
+            {service.mobile1 && service.mobile2 && service.mobile3 ? (
+              // Three mobile images side by side for the app service with scroll animation
+              <div className="flex gap-12 w-full h-full items-center justify-center rounded-4xl">
+                <img
+                  src={service.mobile1}
+                  alt={`${service.title} - Mobile View 1`}
+                  className={`w-[15%] h-[50%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                    isVisible 
+                      ? 'opacity-100 transform translate-y-0 scale-100' 
+                      : 'opacity-0 transform translate-y-8 scale-95'
+                  }`}
+                  style={{ 
+                    maxHeight: '300px',
+                    transitionDelay: '0ms'
+                  }}
+                />
+                <img
+                  src={service.mobile2}
+                  alt={`${service.title} - Mobile View 2`}
+                  className={`w-[15%] h-[70%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                    isVisible 
+                      ? 'opacity-100 transform translate-y-0 scale-100' 
+                      : 'opacity-0 transform translate-y-8 scale-95'
+                  }`}
+                  style={{ 
+                    maxHeight: '600px',
+                    transitionDelay: '400ms'
+                  }}
+                />
+                <img
+                  src={service.mobile3}
+                  alt={`${service.title} - Mobile View 3`}
+                  className={`w-[15%] h-[50%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                    isVisible 
+                      ? 'opacity-100 transform translate-y-0 scale-100' 
+                      : 'opacity-0 transform translate-y-8 scale-95'
+                  }`}
+                  style={{ 
+                    maxHeight: '600px',
+                    transitionDelay: '800ms'
+                  }}
+                />
+              </div>
+            ) : (
+              // Single image for other services
+              <img
+                src={service.image1}
+                alt={service.title}
+                className="w-full h-full object-cover shadow-lg rounded-2xl transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl"
+                style={{ maxHeight: '600px' }}
+              />
+            )}
           </div>
         </div>
 
@@ -53,19 +129,19 @@ const ServiceBlock = ({ service, index }) => {
               <img
                 src={service.icon}
                 alt="Service Icon"
-                className="w-24 mr-3"
+                className="w-24 mr-3 transition-all duration-500 ease-out hover:scale-110 hover:rotate-3"
               />
-              <h2 className="text-3xl font-bold">{service.title}</h2>
+              <h2 className="text-3xl font-bold transition-all duration-500 ease-out hover:scale-105">{service.title}</h2>
             </div>
             <ul className="text-gray-600 text-xl px-4 leading-[2.5rem]">
               {service.descriptionBulletPoints.map((point, idx) => (
-                <li key={idx} className="flex items-start mb-2">
+                <li key={idx} className="flex items-start mb-2 group transition-all duration-300 ease-out hover:translate-x-2">
                   <img
                     src={Flame}
                     alt="Bullet Icon"
-                    className="w-auto h-7 mr-3 mt-1"
+                    className="w-auto h-7 mr-3 mt-1 transition-all duration-300 ease-out group-hover:scale-110 group-hover:rotate-12"
                   />
-                  <span>{point}</span>
+                  <span className="transition-all duration-300 ease-out group-hover:text-gray-800 dark:group-hover:text-gray-200">{point}</span>
                 </li>
               ))}
             </ul>

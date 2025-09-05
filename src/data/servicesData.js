@@ -8,19 +8,22 @@ import WorkshopImg2 from '../assets/img/services/workshop_2.webp';
 import OneToOneImg from '../assets/img/services/one_to_one_img.webp';
 import AppImg from '../assets/img/services/app_img_new_2.webp';
 import AppImgLong from '../assets/img/services/app_img_long.webp';
+import Mobile1 from '../assets/img/services/mobile1.png';
+import Mobile2 from '../assets/img/services/mobile2.png';
+import Mobile3 from '../assets/img/services/mobile3.png';
 
 export const servicesData = [
   {
     id: 1,
     sectionId: 'app',
     icon: App,
-    title: 'The Othentica App',
+    title: 'The Othentica App', 
     description:
       'One-of-its-kind wellness app that makes growth simple and engaging. With gamified learning, quick science-backed practices, daily "mind cookies" and inspiring stories, Othentica helps you build focus, energy, and balance at work and beyond',
     modalDescription1:
       'Othentica is a comprehensive, gamified wellness platform designed for organizations seeking to elevate employee well-being and performance. With secure, streamlined onboarding for large teams, the app reduces HR administrative workload and errors. Employees engage in daily quests, personalized routines, and access a rich library of meditations and wellness resources—fostering authentic self-discovery, resilience, and stress management',
     modalDescription2:
-      'HR leaders benefit from data-driven insights into brain health, energy, and mood trends, enabling proactive interventions and informed decision-making. The platform’s rewards system boosts motivation and participation, cultivating a positive workplace culture. Othentica integrates seamlessly with existing systems, supports diverse workforces, and ensures enterprise-grade security and privacy for all users—empowering organizations to drive productivity, retention, and employee satisfaction',
+      'HR leaders benefit from data-driven insights into brain health, energy, and mood trends, enabling proactive interventions and informed decision-making. The platform\'s rewards system boosts motivation and participation, cultivating a positive workplace culture. Othentica integrates seamlessly with existing systems, supports diverse workforces, and ensures enterprise-grade security and privacy for all users—empowering organizations to drive productivity, retention, and employee satisfaction',
     descriptionBulletPoints: [
       'Gamified learning and quick science-backed practices',
       'Daily “mind cookies” and inspiring stories',
@@ -30,6 +33,9 @@ export const servicesData = [
     buttonText: 'Explore Solution',
     image1: AppImg,
     image2: AppImgLong,
+    mobile1: Mobile1,
+    mobile2: Mobile2,
+    mobile3: Mobile3,
     backgroundColor: '#FEF0DC',
   },
   {
@@ -40,7 +46,7 @@ export const servicesData = [
     description:
       'Corporate Health training journeys designed to reduce life pressures, build resilience, and spark thriving performance — delivered face-to-face, online, or blended with the ability to help organizations track growth and impact.',
     modalDescription1:
-      'We design tailored programs—delivered face-to-face or online—customized to your organization’s unique needs. Each program blends evidence-based wellness practices with engaging experiences, supporting your team’s well-being, performance, and growth.',
+      'We design tailored programs—delivered face-to-face or online—customized to your organization\'s unique needs. Each program blends evidence-based wellness practices with engaging experiences, supporting your team\'s well-being, performance, and growth.',
     modalDescriptionBulletPoints: [
       'Mindfulness & Stress Management Workshops: Interactive sessions (online or face-to-face) designed to help teams build resilience, manage stress, and improve focus',
       'Leadership Well-being Bootcamps: Custom programs for managers to enhance emotional intelligence, decision-making, and team motivation',
@@ -67,7 +73,7 @@ export const servicesData = [
     description:
       'Engaging sessions on brain health, resilience, and corporate health trends, inspiring teams to shift from coping to thriving.',
     modalDescription1:
-      'Have you ever noticed how brain energy and performance can shift from day to day? Achieving more isn’t just about hard work—it’s about brain work. Our talks and workshops focus on brain health, resilience, and the latest corporate wellness trends.',
+      'Have you ever noticed how brain energy and performance can shift from day to day? Achieving more isn\'t just about hard work—it\'s about brain work. Our talks and workshops focus on brain health, resilience, and the latest corporate wellness trends.',
     modalDescriptionBulletPoints: [
       'Designed to inspire teams and foster thriving cultures',
       'Encourage a shift from coping to thriving',

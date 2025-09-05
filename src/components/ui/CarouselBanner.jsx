@@ -89,25 +89,25 @@ const CarouselBanner = ({
       {/* Content */}
       <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto">
         {title && (
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight transition-all duration-700 ease-out hover:scale-105">
             {title}
           </h1>
         )}
 
         {subtitle && (
-          <h2 className="text-xl md:text-2xl font-semibold text-accent mb-4">
+          <h2 className="text-xl md:text-2xl font-semibold text-accent mb-4 transition-all duration-500 ease-out hover:scale-105">
             {subtitle}
           </h2>
         )}
 
         {description && (
-          <p className="text-lg md:text-xl text-neutral/90 dark:text-neutral/80 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-neutral/90 dark:text-neutral/80 mb-8 leading-relaxed max-w-3xl mx-auto transition-all duration-500 ease-out hover:text-neutral dark:hover:text-neutral">
             {description}
           </p>
         )}
 
         {buttonText && (
-          <div className="flex justify-center">
+          <div className="flex justify-center transition-all duration-500 ease-out hover:scale-105">
             <Button
               variant={buttonVariant}
               size="large"
