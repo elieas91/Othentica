@@ -7,9 +7,13 @@ const Features = () => {
     <section className="py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Features
-          </h2>
+            <div className="flex justify-center items-center mb-8">
+              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
+                <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral">
+                  Features
+                </h2>
+              </span>
+            </div>
         </div>
         <div className="relative z-10 flex flex-col justify-start h-[500px] overflow-y-auto top-[2rem]">
           <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">
@@ -35,9 +39,13 @@ const Benefits = () => {
     <section className="py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Benefits
-          </h2>
+            <div className="flex justify-center items-center mb-8">
+              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
+                <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral">
+                  Benefits
+                </h2>
+              </span>
+            </div>
         </div>
         <div className="relative z-10 flex flex-col justify-start h-[500px] overflow-y-auto top-[2rem]">
           <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">

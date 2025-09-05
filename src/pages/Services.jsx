@@ -73,6 +73,13 @@ const Services = () => {
                 </div>
                 </>
               }
+              {/* <div className="absolute w-full h-[24rem] z-[-10]">
+                <img
+                    src={FlameSolid}
+                    alt="Flame decoration"
+                    className={`absolute top-[-90rem] w-[50rem] h-[50rem] opacity-40 pointer-events-none object-contain right-[-18rem] -translate-x-[1/2]`}
+                  />
+              </div> */}
             </section>
           );
         })}

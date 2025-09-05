@@ -54,9 +54,10 @@ const Home = () => {
       <FeaturesAndBenefits />
       <Services />
       <Testimonials />
+      <Clients />
       <Security />
       <SocialMedia />
-      <Clients />
+      
     </div>
   );
 };

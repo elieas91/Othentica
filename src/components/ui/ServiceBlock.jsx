@@ -71,8 +71,8 @@ const ServiceBlock = ({ service, index }) => {
             </ul>
 
             {/* CTA Buttons */}
-            <div className="flex justify-start items-center gap-6 mt-8 px-10">
-              <div className="flex items-baseline gap-4">
+            <div className="flex justify-center items-center gap-6 mt-8 px-10">
+              <div className="flex items-baseline gap-16">
                 {/* Flame Button */}
                 <Tooltip
                   content={`Learn more about ${service.title}`}
