@@ -150,6 +150,9 @@ const Footer = () => {
               <Link to="/terms" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
                 Terms of Service
               </Link> */}
+              <p className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
+                Terms & Conditions
+              </p>
               <a
                 href="https://horiverde.com"
                 target="_blank"

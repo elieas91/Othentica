@@ -10,9 +10,9 @@ export const teamData = [
     subtitle: 'A Message from Our CEO',
     image: Hiba,
     socialMedia: {
-      instagram: '@Hiba',
-      facebook: 'Hiba',
-      linkedin: 'Hiba',
+      linkedin: 'https://www.linkedin.com/in/hiba-tarazi-45220410',
+      whatsapp: 'Hiba',
+      email: 'info@othentica-app.com',
     },
     flipped: false, // false = image on right, true = image on left
     description: [
@@ -36,9 +36,9 @@ export const teamData = [
     ],
     image: tarekImg,
     socialMedia: {
-      instagram: '@Tarek',
-      facebook: 'Tarek',
-      linkedin: 'Tarek',
+      linkedin: 'https://sa.linkedin.com/in/tarek-aad-bsn-pgdba-491b8771',
+      whatsapp: 'Tarek',
+      email: 'info@othentica-app.com',
     },
     flipped: true, // true = image on left, false = image on right
   },

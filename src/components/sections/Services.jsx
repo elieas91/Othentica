@@ -27,8 +27,9 @@ const Services = () => {
             Our Solutions
           </h2>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Discover our comprehensive approach to <span className="font-bold">"Corporate Health"</span> that
-            nurtures every aspect of your being.
+            Discover our comprehensive approach to{' '}
+            <span className="font-bold">Corporate Health</span> that nurtures
+            every aspect of your being.
           </p>
         </div>
 

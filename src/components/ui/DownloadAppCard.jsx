@@ -18,10 +18,10 @@ const DownloadAppCard = () => {
           The Othentica app is available on both the App Store and Google Play.
         </p>
         <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
-          Get it now and stay connected wherever you go!
+          Get it to begin your journey today!
         </p>
-        <Button 
-          variant="secondary" 
+        <Button
+          variant="secondary"
           size="large"
           onClick={() => window.open('/contact', '_blank')}
         >

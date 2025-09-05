@@ -71,57 +71,46 @@ const ServiceBlock = ({ service, index }) => {
             </ul>
 
             {/* CTA Buttons */}
-            <div className="flex justify-start items-center gap-6 mt-8 px-10">
-              <div className="flex items-baseline gap-4">
-                                 {/* Flame Button */}
-                 <Tooltip content={`Learn more about ${service.title}`} position="top">
-                   <button
-                     onClick={openModal}
-                     className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
-                     aria-label={`Learn more about ${service.title}`}
-                   >
-                  <div className="relative group cursor-pointer">
-                    <div className="w-16 h-20 lg:w-20 lg:h-16 relative">
-                      <img
-                        src={Flame}
-                        alt="Learn More"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
+            <div className="flex justify-center items-center gap-6 mt-8 px-10">
+              <div className="flex items-baseline gap-16">
+                {/* Flame Button */}
+                <Tooltip
+                  content={`Learn more about ${service.title}`}
+                  position="top"
+                >
+                  <button
+                    onClick={openModal}
+                    className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
+                    aria-label={`Learn more about ${service.title}`}
+                  >
+                    <div className="relative group cursor-pointer">
+                      <div className="w-16 h-20 lg:w-20 lg:h-16 relative">
+                        <img
+                          src={Flame}
+                          alt="Learn More"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
 
-                    {/* Static glow effects - no animations */}
-                    {/* <div
+                      {/* Static glow effects - no animations */}
+                      {/* <div
                       className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full opacity-60 blur-sm"
                     ></div> */}
-                    <div
-                      className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"
-                    ></div>
+                      <div className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"></div>
 
-                    <div
-                      className="absolute -top-2 -left-1 w-18 h-22 lg:w-22 lg:h-26 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"
-                    ></div>
-                    <div
-                      className="absolute -top-1 -right-1 w-16 h-20 lg:w-18 lg:h-22 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"
-                    ></div>
+                      <div className="absolute -top-2 -left-1 w-18 h-22 lg:w-22 lg:h-26 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"></div>
+                      <div className="absolute -top-1 -right-1 w-16 h-20 lg:w-18 lg:h-22 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"></div>
 
-                    <div
-                      className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"
-                    ></div>
-                    <div
-                      className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"
-                    ></div>
-                                         <div
-                       className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"
-                     ></div>
-                   </div>
-                   </button>
-                 </Tooltip>
+                      <div className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"></div>
+                      <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"></div>
+                      <div className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"></div>
+                    </div>
+                  </button>
+                </Tooltip>
 
                 {/* WhatsApp Button */}
                 <div className="relative group cursor-pointer transition-transform hover:scale-105">
-                  <WhatsAppButton 
-                    className="w-16 h-16 lg:w-12 lg:h-12"
-                  />
+                  <WhatsAppButton className="w-16 h-16 lg:w-12 lg:h-12" />
                 </div>
               </div>
             </div>
@@ -132,7 +121,7 @@ const ServiceBlock = ({ service, index }) => {
       {/* Service Info Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal} title={service.title}>
         <div className="space-y-6">
-          <div className="text-center mb-6">
+          <div className=" mb-6">
             <div className="flex items-center justify-center mb-4">
               <img
                 src={service.icon}
@@ -143,24 +132,28 @@ const ServiceBlock = ({ service, index }) => {
                 {service.title}
               </h3>
             </div>
+            <p className="text-lg text-primary dark:text-gray-200 leading-relaxed mb-4">
+              {service.modalDescription1}
+            </p>
             <p className="text-lg text-primary dark:text-gray-200 leading-relaxed">
-              {service.description}
+              {service.modalDescription2 ?? ''}
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="text-xl font-semibold text-primary dark:text-neutral mb-3">
-              Key Features:
-            </h4>
-            <div className="space-y-3">
-              {service.descriptionBulletPoints.map((point, index) => (
-                <div key={index} className="flex items-start">
-                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                  <span className="text-primary dark:text-gray-200">{point}</span>
-                </div>
-              ))}
+          {service.modalDescriptionBulletPoints != null && (
+            <div className="space-y-4">
+              <div className="space-y-3">
+                {service.modalDescriptionBulletPoints.map((point, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <span className="text-primary dark:text-gray-200">
+                      {point}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
             <p className="text-center italic text-orange-700 dark:text-orange-300 font-medium text-lg">
@@ -172,8 +165,8 @@ const ServiceBlock = ({ service, index }) => {
             <p className="text-primary dark:text-gray-200 mb-4">
               Ready to get started with {service.title}?
             </p>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               onClick={() => {
                 closeModal();
                 window.location.href = '/contact';

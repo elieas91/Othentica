@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import WhatsAppButton from './WhatsappButton';
 import apiService from '../../services/api';
 import Swal from 'sweetalert2';
+import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
@@ -44,7 +45,7 @@ const ContactUs = () => {
           timerProgressBar: true,
           showConfirmButton: true,
           allowOutsideClick: false,
-          allowEscapeKey: false
+          allowEscapeKey: false,
         });
         setForm({ name: '', email: '', phone: '', subject: '', message: '' });
       } else {
@@ -54,7 +55,7 @@ const ContactUs = () => {
           text: 'Sorry, there was an error sending your message. Please try again later.',
           icon: 'error',
           confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ef4444'
+          confirmButtonColor: '#ef4444',
         });
         console.error('Error:', data.error);
       }
@@ -65,7 +66,7 @@ const ContactUs = () => {
         text: 'Please check your internet connection and try again.',
         icon: 'error',
         confirmButtonText: 'Try Again',
-        confirmButtonColor: '#ef4444'
+        confirmButtonColor: '#ef4444',
       });
       console.error('Network error:', error);
     } finally {
@@ -80,7 +81,7 @@ const ContactUs = () => {
         <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
           Send us a Message
         </h2>
-        
+
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -147,9 +148,24 @@ const ContactUs = () => {
               }`}
             >
               {isSubmitting ? (
-                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
               ) : (
                 <svg
@@ -174,53 +190,19 @@ const ContactUs = () => {
         <div>
           <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
           <ul className="space-y-4">
-            <li className="flex items-center">
-              <span className="mr-3">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M4 4h16v16H4z" />
-                </svg>
-              </span>
-              360 King Street
+            <li className="flex items-center gap-x-4">
+              <MapPinIcon className="w-6" />
+              Amber Gem Tower, Mezzanine Floor, Sheikh
               <br />
-              Feasterville Trevosa, PA 19053
+              Khalifa Street, Ajman, United Arab Emirates
             </li>
-            <li className="flex items-center">
-              <span className="mr-3">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13 1.13.37 2.24.72 3.32a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c1.08.35 2.19.59 3.32.72A2 2 0 0 1 22 16.92z" />
-                </svg>
-              </span>
-              (800) 900-200-300
+            <li className="flex items-center gap-x-4">
+              <PhoneIcon className="w-6" />
+              (971) 503-680-320
             </li>
-            <li className="flex items-center">
-              <span className="mr-3">
-                <svg
-                  width="20"
-                  height="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M4 4h16v16H4z" />
-                  <path d="M22 6l-10 7L2 6" />
-                </svg>
-              </span>
-              info@email.com
+            <li className="flex items-center gap-x-4">
+              <InboxIcon className="w-6" />
+              info@othentica-app.com
             </li>
           </ul>
         </div>
