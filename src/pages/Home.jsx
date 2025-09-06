@@ -11,7 +11,27 @@ import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';
 import FeaturesAndBenefits from '../components/sections/FeaturesAndBenefits';
 
+// Hook to detect mobile devices
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
+};
+
 const Home = () => {
+  // Mobile detection
+  const isMobile = useIsMobile();
+  
   // Animation state management
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [isHeroVisible, setIsHeroVisible] = useState(false);
@@ -27,8 +47,13 @@ const Home = () => {
   const clientsRef = useRef(null);
   const securityRef = useRef(null);
 
-  // Intersection Observer for Hero section
+  // Intersection Observer for Hero section (desktop only)
   useEffect(() => {
+    if (isMobile) {
+      setIsHeroVisible(true);
+      return;
+    }
+
     const currentRef = heroRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -51,10 +76,15 @@ const Home = () => {
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [isMobile]);
 
-  // Individual intersection observers for each section
+  // Individual intersection observers for each section (desktop only)
   useEffect(() => {
+    if (isMobile) {
+      setVisibleSections(new Set(['testimonials', 'philosophy', 'mobileShowcase', 'features', 'services', 'secondTestimonials', 'clients', 'security']));
+      return;
+    }
+
     const currentRef = testimonialsRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -77,182 +107,48 @@ const Home = () => {
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [isMobile]);
 
+  // Individual intersection observers for desktop only
   useEffect(() => {
-    const currentRef = philosophyRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'philosophy']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
+    if (isMobile) return;
 
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    const observers = [];
+    const refs = [
+      { ref: philosophyRef, key: 'philosophy' },
+      { ref: mobileShowcaseRef, key: 'mobileShowcase' },
+      { ref: featuresRef, key: 'features' },
+      { ref: servicesRef, key: 'services' },
+      { ref: secondTestimonialsRef, key: 'secondTestimonials' },
+      { ref: clientsRef, key: 'clients' },
+      { ref: securityRef, key: 'security' }
+    ];
+
+    refs.forEach(({ ref, key }) => {
+      const currentRef = ref.current;
+      if (currentRef) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setVisibleSections(prev => new Set([...prev, key]));
+            }
+          },
+          {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+          }
+        );
+        observer.observe(currentRef);
+        observers.push({ observer, ref: currentRef });
+      }
+    });
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      observers.forEach(({ observer, ref }) => {
+        observer.unobserve(ref);
+      });
     };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = mobileShowcaseRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'mobileShowcase']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = featuresRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'features']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = servicesRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'services']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = secondTestimonialsRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'secondTestimonials']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = clientsRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'clients']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const currentRef = securityRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => new Set([...prev, 'security']));
-        }
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
+  }, [isMobile]);
 
   // SEO data for homepage
   const seoData = {
@@ -290,8 +186,8 @@ const Home = () => {
     <div className="Home">
       <SEO {...seoData} />
       
-      {/* Hero Section with Animation */}
-      <div ref={heroRef} className={`transition-all duration-1000 ease-out ${
+      {/* Hero Section */}
+      <div ref={heroRef} className={isMobile ? '' : `transition-all duration-1000 ease-out ${
         isHeroVisible 
           ? 'opacity-100 transform translate-y-0' 
           : 'opacity-0 transform translate-y-8'
@@ -299,8 +195,8 @@ const Home = () => {
         <Hero />
       </div>
 
-      {/* Testimonials Section with Animation */}
-      <div ref={testimonialsRef} className={`transition-all duration-1000 ease-out delay-200 hover:scale-[1.01] ${
+      {/* Testimonials Section */}
+      <div ref={testimonialsRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-200 hover:scale-[1.01] ${
         visibleSections.has('testimonials')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -308,8 +204,8 @@ const Home = () => {
         <Testimonials />
       </div>
 
-      {/* Philosophy Section with Animation */}
-      <div ref={philosophyRef} className={`transition-all duration-1000 ease-out delay-300 hover:scale-[1.01] ${
+      {/* Philosophy Section */}
+      <div ref={philosophyRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-300 hover:scale-[1.01] ${
         visibleSections.has('philosophy')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -317,8 +213,8 @@ const Home = () => {
         <Philosophy />
       </div>
 
-      {/* Mobile Showcase Section with Animation */}
-      <div ref={mobileShowcaseRef} className={`transition-all duration-1000 ease-out delay-400 hover:scale-[1.01] ${
+      {/* Mobile Showcase Section */}
+      <div ref={mobileShowcaseRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-400 hover:scale-[1.01] ${
         visibleSections.has('mobileShowcase')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -326,8 +222,8 @@ const Home = () => {
         <MobileShowcase />
       </div>
 
-      {/* Features and Benefits Section with Animation */}
-      <div ref={featuresRef} className={`transition-all duration-1000 ease-out delay-500 hover:scale-[1.01] ${
+      {/* Features and Benefits Section */}
+      <div ref={featuresRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-500 hover:scale-[1.01] ${
         visibleSections.has('features')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -335,8 +231,8 @@ const Home = () => {
         <FeaturesAndBenefits />
       </div>
 
-      {/* Services Section with Animation */}
-      <div ref={servicesRef} className={`transition-all duration-1000 ease-out delay-600 hover:scale-[1.01] ${
+      {/* Services Section */}
+      <div ref={servicesRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-600 hover:scale-[1.01] ${
         visibleSections.has('services')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -344,8 +240,8 @@ const Home = () => {
         <Services />
       </div>
 
-      {/* Second Testimonials Section with Animation */}
-      <div ref={secondTestimonialsRef} className={`transition-all duration-1000 ease-out delay-700 hover:scale-[1.01] ${
+      {/* Second Testimonials Section */}
+      <div ref={secondTestimonialsRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-700 hover:scale-[1.01] ${
         visibleSections.has('secondTestimonials')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -353,8 +249,8 @@ const Home = () => {
         <Testimonials />
       </div>
 
-      {/* Clients Section with Animation */}
-      <div ref={clientsRef} className={`transition-all duration-1000 ease-out delay-800 hover:scale-[1.01] ${
+      {/* Clients Section */}
+      <div ref={clientsRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-800 hover:scale-[1.01] ${
         visibleSections.has('clients')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
@@ -362,8 +258,8 @@ const Home = () => {
         <Clients />
       </div>
 
-      {/* Security Section with Animation */}
-      <div ref={securityRef} className={`transition-all duration-1000 ease-out delay-900 hover:scale-[1.01] ${
+      {/* Security Section */}
+      <div ref={securityRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-900 hover:scale-[1.01] ${
         visibleSections.has('security')
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'

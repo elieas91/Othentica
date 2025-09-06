@@ -26,7 +26,7 @@ const MeetTheFounders = () => {
             duration={800}
           >
             <div
-              className={`flex flex-row items-center gap-10 px-4 mx-auto pt-10 ${
+              className={`flex flex-col md:flex-row items-center gap-10 px-4 mx-auto pt-10 ${
                 index % 2 !== 0 ? 'p-0' : 'pt-20'
               } ${
                 index % 2 === 0 ? ' bg-white mb-16 p-4' : 'bg-white'
@@ -34,15 +34,15 @@ const MeetTheFounders = () => {
             >
             {/* Text Content - Position changes based on flipped property */}
             <div
-              className={`flex flex-col w-1/2 ${
-                member.flipped ? 'order-2' : 'order-1'
+              className={`flex flex-col w-full md:w-1/2 ${
+                member.flipped ? 'order-1 md:order-2' : 'order-2 md:order-1'
               }`}
             >
-              <h3 className="text-5xl font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
+              <h3 className="text-5xl text-center md:text-left font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
                 {member.subtitle}
               </h3>
               {/* Name in outlined box */}
-              <div className="self-start border-2 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
+              <div className="self-center md:self-start border-2 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
                 <span className="text-xl font-bold text-primary dark:text-neutral">
                   {member.name}
                 </span>
@@ -70,8 +70,8 @@ const MeetTheFounders = () => {
             </div>
 
             {/* Image Section - Position changes based on flipped property */}
-            <div className={`w-1/2 ${member.flipped ? 'order-1' : 'order-2'}`}>
-              <div className="relative h-fit overflow-hidden rounded-lg flex justify-center items-center">
+            <div className={`w-full md:w-1/2 ${member.flipped ? 'order-1' : 'order-2'}`}>
+              <div className="relative h-fit overflow-visible rounded-lg flex justify-center items-center">
                 <img
                   src={member.image}
                   alt={member.name}
@@ -87,8 +87,10 @@ const MeetTheFounders = () => {
                 />
                 {/* Social Media Buttons */}
                 <div
-                  className={`absolute top-1/2 transform -translate-y-[0%] space-y-3 ${
-                    member.flipped ? 'left-[10%]' : 'right-0 -translate-x-1/2'
+                  className={`absolute top-1/2 transform -translate-y-1/2 space-y-3 ${
+                    member.flipped 
+                      ? 'left-0 md:left-[10%] -translate-x-2 md:translate-x-0' 
+                      : 'right-0 -translate-x-2 md:translate-x-1/2'
                   }`}
                 >
                   {/* LinkedIn Button */}
@@ -96,10 +98,10 @@ const MeetTheFounders = () => {
                     href={member.socialMedia.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-36 h-12 bg-[#007ebb] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2"
+                    className="w-28 md:w-36 h-10 md:h-12 bg-[#007ebb] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-1 md:gap-x-2"
                   >
-                    <img src={LinkedInIcon} className="w-8" />
-                    <span className="text-white font-semibold text-sm">
+                    <img src={LinkedInIcon} className="w-6 md:w-8" />
+                    <span className="text-white font-semibold text-xs md:text-sm">
                       LinkedIn
                     </span>
                   </a>
@@ -111,10 +113,10 @@ const MeetTheFounders = () => {
                     href={`mailto:${member.socialMedia.email}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-36 h-12 bg-[#d77644] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-2"
+                    className="w-28 md:w-36 h-10 md:h-12 bg-[#d77644] rounded-lg flex items-center justify-start cursor-pointer hover:scale-105 transition-transform shadow-lg px-2 gap-x-1 md:gap-x-2"
                   >
-                    <img src={EmailIcon} className="w-8" />
-                    <span className="text-white font-semibold text-sm">
+                    <img src={EmailIcon} className="w-6 md:w-8" />
+                    <span className="text-white font-semibold text-xs md:text-sm">
                       Email
                     </span>
                   </a>

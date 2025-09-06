@@ -6,7 +6,6 @@ import Testimonial3 from '../../assets/img/testimonials/testimonial-3.webp';
 import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
 import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
 import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
-import Button from '../ui/Button';
 import {
   testimonialsData,
   testimonialCategories,
@@ -108,7 +107,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
-    <section className="py-16 px-8 lg:px-16 bg-white overflow-hidden">
+    <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
       {/* Subtle background pattern overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
@@ -121,7 +120,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         >
           {/* Left Side - Testimonial with Carousel */}
           <div className="text-left">
-            <h2 className="text-4xl lg:text-5xl font-bold text-primary mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
               Testimonials
             </h2>
 
@@ -135,16 +134,16 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             )}
 
             {/* Carousel Content */}
-            <div className="min-h-[200px] flex flex-col justify-center">
+            <div className="min-h-[200px] md:w-full flex flex-col justify-center">
               <blockquote
-                className="text-xl lg:text-2xl text-primary mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
+                className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
                 style={{ display: 'inline' }}
               >
                 "{isExpanded ? currentTestimonial.quote : truncated}"
                 {needsTruncation && (
                   <button
                     onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
-                    className="ml-2 text-primary/80 hover:text-primary font-medium text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
+                    className="ml-2 text-primary/80 hover:text-primary font-medium text-md md:text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
                     style={{ display: 'inline', verticalAlign: 'baseline' }}
                   >
                     {isExpanded ? 'Read Less' : 'Read More'}
@@ -152,27 +151,27 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                 )}
               </blockquote>
 
-              <cite className="text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
-                <span className="flex items-center gap-3">
+              <cite className="text-base sm:text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
+                <span className="flex items-center gap-3 mb-4 sm:mb-0">
                   <img
                     src={getTestimonialImagePath(currentTestimonial.image)}
                     alt={currentTestimonial.author}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-primary/30 shadow"
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
                   />
                   <span>– {currentTestimonial.author}</span>
                 </span>
-                <Button
+                {/* <Button
                   variant="secondary"
-                  className="mt-8"
+                  className="mt-4 sm:mt-8 w-full sm:w-auto"
                   onClick={() => setShowForm(true)}
                 >
                   Add your Testimonial
-                </Button>
+                </Button> */}
               </cite>
             </div>
 
             {/* Carousel Indicators */}
-            <div className="flex space-x-3 mt-8">
+            <div className="flex flex-wrap justify-center md:justify-start space-x-3 mt-8">
               {filteredTestimonials.map((_, index) => (
                 <button
                   key={index}
@@ -196,7 +195,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
           {/* Right Side - Two Images from Different Categories */}
           {showPics && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 lg:mt-0">
               {categoriesForImages.map((cat, idx) => {
                 // Pick the first image from each category
                 const imageName = cat.images[0];

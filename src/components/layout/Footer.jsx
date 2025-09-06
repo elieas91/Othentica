@@ -12,19 +12,19 @@ const Footer = () => {
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 text-center md:text-left">
             {/* <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3> */}
             <img
               src={WhiteLogo}
               alt="Othentica Logo"
-              className="h-10 w-auto mb-6"
+              className="h-10 w-auto mb-6 mx-auto md:mx-0"
             />
             <p className="text-gray-100 mb-6 font-bold leading-relaxed">
               Your map to clarity, resilience, and growth.
             </p>
             
             {/* App Store Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-center items-center md:items-start md:justify-start">
               <Link
                 to="#"
                 target="_blank"
@@ -53,7 +53,7 @@ const Footer = () => {
               </Link>
             </div>
             
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center md:justify-start">
               <a
                 href="https://linkedin.com/company/othentica"
                 target="_blank"
@@ -97,7 +97,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="text-lg font-bold text-neutral mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
@@ -116,7 +116,7 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div>
+          <div className="text-center md:text-left">
             <h3 className="text-lg font-bold text-neutral mb-4">Services</h3>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
@@ -139,11 +139,11 @@ const Footer = () => {
         <div className="border-t border-white/20 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0">
-              <p className="text-sm text-gray-200">
+              <p className="text-sm text-gray-200 text-center md:text-left">
                 © 2025 Othentica. All rights reserved.
               </p>
             </div>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-center md:text-left">
               <Link to="/privacy" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
                 Privacy Policy
               </Link>

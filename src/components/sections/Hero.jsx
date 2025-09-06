@@ -142,7 +142,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative min-h-[90vh] flex items-center justify-start px-8 lg:px-16 overflow-hidden"
+      className="relative min-h-[90vh] sm:min-h-[85vh] flex items-center justify-start px-4 sm:px-8 lg:px-16 overflow-hidden"
       style={{
         backgroundImage: `url(${HeroBg3})`,
         backgroundSize: 'cover',
@@ -152,16 +152,16 @@ const Hero = () => {
     >
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
-        {/* O Logo with Scale Animation */}
-        <div className="absolute inset-0 flex items-start justify-end left-[25rem] animate-float">
+        {/* O Logo with Scale Animation - Hidden on mobile */}
+        <div className="absolute inset-0 flex items-start justify-end left-[25rem] animate-float hidden sm:flex">
           <img
             src={Logo_o_white}
             alt="Othentica Logo"
             className="w-1/3 h-auto"
           />
         </div>
-        {/* Multiple Animated Flames */}
-        <div className="absolute inset-0 w-full h-full translate-x-20">
+        {/* Multiple Animated Flames - Hidden on mobile */}
+        <div className="absolute inset-0 w-full h-full translate-x-20 hidden sm:block">
           {flames.map((flame) => (
             <div
               key={flame.id}
@@ -182,22 +182,23 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-xl">
-        <h1 className="capitalize text-5xl lg:text-7xl font-bold text-white dark:text-white mb-8 leading-tight">
+      <div className="relative z-10 max-w-xl w-full">
+        <h1 className="capitalize text-3xl sm:text-5xl lg:text-7xl font-bold text-white dark:text-white mb-6 sm:mb-8 leading-tight">
           Step into your authentic self
         </h1>
-        <p className="text-xl lg:text-2xl text-white dark:text-gray-200 mb-10 leading-relaxed max-w-3xl">
+        <p className="text-lg sm:text-xl lg:text-2xl text-white dark:text-gray-200 mb-8 sm:mb-10 leading-relaxed max-w-3xl">
           Wellness is optional. Health is essential.
           <br />
           Corporate health is the evolution.
           <br />
           It's the foundation of energy, resilience, and performance.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link to="/contact" target="_blank">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Link to="/contact" target="_blank" className="w-full sm:w-auto">
             <Button
               variant="accent"
-              size="large">
+              size="large"
+              className="w-full sm:w-auto">
               Onboard your Team
             </Button>
           </Link>
@@ -205,6 +206,7 @@ const Hero = () => {
             variant="secondary"
             size="large"
             onClick={handleScrollToPhilosophy}
+            className="w-full sm:w-auto"
           >
             What is Othentica
           </Button>

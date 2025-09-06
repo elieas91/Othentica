@@ -132,7 +132,7 @@ const About = () => {
           imageOffset="-150%"
           overlayOpacity="bg-black/20"
           speed={0.3}
-          className="mt-14"
+          className="mt-14 hidden md:block"
         ></ParallaxSection>
       </AnimateOnScroll>
 

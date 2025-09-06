@@ -43,9 +43,13 @@ const CarouselMVV = ({ className = '' }) => {
       hasInitialized.current = true;
       
       // Enable transitions after a longer delay to ensure component is stable
+      // Shorter delay on mobile for better performance
+      const isMobile = window.innerWidth <= 768;
+      const delay = isMobile ? 200 : 500;
+      
       const timer = setTimeout(() => {
         setIsLoaded(true);
-      }, 500);
+      }, delay);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -91,8 +95,13 @@ const CarouselMVV = ({ className = '' }) => {
     setCurrentIndex(index);
   };
 
-  // Mouse wheel navigation with debouncing and threshold
+  // Mouse wheel navigation with debouncing and threshold (desktop only)
   const handleWheel = (e) => {
+    // Disable wheel navigation on mobile
+    if (window.innerWidth <= 768) {
+      return;
+    }
+    
     e.preventDefault();
     
     // Clear existing timeout
@@ -123,7 +132,7 @@ const CarouselMVV = ({ className = '' }) => {
     }, 150);
   };
 
-  // Touch/Mouse drag handling
+  // Touch/Mouse drag handling - optimized for mobile
   const handleStart = (e) => {
     setIsDragging(true);
     setStartX(e.type === 'mousedown' ? e.clientX : e.touches[0].clientX);
@@ -143,8 +152,11 @@ const CarouselMVV = ({ className = '' }) => {
     const endX = e.type === 'mouseup' ? e.clientX : e.changedTouches[0].clientX;
     const diff = startX - endX;
     
-    // Increased threshold for more intentional drags
-    if (Math.abs(diff) > 80) {
+    // Lower threshold on mobile for better touch responsiveness
+    const isMobile = window.innerWidth <= 768;
+    const threshold = isMobile ? 50 : 80;
+    
+    if (Math.abs(diff) > threshold) {
       if (diff > 0) {
         goToNext();
       } else {
@@ -219,12 +231,24 @@ const CarouselMVV = ({ className = '' }) => {
       </div>
 
       {/* Navigation buttons */}
-      <button className="carousel-3d-nav carousel-3d-prev" onClick={goToPrev}>
-        <img src={CompassIcon} alt="Previous" className="carousel-3d-nav-icon" />
-      </button>
-      <button className="carousel-3d-nav carousel-3d-next" onClick={goToNext}>
-        <img src={CompassIcon} alt="Next" className="carousel-3d-nav-icon" />
-      </button>
+      <div className="desktop-nav">
+        <button className="carousel-3d-nav carousel-3d-prev" onClick={goToPrev}>
+          <img src={CompassIcon} alt="Previous" className="carousel-3d-nav-icon" />
+        </button>
+        <button className="carousel-3d-nav carousel-3d-next" onClick={goToNext}>
+          <img src={CompassIcon} alt="Next" className="carousel-3d-nav-icon" />
+        </button>
+      </div>
+
+      {/* Mobile navigation container */}
+      <div className="carousel-3d-nav-container">
+        <button className="carousel-3d-nav carousel-3d-prev mobile-nav" onClick={goToPrev}>
+          <img src={CompassIcon} alt="Previous" className="carousel-3d-nav-icon" />
+        </button>
+        <button className="carousel-3d-nav carousel-3d-next mobile-nav" onClick={goToNext}>
+          <img src={CompassIcon} alt="Next" className="carousel-3d-nav-icon" />
+        </button>
+      </div>
 
       {/* Thumbnail indicators */}
       <div className="carousel-3d-thumbnails">
@@ -233,7 +257,7 @@ const CarouselMVV = ({ className = '' }) => {
           return (
             <button
               key={slide.id}
-              className={`carousel-3d-thumbnail ${index === normalizedIndex ? 'active' : ''}`}
+              className={`hidden md:block carousel-3d-thumbnail ${index === normalizedIndex ? 'active' : ''}`}
               onClick={() => goToSlide(index)}
             >
               <img src={slide.image} alt={slide.title} />

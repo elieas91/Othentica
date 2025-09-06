@@ -62,7 +62,7 @@ const MobileShowcase = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <DownloadAppCard />
           {/* Right Mobile Phone */}
-          <div className="relative flex justify-center">
+          <div className="relative flex justify-start w-1/2 md:w-full md:justify-center">
             {/* Background Phone Frame - larger and angled */}
             <div
               className="relative transform -rotate-12 scale-75"
