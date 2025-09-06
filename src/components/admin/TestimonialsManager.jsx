@@ -1,33 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
   TrashIcon, 
   EyeIcon,
-  XMarkIcon 
+  XMarkIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
-import { testimonialsData, testimonialCategories } from '../../data/testimonialsData';
+import apiService from '../../services/api';
 
 const TestimonialsManager = () => {
-  const [testimonials, setTestimonials] = useState(testimonialsData);
+  const [testimonials, setTestimonials] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [stats, setStats] = useState({});
   const [formData, setFormData] = useState({
-    quote: '',
-    author: '',
-    categoryId: '',
-    image: 'testimonial-1'
+    name: '',
+    description: '',
+    image: '',
+    status: 'pending'
   });
+
+  // Load testimonials on component mount
+  useEffect(() => {
+    loadTestimonials();
+    loadStats();
+  }, [loadTestimonials]);
+
+  // Load testimonials based on status filter
+  useEffect(() => {
+    loadTestimonials();
+  }, [statusFilter, loadTestimonials]);
 
   // Reset form when opening
   useEffect(() => {
     if (showForm && !editingTestimonial) {
       setFormData({
-        quote: '',
-        author: '',
-        categoryId: '',
-        image: 'testimonial-1'
+        name: '',
+        description: '',
+        image: '',
+        status: 'pending'
       });
     }
   }, [showForm, editingTestimonial]);
@@ -38,14 +56,53 @@ const TestimonialsManager = () => {
       const testimonial = testimonials.find(t => t.id === editingTestimonial);
       if (testimonial) {
         setFormData({
-          quote: testimonial.quote,
-          author: testimonial.author,
-          categoryId: testimonial.categoryId,
-          image: testimonial.image || 'testimonial-1'
+          name: testimonial.name,
+          description: testimonial.description,
+          image: testimonial.image || '',
+          status: testimonial.status || 'pending'
         });
       }
     }
   }, [editingTestimonial, testimonials]);
+
+  const loadTestimonials = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      let response;
+      if (statusFilter === 'all') {
+        response = await apiService.getTestimonials();
+      } else {
+        response = await apiService.getTestimonialsByStatus(statusFilter);
+      }
+      
+      if (response.success) {
+        setTestimonials(response.data);
+      } else {
+        setError(response.message || 'Failed to load testimonials');
+      }
+    } catch (err) {
+      setError('Failed to load testimonials: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [statusFilter]);
+
+  const loadStats = async () => {
+    try {
+      const response = await apiService.getTestimonialsStats();
+      if (response.success) {
+        const statsObj = {};
+        response.data.forEach(stat => {
+          statsObj[stat.status] = stat.count;
+        });
+        setStats(statsObj);
+      }
+    } catch (err) {
+      console.error('Failed to load stats:', err);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,29 +112,39 @@ const TestimonialsManager = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (editingTestimonial) {
-      // Update existing testimonial
-      setTestimonials(prev => prev.map(t => 
-        t.id === editingTestimonial 
-          ? { ...t, ...formData }
-          : t
-      ));
-    } else {
-      // Add new testimonial
-      const newTestimonial = {
-        id: Math.max(...testimonials.map(t => t.id)) + 1,
-        ...formData
-      };
-      setTestimonials(prev => [...prev, newTestimonial]);
+    try {
+      setLoading(true);
+      setError(null);
+      
+      let response;
+      if (editingTestimonial) {
+        // Update existing testimonial
+        response = await apiService.updateTestimonial(editingTestimonial, formData);
+      } else {
+        // Create new testimonial
+        response = await apiService.createTestimonial(formData);
+      }
+      
+      if (response.success) {
+        // Reload testimonials to get updated data
+        await loadTestimonials();
+        await loadStats();
+        
+        // Reset form and close modal
+        setFormData({ name: '', description: '', image: '', status: 'pending' });
+        setShowForm(false);
+        setEditingTestimonial(null);
+      } else {
+        setError(response.message || 'Failed to save testimonial');
+      }
+    } catch (err) {
+      setError('Failed to save testimonial: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    // Reset form and close modal
-    setFormData({ quote: '', author: '', categoryId: '', image: 'testimonial-1' });
-    setShowForm(false);
-    setEditingTestimonial(null);
   };
 
   const handleEdit = (id) => {
@@ -85,9 +152,47 @@ const TestimonialsManager = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this testimonial?')) {
-      setTestimonials(prev => prev.filter(t => t.id !== id));
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await apiService.deleteTestimonial(id);
+        
+        if (response.success) {
+          // Reload testimonials to get updated data
+          await loadTestimonials();
+          await loadStats();
+        } else {
+          setError(response.message || 'Failed to delete testimonial');
+        }
+      } catch (err) {
+        setError('Failed to delete testimonial: ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await apiService.updateTestimonialStatus(id, newStatus);
+      
+      if (response.success) {
+        // Reload testimonials to get updated data
+        await loadTestimonials();
+        await loadStats();
+      } else {
+        setError(response.message || 'Failed to update testimonial status');
+      }
+    } catch (err) {
+      setError('Failed to update testimonial status: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,9 +206,29 @@ const TestimonialsManager = () => {
     setViewingTestimonial(null);
   };
 
-  const getCategoryName = (categoryId) => {
-    const category = testimonialCategories.find(cat => cat.id === categoryId);
-    return category ? category.name : 'Unknown';
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'approved':
+        return <CheckCircleIcon className="w-4 h-4 text-green-500" />;
+      case 'rejected':
+        return <XCircleIcon className="w-4 h-4 text-red-500" />;
+      case 'pending':
+      default:
+        return <ClockIcon className="w-4 h-4 text-yellow-500" />;
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'approved':
+        return 'bg-green-100 text-green-800';
+      case 'rejected':
+        return 'bg-red-100 text-red-800';
+      case 'pending':
+      default:
+        return 'bg-yellow-100 text-yellow-800';
+    }
   };
 
   return (
@@ -124,63 +249,179 @@ const TestimonialsManager = () => {
         </button>
       </div>
 
-      {/* Testimonials List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="px-3 py-1 bg-gradient-to-r from-secondary to-orange-500 text-white text-xs font-semibold rounded-full">
-                      {getCategoryName(testimonial.categoryId)}
-                    </span>
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                      ID: {testimonial.id}
-                    </span>
-                  </div>
-                  <h4 className="text-lg font-bold text-primary font-poppins mb-2">
-                    {testimonial.author}
-                  </h4>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                    "{testimonial.quote.length > 120 
-                      ? testimonial.quote.substring(0, 120) + '...' 
-                      : testimonial.quote}"
-                  </p>
-                </div>
+      {/* Stats and Filters */}
+      <div className="mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-gradient-to-br from-white to-accent/10 rounded-xl p-4 border border-accent/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total</p>
+                <p className="text-2xl font-bold text-primary">{testimonials.length}</p>
               </div>
-              <div className="flex items-center justify-between pt-4 border-t border-accent/20">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleView(testimonial)}
-                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                    title="View"
-                  >
-                    <EyeIcon className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleEdit(testimonial.id)}
-                    className="p-2 text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all duration-200"
-                    title="Edit"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(testimonial.id)}
-                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                    title="Delete"
-                  >
-                    <TrashIcon className="w-4 h-4" />
-                  </button>
-                </div>
-                <div className="text-xs text-gray-400">
-                  {testimonial.image || 'testimonial-1'}
-                </div>
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <ClockIcon className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </div>
-        ))}
+          <div className="bg-gradient-to-br from-white to-accent/10 rounded-xl p-4 border border-accent/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Pending</p>
+                <p className="text-2xl font-bold text-yellow-600">{stats.pending || 0}</p>
+              </div>
+              <div className="p-3 bg-yellow-100 rounded-lg">
+                <ClockIcon className="w-6 h-6 text-yellow-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-white to-accent/10 rounded-xl p-4 border border-accent/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Approved</p>
+                <p className="text-2xl font-bold text-green-600">{stats.approved || 0}</p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-lg">
+                <CheckCircleIcon className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-br from-white to-accent/10 rounded-xl p-4 border border-accent/20">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Rejected</p>
+                <p className="text-2xl font-bold text-red-600">{stats.rejected || 0}</p>
+              </div>
+              <div className="p-3 bg-red-100 rounded-lg">
+                <XCircleIcon className="w-6 h-6 text-red-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Status Filter */}
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-semibold text-primary">Filter by status:</label>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
+          >
+            <option value="all">All Testimonials</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+          <span className="ml-2 text-gray-600">Loading testimonials...</span>
+        </div>
+      )}
+
+      {/* Testimonials List */}
+      {!loading && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full flex items-center gap-1 ${getStatusColor(testimonial.status)}`}>
+                        {getStatusIcon(testimonial.status)}
+                        {testimonial.status.charAt(0).toUpperCase() + testimonial.status.slice(1)}
+                      </span>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                        ID: {testimonial.id}
+                      </span>
+                    </div>
+                    <h4 className="text-lg font-bold text-primary font-poppins mb-2">
+                      {testimonial.name}
+                    </h4>
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                      "{testimonial.description.length > 120 
+                        ? testimonial.description.substring(0, 120) + '...' 
+                        : testimonial.description}"
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-accent/20">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleView(testimonial)}
+                      className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                      title="View"
+                    >
+                      <EyeIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleEdit(testimonial.id)}
+                      className="p-2 text-gray-500 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-all duration-200"
+                      title="Edit"
+                    >
+                      <PencilIcon className="w-4 h-4" />
+                    </button>
+                    {testimonial.status === 'pending' && (
+                      <>
+                        <button
+                          onClick={() => handleStatusChange(testimonial.id, 'approved')}
+                          className="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200"
+                          title="Approve"
+                        >
+                          <CheckCircleIcon className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleStatusChange(testimonial.id, 'rejected')}
+                          className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                          title="Reject"
+                        >
+                          <XCircleIcon className="w-4 h-4" />
+                        </button>
+                      </>
+                    )}
+                    <button
+                      onClick={() => handleDelete(testimonial.id)}
+                      className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                      title="Delete"
+                    >
+                      <TrashIcon className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {testimonial.image || 'No image'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!loading && testimonials.length === 0 && (
+        <div className="text-center py-12">
+          <div className="text-gray-400 mb-4">
+            <ClockIcon className="w-16 h-16 mx-auto" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-600 mb-2">No testimonials found</h3>
+          <p className="text-gray-500">
+            {statusFilter === 'all' 
+              ? 'No testimonials have been created yet.' 
+              : `No testimonials with status "${statusFilter}" found.`}
+          </p>
+        </div>
+      )}
 
       {/* Add/Edit Modal */}
       {showForm && (
@@ -207,70 +448,61 @@ const TestimonialsManager = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Author Name
+                    Name
                   </label>
                   <input
                     type="text"
-                    name="author"
-                    value={formData.author}
+                    name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter author name"
+                    placeholder="Enter testimonial author name"
                     required
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Category
+                    Status
                   </label>
                   <select
-                    name="categoryId"
-                    value={formData.categoryId}
+                    name="status"
+                    value={formData.status}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    required
                   >
-                    <option value="">Select a category</option>
-                    {testimonialCategories.map(category => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
                   </select>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Testimonial Image
+                  Image URL
                 </label>
-                <select
+                <input
+                  type="url"
                   name="image"
                   value={formData.image}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                >
-                  <option value="testimonial-1">Testimonial 1</option>
-                  <option value="testimonial-2">Testimonial 2</option>
-                  <option value="testimonial-3">Testimonial 3</option>
-                  <option value="testimonial-4">Testimonial 4</option>
-                  <option value="testimonial-5">Testimonial 5</option>
-                  <option value="testimonial-6">Testimonial 6</option>
-                </select>
+                  placeholder="Enter image URL (optional)"
+                />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Quote
+                  Description
                 </label>
                 <textarea
-                  name="quote"
-                  value={formData.quote}
+                  name="description"
+                  value={formData.description}
                   onChange={handleInputChange}
                   rows={6}
                   className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                  placeholder="Enter the testimonial quote..."
+                  placeholder="Enter the testimonial description..."
                   required
                 />
               </div>
@@ -318,37 +550,38 @@ const TestimonialsManager = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Author
+                    Name
                   </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingTestimonial.author}</p>
+                  <p className="text-lg font-medium text-gray-900">{viewingTestimonial.name}</p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Category
+                    Status
                   </label>
-                  <span className="inline-block px-3 py-1 bg-gradient-to-r from-secondary to-orange-500 text-white text-sm font-semibold rounded-full">
-                    {getCategoryName(viewingTestimonial.categoryId)}
+                  <span className={`inline-flex items-center gap-1 px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(viewingTestimonial.status)}`}>
+                    {getStatusIcon(viewingTestimonial.status)}
+                    {viewingTestimonial.status.charAt(0).toUpperCase() + viewingTestimonial.status.slice(1)}
                   </span>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                  Image
+                  Image URL
                 </label>
-                <p className="text-gray-700 bg-gray-100 px-3 py-2 rounded-lg inline-block">
-                  {viewingTestimonial.image || 'testimonial-1'}
+                <p className="text-gray-700 bg-gray-100 px-3 py-2 rounded-lg break-all">
+                  {viewingTestimonial.image || 'No image provided'}
                 </p>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Quote
+                  Description
                 </label>
                 <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
                   <p className="text-gray-800 italic text-lg leading-relaxed">
-                    "{viewingTestimonial.quote}"
+                    "{viewingTestimonial.description}"
                   </p>
                 </div>
               </div>

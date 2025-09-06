@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
           setUser(userData);
         } catch (err) {
           console.error('Auth check failed:', err);
-          apiService.removeToken();
+          apiService.removeAccessToken();
         }
       }
       setLoading(false);
