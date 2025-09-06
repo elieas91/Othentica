@@ -62,10 +62,10 @@ const MobileShowcase = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <DownloadAppCard />
           {/* Right Mobile Phone */}
-          <div className="relative flex justify-start w-1/2 md:w-full md:justify-center">
+          <div className="relative flex justify-start w-[80%] md:w-full md:justify-center min-h-[500px] sm:min-h-[600px]">
             {/* Background Phone Frame - larger and angled */}
             <div
-              className="relative transform -rotate-12 scale-75"
+              className="relative transform -rotate-12 scale-75 sm:scale-90 md:scale-75"
               style={{
                 filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))',
               }}
@@ -85,7 +85,8 @@ const MobileShowcase = () => {
                   <img
                     src={currentAppImage}
                     alt="App interface"
-                    className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
+                    
+                    className="absolute w-[92%] h-[98%] top-[0.3rem] md:h-[97%] object-contain transition-all duration-700 ease-in-out"
                   />
                 </div>
               </div>
@@ -93,7 +94,7 @@ const MobileShowcase = () => {
 
             {/* Foreground Phone Frame - smaller and overlapping */}
             <div
-              className="absolute transform rotate-12 scale-[.60] translate-y-40 translate-x-36 z-20"
+              className="absolute transform rotate-12 scale-[.60] sm:scale-[.70] md:scale-[.60] translate-y-20 sm:translate-y-32 md:translate-y-40 translate-x-20 sm:translate-x-28 md:translate-x-36 z-20"
               style={{
                 filter: 'drop-shadow(16px 18px 4px rgba(0,0,0,0.7))',
               }}

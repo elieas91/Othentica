@@ -23,14 +23,14 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     ? testimonialsData.filter((t) => t.categoryId == currentCategoryId)
     : testimonialsData;
 
-  // Auto-rotate through testimonials every 4 seconds
+  // Auto-rotate through testimonials every 16 seconds
   useEffect(() => {
     if (filteredTestimonials.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex(
         (prevIndex) => (prevIndex + 1) % filteredTestimonials.length
       );
-    }, 4000);
+    }, 16000);
 
     return () => clearInterval(interval);
   }, [filteredTestimonials.length]);
@@ -64,7 +64,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
       'testimonial-5': Testimonial5,
       'testimonial-6': Testimonial6,
     };
-    return imageMap[imageName] || Testimonial1; // fallback to first image
+    return imageMap[imageName] || Testimonial2; // fallback to first image
   };
 
   // Function to truncate quote to 2 lines

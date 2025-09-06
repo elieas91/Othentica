@@ -111,7 +111,7 @@ const ServiceBlock = ({ service, index }) => {
 
         {/* Text Side with Background */}
         <div
-          className={`w-full md:w-3/4 h-[600px] object-cover p-8 pb-64 flex flex-col justify-center relative top-[5rem]  ${
+          className={`w-full md:w-3/4 h-[120vh] md:h-[600px] object-cover p-8 pb-64 flex flex-col justify-center relative top-[5rem]  ${
             isEven
               ? 'md:order-1 md:-mr-32 items-start'
               : 'md:order-2 md:-ml-32 items-end'
