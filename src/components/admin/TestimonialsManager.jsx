@@ -9,15 +9,84 @@ import {
   XCircleIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
+import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 
 const TestimonialsManager = () => {
+  // SweetAlert helper functions for consistent styling
+  const showSuccessAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'success',
+      confirmButtonColor: '#10b981',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium'
+      }
+    });
+  };
+
+  const showErrorAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'error',
+      confirmButtonColor: '#ef4444',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium'
+      }
+    });
+  };
+
+  const showWarningAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'warning',
+      confirmButtonColor: '#f59e0b',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium'
+      }
+    });
+  };
+
+  const showConfirmAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, do it!',
+      cancelButtonText: 'Cancel',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium',
+        cancelButton: 'rounded-xl font-medium'
+      }
+    });
+  };
   const [testimonials, setTestimonials] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [stats, setStats] = useState({});
   const [formData, setFormData] = useState({
@@ -68,7 +137,6 @@ const TestimonialsManager = () => {
   const loadTestimonials = async () => {
     try {
       setLoading(true);
-      setError(null);
       
       let response;
       if (statusFilter === 'all') {
@@ -80,10 +148,10 @@ const TestimonialsManager = () => {
       if (response.success) {
         setTestimonials(response.data);
       } else {
-        setError(response.message || 'Failed to load testimonials');
+        await showErrorAlert('Error', response.message || 'Failed to load testimonials');
       }
     } catch (err) {
-      setError('Failed to load testimonials: ' + err.message);
+      await showErrorAlert('Error', 'Failed to load testimonials: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -98,9 +166,11 @@ const TestimonialsManager = () => {
           statsObj[stat.status] = stat.count;
         });
         setStats(statsObj);
+      } else {
+        await showErrorAlert('Error', response.message || 'Failed to load statistics');
       }
     } catch (err) {
-      console.error('Failed to load stats:', err);
+      await showErrorAlert('Error', 'Failed to load statistics: ' + err.message);
     }
   };
 
@@ -117,7 +187,6 @@ const TestimonialsManager = () => {
     
     try {
       setLoading(true);
-      setError(null);
       
       let response;
       if (editingTestimonial) {
@@ -129,6 +198,14 @@ const TestimonialsManager = () => {
       }
       
       if (response.success) {
+        // Show success message
+        await showSuccessAlert(
+          'Success!', 
+          editingTestimonial 
+            ? 'Testimonial updated successfully!' 
+            : 'Testimonial created successfully!'
+        );
+        
         // Reload testimonials to get updated data
         await loadTestimonials();
         await loadStats();
@@ -138,10 +215,10 @@ const TestimonialsManager = () => {
         setShowForm(false);
         setEditingTestimonial(null);
       } else {
-        setError(response.message || 'Failed to save testimonial');
+        await showErrorAlert('Error', response.message || 'Failed to save testimonial');
       }
     } catch (err) {
-      setError('Failed to save testimonial: ' + err.message);
+      await showErrorAlert('Error', 'Failed to save testimonial: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -153,22 +230,29 @@ const TestimonialsManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this testimonial?')) {
+    const result = await showConfirmAlert(
+      'Are you sure?', 
+      "You won't be able to revert this!"
+    );
+
+    if (result.isConfirmed) {
       try {
         setLoading(true);
-        setError(null);
         
         const response = await apiService.deleteTestimonial(id);
         
         if (response.success) {
+          // Show success message
+          await showSuccessAlert('Deleted!', 'The testimonial has been deleted successfully.');
+          
           // Reload testimonials to get updated data
           await loadTestimonials();
           await loadStats();
         } else {
-          setError(response.message || 'Failed to delete testimonial');
+          await showErrorAlert('Error', response.message || 'Failed to delete testimonial');
         }
       } catch (err) {
-        setError('Failed to delete testimonial: ' + err.message);
+        await showErrorAlert('Error', 'Failed to delete testimonial: ' + err.message);
       } finally {
         setLoading(false);
       }
@@ -178,19 +262,24 @@ const TestimonialsManager = () => {
   const handleStatusChange = async (id, newStatus) => {
     try {
       setLoading(true);
-      setError(null);
       
       const response = await apiService.updateTestimonialStatus(id, newStatus);
       
       if (response.success) {
+        // Show success message
+        await showSuccessAlert(
+          'Status Updated!', 
+          `Testimonial status changed to ${newStatus} successfully!`
+        );
+        
         // Reload testimonials to get updated data
         await loadTestimonials();
         await loadStats();
       } else {
-        setError(response.message || 'Failed to update testimonial status');
+        await showErrorAlert('Error', response.message || 'Failed to update testimonial status');
       }
     } catch (err) {
-      setError('Failed to update testimonial status: ' + err.message);
+      await showErrorAlert('Error', 'Failed to update testimonial status: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -314,12 +403,6 @@ const TestimonialsManager = () => {
         </div>
       </div>
 
-      {/* Error Message */}
-      {error && (
-        <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
-          {error}
-        </div>
-      )}
 
       {/* Loading State */}
       {loading && (

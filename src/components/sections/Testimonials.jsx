@@ -10,17 +10,49 @@ import {
   testimonialsData,
   testimonialCategories,
 } from '../../data/testimonialsData';
+import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
+  // SweetAlert helper functions for consistent styling
+  const showSuccessAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'success',
+      confirmButtonColor: '#10b981',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium'
+      }
+    });
+  };
+
+  const showErrorAlert = (title, text) => {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'error',
+      confirmButtonColor: '#ef4444',
+      background: '#ffffff',
+      customClass: {
+        popup: 'rounded-2xl',
+        title: 'font-poppins font-bold text-primary',
+        content: 'font-poppins',
+        confirmButton: 'rounded-xl font-medium'
+      }
+    });
+  };
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedQuotes, setExpandedQuotes] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Filter testimonials based on category if provided
   const filteredTestimonials = currentCategoryId
@@ -107,8 +139,6 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Handle testimonial form submission
   const handleTestimonialSubmit = async (formData) => {
     setIsSubmitting(true);
-    setSubmitError('');
-    setSubmitSuccess(false);
 
     try {
       // Prepare form data for API
@@ -125,18 +155,20 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
       const response = await apiService.createTestimonial(testimonialData);
       
       if (response.success) {
-        setSubmitSuccess(true);
-        // Close form after 2 seconds
-        setTimeout(() => {
-          setShowForm(false);
-          setSubmitSuccess(false);
-        }, 2000);
+        // Show success message
+        await showSuccessAlert(
+          'Thank You!', 
+          'Your testimonial has been submitted successfully and is pending review. We appreciate your feedback!'
+        );
+        
+        // Close form after success
+        setShowForm(false);
       } else {
-        setSubmitError(response.message || 'Failed to submit testimonial');
+        await showErrorAlert('Error', response.message || 'Failed to submit testimonial');
       }
     } catch (error) {
       console.error('Error submitting testimonial:', error);
-      setSubmitError(error.message || 'Failed to submit testimonial. Please try again.');
+      await showErrorAlert('Error', error.message || 'Failed to submit testimonial. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -145,8 +177,6 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Reset form state when modal is closed
   const handleCloseForm = () => {
     setShowForm(false);
-    setSubmitError('');
-    setSubmitSuccess(false);
     setIsSubmitting(false);
   };
 
@@ -292,8 +322,6 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             <TestimonialForm
               onSubmit={handleTestimonialSubmit}
               isLoading={isSubmitting}
-              error={submitError}
-              success={submitSuccess}
             />
           </div>
         </div>
