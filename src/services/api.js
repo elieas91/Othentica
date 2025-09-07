@@ -11,7 +11,7 @@ const getApiBaseUrl = () => {
   }
   
   // In development, use localhost
-  return 'http://localhost:3001/api';
+  return 'http://localhost:5001/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();

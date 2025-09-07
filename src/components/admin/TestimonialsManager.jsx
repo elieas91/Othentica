@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -31,12 +31,12 @@ const TestimonialsManager = () => {
   useEffect(() => {
     loadTestimonials();
     loadStats();
-  }, [loadTestimonials]);
+  }, []); // Remove loadTestimonials from dependencies to prevent TDZ
 
   // Load testimonials based on status filter
   useEffect(() => {
     loadTestimonials();
-  }, [statusFilter, loadTestimonials]);
+  }, [statusFilter]); // Remove loadTestimonials from dependencies
 
   // Reset form when opening
   useEffect(() => {
@@ -52,7 +52,7 @@ const TestimonialsManager = () => {
 
   // Load testimonial data when editing
   useEffect(() => {
-    if (editingTestimonial) {
+    if (editingTestimonial && testimonials.length > 0) {
       const testimonial = testimonials.find(t => t.id === editingTestimonial);
       if (testimonial) {
         setFormData({
@@ -65,7 +65,7 @@ const TestimonialsManager = () => {
     }
   }, [editingTestimonial, testimonials]);
 
-  const loadTestimonials = useCallback(async () => {
+  const loadTestimonials = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -87,7 +87,7 @@ const TestimonialsManager = () => {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter]);
+  };
 
   const loadStats = async () => {
     try {
