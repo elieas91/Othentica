@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useTheme } from '../../contexts/useTheme';
+// import { useTheme } from '../../contexts/useTheme'; // Commented out to prevent TDZ issues
 import Logo from '../../assets/img/logo.webp';
 
 const Navigation = () => {
@@ -12,7 +12,7 @@ const Navigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   // Theme context available but not used in this component
-  useTheme();
+  // useTheme(); // Commented out to prevent TDZ issues
 
   // Function to handle About dropdown navigation
   const handleDropdownNavigation = (path, dropdownType) => {
