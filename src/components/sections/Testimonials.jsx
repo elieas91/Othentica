@@ -10,13 +10,17 @@ import {
   testimonialsData,
   testimonialCategories,
 } from '../../data/testimonialsData';
-
+import apiService from '../../services/api';
+import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedQuotes, setExpandedQuotes] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Filter testimonials based on category if provided
   const filteredTestimonials = currentCategoryId
@@ -100,6 +104,52 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     }));
   };
 
+  // Handle testimonial form submission
+  const handleTestimonialSubmit = async (formData) => {
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    try {
+      // Prepare form data for API
+      const testimonialData = {
+        name: formData.name,
+        description: formData.description,
+        status: 'pending' // Default status for new testimonials
+      };
+
+      // If image is provided, we'll need to handle file upload
+      // For now, we'll send the testimonial without image
+      // You can extend this later to handle image uploads
+      
+      const response = await apiService.createTestimonial(testimonialData);
+      
+      if (response.success) {
+        setSubmitSuccess(true);
+        // Close form after 2 seconds
+        setTimeout(() => {
+          setShowForm(false);
+          setSubmitSuccess(false);
+        }, 2000);
+      } else {
+        setSubmitError(response.message || 'Failed to submit testimonial');
+      }
+    } catch (error) {
+      console.error('Error submitting testimonial:', error);
+      setSubmitError(error.message || 'Failed to submit testimonial. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Reset form state when modal is closed
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setSubmitError('');
+    setSubmitSuccess(false);
+    setIsSubmitting(false);
+  };
+
   // Get truncated quote for current testimonial
   const { truncated, needsTruncation } = truncateQuote(
     currentTestimonial.quote
@@ -160,13 +210,13 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   />
                   <span>– {currentTestimonial.author}</span>
                 </span>
-                {/* <Button
+                <Button
                   variant="secondary"
                   className="mt-4 sm:mt-8 w-full sm:w-auto"
                   onClick={() => setShowForm(true)}
                 >
                   Add your Testimonial
-                </Button> */}
+                </Button>
               </cite>
             </div>
 
@@ -234,16 +284,16 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 relative w-full max-w-md mx-4">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-2xl font-bold"
-              onClick={() => setShowForm(false)}
+              onClick={handleCloseForm}
               aria-label="Close"
             >
               &times;
             </button>
             <TestimonialForm
-              onSubmit={() => {
-                // Handle form submission here (e.g., send to API, show success, etc.)
-                setShowForm(false);
-              }}
+              onSubmit={handleTestimonialSubmit}
+              isLoading={isSubmitting}
+              error={submitError}
+              success={submitSuccess}
             />
           </div>
         </div>
