@@ -65,7 +65,7 @@ const About = () => {
         url: 'https://othentica.com',
         logo: Logo,
         foundingDate: '2020',
-        slogan: 'Crafting Digital Excellence',
+        slogan: 'Crafting Corporate Health',
         knowsAbout: [
           'Mobile App Development',
           'Digital Transformation',
@@ -112,7 +112,7 @@ const About = () => {
 
       <Banner
         title="About Othentica"
-        subtitle="Crafting Digital Excellence"
+        subtitle="Crafting Corporate Health"
         description="Othentica is a gamified wellness app that guides people to step into their authentic selves by balancing mind, body, and purpose through brain-health-based tools and experiences."
         buttonText=""
         buttonVariant="accent"
