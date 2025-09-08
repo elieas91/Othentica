@@ -6,7 +6,7 @@ export const teamData = [
   {
     id: 1,
     name: 'Hiba Tarazi',
-    role: 'Co-founder & CEO',
+    role: ['Co-founder & CEO', 'M.Ed | Author'],
     subtitle: 'A Message from Our CEO',
     image: Hiba,
     socialMedia: {
@@ -16,11 +16,14 @@ export const teamData = [
     },
     flipped: false, // false = image on right, true = image on left
     description: [
-      '"My purpose is simple: to help humans reak free from life pressures and become truly Unstuckable."',
-      'For two decades in HR, training, and brain health, I walked alongside people carrying hidden struggles: fatigue, pressure, and emotional roadblocks that drained their brilliance. That journey led me to explore brain health, nutrition, and holistic healing, creating Glowing Synapse to help individuals reconnect, and Conscious Subconscious Training Solutions to spark deeper growth.',
-      'Each step revealed a truth: humans are not broken, they are simply carrying weight they don’t yet know how to release. With the right tools, they can unlock clarity, energy, and resilience.',
-      'Othentica is the evolution of that journey, a movement to redefine health at work and in life. We believe Corporate Health is the evolution of wellness: not a luxury, but the foundation of energy, resilience, and performance.',
-      'My mission is bold and clear: to spark energy, clarity, and resilience so humans and workplaces alike can rise above pressures and truly thrive.',
+      'The story of Othentica began with what I witnessed for years: brilliant people quietly drained by pressures, yet carrying an untapped flame of resilience within them.',
+      'For more than twenty years in HR and training, I sat with people carrying hidden struggles; the fatigue behind smiles, the pressures they didn’t voice, the emotions that quietly drained their energy and brilliance. I knew those struggles well, because I carried some of them too.',
+      'That search led me deeper into brain health, nutrition, and holistic healing. I created programs like Glowing Synapse to help individuals reconnect, and co-founded Conscious Subconscious Training Solutions to spark growth on a deeper level. I also co-authored Expand Your Energy Bandwidth in Times of Epic Change, a book born from the same desire to help people reclaim clarity and resilience during life’s most demanding moments.',
+      'Othentica is the evolution of that journey.',
+      'It is more than an app or a program, it is a movement to redefine health at work and in life. To me, true health is not an extra benefit, it is the foundation of energy, resilience, and performance.',
+      'My purpose is simple and bold: to spark energy, clarity, and resilience so people and workplaces alike can rise above pressures and truly thrive.',
+      'Now, I invite you to take this step with me: explore Othentica, light your flame, and discover how powerful life can be when you rise above pressures and step into your authentic self.',
+      'Stay Blessed,',
     ],
   },
   {
