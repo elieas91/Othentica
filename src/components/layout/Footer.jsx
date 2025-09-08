@@ -55,7 +55,7 @@ const Footer = () => {
             
             <div className="flex space-x-4 justify-center md:justify-start">
               <a
-                href="https://linkedin.com/company/othentica"
+                href="https://www.linkedin.com/company/othentica-fzc-llc"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
@@ -64,7 +64,7 @@ const Footer = () => {
                 <FaLinkedin className="text-neutral text-lg" />
               </a>
 
-              <a
+              {/* <a
                 href="https://youtube.com/@othentica"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -72,9 +72,9 @@ const Footer = () => {
                 aria-label="Subscribe to our YouTube channel"
               >
                 <FaYoutube className="text-neutral text-lg" />
-              </a>
+              </a> */}
 
-              <a
+              {/* <a
                 href="https://instagram.com/othentica"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -82,10 +82,10 @@ const Footer = () => {
                 aria-label="Follow us on Instagram"
               >
                 <FaInstagram className="text-neutral text-lg" />
-              </a>
+              </a> */}
 
               <a
-                href="https://facebook.com/othentica"
+                href="https://www.facebook.com/share/1C2Qcrsj2d/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"

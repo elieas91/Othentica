@@ -103,8 +103,11 @@ class ApiService {
       throw new Error('No authentication token found');
     }
 
+    // Check if body is FormData to avoid setting Content-Type header
+    const isFormData = options.body instanceof FormData;
+    
     const headers = {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       'Authorization': `Bearer ${token}`,
       ...options.headers
     };
@@ -122,8 +125,9 @@ class ApiService {
           const newToken = await this.refreshAccessToken();
           // Retry the original request with new token
           const newHeaders = {
-            ...headers,
-            'Authorization': `Bearer ${newToken}`
+            ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+            'Authorization': `Bearer ${newToken}`,
+            ...options.headers
           };
           
           return fetch(url, {
@@ -214,13 +218,19 @@ class ApiService {
   }
 
   // Testimonial endpoints
-  async getTestimonials() {
-    const response = await this.authenticatedRequest(`${this.baseURL}/testimonials`);
+  async getTestimonials(category = null) {
+    const url = category 
+      ? `${this.baseURL}/testimonials?category=${category}`
+      : `${this.baseURL}/testimonials`;
+    const response = await this.authenticatedRequest(url);
     return response.json();
   }
 
-  async getApprovedTestimonials() {
-    const response = await fetch(`${this.baseURL}/testimonials/public`);
+  async getApprovedTestimonials(category = null) {
+    const url = category 
+      ? `${this.baseURL}/testimonials/public?category=${category}`
+      : `${this.baseURL}/testimonials/public`;
+    const response = await fetch(url);
     return response.json();
   }
 
@@ -235,20 +245,29 @@ class ApiService {
   }
 
   async createTestimonial(testimonialData) {
+    // Check if testimonialData contains a file (FormData)
+    const isFormData = testimonialData instanceof FormData;
+    
     const response = await fetch(`${this.baseURL}/testimonials`, {
       method: 'POST',
-      headers: {
+      headers: isFormData ? {} : {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(testimonialData),
+      body: isFormData ? testimonialData : JSON.stringify(testimonialData),
     });
     return response.json();
   }
 
   async updateTestimonial(id, testimonialData) {
+    // Check if testimonialData contains a file (FormData)
+    const isFormData = testimonialData instanceof FormData;
+    
     const response = await this.authenticatedRequest(`${this.baseURL}/testimonials/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(testimonialData),
+      headers: isFormData ? {} : {
+        'Content-Type': 'application/json',
+      },
+      body: isFormData ? testimonialData : JSON.stringify(testimonialData),
     });
     return response.json();
   }
@@ -270,6 +289,11 @@ class ApiService {
 
   async getTestimonialsStats() {
     const response = await this.authenticatedRequest(`${this.baseURL}/testimonials/stats`);
+    return response.json();
+  }
+
+  async getTestimonialsCountByCategory() {
+    const response = await fetch(`${this.baseURL}/testimonials/counts`);
     return response.json();
   }
 

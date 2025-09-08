@@ -1,5 +1,5 @@
 import Horiverde from '../assets/img/clients/horiverde.webp';
-import IGI from '../assets/img/clients/igi.webp';
+import PTI from '../assets/img/clients/pti.webp';
 
 export const clientsData = [
   {
@@ -8,8 +8,14 @@ export const clientsData = [
     logo: Horiverde,
     industry: "Wellness & Health"
   },
+  {
+    id: 2,
+    name: "PTI",
+    logo: PTI,
+    industry: "Technology"
+  },
   // {
-  //   id: 2,
+  //   id: 3,
   //   name: "IGI",
   //   logo: IGI,
   //   industry: "Technology"

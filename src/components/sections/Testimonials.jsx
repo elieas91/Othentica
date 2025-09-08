@@ -7,7 +7,7 @@ import Testimonial4 from '../../assets/img/testimonials/testimonial-4.webp';
 import Testimonial5 from '../../assets/img/testimonials/testimonial-5.webp';
 import Testimonial6 from '../../assets/img/testimonials/testimonial-6.webp';
 import {
-  testimonialsData,
+  testimonialsData as fallbackTestimonialsData,
   testimonialCategories,
 } from '../../data/testimonialsData';
 import Swal from 'sweetalert2';
@@ -16,6 +16,27 @@ import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
+  // Map categoryId to API category parameter
+  const getApiCategory = (categoryId) => {
+    const mapping = {
+      'the-othentica-app': 'app',
+      'tailored-programs': 'programs', 
+      'talks-workshops': 'talks',
+      'one-to-one-guidance': 'one-to-one'
+    };
+    return mapping[categoryId] || null;
+  };
+
+  // Map API category back to categoryId
+  const getCategoryIdFromApi = (apiCategory) => {
+    const mapping = {
+      'app': 'the-othentica-app',
+      'programs': 'tailored-programs',
+      'talks': 'talks-workshops',
+      'one-to-one': 'one-to-one-guidance'
+    };
+    return mapping[apiCategory] || 'general';
+  };
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -53,6 +74,49 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const [expandedQuotes, setExpandedQuotes] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [testimonialsData, setTestimonialsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Function to fetch testimonials
+  const fetchTestimonials = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      // Get API category parameter
+      const apiCategory = getApiCategory(currentCategoryId);
+      const response = await apiService.getApprovedTestimonials(apiCategory);
+      
+      if (response.success && response.data) {
+        // Transform database testimonials to match component structure
+        const transformedTestimonials = response.data.map((testimonial, index) => ({
+          id: testimonial.id,
+          quote: testimonial.description, // Map description to quote
+          author: testimonial.name, // Map name to author
+          categoryId: getCategoryIdFromApi(testimonial.category) || currentCategoryId || 'general', // Map database category to frontend categoryId
+          image: `testimonial-${(index % 6) + 1}`, // Cycle through available images
+          imageUrl: testimonial.imageUrl // Use database image URL if available
+        }));
+        
+        setTestimonialsData(transformedTestimonials);
+      } else {
+        throw new Error(response.message || 'Failed to fetch testimonials');
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+      setError(error.message);
+      // Fallback to static data
+      setTestimonialsData(fallbackTestimonialsData);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch testimonials from API on component mount and when category changes
+  useEffect(() => {
+    fetchTestimonials();
+  }, [currentCategoryId]);
 
   // Filter testimonials based on category if provided
   const filteredTestimonials = currentCategoryId
@@ -79,7 +143,10 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Get two different categories for the right side images
   const getTwoDifferentCategories = () => {
-    if (!currentCategory) return [];
+    if (!currentCategory) {
+      // If no current category, return first two categories
+      return testimonialCategories.slice(0, 2);
+    }
     if (testimonialCategories.length < 2) return [currentCategory];
     // Pick current category and next one (wrap around)
     const currentIdx = testimonialCategories.findIndex(
@@ -91,7 +158,13 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const categoriesForImages = getTwoDifferentCategories();
 
   // Function to get testimonial image path
-  const getTestimonialImagePath = (imageName) => {
+  const getTestimonialImagePath = (imageName, imageUrl = null) => {
+    // If imageUrl is provided (from database), use it
+    if (imageUrl) {
+      return imageUrl;
+    }
+    
+    // Otherwise, use static image mapping
     const imageMap = {
       'testimonial-1': Testimonial1,
       'testimonial-2': Testimonial2,
@@ -141,18 +214,19 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     setIsSubmitting(true);
 
     try {
-      // Prepare form data for API
-      const testimonialData = {
-        name: formData.name,
-        description: formData.description,
-        status: 'pending' // Default status for new testimonials
-      };
-
-      // If image is provided, we'll need to handle file upload
-      // For now, we'll send the testimonial without image
-      // You can extend this later to handle image uploads
+      // Create FormData for file upload
+      const testimonialFormData = new FormData();
+      testimonialFormData.append('name', formData.name);
+      testimonialFormData.append('description', formData.description);
+      testimonialFormData.append('status', 'pending');
+      testimonialFormData.append('category', formData.category);
       
-      const response = await apiService.createTestimonial(testimonialData);
+      // Add image if provided
+      if (formData.image) {
+        testimonialFormData.append('image', formData.image);
+      }
+      
+      const response = await apiService.createTestimonial(testimonialFormData);
       
       if (response.success) {
         // Show success message
@@ -163,6 +237,9 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         
         // Close form after success
         setShowForm(false);
+        
+        // Refresh testimonials to show the new one (if approved)
+        await fetchTestimonials();
       } else {
         await showErrorAlert('Error', response.message || 'Failed to submit testimonial');
       }
@@ -180,9 +257,71 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     setIsSubmitting(false);
   };
 
-  // Get truncated quote for current testimonial
+  // Show loading state
+  if (isLoading) {
+    return (
+      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-primary font-medium">Loading testimonials...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Show error state if no testimonials available
+  if (filteredTestimonials.length === 0) {
+    return (
+      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
+              Testimonials
+            </h2>
+            <p className="text-gray-600 mb-8">
+              {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'}
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => setShowForm(true)}
+            >
+              Add your Testimonial
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Safety check - if no current testimonial, show error state
+  if (!currentTestimonial) {
+    return (
+      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
+              Testimonials
+            </h2>
+            <p className="text-gray-600 mb-8">
+              No testimonials available at the moment.
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => setShowForm(true)}
+            >
+              Add your Testimonial
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Get truncated quote for current testimonial (only after we know it exists)
   const { truncated, needsTruncation } = truncateQuote(
-    currentTestimonial.quote
+    currentTestimonial.quote || ''
   );
   const isExpanded = expandedQuotes[currentTestimonial.id];
 
@@ -219,8 +358,8 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                 className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
                 style={{ display: 'inline' }}
               >
-                "{isExpanded ? currentTestimonial.quote : truncated}"
-                {needsTruncation && (
+                "{isExpanded ? (currentTestimonial?.quote || '') : truncated}"
+                {needsTruncation && currentTestimonial?.id && (
                   <button
                     onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
                     className="ml-2 text-primary/80 hover:text-primary font-medium text-md md:text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
@@ -234,19 +373,12 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
               <cite className="text-base sm:text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
                 <span className="flex items-center gap-3 mb-4 sm:mb-0">
                   <img
-                    src={getTestimonialImagePath(currentTestimonial.image)}
-                    alt={currentTestimonial.author}
+                    src={getTestimonialImagePath(currentTestimonial?.image, currentTestimonial?.imageUrl)}
+                    alt={currentTestimonial?.author || 'Testimonial author'}
                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
                   />
-                  <span>– {currentTestimonial.author}</span>
+                  <span>– {currentTestimonial?.author || 'Anonymous'}</span>
                 </span>
-                <Button
-                  variant="secondary"
-                  className="mt-4 sm:mt-8 w-full sm:w-auto"
-                  onClick={() => setShowForm(true)}
-                >
-                  Add your Testimonial
-                </Button>
               </cite>
             </div>
 
@@ -271,12 +403,23 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                 </button>
               ))}
             </div>
+
+            {/* Add Testimonial Button - Outside Carousel */}
+            <div className="mt-8">
+              <Button
+                variant="secondary"
+                className="w-full sm:w-auto"
+                onClick={() => setShowForm(true)}
+              >
+                Add your Testimonial
+              </Button>
+            </div>
           </div>
 
           {/* Right Side - Two Images from Different Categories */}
           {showPics && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 lg:mt-0">
-              {categoriesForImages.map((cat, idx) => {
+              {categoriesForImages.length > 0 ? categoriesForImages.map((cat, idx) => {
                 // Pick the first image from each category
                 const imageName = cat.images[0];
                 return (
@@ -303,7 +446,36 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                     </div>
                   </div>
                 );
-              })}
+              }) : (
+                // Fallback: show first two categories from testimonialCategories
+                testimonialCategories.slice(0, 2).map((cat, idx) => {
+                  const imageName = cat.images[0];
+                  return (
+                    <div
+                      key={`fallback-${cat.id}-${imageName}-${idx}`}
+                      className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                    >
+                      <div className="h-64 w-full relative">
+                        <img
+                          src={getTestimonialImagePath(imageName)}
+                          alt={`${cat.name} - ${imageName}`}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          style={{ minHeight: '100%', minWidth: '100%' }}
+                        />
+                      </div>
+                      <div className="p-6 text-start">
+                        <h3 className="text-xl font-bold text-primary mb-2">
+                          {cat.name}
+                        </h3>
+                        <p className="text-gray-600 text-sm">{cat.description}</p>
+                        <div className="mt-3 text-xs text-primary/70 font-medium">
+                          {cat.count} testimonials
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           )}
         </div>

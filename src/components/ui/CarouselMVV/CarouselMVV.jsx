@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { missionVisionValuesData } from '../../../data/missionVisionValuesData';
 import CompassIcon from '../../../assets/img/compass.svg';
-import ReadMoreModal from '../ReadMoreModal';
 import './CarouselMVV.css';
 
 const CarouselMVV = ({ className = '' }) => {
@@ -10,8 +9,8 @@ const CarouselMVV = ({ className = '' }) => {
   const [startX, setStartX] = useState(0);
   const [translateZ, setTranslateZ] = useState(700);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: '', content: '' });
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
   const carouselRef = useRef(null);
   const hasInitialized = useRef(false);
   const wheelTimeoutRef = useRef(null);
@@ -33,13 +32,49 @@ const CarouselMVV = ({ className = '' }) => {
     return duplicated;
   };
 
-  // Memoize carousel items to prevent unnecessary re-renders
-  const carouselItems = useMemo(() => duplicateItems(missionVisionValuesData, 2), []); // Duplicate 2 times (6 total items)
+  const carouselItems = duplicateItems(missionVisionValuesData, 2); // Duplicate 2 times (6 total items)
   const totalItems = carouselItems.length;
   const angleStep = 360 / totalItems;
   
   // Calculate rotation directly without state
   const rotation = -currentIndex * angleStep;
+
+  // Function to truncate quote to 3 lines (similar to CSS line-clamp)
+  const truncateQuote = (quote) => {
+    const words = quote.split(' ');
+    const lineLength = 50; // Approximate characters per line
+    const maxChars = lineLength * 3; // 3 lines
+
+    if (quote.length <= maxChars) {
+      return { truncated: quote, needsTruncation: false };
+    }
+
+    let truncated = '';
+    let charCount = 0;
+
+    for (let i = 0; i < words.length; i++) {
+      if (charCount + words[i].length + 1 <= maxChars) {
+        truncated += (truncated ? ' ' : '') + words[i];
+        charCount += words[i].length + 1;
+      } else {
+        break;
+      }
+    }
+
+    return { truncated: truncated + '...', needsTruncation: true };
+  };
+
+  // Function to open modal with full content
+  const openModal = (slide) => {
+    setModalContent(slide);
+    setShowModal(true);
+  };
+
+  // Function to close modal
+  const closeModal = () => {
+    setShowModal(false);
+    setModalContent(null);
+  };
   
   // Initialize component and enable transitions
   useEffect(() => {
@@ -98,20 +133,6 @@ const CarouselMVV = ({ className = '' }) => {
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
-
-  // Handle read more click with useCallback for better performance
-  const handleReadMore = useCallback((slide) => {
-    setModalContent({
-      title: slide.title,
-      content: slide.fullDescription
-    });
-    setModalOpen(true);
-  }, []);
-
-  // Close modal with useCallback
-  const closeModal = useCallback(() => {
-    setModalOpen(false);
-  }, []);
 
   // Mouse wheel navigation with debouncing and threshold (desktop only)
   const handleWheel = (e) => {
@@ -222,6 +243,9 @@ const CarouselMVV = ({ className = '' }) => {
             const itemAngle = index * angleStep;
             const isActive = index === (currentIndex % totalItems + totalItems) % totalItems;
             
+            // Get truncated quote for current slide
+            const { truncated, needsTruncation } = truncateQuote(slide.description);
+            
             return (
               <div
                 key={slide.id}
@@ -239,16 +263,23 @@ const CarouselMVV = ({ className = '' }) => {
                 >
                   <div className="carousel-3d-overlay">
                     <h3 className="carousel-3d-title">{slide.title}</h3>
-                    <p className="carousel-3d-description">{slide.description}</p>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleReadMore(slide);
-                      }}
-                      className="mt-4 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors text-sm font-medium"
-                    >
-                      Read More
-                    </button>
+                    <div className="carousel-3d-description-container">
+                      <p className="carousel-3d-description">
+                        {truncated}
+                      </p>
+                      {needsTruncation && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openModal(slide);
+                          }}
+                          className="carousel-3d-read-more"
+                          style={{ display: 'inline', verticalAlign: 'baseline' }}
+                        >
+                          Read More
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -293,15 +324,43 @@ const CarouselMVV = ({ className = '' }) => {
         })}
       </div>
 
-      {/* Read More Modal */}
-      <ReadMoreModal
-        isOpen={modalOpen}
-        onClose={closeModal}
-        title={modalContent.title}
-        content={modalContent.content}
-      />
+      {/* Modal for full content */}
+      {showModal && modalContent && (
+        <div className="carousel-3d-modal-overlay" onClick={closeModal}>
+          <div className="carousel-3d-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="carousel-3d-modal-header">
+              <h2 className="carousel-3d-modal-title">{modalContent.title}</h2>
+              <button 
+                className="carousel-3d-modal-close" 
+                onClick={closeModal}
+                aria-label="Close modal"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="carousel-3d-modal-content">
+              <div className="carousel-3d-modal-image">
+                <img 
+                  src={modalContent.image} 
+                  alt={modalContent.title}
+                  className="carousel-3d-modal-img"
+                />
+              </div>
+              <div className="carousel-3d-modal-text">
+                <div 
+                  className="carousel-3d-modal-description"
+                  dangerouslySetInnerHTML={{ 
+                    __html: modalContent.description.replace(/\n/g, '<br/>') 
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CarouselMVV;
+

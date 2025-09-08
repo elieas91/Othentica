@@ -267,7 +267,7 @@ const Home = () => {
         <Security />
       </div>
 
-      {/* <SocialMedia /> */}
+      <SocialMedia />
       
     </div>
   );

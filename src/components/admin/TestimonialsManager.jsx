@@ -12,6 +12,14 @@ import {
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 
+// Service categories matching the Services.jsx data
+const SERVICE_CATEGORIES = [
+  { value: 'app', label: 'The Othentica App' },
+  { value: 'programs', label: 'Tailored Programs' },
+  { value: 'talks', label: 'Talks & Workshops' },
+  { value: 'one-to-one', label: '1:1 Guidance' }
+];
+
 const TestimonialsManager = () => {
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
@@ -88,13 +96,16 @@ const TestimonialsManager = () => {
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [stats, setStats] = useState({});
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image: '',
-    status: 'pending'
+    image: null,
+    status: 'pending',
+    category: 'app'
   });
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Load testimonials on component mount
   useEffect(() => {
@@ -102,10 +113,10 @@ const TestimonialsManager = () => {
     loadStats();
   }, []); // Remove loadTestimonials from dependencies to prevent TDZ
 
-  // Load testimonials based on status filter
+  // Load testimonials based on status and category filters
   useEffect(() => {
     loadTestimonials();
-  }, [statusFilter]); // Remove loadTestimonials from dependencies
+  }, [statusFilter, categoryFilter]); // Remove loadTestimonials from dependencies
 
   // Reset form when opening
   useEffect(() => {
@@ -113,9 +124,11 @@ const TestimonialsManager = () => {
       setFormData({
         name: '',
         description: '',
-        image: '',
-        status: 'pending'
+        image: null,
+        status: 'pending',
+        category: 'app'
       });
+      setImagePreview(null);
     }
   }, [showForm, editingTestimonial]);
 
@@ -127,9 +140,12 @@ const TestimonialsManager = () => {
         setFormData({
           name: testimonial.name,
           description: testimonial.description,
-          image: testimonial.image || '',
-          status: testimonial.status || 'pending'
+          image: null, // Reset file input
+          status: testimonial.status || 'pending',
+          category: testimonial.category || 'app'
         });
+        // Set image preview from existing image URL
+        setImagePreview(testimonial.imageUrl || null);
       }
     }
   }, [editingTestimonial, testimonials]);
@@ -139,10 +155,21 @@ const TestimonialsManager = () => {
       setLoading(true);
       
       let response;
-      if (statusFilter === 'all') {
+      if (statusFilter === 'all' && categoryFilter === 'all') {
         response = await apiService.getTestimonials();
-      } else {
+      } else if (statusFilter === 'all' && categoryFilter !== 'all') {
+        response = await apiService.getTestimonials(categoryFilter);
+      } else if (statusFilter !== 'all' && categoryFilter === 'all') {
         response = await apiService.getTestimonialsByStatus(statusFilter);
+      } else {
+        // Both filters applied - get all and filter client-side
+        response = await apiService.getTestimonials();
+        if (response.success) {
+          const filtered = response.data.filter(t => 
+            t.status === statusFilter && t.category === categoryFilter
+          );
+          response.data = filtered;
+        }
       }
       
       if (response.success) {
@@ -175,11 +202,38 @@ const TestimonialsManager = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, files } = e.target;
+    
+    if (name === 'image' && files && files[0]) {
+      const file = files[0];
+      
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        showErrorAlert('Invalid File Type', 'Please select a valid image file (JPEG, PNG, GIF, or WEBP).');
+        return;
+      }
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        showErrorAlert('File Too Large', 'Please select an image smaller than 5MB.');
+        return;
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: file
+      }));
+      
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -188,13 +242,25 @@ const TestimonialsManager = () => {
     try {
       setLoading(true);
       
+      // Create FormData for file upload
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('description', formData.description);
+      submitData.append('status', formData.status);
+      submitData.append('category', formData.category);
+      
+      // Only append image if a new file is selected
+      if (formData.image) {
+        submitData.append('image', formData.image);
+      }
+      
       let response;
       if (editingTestimonial) {
         // Update existing testimonial
-        response = await apiService.updateTestimonial(editingTestimonial, formData);
+        response = await apiService.updateTestimonial(editingTestimonial, submitData);
       } else {
         // Create new testimonial
-        response = await apiService.createTestimonial(formData);
+        response = await apiService.createTestimonial(submitData);
       }
       
       if (response.success) {
@@ -211,7 +277,8 @@ const TestimonialsManager = () => {
         await loadStats();
         
         // Reset form and close modal
-        setFormData({ name: '', description: '', image: '', status: 'pending' });
+        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'app' });
+        setImagePreview(null);
         setShowForm(false);
         setEditingTestimonial(null);
       } else {
@@ -293,6 +360,7 @@ const TestimonialsManager = () => {
     setShowForm(false);
     setEditingTestimonial(null);
     setViewingTestimonial(null);
+    setImagePreview(null);
   };
 
 
@@ -387,19 +455,37 @@ const TestimonialsManager = () => {
           </div>
         </div>
 
-        {/* Status Filter */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-semibold text-primary">Filter by status:</label>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
-          >
-            <option value="all">All Testimonials</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-semibold text-primary">Filter by status:</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-semibold text-primary">Filter by category:</label>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
+            >
+              <option value="all">All Categories</option>
+              {SERVICE_CATEGORIES.map(category => (
+                <option key={category.value} value={category.value}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -427,6 +513,9 @@ const TestimonialsManager = () => {
                       </span>
                       <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                         ID: {testimonial.id}
+                      </span>
+                      <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                        {SERVICE_CATEGORIES.find(cat => cat.value === testimonial.category)?.label || testimonial.category}
                       </span>
                     </div>
                     <h4 className="text-lg font-bold text-primary font-poppins mb-2">
@@ -482,7 +571,15 @@ const TestimonialsManager = () => {
                     </button>
                   </div>
                   <div className="text-xs text-gray-400">
-                    {testimonial.image || 'No image'}
+                    {testimonial.imageUrl ? (
+                      <img
+                        src={testimonial.imageUrl}
+                        alt={testimonial.name}
+                        className="w-8 h-8 object-cover rounded-full"
+                      />
+                    ) : (
+                      'No image'
+                    )}
                   </div>
                 </div>
               </div>
@@ -528,7 +625,7 @@ const TestimonialsManager = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
                     Name
@@ -559,20 +656,69 @@ const TestimonialsManager = () => {
                     <option value="rejected">Rejected</option>
                   </select>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                  >
+                    {SERVICE_CATEGORIES.map(category => (
+                      <option key={category.value} value={category.value}>
+                        {category.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Image URL
+                  Image Upload
                 </label>
-                <input
-                  type="url"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                  placeholder="Enter image URL (optional)"
-                />
+                <div className="space-y-4">
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
+                  />
+                  <p className="text-xs text-gray-500">
+                    Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                  </p>
+                  
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="mt-4">
+                      <p className="text-sm font-semibold text-primary mb-2">Preview:</p>
+                      <div className="relative inline-block">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-32 h-32 object-cover rounded-xl border border-accent/30 shadow-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImagePreview(null);
+                            setFormData(prev => ({ ...prev, image: null }));
+                            // Reset file input
+                            const fileInput = document.querySelector('input[name="image"]');
+                            if (fileInput) fileInput.value = '';
+                          }}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -630,7 +776,7 @@ const TestimonialsManager = () => {
             </div>
 
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                     Name
@@ -647,15 +793,35 @@ const TestimonialsManager = () => {
                     {viewingTestimonial.status.charAt(0).toUpperCase() + viewingTestimonial.status.slice(1)}
                   </span>
                 </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                    Category
+                  </label>
+                  <p className="text-lg font-medium text-gray-900">
+                    {SERVICE_CATEGORIES.find(cat => cat.value === viewingTestimonial.category)?.label || viewingTestimonial.category}
+                  </p>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                  Image URL
+                  Image
                 </label>
-                <p className="text-gray-700 bg-gray-100 px-3 py-2 rounded-lg break-all">
-                  {viewingTestimonial.image || 'No image provided'}
-                </p>
+                {viewingTestimonial.imageUrl ? (
+                  <div className="space-y-3">
+                    <img
+                      src={viewingTestimonial.imageUrl}
+                      alt={viewingTestimonial.name}
+                      className="w-32 h-32 object-cover rounded-xl border border-accent/30 shadow-sm"
+                    />
+                    <p className="text-xs text-gray-500 break-all">
+                      {viewingTestimonial.image}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic">No image provided</p>
+                )}
               </div>
 
               <div>

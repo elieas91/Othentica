@@ -4,6 +4,7 @@ import Modal from './Modal';
 import Button from './Button';
 import WhatsAppButton from './WhatsappButton';
 import Tooltip from './Tooltip';
+import EmailIcon from '../../assets/img/email_icon.webp';
 
 const ServiceBlock = ({ service, index }) => {
   const isEven = index % 2 === 0; // alternate layout
@@ -149,45 +150,74 @@ const ServiceBlock = ({ service, index }) => {
 
             {/* CTA Buttons */}
             <div className="flex justify-center items-center gap-6 mt-8 px-10">
-              <div className="flex items-baseline gap-16">
-                {/* Flame Button */}
-                <Tooltip
-                  content={`Learn more about ${service.title}`}
-                  position="top"
-                >
-                  <button
-                    onClick={openModal}
-                    className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
-                    aria-label={`Learn more about ${service.title}`}
+              <div className="flex items-center gap-16">
+                {/* Flame Button with Title */}
+                <div className="flex flex-col items-center">
+                  <Tooltip
+                    content={`Learn more about ${service.title}`}
+                    position="top"
                   >
-                    <div className="relative group cursor-pointer">
-                      <div className="w-16 h-20 lg:w-20 lg:h-16 relative">
+                    <button
+                      onClick={openModal}
+                      className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
+                      aria-label={`Learn more about ${service.title}`}
+                    >
+                      <div className="relative group cursor-pointer">
+                        <div className="w-16 h-16 lg:w-12 lg:h-12 relative">
+                          <img
+                            src={Flame}
+                            alt="Learn More"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+
+                        {/* Static glow effects - no animations */}
+                        {/* <div
+                        className="absolute inset-0 w-16 h-16 lg:w-12 lg:h-12 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full opacity-60 blur-sm"
+                      ></div> */}
+                        <div className="absolute inset-0 w-16 h-16 lg:w-12 lg:h-12 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"></div>
+
+                        <div className="absolute -top-2 -left-1 w-18 h-18 lg:w-14 lg:h-14 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"></div>
+                        <div className="absolute -top-1 -right-1 w-16 h-16 lg:w-14 lg:h-14 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"></div>
+
+                        <div className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"></div>
+                        <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"></div>
+                        <div className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"></div>
+                      </div>
+                    </button>
+                  </Tooltip>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Learn more</span>
+                </div>
+
+                {/* WhatsApp Button with Title */}
+                <div className="flex flex-col items-center">
+                  <div className="relative group cursor-pointer transition-transform hover:scale-105">
+                    <WhatsAppButton className="w-16 h-16 lg:w-12 lg:h-12" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Get in Touch</span>
+                </div>
+
+                {/* Message Icon with Title */}
+                <div className="flex flex-col items-center">
+                  <Tooltip
+                    content="Contact us for more information"
+                    position="top"
+                  >
+                    <button
+                      onClick={() => window.location.href = '/contact'}
+                      className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 rounded-full"
+                      aria-label="Contact us"
+                    >
+                      <div className="w-16 h-16 lg:w-12 lg:h-12 relative">
                         <img
-                          src={Flame}
-                          alt="Learn More"
-                          className="w-full h-full object-contain"
+                          src={EmailIcon}
+                          alt="Contact Us"
+                          className="w-full h-full object-contain transition-all duration-300 ease-out group-hover:scale-110"
                         />
                       </div>
-
-                      {/* Static glow effects - no animations */}
-                      {/* <div
-                      className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full opacity-60 blur-sm"
-                    ></div> */}
-                      <div className="absolute inset-0 w-16 h-20 lg:w-20 lg:h-24 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"></div>
-
-                      <div className="absolute -top-2 -left-1 w-18 h-22 lg:w-22 lg:h-26 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"></div>
-                      <div className="absolute -top-1 -right-1 w-16 h-20 lg:w-18 lg:h-22 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"></div>
-
-                      <div className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"></div>
-                      <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"></div>
-                      <div className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"></div>
-                    </div>
-                  </button>
-                </Tooltip>
-
-                {/* WhatsApp Button */}
-                <div className="relative group cursor-pointer transition-transform hover:scale-105">
-                  <WhatsAppButton className="w-16 h-16 lg:w-12 lg:h-12" />
+                    </button>
+                  </Tooltip>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Contact Us</span>
                 </div>
               </div>
             </div>

@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Button from './Button';
 
+// Service categories matching the Services.jsx data
+const SERVICE_CATEGORIES = [
+  { value: 'app', label: 'The Othentica App' },
+  { value: 'programs', label: 'Tailored Programs' },
+  { value: 'talks', label: 'Talks & Workshops' },
+  { value: 'one-to-one', label: '1:1 Guidance' }
+];
+
 const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     image: null,
+    category: 'app',
   });
 
   const handleChange = (e) => {
@@ -30,6 +39,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
         name: '',
         description: '',
         image: null,
+        category: 'app',
       });
     }
   }, [success]);
@@ -64,6 +74,27 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           required
           disabled={isLoading}
         />
+      </div>
+
+      {/* Category */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Service Category *
+        </label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="w-full mt-1 border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          required
+          disabled={isLoading}
+        >
+          {SERVICE_CATEGORIES.map(category => (
+            <option key={category.value} value={category.value}>
+              {category.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Description */}

@@ -8,7 +8,6 @@ export { default as ScrollToTop } from './ui/ScrollToTop';
 export { default as OptimizedImage } from './ui/OptimizedImage';
 export { default as OptimizedVideo } from './ui/OptimizedVideo';
 export { default as AnimateOnScroll } from './ui/AnimateOnScroll';
-export { default as ReadMoreModal } from './ui/ReadMoreModal';
 
 // Layout Components
 export { default as Layout } from './layout/Layout';

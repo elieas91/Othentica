@@ -101,6 +101,10 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.carousel-3d-description-container {
+  position: relative;
+}
+
 .carousel-3d-description {
   font-size: 0.9rem;
   line-height: 1.4;
@@ -110,6 +114,206 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin: 0;
+}
+
+.carousel-3d-read-more {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  margin-left: 4px;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+  .carousel-3d-read-more:hover {
+    color: white;
+    text-decoration-color: rgba(255, 255, 255, 0.6);
+  }
+
+/* Modal Styles */
+.carousel-3d-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.carousel-3d-modal {
+  background: white;
+  border-radius: 20px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.carousel-3d-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #d77644, #f4dfc4);
+}
+
+.carousel-3d-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-3d-modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.carousel-3d-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.carousel-3d-modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(90vh - 100px);
+  overflow-y: auto;
+}
+
+.carousel-3d-modal-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.carousel-3d-modal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-3d-modal-text {
+  padding: 2rem;
+}
+
+.carousel-3d-modal-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #374151;
+  text-align: left;
+}
+
+.carousel-3d-modal-description h3 {
+  color: #d77644;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.carousel-3d-modal-description h3:first-child {
+  margin-top: 0;
+}
+
+.carousel-3d-modal-description p {
+  margin: 0.5rem 0;
+}
+
+/* Mobile Modal Styles */
+@media (max-width: 768px) {
+  .carousel-3d-modal {
+    max-width: 95%;
+    margin: 1rem;
+    border-radius: 15px;
+  }
+
+  .carousel-3d-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .carousel-3d-modal-title {
+    font-size: 1.25rem;
+  }
+
+  .carousel-3d-modal-close {
+    font-size: 1.5rem;
+    width: 35px;
+    height: 35px;
+  }
+
+  .carousel-3d-modal-image {
+    height: 150px;
+  }
+
+  .carousel-3d-modal-text {
+    padding: 1.5rem;
+  }
+
+  .carousel-3d-modal-description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-3d-modal {
+    max-width: 100%;
+    margin: 0.5rem;
+    border-radius: 10px;
+  }
+
+  .carousel-3d-modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .carousel-3d-modal-title {
+    font-size: 1.1rem;
+  }
+
+  .carousel-3d-modal-text {
+    padding: 1rem;
+  }
+
+  .carousel-3d-modal-description {
+    font-size: 0.85rem;
+  }
 }
 
 /* Navigation Buttons */
@@ -271,6 +475,10 @@
     font-size: 0.8rem;
   }
 
+  .carousel-3d-read-more {
+    font-size: 0.75rem;
+  }
+
   .carousel-3d-nav {
     width: 50px;
     height: 50px;
@@ -359,5 +567,9 @@
   .carousel-3d-description {
     font-size: 0.75rem;
     -webkit-line-clamp: 2;
+  }
+
+  .carousel-3d-read-more {
+    font-size: 0.7rem;
   }
 }
