@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../ui/Button';
-import OthenticaImg from '../../assets/img/philosophy/othentica-bg.webp';
+import OthenticaImg from '../../assets/img/philosophy/othentica-bg-2.webp';
 import { Link } from 'react-router-dom';
 
 const Philosophy = () => {
@@ -43,8 +43,16 @@ const Philosophy = () => {
             </p>
           </div>
           <div className="mt-6 sm:mt-8">
-            <Link to="/contact" target="_blank" className="block w-full sm:w-auto">
-              <Button variant="secondary" size="large" className="w-full sm:w-auto">
+            <Link
+              to="/contact"
+              target="_blank"
+              className="block w-full sm:w-auto"
+            >
+              <Button
+                variant="secondary"
+                size="large"
+                className="w-full sm:w-auto"
+              >
                 Explore Corporate Packages
               </Button>
             </Link>
