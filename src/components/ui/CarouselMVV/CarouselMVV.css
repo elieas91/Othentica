@@ -79,7 +79,7 @@
 
 .carousel-3d-item.active .carousel-3d-item-content {
   transform: scale(1.05);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 }
 
 /* Overlay for text content */
@@ -122,8 +122,8 @@
   font-size: 2rem;
   font-weight: bold;
   border: none;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 20;
@@ -150,9 +150,10 @@
 }
 
 .carousel-3d-nav-icon {
-  width: 60px;
-  height: 60px;
-  filter: brightness(0) saturate(100%) invert(45%) sepia(78%) saturate(1352%) hue-rotate(346deg) brightness(91%) contrast(87%); /* Makes the icon secondary color (#d77644) */
+  width: 80px;
+  height: 80px;
+  filter: brightness(0) saturate(100%) invert(45%) sepia(78%) saturate(1352%)
+    hue-rotate(346deg) brightness(91%) contrast(87%); /* Makes the icon secondary color (#d77644) */
   transition: transform 0.3s ease;
 }
 
@@ -185,7 +186,7 @@
   .desktop-nav {
     display: block;
   }
-  
+
   .carousel-3d-nav-container {
     display: none;
   }
@@ -201,7 +202,7 @@
 /* Thumbnail Indicators */
 .carousel-3d-thumbnails {
   position: absolute;
-  bottom:5rem;
+  bottom: 5rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -253,7 +254,7 @@
     margin-bottom: 4rem;
     overflow: visible;
   }
-  
+
   .carousel-3d-item {
     cursor: pointer;
     width: 500px;
@@ -261,15 +262,15 @@
     margin-left: -250px;
     margin-top: -150px;
   }
-  
+
   .carousel-3d-title {
     font-size: 1.2rem;
   }
-  
+
   .carousel-3d-description {
     font-size: 0.8rem;
   }
-  
+
   .carousel-3d-nav {
     width: 50px;
     height: 50px;
@@ -279,21 +280,21 @@
     transform: none;
     margin: 1rem 0.5rem 0;
   }
-  
+
   .carousel-3d-prev {
     left: auto;
     right: auto;
   }
-  
+
   .carousel-3d-next {
     right: auto;
     left: auto;
   }
-  
+
   .carousel-3d-thumbnails {
     bottom: 120px;
   }
-  
+
   /* Navigation buttons container for mobile */
   .carousel-3d-nav-container {
     position: relative;
@@ -309,7 +310,7 @@
     margin-top: 1rem;
     width: 100%;
   }
-  
+
   /* Mobile navigation button styles */
   .mobile-nav {
     position: relative;
@@ -321,7 +322,7 @@
     z-index: 1001;
     pointer-events: auto;
   }
-  
+
   .carousel-3d-thumbnail {
     width: 40px;
     height: 40px;
@@ -329,7 +330,7 @@
 }
 
 @media (max-width: 480px) {
-  .carousel-3d-nav:hover{
+  .carousel-3d-nav:hover {
     transform: translateY(0) scale(1);
   }
   .carousel-3d-container {
@@ -338,7 +339,7 @@
     padding: 0 0.75rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .carousel-3d-item {
     cursor: pointer;
     width: 400px;
@@ -346,15 +347,15 @@
     margin-left: -200px;
     margin-top: -120px;
   }
-  
+
   .carousel-3d-overlay {
     padding: 1.5rem 1rem 1rem;
   }
-  
+
   .carousel-3d-title {
     font-size: 1rem;
   }
-  
+
   .carousel-3d-description {
     font-size: 0.75rem;
     -webkit-line-clamp: 2;
