@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -54,21 +54,7 @@ const TestimonialsManager = () => {
     });
   };
 
-  const showWarningAlert = (title, text) => {
-    return Swal.fire({
-      title,
-      text,
-      icon: 'warning',
-      confirmButtonColor: '#f59e0b',
-      background: '#ffffff',
-      customClass: {
-        popup: 'rounded-2xl',
-        title: 'font-poppins font-bold text-primary',
-        content: 'font-poppins',
-        confirmButton: 'rounded-xl font-medium'
-      }
-    });
-  };
+  // Removed unused showWarningAlert function
 
   const showConfirmAlert = (title, text) => {
     return Swal.fire({
@@ -111,12 +97,12 @@ const TestimonialsManager = () => {
   useEffect(() => {
     loadTestimonials();
     loadStats();
-  }, []); // Remove loadTestimonials from dependencies to prevent TDZ
+  }, [loadTestimonials, loadStats]);
 
   // Load testimonials based on status and category filters
   useEffect(() => {
     loadTestimonials();
-  }, [statusFilter, categoryFilter]); // Remove loadTestimonials from dependencies
+  }, [statusFilter, categoryFilter, loadTestimonials]);
 
   // Reset form when opening
   useEffect(() => {
@@ -150,7 +136,7 @@ const TestimonialsManager = () => {
     }
   }, [editingTestimonial, testimonials]);
 
-  const loadTestimonials = async () => {
+  const loadTestimonials = useCallback(async () => {
     try {
       setLoading(true);
       
@@ -182,9 +168,9 @@ const TestimonialsManager = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter, categoryFilter]);
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     try {
       const response = await apiService.getTestimonialsStats();
       if (response.success) {
@@ -199,7 +185,7 @@ const TestimonialsManager = () => {
     } catch (err) {
       await showErrorAlert('Error', 'Failed to load statistics: ' + err.message);
     }
-  };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;

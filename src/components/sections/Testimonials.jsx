@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Flame from '../../assets/img/flame.webp';
 import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
 import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
@@ -79,7 +79,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const [error, setError] = useState(null);
 
   // Function to fetch testimonials
-  const fetchTestimonials = async () => {
+  const fetchTestimonials = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -111,12 +111,12 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentCategoryId]);
 
   // Fetch testimonials from API on component mount and when category changes
   useEffect(() => {
     fetchTestimonials();
-  }, [currentCategoryId]);
+  }, [currentCategoryId, fetchTestimonials]);
 
   // Filter testimonials based on category if provided
   const filteredTestimonials = currentCategoryId
