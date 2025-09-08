@@ -16,13 +16,16 @@ const OptInCountdown = () => {
   }, []);
 
   return (
-    <div className="w-full h-20 bg-primary text-white text-center py-3 shadow-md flex items-center justify-center">
-      <span className="font-semibold text-xl">
-        {spotsLeft.toLocaleString()} spots left!
-      </span>{' '}
-      <span className="ml-2 text-xl opacity-90">
-        {spotsLeft > 0 ? `Hurry before they run out!` : '🔥 All spots filled!'}
-      </span>
+    <div className="w-full h-20 bg-primary text-center py-3 shadow-md flex flex-col items-center justify-center">
+      <p className="font-semibold text-2xl text-white">
+        <span className="text-secondary">
+          {'⏳' + spotsLeft.toLocaleString()}
+        </span>{' '}
+        spots left!
+      </p>
+      <p className="ml-2 text-xl opacity-90 text-white">
+        {spotsLeft > 0 ? `Hurry before they run out!` : 'All spots filled!'}
+      </p>
     </div>
   );
 };
