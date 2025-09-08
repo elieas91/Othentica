@@ -9,15 +9,13 @@ import { Link } from 'react-router-dom';
 import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
 
 const Hero = () => {
-  // Function to handle smooth scrolling to philosophy section
-  const handleScrollToPhilosophy = () => {
-    const element = document.getElementById('philosophy');
-    if (element) {
-      const offset = 80; // Account for fixed navigation height
-      const elementPosition = element.offsetTop - offset;
-      window.scrollTo({
-        top: elementPosition,
+  // Function to scroll to philosophy section
+  const scrollToPhilosophy = () => {
+    const philosophySection = document.getElementById('philosophySec');
+    if (philosophySection) {
+      philosophySection.scrollIntoView({ 
         behavior: 'smooth',
+        block: 'start'
       });
     }
   };
@@ -205,8 +203,8 @@ const Hero = () => {
           <Button
             variant="secondary"
             size="large"
-            onClick={handleScrollToPhilosophy}
             className="w-full sm:w-auto"
+            onClick={scrollToPhilosophy}
           >
             What is Othentica
           </Button>

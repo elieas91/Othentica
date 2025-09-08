@@ -272,6 +272,66 @@ class ApiService {
     const response = await this.authenticatedRequest(`${this.baseURL}/testimonials/stats`);
     return response.json();
   }
+
+  // Opt-in endpoints
+  async optIn(formData) {
+    const response = await fetch(`${this.baseURL}/optin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    return { response, data };
+  }
+
+  // Admin opt-in management endpoints
+  async getAllOptinUsers() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin`);
+    return response.json();
+  }
+
+  async getOptinUserById(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/${id}`);
+    return response.json();
+  }
+
+  async getOptinUsersByCountry(country) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/country/${country}`);
+    return response.json();
+  }
+
+  async updateOptinUser(id, userData) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData),
+    });
+    return response.json();
+  }
+
+  async deleteOptinUser(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  }
+
+  async getOptinStats() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/stats`);
+    return response.json();
+  }
+
+  async checkEmailExists(email) {
+    const response = await fetch(`${this.baseURL}/optin/check-email/${email}`);
+    return response.json();
+  }
+
+  async getOptinCount() {
+    const response = await fetch(`${this.baseURL}/optin/count`);
+    return response.json();
+  }
 }
 
 // Create and export a singleton instance

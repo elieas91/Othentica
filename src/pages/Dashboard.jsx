@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import TestimonialsManager from '../components/admin/TestimonialsManager';
+import OptInManager from '../components/admin/OptInManager';
 import LogoWhite from '../assets/img/logo_white.webp';
 import { 
   Bars3Icon, 
@@ -12,7 +13,8 @@ import {
   ChartBarIcon,
   Cog6ToothIcon,
   ChevronLeftIcon,
-  BookmarkIcon
+  BookmarkIcon,
+  UserPlusIcon
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 
@@ -53,8 +55,9 @@ const Dashboard = () => {
   const navigationItems = [
     { id: 'overview', name: 'Overview', icon: HomeIcon, color: 'from-blue-500 to-blue-600' },
     { id: 'testimonials', name: 'Testimonials', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500' },
-    { id: 'users', name: 'Users', icon: UsersIcon, color: 'from-green-500 to-emerald-600' },
-    { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'from-purple-500 to-violet-600' },
+    { id: 'optin', name: 'Opt-in Users', icon: UserPlusIcon, color: 'from-green-500 to-emerald-600' },
+    { id: 'users', name: 'Users', icon: UsersIcon, color: 'from-purple-500 to-violet-600' },
+    { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'from-indigo-500 to-indigo-600' },
     { id: 'settings', name: 'Settings', icon: Cog6ToothIcon, color: 'from-gray-500 to-gray-600' },
   ];
 
@@ -62,6 +65,8 @@ const Dashboard = () => {
     switch (activeSection) {
       case 'testimonials':
         return <TestimonialsManager />;
+      case 'optin':
+        return <OptInManager />;
       case 'users':
         return <div className="p-6"><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Users Management</h2><p className="text-gray-600 dark:text-gray-400">Coming soon...</p></div>;
       case 'analytics':
@@ -143,7 +148,7 @@ const Dashboard = () => {
                   <p className="text-gray-600 mt-1">Access frequently used features</p>
                 </div>
                 <div className="p-8">
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <button 
                       onClick={() => setActiveSection('testimonials')}
                       className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
@@ -156,11 +161,22 @@ const Dashboard = () => {
                       </div>
                     </button>
                     <button 
-                      onClick={() => setActiveSection('users')}
+                      onClick={() => setActiveSection('optin')}
                       className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
                     >
                       <div className="text-center">
                         <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                          <UserPlusIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <p className="text-sm font-semibold text-primary font-poppins">Manage Opt-ins</p>
+                      </div>
+                    </button>
+                    <button 
+                      onClick={() => setActiveSection('users')}
+                      className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
                           <UsersIcon className="w-6 h-6 text-white" />
                         </div>
                         <p className="text-sm font-semibold text-primary font-poppins">Manage Users</p>

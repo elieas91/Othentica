@@ -7,7 +7,7 @@ const Philosophy = () => {
   return (
     <section
       className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white dark:bg-primary"
-      id="philosophy"
+      id="philosophySec"
     >
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 items-center">
         {/* Left Image */}

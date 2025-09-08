@@ -4,10 +4,13 @@ import Modal from '../components/ui/Modal';
 import { useState } from 'react';
 import { countryList } from '../data/countryList';
 import ClockAnimation from '../components/ui/ClockAnimation';
+import apiService from '../services/api';
 
 const OptIn = () => {
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [thankYouModalOpen, setThankYouModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const [clockAnimation, setClockAnimation] = useState(false);
 
@@ -24,6 +27,8 @@ const OptIn = () => {
   const handleFormModalClose = () => {
     setFormModalOpen(false);
     setForm(initialFormState);
+    setSubmitError('');
+    setIsSubmitting(false);
   };
 
   const handleThankYouModalClose = () => {
@@ -39,8 +44,10 @@ const OptIn = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
+    
     // Client-side validation for all mandatory fields
     const { firstName, email, phone, company, country, acknowledge } = form;
     if (
@@ -51,12 +58,37 @@ const OptIn = () => {
       !country.trim() ||
       !acknowledge
     ) {
-      alert('Please fill in all fields and acknowledge the disclaimer.');
+      setSubmitError('Please fill in all fields and acknowledge the disclaimer.');
       return;
     }
-    // TODO: handle form submission (API call, etc.)
-    handleFormModalClose();
-    setThankYouModalOpen(true);
+
+    setIsSubmitting(true);
+
+    try {
+      const formData = {
+        firstName: firstName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        company: company.trim(),
+        country: country.trim()
+      };
+
+      const { response, data } = await apiService.optIn(formData);
+
+      if (response.ok) {
+        // Success - close form modal and show thank you modal
+        handleFormModalClose();
+        setThankYouModalOpen(true);
+      } else {
+        // Handle API errors
+        setSubmitError(data.error || 'Failed to register. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCopy = () => {
@@ -124,6 +156,11 @@ const OptIn = () => {
         title="Othentica Early Access Registration"
       >
         <form className="space-y-4" onSubmit={handleSubmit}>
+          {submitError && (
+            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              {submitError}
+            </div>
+          )}
           <div>
             <label
               className="block text-sm font-medium mb-1"
@@ -221,8 +258,13 @@ const OptIn = () => {
               Othentica and for early access purposes.
             </label>
           </div>
-          <Button variant="secondary" className="w-full" type="submit">
-            Submit
+          <Button 
+            variant="secondary" 
+            className="w-full" 
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
         </form>
         {/* Reassurance and Disclaimer Section */}
