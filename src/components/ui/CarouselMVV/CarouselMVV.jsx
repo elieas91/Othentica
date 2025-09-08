@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { missionVisionValuesData } from '../../../data/missionVisionValuesData';
 import CompassIcon from '../../../assets/img/compass.svg';
+import ReadMoreModal from '../ReadMoreModal';
 import './CarouselMVV.css';
 
 const CarouselMVV = ({ className = '' }) => {
@@ -9,6 +10,8 @@ const CarouselMVV = ({ className = '' }) => {
   const [startX, setStartX] = useState(0);
   const [translateZ, setTranslateZ] = useState(700);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', content: '' });
   const carouselRef = useRef(null);
   const hasInitialized = useRef(false);
   const wheelTimeoutRef = useRef(null);
@@ -30,7 +33,8 @@ const CarouselMVV = ({ className = '' }) => {
     return duplicated;
   };
 
-  const carouselItems = duplicateItems(missionVisionValuesData, 2); // Duplicate 2 times (6 total items)
+  // Memoize carousel items to prevent unnecessary re-renders
+  const carouselItems = useMemo(() => duplicateItems(missionVisionValuesData, 2), []); // Duplicate 2 times (6 total items)
   const totalItems = carouselItems.length;
   const angleStep = 360 / totalItems;
   
@@ -94,6 +98,20 @@ const CarouselMVV = ({ className = '' }) => {
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
+
+  // Handle read more click with useCallback for better performance
+  const handleReadMore = useCallback((slide) => {
+    setModalContent({
+      title: slide.title,
+      content: slide.fullDescription
+    });
+    setModalOpen(true);
+  }, []);
+
+  // Close modal with useCallback
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+  }, []);
 
   // Mouse wheel navigation with debouncing and threshold (desktop only)
   const handleWheel = (e) => {
@@ -222,6 +240,15 @@ const CarouselMVV = ({ className = '' }) => {
                   <div className="carousel-3d-overlay">
                     <h3 className="carousel-3d-title">{slide.title}</h3>
                     <p className="carousel-3d-description">{slide.description}</p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReadMore(slide);
+                      }}
+                      className="mt-4 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors text-sm font-medium"
+                    >
+                      Read More
+                    </button>
                   </div>
                 </div>
               </div>
@@ -265,6 +292,14 @@ const CarouselMVV = ({ className = '' }) => {
           );
         })}
       </div>
+
+      {/* Read More Modal */}
+      <ReadMoreModal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title={modalContent.title}
+        content={modalContent.content}
+      />
     </div>
   );
 };
