@@ -16,11 +16,11 @@ const OptInCountdown = () => {
   }, []);
 
   return (
-    <div className="w-full bg-primary text-white text-center py-3 shadow-md">
-      <span className="font-semibold">
-        🎉 {spotsLeft.toLocaleString()} spots left!
+    <div className="w-full h-20 bg-primary text-white text-center py-3 shadow-md flex items-center justify-center">
+      <span className="font-semibold text-xl">
+        {spotsLeft.toLocaleString()} spots left!
       </span>{' '}
-      <span className="ml-2 text-sm opacity-90">
+      <span className="ml-2 text-xl opacity-90">
         {spotsLeft > 0 ? `Hurry before they run out!` : '🔥 All spots filled!'}
       </span>
     </div>
