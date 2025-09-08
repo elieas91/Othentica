@@ -1,5 +1,5 @@
 import Horiverde from '../assets/img/clients/horiverde.webp';
-import PTI from '../assets/img/clients/pti.webp';
+import PTI from '../assets/img/clients/Pti.webp';
 
 export const clientsData = [
   {
