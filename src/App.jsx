@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ui/ScrollToTop';
-import { Home, About, Services, SocialMedia, Contact, Login, Register, Dashboard } from './pages';
+import { Home, About, Services, SocialMedia, Contact, Login, Register, Dashboard, OptIn } from './pages';
 import { AuthProvider } from './contexts/AuthContext';
 import AdminLayout from './components/layout/AdminLayout';
 import './App.css';
@@ -33,6 +33,7 @@ function App() {
                 <Route path="/blog" element={<SocialMedia />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/opt-in" element={<OptIn/> }/>
               </Routes>
             </Layout>
           } />
