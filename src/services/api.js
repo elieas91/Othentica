@@ -7,7 +7,7 @@ const getApiBaseUrl = () => {
   
   // In production (when deployed), API is on port 5000
   if (import.meta.env.PROD) {
-    return 'http://othentica-app.com:5000/api';
+    return 'https://othentica-app.com:5000/api';
   }
   
   // In development, use localhost
