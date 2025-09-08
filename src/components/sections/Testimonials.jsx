@@ -161,7 +161,22 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
     // If imageUrl is provided (from database), use it
     if (imageUrl) {
-      return imageUrl;
+      // Ensure the URL has the correct path structure for production
+      // If it's a relative URL or missing /server prefix in production, fix it
+      if (imageUrl.startsWith('http')) {
+        return imageUrl; // Already a full URL, use as is
+      } else if (imageUrl.startsWith('/uploads/')) {
+        // If it's a relative URL starting with /uploads, check if we need to add /server prefix
+        const isProduction = window.location.hostname.includes('othentica-app.com') || 
+                           window.location.hostname.includes('othentica.com');
+        return isProduction ? `/server${imageUrl}` : imageUrl;
+      } else {
+        // If it's just a filename, construct the full path
+        const isProduction = window.location.hostname.includes('othentica-app.com') || 
+                           window.location.hostname.includes('othentica.com');
+        const basePath = isProduction ? '/server/uploads/testimonials' : '/uploads/testimonials';
+        return `${basePath}/${imageUrl}`;
+      }
     }
     
     // Otherwise, use static image mapping
