@@ -5,13 +5,13 @@ const getApiBaseUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // In production (when deployed), API is on subdomain
-  // if (import.meta.env.PROD) {
-    return 'https://othentica-app.com/api';
-  // }
+  // In production (when deployed), API is on port 5000
+  if (import.meta.env.PROD) {
+    return 'http://othentica-app.com:5000/api';
+  }
   
   // In development, use localhost
-  // return 'http://localhost:5001/api';
+  return 'http://localhost:5001/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
