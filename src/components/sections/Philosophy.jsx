@@ -37,7 +37,7 @@ const Philosophy = () => {
             </p>
             <p className="text-base sm:text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
               Users explore islands, unlock bridges, and grow their inner flame
-              — gaining focus, energy, and balance along the way. Whether for
+               gaining focus, energy, and balance along the way. Whether for
               individuals or organizations, Othentica makes personal growth not
               just achievable, but inspiring and fun.
             </p>
