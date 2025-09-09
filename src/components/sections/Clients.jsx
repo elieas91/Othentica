@@ -72,7 +72,7 @@ const Clients = () => {
                   key={client.id}
                   className="text-center group w-32 h-32 flex-shrink-0 relative"
                 >
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center border border-white relative z-10">
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center border border-white relative z-10">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo`}
