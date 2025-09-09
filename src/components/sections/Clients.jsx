@@ -4,9 +4,7 @@ import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.0.webp';
 import Flame from '../../assets/img/flame.webp';
 
 const Clients = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const shouldUseCarousel = clientsData.length > 6;
-  const itemsPerView = 4;
   
   // Drag functionality
   const [isDragging, setIsDragging] = useState(false);
@@ -125,7 +123,6 @@ const Clients = () => {
   }
 
   // Carousel layout for more than 6 clients
-  const currentClients = clientsData.slice(currentIndex, currentIndex + itemsPerView);
 
   return (
     <section className="py-16 px-8 lg:px-16">
