@@ -3,6 +3,7 @@ import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import { useState } from 'react';
 import { countryList } from '../data/countryList';
+import { industryList } from '../data/industryList';
 import ClockAnimation from '../components/ui/ClockAnimation';
 import apiService from '../services/api';
 
@@ -17,9 +18,11 @@ const OptIn = () => {
   const initialFormState = {
     firstName: '',
     email: '',
+    phoneCountryCode: '',
     phone: '',
     company: '',
     country: '',
+    industry: '',
     acknowledge: false,
   };
   const [form, setForm] = useState(initialFormState);
@@ -47,18 +50,23 @@ const OptIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError('');
-    
+
     // Client-side validation for all mandatory fields
-    const { firstName, email, phone, company, country, acknowledge } = form;
+    const { firstName, email, phone, company, country, industry, acknowledge } =
+      form;
     if (
       !firstName.trim() ||
       !email.trim() ||
+      !phoneCountryCode.trim() ||
       !phone.trim() ||
       !company.trim() ||
       !country.trim() ||
+      !industry.trim() ||
       !acknowledge
     ) {
-      setSubmitError('Please fill in all fields and acknowledge the disclaimer.');
+      setSubmitError(
+        'Please fill in all fields and acknowledge the disclaimer.'
+      );
       return;
     }
 
@@ -68,9 +76,11 @@ const OptIn = () => {
       const formData = {
         firstName: firstName.trim(),
         email: email.trim(),
+        phoneCountryCode: phoneCountryCode.trim(),
         phone: phone.trim(),
         company: company.trim(),
-        country: country.trim()
+        country: country.trim(),
+        industry: industry.trim(),
       };
 
       const { response, data } = await apiService.optIn(formData);
@@ -85,7 +95,9 @@ const OptIn = () => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      setSubmitError('Network error. Please check your connection and try again.');
+      setSubmitError(
+        'Network error. Please check your connection and try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +192,7 @@ const OptIn = () => {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="email">
-              Personal Email Address *
+              <span className="font-bold">Personal</span> Email Address *
             </label>
             <input
               type="email"
@@ -196,22 +208,34 @@ const OptIn = () => {
             <label className="block text-sm font-medium mb-1" htmlFor="phone">
               Personal Phone Number *
             </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring"
-            />
+            <div className="flex gap-2">
+              {/* Phone Country Code */}
+              <input
+                type="text"
+                id="phoneCountryCode"
+                name="phoneCountryCode"
+                value={form.phoneCountryCode}
+                onChange={handleChange}
+                required
+                placeholder="+971"
+                className="w-24 px-3 py-2 border rounded-lg focus:outline-none focus:ring"
+              />
+
+              {/* Phone Number */}
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                required
+                className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="company">
               Company Name *{' '}
-              <span className="text-xs">
-                (put NA if not currently at a specific job)
-              </span>
             </label>
             <input
               type="text"
@@ -222,6 +246,29 @@ const OptIn = () => {
               required
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring"
             />
+          </div>
+          <div>
+            <label
+              className="block text-sm font-medium mb-1"
+              htmlFor="industry"
+            >
+              Industry *
+            </label>
+            <select
+              id="industry"
+              name="industry"
+              value={form.industry}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring"
+            >
+              <option value="">Select your industry</option>
+              {industryList.map((industry) => (
+                <option key={industry.id} value={industry.name}>
+                  {industry.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="country">
@@ -243,6 +290,25 @@ const OptIn = () => {
               ))}
             </select>
           </div>
+
+          {/* Reassurance and Disclaimer Section */}
+          <div className="mt-6 p-4 bg-gray-50 dark:bg-neutral rounded-lg text-sm border border-gray-200 dark:border-gray-700">
+            <h3 className="font-semibold mb-2">Disclaimer</h3>
+            <p>
+              Your privacy matters. Othentica will keep your personal data safe
+              and will only use it to send you updates and app access
+              information.
+            </p>
+            <h3 className="font-semibold mt-4 mb-2">Important Note</h3>
+            <p>
+              Othentica is a wellness, self-growth, and brain-health awareness
+              platform. It does not provide medical advice and is not a
+              substitute for professional medical or mental health care. If you
+              need medical attention, please consult a qualified healthcare
+              provider. By continuing, you acknowledge that your use of
+              Othentica is for wellness purposes only.
+            </p>
+          </div>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -258,32 +324,15 @@ const OptIn = () => {
               Othentica and for early access purposes.
             </label>
           </div>
-          <Button 
-            variant="secondary" 
-            className="w-full" 
+          <Button
+            variant="secondary"
+            className="w-full"
             type="submit"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
         </form>
-        {/* Reassurance and Disclaimer Section */}
-        <div className="mt-6 p-4 bg-gray-50 dark:bg-neutral rounded-lg text-sm border border-gray-200 dark:border-gray-700">
-          <h3 className="font-semibold mb-2">Reassurance & Disclaimer</h3>
-          <p>
-            Your privacy matters. Othentica will keep your personal data safe
-            and will only use it to send you updates and app access information.
-          </p>
-          <h3 className="font-semibold mt-4 mb-2">Important Note</h3>
-          <p>
-            Othentica is a wellness, self-growth, and brain-health awareness
-            platform. It does not provide medical advice and is not a substitute
-            for professional medical or mental health care. If you need medical
-            attention, please consult a qualified healthcare provider. By
-            continuing, you acknowledge that your use of Othentica is for
-            wellness purposes only.
-          </p>
-        </div>
       </Modal>
 
       {/* Thank you Modal */}
