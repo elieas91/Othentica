@@ -1,6 +1,6 @@
 import Horiverde from '../assets/img/clients/horiverde.webp';
 import PTI from '../assets/img/clients/Pti.webp';
-import Ahli from '../assets/img/clients/Ahli.webp';
+import Ahli from '../assets/img/clients/ahli.webp';
 
 export const clientsData = [
   {
