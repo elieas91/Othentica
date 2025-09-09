@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { clientsData } from '../../data/clientsData';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.0.webp';
 import Flame from '../../assets/img/flame.webp';
@@ -6,37 +6,73 @@ import Flame from '../../assets/img/flame.webp';
 const Clients = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const shouldUseCarousel = clientsData.length > 6;
-  const itemsPerView = 6;
+  const itemsPerView = 4;
+  
+  // Drag functionality
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const carouselRef = useRef(null);
+  
+  // Create infinite scroll data by duplicating clients
+  const infiniteClientsData = [...clientsData, ...clientsData, ...clientsData];
 
   // Auto-rotate through clients every 4 seconds if carousel is active
   useEffect(() => {
-    if (!shouldUseCarousel) return;
+    if (!shouldUseCarousel || isDragging) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex(
-        (prevIndex) =>
-          (prevIndex + 1) % (clientsData.length - itemsPerView + 1)
-      );
+      if (carouselRef.current) {
+        const scrollAmount = 272; // w-36 (144px) + gap-32 (128px)
+        carouselRef.current.scrollLeft += scrollAmount;
+      }
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [shouldUseCarousel, itemsPerView]);
+  }, [shouldUseCarousel, isDragging]);
 
-  const nextSlide = () => {
+  // Mouse drag handlers
+  const handleMouseDown = (e) => {
     if (!shouldUseCarousel) return;
-    const maxIndex = clientsData.length - itemsPerView;
-    setCurrentIndex(
-      (prevIndex) => (prevIndex + 1) % (maxIndex + 1)
-    );
+    setIsDragging(true);
+    setStartX(e.pageX - carouselRef.current.offsetLeft);
+    setScrollLeft(carouselRef.current.scrollLeft);
+    carouselRef.current.style.cursor = 'grabbing';
   };
 
-  const prevSlide = () => {
+  const handleMouseLeave = () => {
     if (!shouldUseCarousel) return;
-    const maxIndex = clientsData.length - itemsPerView;
-    setCurrentIndex((prevIndex) => {
-      return prevIndex === 0 ? maxIndex : prevIndex - 1;
-    });
+    setIsDragging(false);
+    carouselRef.current.style.cursor = 'grab';
   };
+
+  const handleMouseUp = () => {
+    if (!shouldUseCarousel) return;
+    setIsDragging(false);
+    carouselRef.current.style.cursor = 'grab';
+  };
+
+  const handleMouseMove = (e) => {
+    if (!shouldUseCarousel || !isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    carouselRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  // Handle infinite scroll reset
+  const handleScroll = () => {
+    if (!carouselRef.current) return;
+    
+    const { scrollLeft } = carouselRef.current;
+    const singleSetWidth = clientsData.length * (144 + 128); // w-36 (144px) + gap-32 (128px)
+    
+    // If scrolled past the first set, reset to beginning
+    if (scrollLeft >= singleSetWidth) {
+      carouselRef.current.scrollLeft = scrollLeft - singleSetWidth;
+    }
+  };
+
 
 
 
@@ -66,18 +102,17 @@ const Clients = () => {
 
           {/* Centered Client Logos with Flexbox */}
           <div className="flex justify-center">
-            <div className="flex flex-wrap justify-center gap-8 max-w-4xl">
+            <div className="flex flex-wrap justify-center gap-32 max-w-4xl">
               {clientsData.map((client) => (
                 <div
                   key={client.id}
-                  className="text-center group w-32 h-32 flex-shrink-0 relative"
+                  className="text-center group w-36 aspect-square flex-shrink-0 relative"
                 >
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center border border-white relative z-10">
+                  <div className="w-full h-full flex items-center justify-center">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo`}
-                      className="max-w-full max-h-full cursor-pointer object-contain transition-all duration-300"
-                      style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '8px' }}
+                      className="w-full h-full cursor-pointer object-contain transition-all duration-300 group-hover:scale-105"
                     />
                   </div>
                 </div>
@@ -107,70 +142,37 @@ const Clients = () => {
         {/* Carousel Container */}
         <div className="relative max-w-6xl mx-auto">
           {/* Carousel Track */}
-          <div className="">
-            <div className="flex transition-transform duration-700 ease-in-out">
-              <div className="flex justify-center w-full">
-                <div className="flex flex-wrap justify-center gap-8">
-                  {currentClients.map((client) => (
-                    <div
-                      key={client.id}
-                      className="text-center group w-32 h-32 flex-shrink-0 relative"
-                    >
-                      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center relative z-10 border border-white">
-                        <img
-                          src={client.logo}
-                          alt={`${client.name} logo`}
-                          className="max-w-full max-h-full object-contain cursor-pointer transition-all duration-300"
-                          style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '8px' }}
-                        />
-                      </div>
+          <div className="overflow-hidden">
+            <div 
+              ref={carouselRef}
+              className="flex overflow-x-auto scrollbar-hide cursor-grab select-none"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              onScroll={handleScroll}
+            >
+              <div className="flex gap-32 px-8 py-4">
+                {infiniteClientsData.map((client, index) => (
+                  <div
+                    key={`${client.id}-${index}`}
+                    className="text-center group w-36 aspect-square flex-shrink-0 relative"
+                  >
+                    <div className="w-full h-full flex items-center justify-center">
+                      <img
+                        src={client.logo}
+                        alt={`${client.name} logo`}
+                        className="w-full h-full object-contain cursor-pointer transition-all duration-300 group-hover:scale-105"
+                        draggable={false}
+                      />
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 text-primary dark:text-neutral p-3 rounded-full shadow-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-300 z-10"
-            aria-label="Previous clients"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white dark:bg-gray-800 text-primary dark:text-neutral p-3 rounded-full shadow-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-all duration-300 z-10"
-            aria-label="Next clients"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
         </div>
       </div>
     </section>

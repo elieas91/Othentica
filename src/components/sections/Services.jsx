@@ -3,6 +3,7 @@ import { servicesData } from '../../data/servicesData';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
 import FlameSolid from '../../assets/img/flame_solid.webp';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
   return (
@@ -54,11 +55,11 @@ const Services = () => {
                   {service.description}
                 </p>
               </div>
-              <Button variant="secondary" className="w-full mt-auto" onClick={() => {
-                window.location.href = `/services#${service.sectionId}`;
-              }}>
+              <Link to={`/services#${service.sectionId}`} target="_blank">
+              <Button variant="secondary" className="w-full mt-auto" >
                 {service.buttonText}
               </Button>
+              </Link>
             </Card>
           ))}
         </div>

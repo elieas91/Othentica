@@ -5,12 +5,13 @@ import WhiteLogo from '../../assets/img/logo_white.webp';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
 
-const Footer = () => {
+const Footer = ({ minimal = false }) => {
   return (
     <footer className="bg-primary py-10 px-8 lg:px-16">
       <div className="max-w-6xl mx-auto">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        {/* Main Footer Content - only show if not minimal */}
+        {!minimal && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div className="lg:col-span-2 text-center md:text-left">
             {/* <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3> */}
@@ -134,9 +135,10 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+        )}
 
         {/* Bottom Footer */}
-        <div className="border-t border-white/20 pt-8 mt-8">
+        <div className={`border-t border-white/20 pt-8 ${!minimal ? 'mt-8' : 'mt-0'}`}>
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0">
               <p className="text-sm text-gray-200 text-center md:text-left">

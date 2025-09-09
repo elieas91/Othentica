@@ -15,7 +15,7 @@ const Features = () => {
               </span>
             </div>
         </div>
-        <div className="relative z-10 flex flex-col justify-start h-[500px] overflow-y-auto top-[2rem]">
+        <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
           <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">
             {appFeaturesData.map((feature) => (
               <li key={feature.id} className="flex items-start mb-2">
@@ -47,7 +47,7 @@ const Benefits = () => {
               </span>
             </div>
         </div>
-        <div className="relative z-10 flex flex-col justify-start h-[500px] overflow-y-auto top-[2rem]">
+        <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
           <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">
             {appBenefitsData.map((benefit) => (
               <li key={benefit.id} className="flex items-start mb-2">

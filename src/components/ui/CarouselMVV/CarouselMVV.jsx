@@ -350,7 +350,9 @@ const CarouselMVV = ({ className = '' }) => {
                 <div 
                   className="carousel-3d-modal-description"
                   dangerouslySetInnerHTML={{ 
-                    __html: modalContent.description.replace(/\n/g, '<br/>') 
+                    __html: modalContent.description
+                      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Convert **text** to <strong>text</strong>
+                      .replace(/\n/g, '<br/>') 
                   }}
                 />
               </div>

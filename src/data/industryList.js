@@ -146,4 +146,5 @@ export const industryList = [
   { id: 145, name: 'Wine/Spirits' },
   { id: 146, name: 'Wireless' },
   { id: 147, name: 'Writing/Editing' },
+  { id: 148, name: 'Other' },
 ];
