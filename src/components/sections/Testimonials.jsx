@@ -161,19 +161,22 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
     // If imageUrl is provided (from database), use it
     if (imageUrl) {
-      // Ensure the URL has the correct path structure for production
-      // If it's a relative URL or missing /server prefix in production, fix it
+      // Check if we're in production
+      const isProduction = window.location.hostname.includes('othentica-app.com') || 
+                         window.location.hostname.includes('othentica.com');
+      
+      // If it's a full URL, check if it needs to be corrected for production
       if (imageUrl.startsWith('http')) {
-        return imageUrl; // Already a full URL, use as is
+        // If it's a localhost URL in production, replace it with the correct domain
+        if (isProduction && imageUrl.includes('localhost:5001')) {
+          return imageUrl.replace('http://localhost:5001', 'https://othentica-app.com/server');
+        }
+        return imageUrl; // Already a correct full URL, use as is
       } else if (imageUrl.startsWith('/uploads/')) {
         // If it's a relative URL starting with /uploads, check if we need to add /server prefix
-        const isProduction = window.location.hostname.includes('othentica-app.com') || 
-                           window.location.hostname.includes('othentica.com');
         return isProduction ? `/server${imageUrl}` : imageUrl;
       } else {
         // If it's just a filename, construct the full path
-        const isProduction = window.location.hostname.includes('othentica-app.com') || 
-                           window.location.hostname.includes('othentica.com');
         const basePath = isProduction ? '/server/uploads/testimonials' : '/uploads/testimonials';
         return `${basePath}/${imageUrl}`;
       }
@@ -387,11 +390,11 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
               <cite className="text-base sm:text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
                 <span className="flex items-center gap-3 mb-4 sm:mb-0">
-                  {/* <img
+                  <img
                     src={getTestimonialImagePath(currentTestimonial?.image, currentTestimonial?.imageUrl)}
                     alt={currentTestimonial?.author || 'Testimonial author'}
                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
-                  /> */}
+                  />
                   <span>– {currentTestimonial?.author || 'Anonymous'}</span>
                 </span>
               </cite>
