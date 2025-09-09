@@ -93,49 +93,6 @@ const TestimonialsManager = () => {
   });
   const [imagePreview, setImagePreview] = useState(null);
 
-  // Load testimonials on component mount
-  useEffect(() => {
-    loadTestimonials();
-    loadStats();
-  }, [loadTestimonials, loadStats]);
-
-  // Load testimonials based on status and category filters
-  useEffect(() => {
-    loadTestimonials();
-  }, [statusFilter, categoryFilter, loadTestimonials]);
-
-  // Reset form when opening
-  useEffect(() => {
-    if (showForm && !editingTestimonial) {
-      setFormData({
-        name: '',
-        description: '',
-        image: null,
-        status: 'pending',
-        category: 'app'
-      });
-      setImagePreview(null);
-    }
-  }, [showForm, editingTestimonial]);
-
-  // Load testimonial data when editing
-  useEffect(() => {
-    if (editingTestimonial && testimonials.length > 0) {
-      const testimonial = testimonials.find(t => t.id === editingTestimonial);
-      if (testimonial) {
-        setFormData({
-          name: testimonial.name,
-          description: testimonial.description,
-          image: null, // Reset file input
-          status: testimonial.status || 'pending',
-          category: testimonial.category || 'app'
-        });
-        // Set image preview from existing image URL
-        setImagePreview(testimonial.imageUrl || null);
-      }
-    }
-  }, [editingTestimonial, testimonials]);
-
   const loadTestimonials = useCallback(async () => {
     try {
       setLoading(true);
@@ -186,6 +143,49 @@ const TestimonialsManager = () => {
       await showErrorAlert('Error', 'Failed to load statistics: ' + err.message);
     }
   }, []);
+
+  // Load testimonials on component mount
+  useEffect(() => {
+    loadTestimonials();
+    loadStats();
+  }, [loadTestimonials, loadStats]);
+
+  // Load testimonials based on status and category filters
+  useEffect(() => {
+    loadTestimonials();
+  }, [statusFilter, categoryFilter, loadTestimonials]);
+
+  // Reset form when opening
+  useEffect(() => {
+    if (showForm && !editingTestimonial) {
+      setFormData({
+        name: '',
+        description: '',
+        image: null,
+        status: 'pending',
+        category: 'app'
+      });
+      setImagePreview(null);
+    }
+  }, [showForm, editingTestimonial]);
+
+  // Load testimonial data when editing
+  useEffect(() => {
+    if (editingTestimonial && testimonials.length > 0) {
+      const testimonial = testimonials.find(t => t.id === editingTestimonial);
+      if (testimonial) {
+        setFormData({
+          name: testimonial.name,
+          description: testimonial.description,
+          image: null, // Reset file input
+          status: testimonial.status || 'pending',
+          category: testimonial.category || 'app'
+        });
+        // Set image preview from existing image URL
+        setImagePreview(testimonial.imageUrl || null);
+      }
+    }
+  }, [editingTestimonial, testimonials]);
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
