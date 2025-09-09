@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { clientsData } from '../../data/clientsData';
+import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.0.webp';
 import Flame from '../../assets/img/flame.webp';
 
 const Clients = () => {
@@ -43,6 +44,16 @@ const Clients = () => {
     // Static flexbox layout for 6 or fewer clients
     return (
       <section className="py-16 px-8 lg:px-16 bg-white">
+        {/* Background layer with logo pattern */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url(${LogoPattern})`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '200px 350px',
+            opacity: 0.2,
+          }}
+        />
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
@@ -59,13 +70,14 @@ const Clients = () => {
               {clientsData.map((client) => (
                 <div
                   key={client.id}
-                  className="text-center group w-32 h-32 flex-shrink-0"
+                  className="text-center group w-32 h-32 flex-shrink-0 relative"
                 >
-                  <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center">
+                  <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center border border-white relative z-10">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo`}
                       className="max-w-full max-h-full cursor-pointer object-contain transition-all duration-300"
+                      style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '8px' }}
                     />
                   </div>
                 </div>
@@ -102,13 +114,14 @@ const Clients = () => {
                   {currentClients.map((client) => (
                     <div
                       key={client.id}
-                      className="text-center group w-32 h-32 flex-shrink-0"
+                      className="text-center group w-32 h-32 flex-shrink-0 relative"
                     >
-                      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center">
+                      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 group-hover:scale-105 w-full h-full flex items-center justify-center relative z-10 border border-white">
                         <img
                           src={client.logo}
                           alt={`${client.name} logo`}
                           className="max-w-full max-h-full object-contain cursor-pointer transition-all duration-300"
+                          style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '8px' }}
                         />
                       </div>
                     </div>
