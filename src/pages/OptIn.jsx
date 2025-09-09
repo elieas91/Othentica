@@ -1,7 +1,7 @@
 import OptInCountdown from '../components/layout/OptInCountdown';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { countryList } from '../data/countryList';
 import { industryList } from '../data/industryList';
 import ClockAnimation from '../components/ui/ClockAnimation';
@@ -12,6 +12,13 @@ const OptIn = () => {
   const [thankYouModalOpen, setThankYouModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const errorRef = useRef(null);
+  // Scroll to error message when submitError changes
+  useEffect(() => {
+    if (submitError && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [submitError]);
 
   const [clockAnimation, setClockAnimation] = useState(false);
 
@@ -52,8 +59,16 @@ const OptIn = () => {
     setSubmitError('');
 
     // Client-side validation for all mandatory fields
-    const { firstName, email, phone, company, country, industry, acknowledge } =
-      form;
+    const {
+      firstName,
+      email,
+      phoneCountryCode,
+      phone,
+      company,
+      country,
+      industry,
+      acknowledge,
+    } = form;
     if (
       !firstName.trim() ||
       !email.trim() ||
@@ -67,6 +82,20 @@ const OptIn = () => {
       setSubmitError(
         'Please fill in all fields and acknowledge the disclaimer.'
       );
+      return;
+    }
+
+    // Validate phoneCountryCode format: must start with + and only contain numbers after
+    if (!/^\+[0-9]+$/.test(phoneCountryCode.trim())) {
+      setSubmitError(
+        'Phone country code must start with + and contain only numbers after it.'
+      );
+      return;
+    }
+
+    // Validate phone: must only contain numbers
+    if (!/^[0-9]+$/.test(phone.trim())) {
+      setSubmitError('Phone number must contain only numbers.');
       return;
     }
 
@@ -169,7 +198,10 @@ const OptIn = () => {
       >
         <form className="space-y-4" onSubmit={handleSubmit}>
           {submitError && (
-            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <div
+              ref={errorRef}
+              className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg"
+            >
               {submitError}
             </div>
           )}
