@@ -22,7 +22,7 @@ const Footer = () => {
             <p className="text-gray-100 mb-6 font-bold leading-relaxed">
               Your map to clarity, resilience, and growth.
             </p>
-            
+
             {/* App Store Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-center items-center md:items-start md:justify-start">
               <Link
@@ -52,7 +52,7 @@ const Footer = () => {
                 />
               </Link>
             </div>
-            
+
             <div className="flex space-x-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com/company/othentica-fzc-llc"
@@ -120,16 +120,16 @@ const Footer = () => {
             <h3 className="text-lg font-bold text-neutral mb-4">Services</h3>
             <ul className="space-y-2">
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services">Wellness Coaching</Link>
+                <Link to="/services#app">The Othentica App</Link>
               </li>
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services">Mobile Apps</Link>
+                <Link to="/services#programs">Tailored Programs</Link>
               </li>
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services">Performance Training</Link>
+                <Link to="/services#talks">Talks & Workshops</Link>
               </li>
               <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services">Relaxation Techniques</Link>
+                <Link to="/services#one-to-one">1:1 Guidance</Link>
               </li>
             </ul>
           </div>
@@ -144,10 +144,16 @@ const Footer = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-center md:text-left">
-              <Link to="/privacy" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
+              <Link
+                to="/privacy"
+                className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
+              >
                 Privacy Policy
               </Link>
-              <Link to="#" className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out">
+              <Link
+                to="#"
+                className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
+              >
                 Terms & Conditions
               </Link>
               <a
