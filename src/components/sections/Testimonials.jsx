@@ -159,40 +159,28 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
-    // If imageUrl is provided (from database), use it
-    if (imageUrl) {
-      // Check if we're in production
-      const isProduction = window.location.hostname.includes('othentica-app.com') || 
-                         window.location.hostname.includes('othentica.com');
-      
-      // If it's a full URL, check if it needs to be corrected for production
-      if (imageUrl.startsWith('http')) {
-        // If it's a localhost URL in production, replace it with the correct domain
-        if (isProduction && imageUrl.includes('localhost:5001')) {
-          return imageUrl.replace('http://localhost:5001', 'https://othentica-app.com/server');
-        }
-        return imageUrl; // Already a correct full URL, use as is
-      } else if (imageUrl.startsWith('/uploads/')) {
-        // If it's a relative URL starting with /uploads, check if we need to add /server prefix
-        return isProduction ? `/server${imageUrl}` : imageUrl;
-      } else {
-        // If it's just a filename, construct the full path
-        const basePath = isProduction ? '/server/uploads/testimonials' : '/uploads/testimonials';
-        return `${basePath}/${imageUrl}`;
-      }
-    }
-    
-    // Otherwise, use static image mapping
-    const imageMap = {
-      'testimonial-1': Testimonial1,
-      'testimonial-2': Testimonial2,
-      'testimonial-3': Testimonial3,
-      'testimonial-4': Testimonial4,
-      'testimonial-5': Testimonial5,
-      'testimonial-6': Testimonial6,
-    };
-    return imageMap[imageName] || Testimonial2; // fallback to first image
+  // If a database URL is provided
+  if (imageUrl) {
+    // If it’s already a full URL, just return it
+    if (imageUrl.startsWith('http')) return imageUrl;
+
+    // If it's just a filename or relative path, prepend /server/uploads/testimonials/
+    return `/server/uploads/testimonials/${imageUrl}`;
+  }
+
+  // Otherwise, use static fallback images
+  const imageMap = {
+    'testimonial-1': Testimonial1,
+    'testimonial-2': Testimonial2,
+    'testimonial-3': Testimonial3,
+    'testimonial-4': Testimonial4,
+    'testimonial-5': Testimonial5,
+    'testimonial-6': Testimonial6,
   };
+
+  return imageMap[imageName] || Testimonial2;
+};
+
 
   // Function to truncate quote to 2 lines
   const truncateQuote = (quote) => {
