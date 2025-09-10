@@ -411,7 +411,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             </div>
 
             {/* Add Testimonial Button - Outside Carousel */}
-              {/* <div className="mt-8">
+              <div className="mt-8">
                 <Button
                   variant="secondary"
                   className="w-full sm:w-auto"
@@ -419,7 +419,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                 >
                   Add your Testimonial
                 </Button>
-              </div> */}
+              </div>
           </div>
 
           {/* Right Side - Two Images from Different Categories */}
