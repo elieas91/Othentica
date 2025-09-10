@@ -230,6 +230,7 @@ const OptInManager = () => {
             <option value="first_name">Sort by Name</option>
             <option value="email">Sort by Email</option>
             <option value="country">Sort by Country</option>
+            <option value="status">Sort by Status</option>
           </select>
 
           <select
@@ -254,6 +255,7 @@ const OptInManager = () => {
                 <th className="px-6 py-4 text-left font-semibold">Phone</th>
                 <th className="px-6 py-4 text-left font-semibold">Company</th>
                 <th className="px-6 py-4 text-left font-semibold">Country</th>
+                <th className="px-6 py-4 text-left font-semibold">Status</th>
                 <th className="px-6 py-4 text-left font-semibold">Date</th>
                 <th className="px-6 py-4 text-center font-semibold">Actions</th>
               </tr>
@@ -275,6 +277,9 @@ const OptInManager = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-gray-600">{user.country}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="text-gray-600">{user.status}</div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-gray-600">
