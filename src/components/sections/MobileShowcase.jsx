@@ -42,7 +42,7 @@ const MobileShowcase = () => {
         style={{
           backgroundImage: `url(${LogoPattern})`,
           backgroundRepeat: 'repeat',
-          backgroundSize: '900px 895px',
+          backgroundSize: '900px 916px',
           opacity: 0.4,
         }}
       />
