@@ -1,10 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import TimerDoneSound from '../../assets/audio/timer_done.webm';
+
 
 const ClockAnimation = ({ duration = 60 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    if (timeLeft <= 0) return;
+    if (timeLeft <= 0) {
+      // Play sound when timer reaches 0
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+      return;
+    }
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
@@ -49,6 +59,8 @@ const ClockAnimation = ({ duration = 60 }) => {
         <span className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-bold">
           {timeLeft}
         </span>
+        {/* Hidden audio element for timer done sound */}
+        <audio ref={audioRef} src={TimerDoneSound} preload="auto" />
       </div>
     </div>
   );

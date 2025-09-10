@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { clientsData } from '../../data/clientsData';
-import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.0.webp';
-import Flame from '../../assets/img/flame.webp';
 
 const Clients = () => {
   const shouldUseCarousel = clientsData.length > 6;
@@ -78,16 +76,6 @@ const Clients = () => {
     // Static flexbox layout for 6 or fewer clients
     return (
       <section className="py-16 px-8 lg:px-16 bg-white">
-        {/* Background layer with logo pattern */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${LogoPattern})`,
-            backgroundRepeat: 'repeat',
-            backgroundSize: '200px 350px',
-            opacity: 0.2,
-          }}
-        />
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
@@ -100,7 +88,7 @@ const Clients = () => {
 
           {/* Centered Client Logos with Flexbox */}
           <div className="flex justify-center">
-            <div className="flex flex-wrap justify-center gap-32 max-w-4xl">
+            <div className="flex flex-nowrap justify-center gap-32 max-w-4xl">
               {clientsData.map((client) => (
                 <div
                   key={client.id}

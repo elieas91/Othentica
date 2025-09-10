@@ -204,7 +204,7 @@ const ServiceBlock = ({ service, index }) => {
                     position="top"
                   >
                     <button
-                      onClick={() => window.location.href = '/contact'}
+                      onClick={() => window.open('/contact', '_blank')}
                       className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 rounded-full"
                       aria-label="Contact us"
                     >
@@ -276,7 +276,7 @@ const ServiceBlock = ({ service, index }) => {
               variant="primary"
               onClick={() => {
                 closeModal();
-                window.location.href = '/contact';
+                window.open('/contact', '_blank')
               }}
               className="px-8 py-3"
             >

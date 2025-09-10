@@ -8,8 +8,8 @@ const Features = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
             <div className="flex justify-center items-center mb-8">
-              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
-                <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
+              <span className="flex items-center justify-center w-full max-w-xs bg-secondary rounded-lg shadow-md px-8 py-6">
+                <h2 className="text-xl lg:text-3xl font-semibold text-white dark:text-neutral">
                   Features
                 </h2>
               </span>
@@ -40,8 +40,8 @@ const Benefits = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
             <div className="flex justify-center items-center mb-8">
-              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
-                <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
+              <span className="flex items-center justify-center w-full max-w-xs bg-secondary rounded-lg shadow-md px-8 py-6">
+                <h2 className="text-xl lg:text-3xl font-semibold text-white dark:text-neutral">
                   Benefits
                 </h2>
               </span>

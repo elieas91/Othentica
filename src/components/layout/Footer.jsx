@@ -12,60 +12,45 @@ const Footer = ({ minimal = false }) => {
         {/* Main Footer Content - only show if not minimal */}
         {!minimal && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Company Info */}
-          <div className="lg:col-span-2 text-center md:text-left">
-            {/* <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3> */}
-            <img
-              src={WhiteLogo}
-              alt="Othentica Logo"
-              className="h-10 w-auto mb-6 mx-auto md:mx-0"
-            />
-            <p className="text-gray-100 mb-6 font-bold leading-relaxed">
-              Your map to clarity, resilience, and growth.
-            </p>
+            {/* Company Info */}
+            <div className="lg:col-span-2 text-center md:text-left">
+              {/* <h3 className="text-2xl font-bold text-neutral mb-4">Othentica</h3> */}
+              <img
+                src={WhiteLogo}
+                alt="Othentica Logo"
+                className="h-10 w-auto mb-6 mx-auto md:mx-0"
+              />
+              <p className="text-gray-100 mb-6 font-bold leading-relaxed">
+                Your map to clarity, resilience, and growth.
+              </p>
 
-            {/* App Store Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-center items-center md:items-start md:justify-start">
-              <Link
-                to="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block hover:scale-105 transition-transform duration-300 ease-in-out"
-                aria-label="Download on the App Store"
-              >
+              {/* App Store Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-6 justify-center items-center md:items-start md:justify-start">
                 <img
                   src={AppStoreBadge}
                   alt="Download on the App Store"
                   className="h-12 w-auto"
                 />
-              </Link>
-              <Link
-                to="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block hover:scale-105 transition-transform duration-300 ease-in-out"
-                aria-label="Get it on Google Play"
-              >
+
                 <img
                   src={GooglePlayBadge}
                   alt="Get it on Google Play"
                   className="h-12 w-auto"
                 />
-              </Link>
-            </div>
+              </div>
 
-            <div className="flex space-x-4 justify-center md:justify-start">
-              <a
-                href="https://www.linkedin.com/company/othentica-fzc-llc"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
-                aria-label="Follow us on LinkedIn"
-              >
-                <FaLinkedin className="text-neutral text-lg" />
-              </a>
+              <div className="flex space-x-4 justify-center md:justify-start">
+                <a
+                  href="https://www.linkedin.com/company/othentica-fzc-llc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
+                  aria-label="Follow us on LinkedIn"
+                >
+                  <FaLinkedin className="text-neutral text-lg" />
+                </a>
 
-              {/* <a
+                {/* <a
                 href="https://youtube.com/@othentica"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -75,7 +60,7 @@ const Footer = ({ minimal = false }) => {
                 <FaYoutube className="text-neutral text-lg" />
               </a> */}
 
-              {/* <a
+                {/* <a
                 href="https://instagram.com/othentica"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -85,60 +70,66 @@ const Footer = ({ minimal = false }) => {
                 <FaInstagram className="text-neutral text-lg" />
               </a> */}
 
-              <a
-                href="https://www.facebook.com/share/1C2Qcrsj2d/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
-                aria-label="Follow us on Facebook"
-              >
-                <FaFacebook className="text-neutral text-lg" />
-              </a>
+                <a
+                  href="https://www.facebook.com/share/1C2Qcrsj2d/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
+                  aria-label="Follow us on Facebook"
+                >
+                  <FaFacebook className="text-neutral text-lg" />
+                </a>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="text-center md:text-left">
+              <h3 className="text-lg font-bold text-neutral mb-4">
+                Quick Links
+              </h3>
+              <ul className="space-y-2">
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/">Home</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/about">About</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/services">Services</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/blog">Blog</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Services */}
+            <div className="text-center md:text-left">
+              <h3 className="text-lg font-bold text-neutral mb-4">Services</h3>
+              <ul className="space-y-2">
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/services#app">The Othentica App</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/services#programs">Tailored Programs</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/services#talks">Talks & Workshops</Link>
+                </li>
+                <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
+                  <Link to="/services#one-to-one">1:1 Guidance</Link>
+                </li>
+              </ul>
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-bold text-neutral mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/">Home</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/about">About</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services">Services</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/blog">Blog</Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="text-center md:text-left">
-            <h3 className="text-lg font-bold text-neutral mb-4">Services</h3>
-            <ul className="space-y-2">
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services#app">The Othentica App</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services#programs">Tailored Programs</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services#talks">Talks & Workshops</Link>
-              </li>
-              <li className="text-neutral hover:text-secondary hover:translate-x-1 transition-all duration-300 ease-in-out">
-                <Link to="/services#one-to-one">1:1 Guidance</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
         )}
 
         {/* Bottom Footer */}
-        <div className={`border-t border-white/20 pt-8 ${!minimal ? 'mt-8' : 'mt-0'}`}>
+        <div
+          className={`border-t border-white/20 pt-8 ${
+            !minimal ? 'mt-8' : 'mt-0'
+          }`}
+        >
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0">
               <p className="text-sm text-gray-200 text-center md:text-left">

@@ -287,7 +287,8 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
               Testimonials
             </h2>
             <p className="text-gray-600 mb-8">
-              {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'}
+              {/* {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'} */}
+              {error ? 'Unable to load testimonials. Please try again later.' : ''}
             </p>
             <Button
               variant="secondary"
@@ -303,26 +304,26 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Safety check - if no current testimonial, show error state
   if (!currentTestimonial) {
-    return (
-      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
-              Testimonials
-            </h2>
-            <p className="text-gray-600 mb-8">
-              No testimonials available at the moment.
-            </p>
-            <Button
-              variant="secondary"
-              onClick={() => setShowForm(true)}
-            >
-              Add your Testimonial
-            </Button>
-          </div>
-        </div>
-      </section>
-    );
+    // return (
+    //   <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+    //     <div className="max-w-7xl mx-auto">
+    //       <div className="text-center">
+    //         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
+    //           Testimonials
+    //         </h2>
+    //         <p className="text-gray-600 mb-8">
+    //           No testimonials available at the moment.
+    //         </p>
+    //         <Button
+    //           variant="secondary"
+    //           onClick={() => setShowForm(true)}
+    //         >
+    //           Add your Testimonial
+    //         </Button>
+    //       </div>
+    //     </div>
+    //   </section>
+    // );
   }
 
   // Get truncated quote for current testimonial (only after we know it exists)

@@ -73,11 +73,6 @@ const Security = () => {
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {securityData.map((security) => {
-            const { truncated, needsTruncation } = truncateDescription(
-              security.description
-            );
-            const isExpanded = expandedDescriptions[security.id];
-
             return (
               <Card
                 key={security.id}
@@ -95,22 +90,10 @@ const Security = () => {
                   <h3 className="text-xl font-semibold text-primary dark:text-neutral mb-4">
                     {security.title}
                   </h3>
-                  <div className="text-primary dark:text-gray-200 mb-8 leading-relaxed">
-                    <span>
-                      {isExpanded
-                        ? typeof security.description === 'string'
-                          ? security.description
-                          : String(security.description)
-                        : truncated}
-                    </span>
-                    {needsTruncation && (
-                      <button
-                        onClick={() => toggleDescriptionExpansion(security.id)}
-                        className="ml-2 text-primary/80 hover:text-primary dark:text-gray-300 dark:hover:text-white font-medium text-sm transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60 dark:decoration-gray-300 dark:hover:decoration-white"
-                      >
-                        {isExpanded ? 'Read Less' : 'Read More'}
-                      </button>
-                    )}
+                  <div className="text-primary dark:text-gray-200 mb-8 leading-relaxed h-[200px] overflow-y-auto px-2">
+                    {typeof security.description === 'string'
+                      ? security.description
+                      : String(security.description)}
                   </div>
                 </div>
               </Card>
