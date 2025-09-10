@@ -1,45 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { securityData } from '../../data/securityData';
 import Card from '../ui/Card';
 import FlameSolid from '../../assets/img/flame_solid.webp';
 
 const Security = () => {
-  const [expandedDescriptions, setExpandedDescriptions] = useState({});
-
-  // Function to truncate description
-  const truncateDescription = (description) => {
-    // Handle case where description might be JSX or not a string
-    const textDescription =
-      typeof description === 'string' ? description : String(description);
-    const maxChars = 200; // Adjust this value based on your needs
-
-    if (textDescription.length <= maxChars) {
-      return { truncated: textDescription, needsTruncation: false };
-    }
-
-    let truncated = '';
-    let charCount = 0;
-    const words = textDescription.split(' ');
-
-    for (let i = 0; i < words.length; i++) {
-      if (charCount + words[i].length + 1 <= maxChars) {
-        truncated += (truncated ? ' ' : '') + words[i];
-        charCount += words[i].length + 1;
-      } else {
-        break;
-      }
-    }
-
-    return { truncated: truncated + '...', needsTruncation: true };
-  };
-
-  // Function to toggle description expansion
-  const toggleDescriptionExpansion = (securityId) => {
-    setExpandedDescriptions((prev) => ({
-      ...prev,
-      [securityId]: !prev[securityId],
-    }));
-  };
 
   return (
     <section className="py-16 px-8 lg:px-16 bg-white dark:bg-primary rounded-xl shadow-lg mt-12">

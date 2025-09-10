@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import apiService from '../services/api';
 
 const Unsubscribe = () => {
   const { id } = useParams();
