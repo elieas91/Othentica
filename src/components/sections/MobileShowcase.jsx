@@ -73,7 +73,7 @@ const MobileShowcase = () => {
               <img
                 src={Phone}
                 alt="Smartphone mockup"
-                className="w-80 h-auto shadow-professional opacity-80"
+                className="w-80 h-auto opacity-80"
                 style={{
                   filter:
                     'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15)) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1))',
@@ -85,7 +85,6 @@ const MobileShowcase = () => {
                   <img
                     src={currentAppImage}
                     alt="App interface"
-                    
                     className="absolute w-[92%] h-[98%] top-[0.3rem] md:h-[97%] object-contain transition-all duration-700 ease-in-out"
                   />
                 </div>
