@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { Home, About, Services, SocialMedia, Contact, Login, Register, Dashboard, OptIn } from './pages';
+import Unsubscribe from './pages/Unsubscribe';
 import { AuthProvider } from './contexts/AuthContext';
 import AdminLayout from './components/layout/AdminLayout';
 import './App.css';
@@ -24,6 +25,7 @@ function App() {
               <Dashboard />
             </AdminLayout>
           } />
+          <Route path="/unsubscribe/:id" element={<Unsubscribe />} />
           <Route path="/*" element={
             <Layout>
               <Routes>

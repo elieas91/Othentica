@@ -95,6 +95,48 @@ const OptIn = () => {
     setThankYouModalOpen(false);
   };
 
+  // Function to validate if email is personal (not business)
+  const isPersonalEmail = (email) => {
+    const emailLower = email.toLowerCase().trim();
+    
+    // Common personal email domains that are ACCEPTED
+    const personalEmailPatterns = [
+      /@gmail\.com$/,
+      /@yahoo\.com$/,
+      /@hotmail\.com$/,
+      /@outlook\.com$/,
+      /@aol\.com$/,
+      /@icloud\.com$/,
+      /@protonmail\.com$/,
+      /@zoho\.com$/,
+      /@yandex\.com$/,
+      /@mail\.com$/,
+      /@live\.com$/,
+      /@msn\.com$/,
+      /@rediffmail\.com$/,
+      /@sify\.com$/,
+      /@inbox\.com$/,
+      /@fastmail\.com$/,
+      /@tutanota\.com$/,
+      /@mailinator\.com$/,
+      /@10minutemail\.com$/,
+      /@guerrillamail\.com$/,
+      /@temp-mail\.org$/,
+      /@throwaway\.email$/,
+      /@disposable\.email$/,
+      /@tempmail\.org$/,
+      /@sharklasers\.com$/,
+      /@grr\.la$/,
+      /@guerrillamail\.block$/
+    ];
+    
+    // Check if email matches any personal email pattern
+    const isPersonalEmailDomain = personalEmailPatterns.some(pattern => pattern.test(emailLower));
+    
+    // If it matches personal patterns, it's ACCEPTED
+    return isPersonalEmailDomain;
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -147,6 +189,12 @@ const OptIn = () => {
     // Validate phone: must only contain numbers
     if (!/^[0-9]+$/.test(phone.trim())) {
       setSubmitError('Phone number must contain only numbers.');
+      return;
+    }
+
+    // Validate email: must be personal email (not business)
+    if (!isPersonalEmail(email.trim())) {
+      setSubmitError('Please use a personal email address (like Gmail, Yahoo, Outlook, etc.). Business emails are not accepted.');
       return;
     }
 
@@ -336,7 +384,8 @@ const OptIn = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-primary dark:text-neutral mb-2" htmlFor="email">
-                        <span className="font-bold">Personal</span> Email Address *
+                        <span className="font-bold">Personal</span> Email Address * <br />
+                        {/* <span className="text-xs text-gray-500 dark:text-gray-400">(Gmail, Yahoo, Outlook, etc. - Business emails not accepted)</span> */}
                       </label>
                       <input
                         type="email"
@@ -346,7 +395,7 @@ const OptIn = () => {
                         onChange={handleChange}
                         required
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white dark:bg-gray-800 text-primary dark:text-neutral"
-                        placeholder="your.email@example.com"
+                        placeholder="your.email@gmail.com"
                       />
                     </div>
                   </div>
