@@ -390,25 +390,92 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             </div>
 
             {/* Carousel Indicators */}
-            <div className="flex flex-wrap justify-center md:justify-start space-x-3 mt-8">
-              {filteredTestimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-8 h-8 transition-all duration-300 ${
-                    index === currentIndex
-                      ? 'opacity-100 scale-110'
-                      : 'opacity-30 hover:opacity-60'
-                  }`}
-                  aria-label={`Go to testimonial ${index + 1}`}
-                >
-                  <img
-                    src={Flame}
-                    alt={`Testimonial ${index + 1}`}
-                    className="w-full h-full object-contain"
-                  />
-                </button>
-              ))}
+            <div className="mt-8">
+              {/* Desktop: Show all flames in a row */}
+              <div className="hidden md:flex justify-center lg:justify-start space-x-3">
+                {filteredTestimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`w-8 h-8 transition-all duration-300 ${
+                      index === currentIndex
+                        ? 'opacity-100 scale-110'
+                        : 'opacity-30 hover:opacity-60'
+                    }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  >
+                    <img
+                      src={Flame}
+                      alt={`Testimonial ${index + 1}`}
+                      className="w-full h-full object-contain"
+                    />
+                  </button>
+                ))}
+              </div>
+              
+              {/* Mobile: Horizontal scrollable carousel */}
+              <div className="md:hidden">
+                <div className="relative">
+                  <div className="overflow-x-auto scrollbar-hide">
+                    <div className="flex space-x-3 pb-2" style={{ width: 'max-content' }}>
+                      {filteredTestimonials.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIndex(index)}
+                          className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
+                            index === currentIndex
+                              ? 'opacity-100 scale-110'
+                              : 'opacity-30 hover:opacity-60'
+                          }`}
+                          aria-label={`Go to testimonial ${index + 1}`}
+                        >
+                          <img
+                            src={Flame}
+                            alt={`Testimonial ${index + 1}`}
+                            className="w-full h-full object-contain"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Gradient fade indicators */}
+                  <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                  <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+                </div>
+              </div>
+              
+              {/* Show horizontal carousel on desktop when there are many testimonials */}
+              {filteredTestimonials.length > 8 && (
+                <div className="hidden md:block lg:hidden">
+                  <div className="relative">
+                    <div className="overflow-x-auto scrollbar-hide">
+                      <div className="flex space-x-3 pb-2" style={{ width: 'max-content' }}>
+                        {filteredTestimonials.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentIndex(index)}
+                            className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
+                              index === currentIndex
+                                ? 'opacity-100 scale-110'
+                                : 'opacity-30 hover:opacity-60'
+                            }`}
+                            aria-label={`Go to testimonial ${index + 1}`}
+                          >
+                            <img
+                              src={Flame}
+                              alt={`Testimonial ${index + 1}`}
+                              className="w-full h-full object-contain"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Gradient fade indicators */}
+                    <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Add Testimonial Button - Outside Carousel */}
