@@ -390,11 +390,11 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
               <cite className="text-base sm:text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
                 <span className="flex items-center gap-3 mb-4 sm:mb-0">
-                  {/* <img
+                  <img
                     src={getTestimonialImagePath(currentTestimonial?.image, currentTestimonial?.imageUrl)}
                     alt={currentTestimonial?.author || 'Testimonial author'}
                     className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
-                  /> */}
+                  />
                   <span>– {currentTestimonial?.author || 'Anonymous'}</span>
                 </span>
               </cite>
