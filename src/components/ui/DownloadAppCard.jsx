@@ -35,7 +35,7 @@ const DownloadAppCard = () => {
       <div className="flex flex-row items-center gap-4 mt-6">
         {/* Google Play */}
         <a
-          href="https://play.google.com/store/apps/details?id=your.app.id"
+          // href="https://play.google.com/store/apps/details?id=your.app.id"
           target="_blank"
           rel="noopener noreferrer"
           className="min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -49,7 +49,7 @@ const DownloadAppCard = () => {
 
         {/* App Store */}
         <a
-          href="https://apps.apple.com/app/idyourappid"
+          // href="https://apps.apple.com/app/idyourappid"
           target="_blank"
           rel="noopener noreferrer"
           className="min-h-[44px] min-w-[44px] flex items-center justify-center"
