@@ -554,6 +554,11 @@ const OptIn = () => {
           </p>
           <p className="text-xl my-4">
             We'll notify you by email as soon as the Othentica app is ready.
+          </p>
+          <p className="text-xl my-4">
+            Kindly mark our email as safe and ensure it lands in your inbox (not the spam folder), so you don't miss any updates.
+          </p>
+          <p className="text-xl my-4">
             Until then, here's a first spark to begin your journey:
           </p>
           <h2 className="text-2xl font-bold mt-8 mb-4">Quick Othentica Tip</h2>
