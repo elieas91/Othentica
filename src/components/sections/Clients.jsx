@@ -88,7 +88,7 @@ const Clients = () => {
 
           {/* Centered Client Logos with Flexbox */}
           <div className="flex justify-center">
-            <div className="flex flex-wrap justify-center gap-32 max-w-4xl">
+            <div className="flex flex-nowrap justify-center gap-32 max-w-4xl">
               {clientsData.map((client) => (
                 <div
                   key={client.id}
