@@ -145,7 +145,7 @@ const Navigation = () => {
         { path: '/services#one-to-one', label: '1:1 Guidance' },
       ],
     },
-    // { path: '/blog', label: 'Blog' },
+    { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
   ];
 
