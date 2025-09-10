@@ -276,7 +276,7 @@ const ServiceBlock = ({ service, index }) => {
               variant="primary"
               onClick={() => {
                 closeModal();
-                window.location.href = '/contact';
+                window.open('/contact', '_blank')
               }}
               className="px-8 py-3"
             >
