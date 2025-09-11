@@ -4,6 +4,9 @@ import { FaLinkedin, FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
 import WhiteLogo from '../../assets/img/logo_white.webp';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
+import TermsAndConditionsPDF from '../../assets/pdf/terms_and_conditions_of_use.pdf';
+import DisclaimersPDF from '../../assets/pdf/disclaimers.pdf';
+import PrivacyPolicyPDF from '../../assets/pdf/privacy_policy.pdf';
 
 const Footer = ({ minimal = false }) => {
   return (
@@ -132,19 +135,32 @@ const Footer = ({ minimal = false }) => {
         >
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-row items-center justify-center space-x-0 text-sm text-center">
-              <Link
-                to="#"
+              <a
+                href={TermsAndConditionsPDF}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
               >
                 Terms & Conditions
-              </Link>
+              </a>
               <span className="text-gray-400">|</span>
-              <Link
-                to="/privacy"
+              <a
+                href={PrivacyPolicyPDF}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
               >
                 Privacy Policy
-              </Link>
+              </a>
+              <span className="text-gray-400">|</span>
+              <a
+                href={DisclaimersPDF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
+              >
+                Disclaimers
+              </a>
               <span className="text-gray-400">|</span>
               <span className="px-3 text-gray-200">
                 © 2025 Othentica. All rights reserved.
