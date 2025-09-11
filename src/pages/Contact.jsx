@@ -30,8 +30,8 @@ const Contact = () => {
     <div className="relative min-h-screen dark:bg-primary">
       <div className="bg-blue-400/40">
         <Banner
-          title="This is the part where you say hi"
-          subtitle="And we say hi back!"
+          title="Every Successful Partnership Starts with a Phone Call"
+          subtitle=""
           description=""
           buttonText=""
           buttonVariant="accent"
