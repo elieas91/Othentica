@@ -89,10 +89,14 @@ const OptIn = () => {
   };
 
   const handleShowForm = () => {
-    // Open the same OptIn page in a new tab, which will show the form by default
-    const url =
-      window.location.origin + window.location.pathname + '?earlyaccess=1';
-    window.open(url, '_blank');
+    // Show the form and scroll to it
+    setShowForm(true);
+    // Use setTimeout to ensure the form is rendered before scrolling
+    setTimeout(() => {
+      if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   const handleThankYouModalClose = () => {
