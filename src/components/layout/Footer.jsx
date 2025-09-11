@@ -4,6 +4,9 @@ import { FaLinkedin, FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
 import WhiteLogo from '../../assets/img/logo_white.webp';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
+import TermsAndConditionsPDF from '../../assets/pdf/terms_and_conditions_of_use.pdf';
+import DisclaimersPDF from '../../assets/pdf/disclaimers.pdf';
+import PrivacyPolicyPDF from '../../assets/pdf/privacy_policy.pdf';
 
 const Footer = ({ minimal = false }) => {
   return (
@@ -130,37 +133,50 @@ const Footer = ({ minimal = false }) => {
             !minimal ? 'mt-8' : 'mt-0'
           }`}
         >
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0">
-              <p className="text-sm text-gray-200 text-center md:text-left">
-                © 2025 Othentica. All rights reserved.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-center md:text-left">
-              <Link
-                to="/privacy"
-                className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="#"
-                className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                Terms & Conditions
-              </Link>
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-row items-center justify-center space-x-0 text-sm text-center">
               <a
-                href="https://horiverde.com"
+                href={TermsAndConditionsPDF}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out text-sm font-medium"
+                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
               >
-                Powered By{' '}
-                <span className="uppercase text-secondary hover:text-accent transition-colors duration-300">
-                  Horiverde
-                </span>
+                Terms & Conditions
               </a>
+              <span className="text-gray-400">|</span>
+              <a
+                href={PrivacyPolicyPDF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
+              >
+                Privacy Policy
+              </a>
+              <span className="text-gray-400">|</span>
+              <a
+                href={DisclaimersPDF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
+              >
+                Disclaimers
+              </a>
+              <span className="text-gray-400">|</span>
+              <span className="px-3 text-gray-200">
+                © 2025 Othentica. All rights reserved.
+              </span>
             </div>
+            <a
+              href="https://horiverde.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 mt-6 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out text-sm font-medium"
+            >
+              Powered By{' '}
+              <span className="uppercase text-secondary hover:text-accent transition-colors duration-300">
+                Horiverde
+              </span>
+            </a>
           </div>
         </div>
       </div>
