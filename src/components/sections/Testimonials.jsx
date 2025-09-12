@@ -415,34 +415,29 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                 ))}
               </div>
               
-              {/* Mobile: Horizontal scrollable carousel */}
+              {/* Mobile: Flames wrap to second line if too many */}
               <div className="md:hidden">
                 <div className="relative">
-                  <div className="overflow-x-auto scrollbar-hide">
-                    <div className="flex space-x-3 pb-2" style={{ width: 'max-content' }}>
-                      {filteredTestimonials.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentIndex(index)}
-                          className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
-                            index === currentIndex
-                              ? 'opacity-100 scale-110'
-                              : 'opacity-30 hover:opacity-60'
-                          }`}
-                          aria-label={`Go to testimonial ${index + 1}`}
-                        >
-                          <img
-                            src={Flame}
-                            alt={`Testimonial ${index + 1}`}
-                            className="w-full h-full object-contain"
-                          />
-                        </button>
-                      ))}
-                    </div>
+                  <div className="flex flex-wrap justify-center items-center space-x-3 space-y-2 pb-2 w-full">
+                    {filteredTestimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
+                          index === currentIndex
+                            ? 'opacity-100 scale-110'
+                            : 'opacity-30 hover:opacity-60'
+                        }`}
+                        aria-label={`Go to testimonial ${index + 1}`}
+                      >
+                        <img
+                          src={Flame}
+                          alt={`Testimonial ${index + 1}`}
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                    ))}
                   </div>
-                  {/* Gradient fade indicators */}
-                  <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-                  <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
                 </div>
               </div>
               

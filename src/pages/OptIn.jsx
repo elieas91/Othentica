@@ -316,9 +316,47 @@ const OptIn = () => {
       <OptInCountdown />
       <div className="my-16 dark:bg-primary">
         <div className="px-6">
+          {/* Desktop layout: columns, Mobile layout: stacked */}
           <div className="flex flex-col md:flex-row justify-center items-start mt-8 gap-8">
-            {/* Left column: text */}
-            <div className="w-full md:w-1/3 order-1 flex flex-col justify-center items-start">
+            {/* Mobile: Welcome text */}
+            <div className="block md:hidden w-full mb-6">
+              <h2 className="text-3xl font-bold mb-4">
+                Welcome! You’ve chosen to step into your authentic self.
+              </h2>
+            </div>
+            {/* Mobile: iframe */}
+            <div className="block md:hidden w-full mb-6 aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/_8tP35o0kHI"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full rounded-lg shadow-lg"
+              ></iframe>
+            </div>
+            {/* Mobile: Register text and button */}
+            <div className="block md:hidden w-full">
+              <p className="text-xl mb-2">
+                Register now to receive early access to Othentica, the gamified wellness app that helps you find your treasures of clarity, energy, and resilience.
+              </p>
+              <p className="text-xl mb-2">
+                We’ll notify you by email and SMS as soon as it’s live.
+              </p>
+              <Button
+                variant="secondary"
+                size="large"
+                className="mt-8 w-full"
+                onClick={handleShowForm}
+                glow={true}
+              >
+                Yes, I Want Early Access
+              </Button>
+            </div>
+
+            {/* Desktop: Left column: text */}
+            <div className="hidden md:flex w-full md:w-1/3 order-1 flex-col justify-center items-start">
               <h2 className="text-3xl font-bold mb-4">
                 Welcome! You’ve chosen to step into your authentic self.
               </h2>
@@ -340,8 +378,8 @@ const OptIn = () => {
                 Yes, I Want Early Access
               </Button>
             </div>
-            {/* Right column: iframe */}
-            <div className="w-full md:w-2/3 max-w-3xl aspect-video order-2">
+            {/* Desktop: Right column: iframe */}
+            <div className="hidden md:block w-full md:w-2/3 max-w-3xl aspect-video order-2">
               <iframe
                 width="100%"
                 height="100%"
