@@ -15,7 +15,7 @@ import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
 
-const Testimonials = ({ showPics = true, currentCategoƒryId = null }) => {
+const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Map categoryId to API category parameter
   const getApiCategory = (categoryId) => {
     const mapping = {

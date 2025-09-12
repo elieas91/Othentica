@@ -26,7 +26,7 @@ export const getApiBaseUrl = () => {
   }
   
   // In development, use localhost
-  return 'http://localhost:5001/api';
+  return 'http://localhost:3001/api';
 };
 
 export const API_URL = getApiUrl();

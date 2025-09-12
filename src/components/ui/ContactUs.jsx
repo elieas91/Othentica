@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import WhatsAppButton from './WhatsappButton';
+import CalendarBooking from './CalendarBooking';
 import apiService from '../../services/api';
 import Swal from 'sweetalert2';
 import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
@@ -60,15 +61,28 @@ const ContactUs = () => {
         console.error('Error:', data.error);
       }
     } catch (error) {
-      // Show network error alert
-      Swal.fire({
-        title: 'Connection Error!',
-        text: 'Please check your internet connection and try again.',
-        icon: 'error',
-        confirmButtonText: 'Try Again',
-        confirmButtonColor: '#ef4444',
-      });
-      console.error('Network error:', error);
+      // Check if it's a connection refused error (no backend server)
+      if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
+        // Show fallback message for development
+        Swal.fire({
+          title: 'Development Mode',
+          text: 'Backend server is not running. In production, this would send your message. For now, please use the calendar booking or WhatsApp button.',
+          icon: 'info',
+          confirmButtonText: 'Got it!',
+          confirmButtonColor: '#3b82f6',
+        });
+        console.log('Backend server not available, showing fallback message');
+      } else {
+        // Show network error alert
+        Swal.fire({
+          title: 'Connection Error!',
+          text: 'Please check your internet connection and try again.',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+          confirmButtonColor: '#ef4444',
+        });
+        console.error('Network error:', error);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -140,6 +154,8 @@ const ContactUs = () => {
             />
           </div>
           <div className="md:col-span-2 flex justify-end mt-4 gap-x-4">
+            <WhatsAppButton className="w-14 h-14" />
+            <CalendarBooking className="w-14 h-14" />
             <button
               type="submit"
               disabled={isSubmitting}
@@ -181,7 +197,6 @@ const ContactUs = () => {
                 </svg>
               )}
             </button>
-            <WhatsAppButton className="w-14 h-14" />
           </div>
         </form>
       </div>
