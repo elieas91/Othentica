@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // import { useTheme } from '../../contexts/useTheme'; // Commented out to prevent TDZ issues
-import Logo from '../../assets/img/logo.webp';
+import Logo from '../../assets/img/logo.png';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

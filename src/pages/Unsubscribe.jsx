@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const Unsubscribe = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const Unsubscribe = () => {
       }
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/optin/unsubscribe/${id}`, {
+        const response = await fetch(`${API_URL}/api/optin/unsubscribe/${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
