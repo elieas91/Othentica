@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import WhatsAppButton from './WhatsappButton';
 import CalendarBooking from './CalendarBooking';
 import apiService from '../../services/api';
-import Swal from 'sweetalert2';
 import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 
 const ContactUs = () => {
@@ -36,6 +35,7 @@ const ContactUs = () => {
 
       if (response.ok) {
         // Show success alert
+        const { default: Swal } = await import('sweetalert2');
         Swal.fire({
           title: 'Message Sent!',
           text: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
@@ -51,6 +51,7 @@ const ContactUs = () => {
         setForm({ name: '', email: '', phone: '', subject: '', message: '' });
       } else {
         // Show error alert
+        const { default: Swal } = await import('sweetalert2');
         Swal.fire({
           title: 'Error!',
           text: 'Sorry, there was an error sending your message. Please try again later.',
@@ -64,6 +65,7 @@ const ContactUs = () => {
       // Check if it's a connection refused error (no backend server)
       if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
         // Show fallback message for development
+        const { default: Swal } = await import('sweetalert2');
         Swal.fire({
           title: 'Development Mode',
           text: 'Backend server is not running. In production, this would send your message. For now, please use the calendar booking or WhatsApp button.',
@@ -71,7 +73,6 @@ const ContactUs = () => {
           confirmButtonText: 'Got it!',
           confirmButtonColor: '#3b82f6',
         });
-        console.log('Backend server not available, showing fallback message');
       } else {
         // Show network error alert
         Swal.fire({

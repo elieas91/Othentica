@@ -6,6 +6,7 @@ const BlogCard = ({
   image,
   description,
   link,
+  linkText = 'Read More',
   showReadMore,
   textToTheSide = true,
   className = '',
@@ -48,7 +49,7 @@ const BlogCard = ({
         {/* Optional Read More Button */}
         {showReadMore && (
           <a href={link} target="_blank" rel="noopener noreferrer">
-            <Button variant="secondary">Read More</Button>
+            <Button variant="secondary">{linkText}</Button>
           </a>
         )}
       </div>

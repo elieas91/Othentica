@@ -2,7 +2,7 @@ import SocialMedia from '../components/sections/Blog';
 import Banner from '../components/ui/Banner';
 import BannerBg from '../assets/img/blog/blog_bg.webp';
 import BlogCard from '../components/ui/BlogCard';
-import { blogData } from '../data/blogData';
+import { blogData } from '../data/blogData.jsx';
 
 const Blog = () => {
   return (
@@ -30,6 +30,7 @@ const Blog = () => {
               image={blogData[0].image}
               description={blogData[0].description}
               link={blogData[0].link}
+              linkText={blogData[0].linkText}
               showReadMore={true}
               textToTheSide={false}
               className="min-h[250px] lg:min-h-[800px]"
@@ -47,6 +48,7 @@ const Blog = () => {
               image={blog.image}
               description={blog.description}
               link={blog.link}
+              linkText={blog.linkText}
               showReadMore={true}
               className="min-h-[250px]"
             />

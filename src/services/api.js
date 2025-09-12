@@ -163,7 +163,6 @@ class ApiService {
     
     if (response.ok) {
       // Registration doesn't return tokens, user needs to login
-      console.log('Registration successful. Please login.');
     }
     
     return { response, data };

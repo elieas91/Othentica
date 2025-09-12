@@ -51,7 +51,6 @@ const OptIn = () => {
         }));
       }
     } catch (error) {
-      console.log('Could not detect country:', error);
       // Fallback to UAE if detection fails
       setForm((prev) => ({
         ...prev,

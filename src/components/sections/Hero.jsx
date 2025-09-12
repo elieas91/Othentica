@@ -148,6 +148,15 @@ const Hero = () => {
         backgroundPosition: 'center',
       }}
     >
+      {/* LCP Image with fetchpriority high for immediate loading */}
+      <img
+        src={HeroBg3}
+        alt="Othentica Hero Background"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ display: 'none' }}
+        fetchPriority="high"
+        loading="eager"
+      />
       {/* Animated Background with Logo and Flames */}
       <div className="absolute inset-0 w-full h-full">
         {/* O Logo with Scale Animation - Hidden on mobile */}

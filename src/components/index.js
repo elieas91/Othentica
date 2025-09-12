@@ -7,6 +7,7 @@ export { default as SEO } from './ui/SEO';
 export { default as ScrollToTop } from './ui/ScrollToTop';
 export { default as OptimizedImage } from './ui/OptimizedImage';
 export { default as OptimizedVideo } from './ui/OptimizedVideo';
+export { default as LazyImage } from './ui/LazyImage';
 export { default as AnimateOnScroll } from './ui/AnimateOnScroll';
 export { default as CalendarBooking } from './ui/CalendarBooking';
 

@@ -19,7 +19,6 @@ class CalendarService {
       
       // If it's a CORS error, fallback to Google Calendar URL method
       if (error.message === 'CORS_ERROR') {
-        console.log('CORS error detected, falling back to Google Calendar URL method');
         return this.createGoogleCalendarUrl(eventData);
       }
       
@@ -51,7 +50,6 @@ class CalendarService {
       }
 
       const result = await response.json();
-      console.log('Calendar event created:', result);
       return result;
     } catch (error) {
       // If CORS fails, throw a specific error to trigger fallback
@@ -153,6 +151,26 @@ class CalendarService {
 
   // Get available time slots for a given date
   getAvailableTimeSlots(date) {
+    // Validate the date parameter
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      return [];
+    }
+
+    // Check if the date is a weekday (Monday-Friday)
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      return []; // No appointments on weekends
+    }
+
+    // Check if the date is in the past
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const appointmentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    if (appointmentDate < today) {
+      return []; // No appointments in the past
+    }
+
     const timeSlots = [];
     const startHour = 9; // 9 AM
     const endHour = 18; // 6 PM

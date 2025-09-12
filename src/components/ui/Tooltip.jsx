@@ -7,19 +7,16 @@ const Tooltip = ({ children, content, position = 'top' }) => {
     <div className="relative inline-block">
       <div
         onMouseEnter={() => {
-          console.log('Mouse enter - showing tooltip');
           setIsVisible(true);
         }}
         onMouseLeave={() => {
-          console.log('Mouse leave - hiding tooltip');
           setIsVisible(false);
         }}
         onFocus={() => {
-          console.log('Focus - showing tooltip');
           setIsVisible(true);
         }}
         onBlur={() => {
-          console.log('Blur - hiding tooltip');
+          consol.log('Blur - hiding tooltip');
           setIsVisible(false);
         }}
       >

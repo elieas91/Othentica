@@ -31,7 +31,6 @@ const OptimizedVideo = ({
     if (isIntersecting && autoPlay && video.readyState >= 3) {
       video.play().catch(() => {
         // Ignore autoplay errors (browser restrictions)
-        console.log('Autoplay prevented by browser');
       });
     } else if (!isIntersecting && video.readyState >= 3) {
       // Pause when video goes out of viewport
