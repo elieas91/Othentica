@@ -392,7 +392,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             </div>
 
             {/* Carousel Indicators */}
-            <div className="mt-8">
+            <div className="mt-2">
               {/* Desktop: Show all flames in a row */}
               <div className="hidden md:flex justify-center lg:justify-start space-x-3">
                 {filteredTestimonials.map((_, index) => (
