@@ -32,7 +32,7 @@ const WhatsAppButton = ({ type = 'circle', className = '' }) => {
       className={`${className} cursor-pointer`}
       style={{
         cursor: 'pointer',
-        zIndex: 1000,
+        zIndex: 10,
       }}
     />
   );
