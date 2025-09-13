@@ -127,17 +127,8 @@ class CalendarService {
       return { valid: false, message: 'Appointment must be scheduled for a future date and time.' };
     }
 
-    // Check if appointment is within business hours (9 AM - 6 PM, Monday-Friday)
-    const dayOfWeek = appointmentDate.getDay();
-    const hour = appointmentDate.getHours();
-
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      return { valid: false, message: 'Appointments are only available Monday through Friday.' };
-    }
-
-    if (hour < 9 || hour >= 18) {
-      return { valid: false, message: 'Appointments are only available between 9:00 AM and 6:00 PM.' };
-    }
+    // Appointments are now available 24/7, Monday through Sunday
+    // No day or time restrictions
 
     // Check if appointment is not more than 90 days in advance
     const maxDate = new Date();
@@ -156,11 +147,8 @@ class CalendarService {
       return [];
     }
 
-    // Check if the date is a weekday (Monday-Friday)
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      return []; // No appointments on weekends
-    }
+    // Appointments are now available 24/7, Monday through Sunday
+    // No day restrictions
 
     // Check if the date is in the past
     const now = new Date();
@@ -172,10 +160,8 @@ class CalendarService {
     }
 
     const timeSlots = [];
-    const startHour = 9; // 9 AM
-    const endHour = 18; // 6 PM
-
-    for (let hour = startHour; hour < endHour; hour++) {
+    // Generate 24/7 time slots (00:00 to 23:30 in 30-minute intervals)
+    for (let hour = 0; hour < 24; hour++) {
       for (let minutes = 0; minutes < 60; minutes += 30) {
         const timeString = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         timeSlots.push(timeString);
