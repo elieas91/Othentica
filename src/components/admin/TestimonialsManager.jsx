@@ -14,7 +14,7 @@ import apiService from '../../services/api';
 
 // Service categories matching the Services.jsx data
 const SERVICE_CATEGORIES = [
-  { value: 'app', label: 'The Othentica App' },
+  { value: 'app', label: 'The Othentica App', disabled: true },
   { value: 'programs', label: 'Tailored Programs' },
   { value: 'talks', label: 'Talks & Workshops' },
   { value: 'one-to-one', label: '1:1 Guidance' }
@@ -89,7 +89,7 @@ const TestimonialsManager = () => {
     description: '',
     image: null,
     status: 'pending',
-    category: 'app'
+    category: 'programs'
   });
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -163,7 +163,7 @@ const TestimonialsManager = () => {
         description: '',
         image: null,
         status: 'pending',
-        category: 'app'
+        category: 'programs'
       });
       setImagePreview(null);
     }
@@ -174,12 +174,20 @@ const TestimonialsManager = () => {
     if (editingTestimonial && testimonials.length > 0) {
       const testimonial = testimonials.find(t => t.id === editingTestimonial);
       if (testimonial) {
+        // If the testimonial has the disabled 'app' category, show a warning
+        if (testimonial.category === 'app') {
+          showErrorAlert(
+            'Category Disabled', 
+            'This testimonial has "The Othentica App" category which is currently disabled. Please select a different category.'
+          );
+        }
+        
         setFormData({
           name: testimonial.name,
           description: testimonial.description,
           image: null, // Reset file input
           status: testimonial.status || 'pending',
-          category: testimonial.category || 'app'
+          category: testimonial.category === 'app' ? 'programs' : (testimonial.category || 'programs')
         });
         // Set image preview from existing image URL
         setImagePreview(testimonial.imageUrl || null);
@@ -263,7 +271,7 @@ const TestimonialsManager = () => {
         await loadStats();
         
         // Reset form and close modal
-        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'app' });
+        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'programs' });
         setImagePreview(null);
         setShowForm(false);
         setEditingTestimonial(null);
@@ -466,7 +474,12 @@ const TestimonialsManager = () => {
             >
               <option value="all">All Categories</option>
               {SERVICE_CATEGORIES.map(category => (
-                <option key={category.value} value={category.value}>
+                <option 
+                  key={category.value} 
+                  value={category.value}
+                  disabled={category.disabled}
+                  className={category.disabled ? 'text-gray-400 bg-gray-100' : ''}
+                >
                   {category.label}
                 </option>
               ))}
@@ -654,7 +667,12 @@ const TestimonialsManager = () => {
                     className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
                   >
                     {SERVICE_CATEGORIES.map(category => (
-                      <option key={category.value} value={category.value}>
+                      <option 
+                        key={category.value} 
+                        value={category.value}
+                        disabled={category.disabled}
+                        className={category.disabled ? 'text-gray-400 bg-gray-100' : ''}
+                      >
                         {category.label}
                       </option>
                     ))}

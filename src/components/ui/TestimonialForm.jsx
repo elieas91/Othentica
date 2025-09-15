@@ -3,7 +3,7 @@ import Button from './Button';
 
 // Service categories matching the Services.jsx data
 const SERVICE_CATEGORIES = [
-  { value: 'app', label: 'The Othentica App' },
+  { value: 'app', label: 'The Othentica App', disabled: true },
   { value: 'programs', label: 'Tailored Programs' },
   { value: 'talks', label: 'Talks & Workshops' },
   { value: 'one-to-one', label: '1:1 Guidance' }
@@ -14,7 +14,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
     name: '',
     description: '',
     image: null,
-    category: 'app',
+    category: 'programs',
   });
 
   const handleChange = (e) => {
@@ -39,7 +39,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
         name: '',
         description: '',
         image: null,
-        category: 'app',
+        category: 'programs',
       });
     }
   }, [success]);
@@ -90,8 +90,13 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           disabled={isLoading}
         >
           {SERVICE_CATEGORIES.map(category => (
-            <option key={category.value} value={category.value}>
-              {category.label}
+            <option 
+              key={category.value} 
+              value={category.value}
+              disabled={category.disabled}
+              style={category.disabled ? { color: '#9CA3AF', fontStyle: 'italic' } : {}}
+            >
+              {category.label} {category.disabled ? '(Temporarily Unavailable)' : ''}
             </option>
           ))}
         </select>

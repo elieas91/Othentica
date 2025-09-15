@@ -7,6 +7,7 @@ import { industryList } from '../data/industryList';
 import { countryCodeMap, popularCountryCodes } from '../data/countryCodeMap';
 import ClockAnimation from '../components/ui/ClockAnimation';
 import apiService from '../services/api';
+import PDFViewer from '../components/ui/PDFViewer';
 import TermsAndConditionsPDF from '../assets/pdf/terms_and_conditions_of_use.pdf';
 
 const OptIn = () => {
@@ -84,6 +85,7 @@ const OptIn = () => {
 
   // Modal for Terms and Conditions PDF
   const [termsModalOpen, setTermsModalOpen] = useState(false);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const handleTermsModalOpen = () => setTermsModalOpen(true);
   const handleTermsModalClose = () => setTermsModalOpen(false);
 
@@ -92,6 +94,7 @@ const OptIn = () => {
     setForm(initialFormState);
     setSubmitError('');
     setIsSubmitting(false);
+    setHasScrolledToBottom(false);
   };
 
   const handleShowForm = () => {
@@ -715,13 +718,23 @@ const OptIn = () => {
                       checked={form.termsAgree}
                       onChange={handleChange}
                       required
-                      className="mr-2"
+                      disabled={!hasScrolledToBottom}
+                      className="mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <label
                       htmlFor="termsAgree"
-                      className="text-sm text-gray-700 dark:text-gray-300"
+                      className={`text-sm ${
+                        !hasScrolledToBottom
+                          ? 'text-gray-400 dark:text-gray-500'
+                          : 'text-gray-700 dark:text-gray-300'
+                      }`}
                     >
                       I have read and agreed to the Terms and Conditions
+                      {!hasScrolledToBottom && (
+                        <span className="block text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          Please view and agree to the Terms and Conditions first
+                        </span>
+                      )}
                     </label>
                   </div>
 
@@ -743,21 +756,22 @@ const OptIn = () => {
         </div>
       )}
 
-      {/* Terms and Conditions PDF Modal */}
+      {/* Terms and Conditions Modal */}
       <Modal
         isOpen={termsModalOpen}
         onClose={handleTermsModalClose}
-        title="Terms and Conditions"
+        title=""
         closeOnOutsideClick={false}
+        className="max-w-7xl w-full h-[90vh]"
       >
-        <div className="p-4">
-          <iframe
-            src= {TermsAndConditionsPDF}
-            title="Terms and Conditions PDF"
-            width="100%"
-            height="600px"
-            style={{ border: 'none' }}
-          ></iframe>
+        <div className="h-full">
+          <PDFViewer 
+            pdfUrl={TermsAndConditionsPDF} 
+            title="Terms and Conditions of Use"
+            onScrollToBottom={() => {
+              setHasScrolledToBottom(true);
+            }}
+          />
         </div>
       </Modal>
 

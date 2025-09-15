@@ -3,22 +3,22 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
-import calendarService from '../../services/calendarService';
+import hibaCalendarService from '../../services/hibaCalendarService';
 
-const CalendarBooking = ({ className = '', showText = false }) => {
+const HibaCalendarBooking = ({ className = '', showText = false }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // Get available time slots from calendar service
-  const timeSlots = calendarService.getAvailableTimeSlots(selectedDate);
+  // Get available time slots from Hiba's calendar service
+  const timeSlots = hibaCalendarService.getAvailableTimeSlots(selectedDate);
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
       Swal.fire({
         title: 'Missing Information',
-        text: 'Please select both date and time for your appointment.',
+        text: 'Please select both date and time for your appointment with Hiba.',
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: '#3b82f6',
@@ -30,10 +30,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
 
     try {
       // Format the appointment data
-      const appointmentData = calendarService.formatAppointmentData(selectedDate, selectedTime);
+      const appointmentData = hibaCalendarService.formatAppointmentData(selectedDate, selectedTime);
       
       // Validate the appointment time
-      const validation = calendarService.validateAppointmentTime(appointmentData.startDateTime);
+      const validation = hibaCalendarService.validateAppointmentTime(appointmentData.startDateTime);
       if (!validation.valid) {
         Swal.fire({
           title: 'Invalid Appointment Time',
@@ -45,8 +45,8 @@ const CalendarBooking = ({ className = '', showText = false }) => {
         return;
       }
 
-      // Create the calendar event using Google Apps Script
-      const result = await calendarService.createEvent(appointmentData);
+      // Create the calendar event using Hiba's Google Apps Script
+      const result = await hibaCalendarService.createEvent(appointmentData);
 
       // Check if result is a URL (fallback method) or success object
       if (typeof result === 'string' && result.startsWith('http')) {
@@ -66,7 +66,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
         // Direct calendar event creation was successful
         Swal.fire({
           title: 'Appointment Booked!',
-          text: 'Your appointment has been successfully added to our calendar. You will receive a confirmation email shortly.',
+          text: 'Your appointment with Hiba has been successfully scheduled. You will receive a confirmation email shortly.',
           icon: 'success',
           confirmButtonText: 'Great!',
           confirmButtonColor: '#3b82f6',
@@ -85,7 +85,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
       // Check if it's a network error or API error
       const errorMessage = error.message.includes('HTTP error') 
         ? 'Unable to connect to the booking service. Please try again later.'
-        : 'There was an error booking your appointment. Please try again.';
+        : 'There was an error booking your appointment with Hiba. Please try again.';
         
       Swal.fire({
         title: 'Booking Error!',
@@ -115,12 +115,12 @@ const CalendarBooking = ({ className = '', showText = false }) => {
       <button
         onClick={openModal}
         className={`${className} ${showText ? 'rounded-lg' : 'rounded-full'} bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition-colors shadow-lg hover:shadow-xl`}
-        title="Book an Appointment"
+        title="Book a Meeting with Hiba"
       >
         <CalendarIcon className="w-6 h-6" />
         {showText && (
           <span className="ml-2 font-semibold text-sm">
-            Book Meeting
+            Book with Hiba
           </span>
         )}
       </button>
@@ -128,10 +128,13 @@ const CalendarBooking = ({ className = '', showText = false }) => {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full h-fit max-w-4xl max-h-[95vh] overflow-y-auto">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">Book an Appointment</h3>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">Book with Hiba Tarazi</h3>
+                  <p className="text-sm text-gray-600 mt-1">Available Monday-Thursday, 11:00 AM - 3:00 PM</p>
+                </div>
                 <button
                   onClick={closeModal}
                   className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -141,6 +144,20 @@ const CalendarBooking = ({ className = '', showText = false }) => {
               </div>
 
               <div className="space-y-6">
+                {/* Hiba's Info */}
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border border-green-200">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">H</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Hiba Tarazi</h4>
+                      <p className="text-sm text-gray-600">CEO & Co-founder, Othentica</p>
+                      <p className="text-xs text-gray-500">M.Ed | Author | Wellness Expert</p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Date Picker */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -190,10 +207,26 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                       <strong>Time:</strong> {selectedTime}
                     </p>
                     <p className="text-green-700">
-                      <strong>Duration:</strong> 1 hour
+                      <strong>Duration:</strong> 45 minutes
+                    </p>
+                    <p className="text-green-700">
+                      <strong>Type:</strong> Video Call
                     </p>
                   </div>
                 )}
+
+                {/* Meeting Info */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-2">What to Expect:</h4>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>• 45-minute consultation with Hiba Tarazi</p>
+                    <p>• Available Monday to Thursday, 11:00 AM - 3:00 PM</p>
+                    <p>• Discuss your wellness goals and challenges</p>
+                    <p>• Learn how Othentica can support your journey</p>
+                    <p>• Get personalized recommendations</p>
+                    <p>• Video call link will be provided via email</p>
+                  </div>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-3 pt-4">
@@ -236,7 +269,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                         Booking...
                       </div>
                     ) : (
-                      'Book Appointment'
+                      'Book with Hiba'
                     )}
                   </button>
                 </div>
@@ -249,4 +282,4 @@ const CalendarBooking = ({ className = '', showText = false }) => {
   );
 };
 
-export default CalendarBooking;
+export default HibaCalendarBooking;
