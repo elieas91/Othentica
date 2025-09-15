@@ -7,6 +7,7 @@ import { industryList } from '../data/industryList';
 import { countryCodeMap, popularCountryCodes } from '../data/countryCodeMap';
 import ClockAnimation from '../components/ui/ClockAnimation';
 import apiService from '../services/api';
+import TermsAndConditionsPDF from '../assets/pdf/terms_and_conditions_of_use.pdf';
 
 const OptIn = () => {
   const [showForm, setShowForm] = useState(false);
@@ -77,8 +78,14 @@ const OptIn = () => {
     industry: '',
     acknowledge: false,
     disclaimerAgree: false,
+    termsAgree: false,
   };
   const [form, setForm] = useState(initialFormState);
+
+  // Modal for Terms and Conditions PDF
+  const [termsModalOpen, setTermsModalOpen] = useState(false);
+  const handleTermsModalOpen = () => setTermsModalOpen(true);
+  const handleTermsModalClose = () => setTermsModalOpen(false);
 
   const handleFormClose = () => {
     setShowForm(false);
@@ -170,6 +177,7 @@ const OptIn = () => {
       industry,
       acknowledge,
       disclaimerAgree,
+
     } = form;
     if (
       !firstName.trim() ||
@@ -180,10 +188,11 @@ const OptIn = () => {
       !country.trim() ||
       !industry.trim() ||
       !acknowledge ||
-      !disclaimerAgree
+      !disclaimerAgree ||
+      !form.termsAgree
     ) {
       setSubmitError(
-        'Please fill in all fields and acknowledge both the disclaimer and terms.'
+        'Please fill in all fields and acknowledge both the disclaimer and terms, and agree to the Terms and Conditions.'
       );
       return;
     }
@@ -669,7 +678,7 @@ const OptIn = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center">
+                  <div className="flex items-center mb-2">
                     <input
                       type="checkbox"
                       id="acknowledge"
@@ -685,6 +694,34 @@ const OptIn = () => {
                     >
                       I acknowledge that my information will be used to notify
                       me about Othentica and for early access purposes.
+                    </label>
+                  </div>
+
+                  {/* Terms and Conditions PDF Modal Trigger */}
+                  <div className="flex items-center mb-2">
+                    <Button
+                      type="button"
+                      variant="accent"
+                      size="small"
+                      className="mr-4"
+                      onClick={handleTermsModalOpen}
+                    >
+                      View Terms and Conditions
+                    </Button>
+                    <input
+                      type="checkbox"
+                      id="termsAgree"
+                      name="termsAgree"
+                      checked={form.termsAgree}
+                      onChange={handleChange}
+                      required
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="termsAgree"
+                      className="text-sm text-gray-700 dark:text-gray-300"
+                    >
+                      I have read and agreed to the Terms and Conditions
                     </label>
                   </div>
 
@@ -705,6 +742,24 @@ const OptIn = () => {
           </div>
         </div>
       )}
+
+      {/* Terms and Conditions PDF Modal */}
+      <Modal
+        isOpen={termsModalOpen}
+        onClose={handleTermsModalClose}
+        title="Terms and Conditions"
+        closeOnOutsideClick={false}
+      >
+        <div className="p-4">
+          <iframe
+            src= {TermsAndConditionsPDF}
+            title="Terms and Conditions PDF"
+            width="100%"
+            height="600px"
+            style={{ border: 'none' }}
+          ></iframe>
+        </div>
+      </Modal>
 
       {/* Thank you Modal */}
       <Modal
