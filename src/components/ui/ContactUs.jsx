@@ -36,7 +36,7 @@ const ContactUs = () => {
       if (response.ok) {
         // Show success alert
         const { default: Swal } = await import('sweetalert2');
-        Swal.fire({
+        window.Swal.fire({
           title: 'Message Sent!',
           text: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
           icon: 'success',
@@ -52,7 +52,7 @@ const ContactUs = () => {
       } else {
         // Show error alert
         const { default: Swal } = await import('sweetalert2');
-        Swal.fire({
+        window.Swal.fire({
           title: 'Error!',
           text: 'Sorry, there was an error sending your message. Please try again later.',
           icon: 'error',
@@ -66,7 +66,7 @@ const ContactUs = () => {
       if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
         // Show fallback message for development
         const { default: Swal } = await import('sweetalert2');
-        Swal.fire({
+        window.Swal.fire({
           title: 'Development Mode',
           text: 'Backend server is not running. In production, this would send your message. For now, please use the calendar booking or WhatsApp button.',
           icon: 'info',
@@ -75,7 +75,7 @@ const ContactUs = () => {
         });
       } else {
         // Show network error alert
-        Swal.fire({
+        window.Swal.fire({
           title: 'Connection Error!',
           text: 'Please check your internet connection and try again.',
           icon: 'error',

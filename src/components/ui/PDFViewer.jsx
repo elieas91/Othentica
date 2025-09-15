@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
 const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,7 +22,7 @@ const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
   };
 
   // Function to check if user has scrolled to bottom
-  const checkScrollToBottom = () => {
+  const checkScrollToBottom = useCallback(() => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       try {
         const iframe = iframeRef.current;
@@ -42,7 +42,7 @@ const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
             setShowCheckbox(false);
           }
         }
-      } catch (error) {
+      } catch {
         // Cross-origin restrictions might prevent access
         // Fallback: show checkbox after 3 seconds
         if (!showCheckbox) {
@@ -50,7 +50,7 @@ const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
         }
       }
     }
-  };
+  }, [showCheckbox]);
 
   // Add scroll event listener when iframe loads
   useEffect(() => {
@@ -64,7 +64,7 @@ const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
             iframeDoc.addEventListener('wheel', checkScrollToBottom);
             iframeDoc.addEventListener('mousemove', checkScrollToBottom);
           }
-        } catch (error) {
+        } catch {
           // Cross-origin restrictions - show checkbox after delay
           setTimeout(() => setShowCheckbox(true), 3000);
         }
@@ -81,12 +81,12 @@ const PDFViewer = ({ pdfUrl, title = "Document", onScrollToBottom }) => {
             iframeDoc.removeEventListener('wheel', checkScrollToBottom);
             iframeDoc.removeEventListener('mousemove', checkScrollToBottom);
           }
-        } catch (error) {
+        } catch {
           // Cross-origin restrictions
         }
       };
     }
-  }, [showCheckbox]);
+  }, [showCheckbox, checkScrollToBottom]);
 
   return (
     <div className="h-full w-full bg-white dark:bg-gray-900 relative flex flex-col">

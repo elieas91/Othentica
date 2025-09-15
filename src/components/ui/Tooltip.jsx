@@ -16,7 +16,7 @@ const Tooltip = ({ children, content, position = 'top' }) => {
           setIsVisible(true);
         }}
         onBlur={() => {
-          consol.log('Blur - hiding tooltip');
+          console.log('Blur - hiding tooltip');
           setIsVisible(false);
         }}
       >

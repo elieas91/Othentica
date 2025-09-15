@@ -52,7 +52,7 @@ const OptIn = () => {
           country: data.country_name || '',
         }));
       }
-    } catch (error) {
+    } catch {
       // Fallback to UAE if detection fails
       setForm((prev) => ({
         ...prev,
