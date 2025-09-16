@@ -2,7 +2,6 @@ import Button from './Button';
 
 const BlogCard = ({
   title,
-  date,
   image,
   description,
   link,

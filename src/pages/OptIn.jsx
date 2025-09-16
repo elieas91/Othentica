@@ -81,18 +81,12 @@ const OptIn = () => {
   };
   const [form, setForm] = useState(initialFormState);
 
-  // Modal for Terms and Conditions PDF
-  const [termsModalOpen, setTermsModalOpen] = useState(false);
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
-  const handleTermsModalOpen = () => setTermsModalOpen(true);
-  const handleTermsModalClose = () => setTermsModalOpen(false);
 
   const handleFormClose = () => {
     setShowForm(false);
     setForm(initialFormState);
     setSubmitError('');
     setIsSubmitting(false);
-    setHasScrolledToBottom(false);
   };
 
   const handleShowForm = () => {
