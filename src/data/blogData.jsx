@@ -6,13 +6,14 @@ import BlogImg4 from '../assets/img/blog/blog_img4.webp';
 export const blogData = [
   {
     id: 1,
-    title: 'Empowering Brain Health and Resilience',
+    title:
+      'IGI to launch a wellness app for women in insurance during the Dive In Festival',
     image: BlogImg1,
     date: 'March 21, 2024',
-    link: 'https://www.linkedin.com/posts/hiba-tarazi-45220410_aedaevaerabraepaesaexaetaepaei-aezaepaepaevaeyaerabraepaesaetaewaegaep-activity-7366418609201393665-SgK0?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAIqdX4BTfqfHwvnRPg4sDCIcyj6IvwHfxM',
-    linkText: 'Read about brain health workshop at Ahli Bank',
+    link: 'https://www.linkedin.com/posts/theinsurer_igi-to-launch-a-wellness-app-for-women-in-activity-7371467524963627008-2Q_6?utm_source=share&utm_medium=member_android&rcm=ACoAAAIqdX4BTfqfHwvnRPg4sDCIcyj6IvwHfxM',
+    linkText: 'Read about IGI and Othentica',
     description:
-      "Delivering my yearly program to the banking sector in Jordan is always a highlight. The recent workshop with Ahli Bank employees in Amman was a professional and inspiring session, focused on building new, healthy habits. I am grateful for the opportunity to help employees strengthen their brains, manage stress wisely, and perform at their best. Thanks to the L&D team at Ahli Bank for supporting their employees' growth and well-being. I look forward to continuing this journey of growth and resilience in upcoming sessions.",
+      'IGI reinforces its commitment to diversity and inclusion by sponsoring the Othentica wellness app, offering 1,000 women in the insurance industry personalized tools for mental and physical wellbeing, brain health, and stress management to thrive professionally and personally.',
   },
   {
     id: 2,

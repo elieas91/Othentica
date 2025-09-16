@@ -36,7 +36,7 @@ const BlogCard = ({
           textToTheSide ? 'md:w-1/2 md:pl-6' : ''
         }`}
       >
-        <p className="text-sm opacity-80">{date}</p>
+        {/* <p className="text-sm opacity-80">{date}</p> */}
         <h2 className="text-lg md:text-xl font-semibold leading-snug">
           {title}
         </h2>
