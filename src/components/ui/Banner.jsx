@@ -16,6 +16,7 @@ const Banner = ({
   hasOverlay = true,
   className = '',
   children,
+  textInRectangle = false,
 }) => {
   // If backgroundImages is provided and is an array, render them as columns
   const hasMultipleImages =
@@ -73,11 +74,21 @@ const Banner = ({
 
       {/* Content */}
       <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto">
-        {title && (
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight">
-            {title}
-          </h1>
-        )}
+        {title &&
+          (textInRectangle ? (
+            <div
+              className="inline-block border-2 border-white px-4 py-2 md:px-8 md:py-3 mb-6"
+              style={{ background: 'rgba(0,0,0,0.15)' }}
+            >
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight m-0">
+                {title}
+              </h1>
+            </div>
+          ) : (
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight">
+              {title}
+            </h1>
+          ))}
 
         {subtitle && (
           <h2 className="text-xl md:text-2xl font-semibold text-accent mb-4">

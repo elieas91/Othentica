@@ -4,9 +4,6 @@ import { FaLinkedin, FaYoutube, FaInstagram, FaFacebook } from 'react-icons/fa';
 import WhiteLogo from '../../assets/img/logo_white.webp';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
-import TermsAndConditionsPDF from '../../assets/pdf/terms_and_conditions_of_use.pdf';
-import DisclaimersPDF from '../../assets/pdf/disclaimers.pdf';
-import PrivacyPolicyPDF from '../../assets/pdf/privacy_policy.pdf';
 
 const Footer = ({ minimal = false }) => {
   return (
@@ -136,7 +133,7 @@ const Footer = ({ minimal = false }) => {
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-row items-center justify-center space-x-0 text-sm text-center">
               <a
-                href={TermsAndConditionsPDF}
+                href="/terms-conditions"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
@@ -145,7 +142,7 @@ const Footer = ({ minimal = false }) => {
               </a>
               <span className="text-gray-400">|</span>
               <a
-                href={PrivacyPolicyPDF}
+                href="/privacy-policy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
@@ -154,7 +151,7 @@ const Footer = ({ minimal = false }) => {
               </a>
               <span className="text-gray-400">|</span>
               <a
-                href={DisclaimersPDF}
+                href="/disclaimers"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
