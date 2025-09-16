@@ -8,9 +8,9 @@ import WorkshopImg2 from '../assets/img/services/workshop_2.webp';
 import OneToOneImg from '../assets/img/services/one_to_one_img.webp';
 import AppImg from '../assets/img/services/app_img_new_2.webp';
 import AppImgLong from '../assets/img/services/app_img_long.webp';
-import Mobile1 from '../assets/img/services/mobile1.png';
-import Mobile2 from '../assets/img/services/mobile2.png';
-import Mobile3 from '../assets/img/services/mobile3.png';
+import Mobile1 from '../assets/img/services/mobile1.webp';
+import Mobile2 from '../assets/img/services/mobile2.webp';
+import Mobile3 from '../assets/img/services/mobile3.webp';
 
 export const servicesData = [
   {

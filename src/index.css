@@ -1,3 +1,7 @@
+/* Slick Carousel CSS - Must be at the top */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 /* Local Font Declarations */
 @font-face {
   font-family: 'Montserrat';
@@ -1029,5 +1033,69 @@
   }
   .scrollbar-hide::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
+  }
+
+  /* Custom Slick Carousel Styles */
+  .slick-dots {
+    position: static !important;
+    margin-top: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2rem;
+    height: 100%;
+    display: flex !important;
+    justify-content: start;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .slick-dots li {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+
+  .slick-dots li button {
+    width: 2rem !important;
+    height: 2rem !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+  }
+
+  .slick-dots li button:hover {
+    opacity: 0.6 !important;
+  }
+
+  .slick-dots li.slick-active button {
+    opacity: 1 !important;
+    transform: scale(1.1);
+  }
+
+  .slick-dots li button:before {
+    display: none !important;
+  }
+
+  .slick-dots li button img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+
+  /* Mobile responsive dots */
+  @media (max-width: 768px) {
+    .slick-dots {
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .slick-dots li button {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+    }
   }
 }

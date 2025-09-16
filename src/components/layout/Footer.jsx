@@ -60,15 +60,15 @@ const Footer = ({ minimal = false }) => {
                 <FaYoutube className="text-neutral text-lg" />
               </a> */}
 
-                {/* <a
-                href="https://instagram.com/othentica"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
-                aria-label="Follow us on Instagram"
-              >
-                <FaInstagram className="text-neutral text-lg" />
-              </a> */}
+                <a
+                  href="https://www.instagram.com/othenticaapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center hover:bg-secondary/90 transition-colors duration-500 ease-in-out cursor-pointer"
+                  aria-label="Follow us on Instagram"
+                >
+                  <FaInstagram className="text-neutral text-lg" />
+                </a>
 
                 <a
                   href="https://www.facebook.com/share/1C2Qcrsj2d/"

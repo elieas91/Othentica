@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Slider from 'react-slick';
 import Flame from '../../assets/img/flame.webp';
 import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
 import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
@@ -70,13 +71,13 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     });
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedQuotes, setExpandedQuotes] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [testimonialsData, setTestimonialsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  // const [sliderRef, setSliderRef] = useState(null);
 
   // Function to fetch testimonials
   const fetchTestimonials = useCallback(async () => {
@@ -123,23 +124,51 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     ? testimonialsData.filter((t) => t.categoryId == currentCategoryId)
     : testimonialsData;
 
-  // Auto-rotate through testimonials every 16 seconds
-  useEffect(() => {
-    if (filteredTestimonials.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentIndex(
-        (prevIndex) => (prevIndex + 1) % filteredTestimonials.length
-      );
-    }, 16000);
-
-    return () => clearInterval(interval);
-  }, [filteredTestimonials.length]);
-
-  // Get the current testimonial and its category
-  const currentTestimonial = filteredTestimonials[currentIndex];
+  // Get the first testimonial and its category for the right side images
+  const firstTestimonial = filteredTestimonials[0];
   const currentCategory = testimonialCategories.find(
-    (cat) => cat.id === currentTestimonial?.categoryId
+    (cat) => cat.id === firstTestimonial?.categoryId
   );
+
+  // Slick carousel settings
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: false,
+    customPaging: (i) => (
+      <button
+        className={`w-8 h-8 transition-all duration-300 ${
+          i === 0 ? 'opacity-100 scale-110' : 'opacity-30 hover:opacity-60'
+        }`}
+        aria-label={`Go to testimonial ${i + 1}`}
+      >
+        <img
+          src={Flame}
+          alt={`Testimonial ${i + 1}`}
+          className="w-full h-full object-contain"
+        />
+      </button>
+    ),
+    beforeChange: (current, next) => {
+      // Update the active dot when slide changes
+      const dots = document.querySelectorAll('.slick-dots li button');
+      dots.forEach((dot, index) => {
+        if (index === next) {
+          dot.classList.add('opacity-100', 'scale-110');
+          dot.classList.remove('opacity-30');
+        } else {
+          dot.classList.remove('opacity-100', 'scale-110');
+          dot.classList.add('opacity-30');
+        }
+      });
+    }
+  };
 
   // Get two different categories for the right side images
   const getTwoDifferentCategories = () => {
@@ -302,35 +331,29 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     );
   }
 
-  // Safety check - if no current testimonial, show error state
-  if (!currentTestimonial) {
-    // return (
-    //   <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
-    //     <div className="max-w-7xl mx-auto">
-    //       <div className="text-center">
-    //         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
-    //           Testimonials
-    //         </h2>
-    //         <p className="text-gray-600 mb-8">
-    //           No testimonials available at the moment.
-    //         </p>
-    //         <Button
-    //           variant="secondary"
-    //           onClick={() => setShowForm(true)}
-    //         >
-    //           Add your Testimonial
-    //         </Button>
-    //       </div>
-    //     </div>
-    //   </section>
-    // );
+  // Safety check - if no testimonials, show error state
+  if (filteredTestimonials.length === 0) {
+    return (
+      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
+              Testimonials
+            </h2>
+            <p className="text-gray-600 mb-8">
+              {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'}
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => setShowForm(true)}
+            >
+              Add your Testimonial
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
   }
-
-  // Get truncated quote for current testimonial (only after we know it exists)
-  const { truncated, needsTruncation } = truncateQuote(
-    currentTestimonial.quote || ''
-  );
-  const isExpanded = expandedQuotes[currentTestimonial.id];
 
   return (
     <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
@@ -359,121 +382,51 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
               </div>
             )}
 
-            {/* Carousel Content */}
-            <div className="min-h-[200px] md:w-full flex flex-col justify-center">
-              <blockquote
-                className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium transition-all duration-700 ease-in-out"
-                style={{ display: 'inline' }}
-              >
-                "{isExpanded ? (currentTestimonial?.quote || '') : truncated}"
-                {needsTruncation && currentTestimonial?.id && (
-                  <button
-                    onClick={() => toggleQuoteExpansion(currentTestimonial.id)}
-                    className="ml-2 text-primary/80 hover:text-primary font-medium text-md md:text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
-                    style={{ display: 'inline', verticalAlign: 'baseline' }}
-                  >
-                    {isExpanded ? 'Read Less' : 'Read More'}
-                  </button>
-                )}
-              </blockquote>
+            {/* Slick Carousel Content */}
+            <div className="min-h-[200px] md:w-full">
+              <Slider {...sliderSettings}>
+                {filteredTestimonials.map((testimonial) => {
+                  const { truncated, needsTruncation } = truncateQuote(testimonial.quote || '');
+                  const isExpanded = expandedQuotes[testimonial.id];
+                  
+                  return (
+                    <div key={testimonial.id} className="px-2">
+                      <div className="flex flex-col justify-center min-h-[200px]">
+                        <blockquote
+                          className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium"
+                          style={{ display: 'inline' }}
+                        >
+                          "{isExpanded ? (testimonial.quote || '') : truncated}"
+                          {needsTruncation && testimonial.id && (
+                            <button
+                              onClick={() => toggleQuoteExpansion(testimonial.id)}
+                              className="ml-2 text-primary/80 hover:text-primary font-medium text-md md:text-lg mb-0 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60"
+                              style={{ display: 'inline', verticalAlign: 'baseline' }}
+                            >
+                              {isExpanded ? 'Read Less' : 'Read More'}
+                            </button>
+                          )}
+                        </blockquote>
 
-              <cite className="text-base sm:text-lg text-primary font-semibold transition-all duration-700 ease-in-out">
-                <span className="flex items-center gap-3 mb-4 sm:mb-0">
-                  {currentTestimonial?.imageUrl && (
-                    <img
-                      src={getTestimonialImagePath(currentTestimonial?.image, currentTestimonial?.imageUrl)}
-                      alt={currentTestimonial?.author || 'Testimonial author'}
-                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
-                    />
-                  )}
-                  <span>– {currentTestimonial?.author || 'Anonymous'}</span>
-                </span>
-              </cite>
-            </div>
-
-            {/* Carousel Indicators */}
-            <div className="mt-2">
-              {/* Desktop: Show all flames in a row */}
-              <div className="hidden md:flex justify-center lg:justify-start space-x-3">
-                {filteredTestimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`w-8 h-8 transition-all duration-300 ${
-                      index === currentIndex
-                        ? 'opacity-100 scale-110'
-                        : 'opacity-30 hover:opacity-60'
-                    }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
-                  >
-                    <img
-                      src={Flame}
-                      alt={`Testimonial ${index + 1}`}
-                      className="w-full h-full object-contain"
-                    />
-                  </button>
-                ))}
-              </div>
-              
-              {/* Mobile: Flames wrap to second line if too many */}
-              <div className="md:hidden">
-                <div className="relative">
-                  <div className="flex flex-wrap justify-center items-center space-x-3 space-y-2 pb-2 w-full">
-                    {filteredTestimonials.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
-                          index === currentIndex
-                            ? 'opacity-100 scale-110'
-                            : 'opacity-30 hover:opacity-60'
-                        }`}
-                        aria-label={`Go to testimonial ${index + 1}`}
-                      >
-                        <img
-                          src={Flame}
-                          alt={`Testimonial ${index + 1}`}
-                          className="w-full h-full object-contain"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              {/* Show horizontal carousel on desktop when there are many testimonials */}
-              {filteredTestimonials.length > 8 && (
-                <div className="hidden md:block lg:hidden">
-                  <div className="relative">
-                    <div className="overflow-x-auto scrollbar-hide">
-                      <div className="flex space-x-3 pb-2" style={{ width: 'max-content' }}>
-                        {filteredTestimonials.map((_, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setCurrentIndex(index)}
-                            className={`w-8 h-8 flex-shrink-0 transition-all duration-300 ${
-                              index === currentIndex
-                                ? 'opacity-100 scale-110'
-                                : 'opacity-30 hover:opacity-60'
-                            }`}
-                            aria-label={`Go to testimonial ${index + 1}`}
-                          >
-                            <img
-                              src={Flame}
-                              alt={`Testimonial ${index + 1}`}
-                              className="w-full h-full object-contain"
-                            />
-                          </button>
-                        ))}
+                        <cite className="text-base sm:text-lg text-primary font-semibold">
+                          <span className="flex items-center gap-3 mb-4 sm:mb-0">
+                            {testimonial.imageUrl && (
+                              <img
+                                src={getTestimonialImagePath(testimonial.image, testimonial.imageUrl)}
+                                alt={testimonial.author || 'Testimonial author'}
+                                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-primary/30 shadow"
+                              />
+                            )}
+                            <span>– {testimonial.author || 'Anonymous'}</span>
+                          </span>
+                        </cite>
                       </div>
                     </div>
-                    {/* Gradient fade indicators */}
-                    <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
-                    <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
-                  </div>
-                </div>
-              )}
+                  );
+                })}
+              </Slider>
             </div>
+
 
             {/* Add Testimonial Button - Outside Carousel */}
               <div className="mt-8">
