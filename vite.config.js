@@ -125,6 +125,7 @@ export default defineConfig({
     force: true
   },
   define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    '__BUILD_TIME__': JSON.stringify(new Date().toISOString())
   }
 })

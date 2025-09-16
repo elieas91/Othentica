@@ -2,6 +2,7 @@ import SocialMedia from '../components/sections/Blog';
 import Banner from '../components/ui/Banner';
 import BannerBg from '../assets/img/blog/blog_bg.webp';
 import BlogCard from '../components/ui/BlogCard';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 import { blogData } from '../data/blogData.jsx';
 
 const Blog = () => {
@@ -55,7 +56,9 @@ const Blog = () => {
           ))}
         </div>
       </div>
-      <SocialMedia />
+      <ErrorBoundary>
+        <SocialMedia />
+      </ErrorBoundary>
     </>
   );
 };

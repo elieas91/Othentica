@@ -10,6 +10,7 @@ import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';
 import FeaturesAndBenefits from '../components/sections/FeaturesAndBenefits';
+import ErrorBoundary from '../components/ui/ErrorBoundary';
 
 // Hook to detect mobile devices
 const useIsMobile = () => {
@@ -267,7 +268,9 @@ const Home = () => {
         <Security />
       </div>
 
-      <SocialMedia />
+      <ErrorBoundary>
+        <SocialMedia />
+      </ErrorBoundary>
       
     </div>
   );

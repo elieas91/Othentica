@@ -1,22 +1,72 @@
-import React, { useState } from 'react';
-import { instagramData } from '../../data/instagramData';
+import React, { useCallback, useEffect } from 'react';
+// import { instagramData } from '../../data/instagramData'; // COMMENTED OUT FOR TESTING
 
 const SocialMedia = () => {
-  const [activePlatform, setActivePlatform] = useState('instagram');
+  // const [activePlatform, setActivePlatform] = useState(null); // COMMENTED OUT FOR TESTING
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔍 SocialMedia Component Mounted');
+    // console.log('🔍 Instagram Data:', instagramData); // COMMENTED OUT
+    // console.log('🔍 Active Platform:', activePlatform); // COMMENTED OUT
+  }, []);
+
+  const handleSocialClick = useCallback((platformKey, platform) => {
+    console.log('🔍 Social Click:', { platformKey, platform });
+    try {
+      // INSTAGRAM LOGIC COMMENTED OUT FOR TESTING
+      // if (platformKey === 'instagram') {
+      //   console.log('🔍 Toggling Instagram platform');
+      //   setActivePlatform(activePlatform === 'instagram' ? null : 'instagram');
+      // } else 
+      if (platform?.url) {
+        console.log('🔍 Opening external link:', platform.url);
+        window.open(platform.url, '_blank', 'noopener,noreferrer');
+      }
+    } catch (error) {
+      console.error('❌ Error handling social click:', error);
+    }
+  }, []); // REMOVED activePlatform DEPENDENCY
+
+  // Error boundary for component - COMMENTED OUT FOR TESTING
+  // if (!instagramData) {
+  //   return (
+  //     <section className="py-16 bg-white">
+  //       <div className="text-center">
+  //         <h2 className="text-3xl font-bold text-primary mb-4">
+  //           Othentica FZC LLC
+  //         </h2>
+  //         <p className="text-primary/70 text-lg">
+  //           Follow us on social media for updates and insights
+  //         </p>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   // Social platforms with direct links
   const socialPlatforms = {
-    instagram: {
-      name: 'Instagram',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-      ),
-      color: 'bg-gradient-to-r from-purple-500 to-pink-500',
-      hoverColor: 'hover:from-purple-600 hover:to-pink-600',
-      url: 'https://www.instagram.com/othenticaapp',
-    },
+    // INSTAGRAM COMMENTED OUT FOR TESTING
+    // instagram: {
+    //   name: 'Instagram',
+    //   icon: (() => {
+    //     console.log('🔍 Creating Instagram SVG icon');
+    //     try {
+    //       const icon = (
+    //         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+    //           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+    //         </svg>
+    //       );
+    //       return icon;
+    //     } catch (error) {
+    //       console.error('❌ Error creating Instagram icon:', error);
+    //       return <span>📷</span>;
+    //     }
+    //   })(),
+    //   color: 'bg-gradient-to-r from-purple-500 to-pink-500',
+    //   hoverColor: 'hover:from-purple-600 hover:to-pink-600',
+    //   url: 'https://www.instagram.com/othenticaapp',
+    // },
     facebook: {
       name: 'Facebook',
       icon: (
@@ -41,76 +91,102 @@ const SocialMedia = () => {
     },
   };
 
+  console.log('🔍 Rendering SocialMedia component');
+  console.log('🔍 Social platforms:', Object.keys(socialPlatforms));
 
-  const handleSocialClick = (platformKey, platform) => {
-    if (platformKey === 'instagram') {
-      setActivePlatform(activePlatform === 'instagram' ? null : 'instagram');
-    } else if (platform.url) {
-      window.open(platform.url, '_blank');
-    }
-  };
-
+  try {
+  console.log('🔍 Rendering section element');
+  
   return (
     <section className="py-16 bg-white">
 
       {/* Social Media Icons - Direct Links */}
       <div className="flex justify-center mb-12">
         <div className="flex gap-6">
-          {Object.entries(socialPlatforms).map(([key, platform]) => (
-            <button
-              key={key}
-              onClick={() => handleSocialClick(key, platform)}
-              className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg text-white focus:outline-none border-0 border-transparent hover:scale-110 ${
-                activePlatform === key 
-                  ? 'ring-4 ring-primary/30 scale-110' 
-                  : ''
-              } ${platform.color} ${platform.hoverColor}`}
-              aria-label={`Visit Othentica FZC LLC on ${platform.name}`}
-                >
-                  {platform.icon}
-            </button>
-          ))}
+          {(() => {
+            console.log('🔍 About to render social platform buttons');
+            return Object.entries(socialPlatforms).map(([key, platform]) => {
+              console.log('🔍 Rendering button for:', key, platform);
+              return (
+              <button
+                key={key}
+                onClick={() => {
+                  console.log('🔍 Button clicked:', key);
+                  handleSocialClick(key, platform);
+                }}
+                className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg text-white focus:outline-none border-0 border-transparent hover:scale-110 ${platform.color} ${platform.hoverColor}`}
+                aria-label={`Visit Othentica FZC LLC on ${platform.name}`}
+                  >
+                    {(() => {
+                      console.log('🔍 Rendering icon for:', key);
+                      return platform.icon;
+                    })()}
+              </button>
+              );
+            });
+          })()}
         </div>
       </div>
 
-      {/* Instagram Feed Display */}
-      {activePlatform === 'instagram' && (
+      {/* INSTAGRAM FEED DISPLAY COMMENTED OUT FOR TESTING */}
+      {/* {(() => {
+        console.log('🔍 Checking Instagram feed condition:', { activePlatform, hasInstagramData: !!instagramData });
+        return null;
+      })()}
+      {activePlatform === 'instagram' && instagramData && (
         <div className="max-w-4xl mx-auto mb-12">
+          {(() => {
+            console.log('🔍 Rendering Instagram feed');
+            return null;
+          })()}
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-100">
-            {/* Instagram Profile Header */}
             <div className="flex items-center justify-center mb-8">
               <div className="flex items-center space-x-4">
-                <img
-                  src={instagramData.profilePictureUrl}
-                  alt={`${instagramData.username} profile`}
-                  className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
-                />
+                {instagramData.profilePictureUrl && (
+                  <img
+                    src={instagramData.profilePictureUrl}
+                    alt={`${instagramData.username || 'Instagram'} profile`}
+                    className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                )}
                 <div className="text-left">
-                  <h3 className="text-2xl font-bold text-gray-800">@{instagramData.username}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{instagramData.biography}</p>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    @{instagramData.username || 'othenticaapp'}
+                  </h3>
+                  {instagramData.biography && (
+                    <p className="text-gray-600 text-sm mb-2">{instagramData.biography}</p>
+                  )}
                   <div className="flex space-x-4 text-sm text-gray-500">
-                    <span><strong>{instagramData.followersCount}</strong> followers</span>
-                    <span><strong>{instagramData.followsCount}</strong> following</span>
+                    <span><strong>{instagramData.followersCount || 0}</strong> followers</span>
+                    <span><strong>{instagramData.followsCount || 0}</strong> following</span>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Instagram Posts Grid */}
-            {instagramData.posts.length > 0 ? (
+            {instagramData.posts && instagramData.posts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {instagramData.posts.map((post, index) => (
                   <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    <img
-                      src={post.imageUrl}
-                      alt={`Instagram post ${index + 1}`}
-                      className="w-full h-64 object-cover"
-                    />
+                    {post.imageUrl && (
+                      <img
+                        src={post.imageUrl}
+                        alt={`Instagram post ${index + 1}`}
+                        className="w-full h-64 object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    )}
                     <div className="p-4">
-                      <p className="text-gray-800 text-sm line-clamp-3">{post.caption}</p>
+                      {post.caption && (
+                        <p className="text-gray-800 text-sm line-clamp-3">{post.caption}</p>
+                      )}
                       <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-                        <span>{post.likesCount} likes</span>
-                        <span>{new Date(post.timestamp).toLocaleDateString()}</span>
+                        <span>{post.likesCount || 0} likes</span>
+                        <span>{post.timestamp ? new Date(post.timestamp).toLocaleDateString() : 'Recently'}</span>
                       </div>
                     </div>
                   </div>
@@ -142,7 +218,7 @@ const SocialMedia = () => {
             )}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Company Info */}
       <div className="text-center">
@@ -157,7 +233,26 @@ const SocialMedia = () => {
         </p>
       </div>
     </section>
-  );
+    );
+  } catch (error) {
+    console.error('❌ Error rendering SocialMedia component:', error);
+    console.error('❌ Error stack:', error.stack);
+    return (
+      <section className="py-16 bg-white">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-primary mb-4">
+            Othentica FZC LLC
+          </h2>
+          <p className="text-primary/70 text-lg">
+            Follow us on social media for updates and insights
+          </p>
+          <p className="text-red-500 text-sm mt-4">
+            Error loading social media section. Please refresh the page.
+          </p>
+        </div>
+      </section>
+    );
+  }
 };
 
 export default SocialMedia;
