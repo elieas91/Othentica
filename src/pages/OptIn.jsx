@@ -7,8 +7,7 @@ import { industryList } from '../data/industryList';
 import { countryCodeMap, popularCountryCodes } from '../data/countryCodeMap';
 import ClockAnimation from '../components/ui/ClockAnimation';
 import apiService from '../services/api';
-import PDFViewer from '../components/ui/PDFViewer';
-import TermsAndConditionsPDF from '../assets/pdf/terms_and_conditions_of_use.pdf';
+import Terms from '../components/ui/Terms';
 
 const OptIn = () => {
   const [showForm, setShowForm] = useState(false);
@@ -78,7 +77,6 @@ const OptIn = () => {
     country: '',
     industry: '',
     acknowledge: false,
-    disclaimerAgree: false,
     termsAgree: false,
   };
   const [form, setForm] = useState(initialFormState);
@@ -179,8 +177,6 @@ const OptIn = () => {
       country,
       industry,
       acknowledge,
-      disclaimerAgree,
-
     } = form;
     if (
       !firstName.trim() ||
@@ -191,12 +187,9 @@ const OptIn = () => {
       !country.trim() ||
       !industry.trim() ||
       !acknowledge ||
-      !disclaimerAgree ||
       !form.termsAgree
     ) {
-      setSubmitError(
-        'Please fill in all fields and acknowledge both the disclaimer and terms, and agree to the Terms and Conditions.'
-      );
+      setSubmitError('Please fill in all fields.');
       return;
     }
 
@@ -350,7 +343,9 @@ const OptIn = () => {
             {/* Mobile: Register text and button */}
             <div className="block md:hidden w-full">
               <p className="text-xl mb-2">
-                Register now to receive early access to Othentica, the gamified wellness app that helps you find your treasures of clarity, energy, and resilience.
+                Register now to receive early access to Othentica, the gamified
+                wellness app that helps you find your treasures of clarity,
+                energy, and resilience.
               </p>
               <p className="text-xl mb-2">
                 We’ll notify you by email and SMS as soon as it’s live.
@@ -640,46 +635,7 @@ const OptIn = () => {
                     </select>
                   </div>
 
-                  {/* Disclaimer Section */}
-                  <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm border border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold mb-2 text-primary dark:text-neutral">
-                      Disclaimer
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">
-                      Your privacy matters. Othentica will keep your personal
-                      data safe and will only use it to send you updates and app
-                      access information.
-                    </p>
-                    <h3 className="font-semibold mb-2 text-primary dark:text-neutral">
-                      Important Note
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">
-                      Othentica is a wellness, self-growth, and brain-health
-                      awareness platform. It does not provide medical advice and
-                      is not a substitute for professional medical or mental
-                      health care. If you need medical attention, please consult
-                      a qualified healthcare provider. By continuing, you
-                      acknowledge that your use of Othentica is for wellness
-                      purposes only.
-                    </p>
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="disclaimerAgree"
-                        name="disclaimerAgree"
-                        checked={form.disclaimerAgree}
-                        onChange={handleChange}
-                        required
-                        className="mr-2"
-                      />
-                      <label
-                        htmlFor="disclaimerAgree"
-                        className="text-sm text-gray-700 dark:text-gray-300"
-                      >
-                        I agree to the terms and conditions above
-                      </label>
-                    </div>
-                  </div>
+                  <Terms form={form} handleChange={handleChange} />
 
                   <div className="flex items-center mb-2">
                     <input
@@ -700,44 +656,6 @@ const OptIn = () => {
                     </label>
                   </div>
 
-                  {/* Terms and Conditions PDF Modal Trigger */}
-                  <div className="flex items-center mb-2">
-                    <Button
-                      type="button"
-                      variant="accent"
-                      size="small"
-                      className="mr-4"
-                      onClick={handleTermsModalOpen}
-                    >
-                      View Terms and Conditions
-                    </Button>
-                    <input
-                      type="checkbox"
-                      id="termsAgree"
-                      name="termsAgree"
-                      checked={form.termsAgree}
-                      onChange={handleChange}
-                      required
-                      disabled={!hasScrolledToBottom}
-                      className="mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    />
-                    <label
-                      htmlFor="termsAgree"
-                      className={`text-sm ${
-                        !hasScrolledToBottom
-                          ? 'text-gray-400 dark:text-gray-500'
-                          : 'text-gray-700 dark:text-gray-300'
-                      }`}
-                    >
-                      I have read and agreed to the Terms and Conditions
-                      {!hasScrolledToBottom && (
-                        <span className="block text-xs text-gray-400 dark:text-gray-500 mt-1">
-                          Please view and agree to the Terms and Conditions first
-                        </span>
-                      )}
-                    </label>
-                  </div>
-
                   <div className="pt-4">
                     <Button
                       variant="secondary"
@@ -755,25 +673,6 @@ const OptIn = () => {
           </div>
         </div>
       )}
-
-      {/* Terms and Conditions Modal */}
-      <Modal
-        isOpen={termsModalOpen}
-        onClose={handleTermsModalClose}
-        title=""
-        closeOnOutsideClick={false}
-        className="max-w-7xl w-full h-[90vh]"
-      >
-        <div className="h-full">
-          <PDFViewer 
-            pdfUrl={TermsAndConditionsPDF} 
-            title="Terms and Conditions of Use"
-            onScrollToBottom={() => {
-              setHasScrolledToBottom(true);
-            }}
-          />
-        </div>
-      </Modal>
 
       {/* Thank you Modal */}
       <Modal
