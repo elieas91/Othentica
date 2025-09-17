@@ -55,6 +55,7 @@ const Blog = () => {
           ))}
         </div>
       </div>
+
       <SocialMedia />
     </>
   );

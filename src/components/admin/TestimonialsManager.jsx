@@ -14,7 +14,7 @@ import apiService from '../../services/api';
 
 // Service categories matching the Services.jsx data
 const SERVICE_CATEGORIES = [
-  { value: 'app', label: 'The Othentica App', disabled: true },
+  { value: 'app', label: 'The Othentica App' },
   { value: 'programs', label: 'Tailored Programs' },
   { value: 'talks', label: 'Talks & Workshops' },
   { value: 'one-to-one', label: '1:1 Guidance' }

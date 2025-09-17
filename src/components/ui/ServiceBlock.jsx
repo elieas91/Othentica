@@ -61,7 +61,7 @@ const ServiceBlock = ({ service, index }) => {
                 <img
                   src={service.mobile1}
                   alt={`${service.title} - Mobile View 1`}
-                  className={`w-[15%] h-[50%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                  className={`w-[15%] h-[50%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
                     isVisible 
                       ? 'opacity-100 transform translate-y-0 scale-100' 
                       : 'opacity-0 transform translate-y-8 scale-95'
@@ -74,7 +74,7 @@ const ServiceBlock = ({ service, index }) => {
                 <img
                   src={service.mobile2}
                   alt={`${service.title} - Mobile View 2`}
-                  className={`w-[15%] h-[70%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                  className={`w-[15%] h-[70%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
                     isVisible 
                       ? 'opacity-100 transform translate-y-0 scale-100' 
                       : 'opacity-0 transform translate-y-8 scale-95'
@@ -87,7 +87,7 @@ const ServiceBlock = ({ service, index }) => {
                 <img
                   src={service.mobile3}
                   alt={`${service.title} - Mobile View 3`}
-                  className={`w-[15%] h-[50%] object-cover shadow-lg rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
+                  className={`w-[15%] h-[50%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
                     isVisible 
                       ? 'opacity-100 transform translate-y-0 scale-100' 
                       : 'opacity-0 transform translate-y-8 scale-95'
@@ -103,7 +103,7 @@ const ServiceBlock = ({ service, index }) => {
               <img
                 src={service.image1}
                 alt={service.title}
-                className="w-full h-full object-cover shadow-lg rounded-2xl transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl"
+                className="w-full h-full object-cover  rounded-2xl transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl"
                 style={{ maxHeight: '600px' }}
               />
             )}
