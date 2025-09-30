@@ -3,13 +3,13 @@ import { clientsData } from '../../data/clientsData';
 
 const Clients = () => {
   const shouldUseCarousel = clientsData.length > 6;
-  
+
   // Drag functionality
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const carouselRef = useRef(null);
-  
+
   // Create infinite scroll data by duplicating clients
   const infiniteClientsData = [...clientsData, ...clientsData, ...clientsData];
 
@@ -59,21 +59,18 @@ const Clients = () => {
   // Handle infinite scroll reset
   const handleScroll = () => {
     if (!carouselRef.current) return;
-    
+
     const { scrollLeft } = carouselRef.current;
     const singleSetWidth = clientsData.length * (144 + 128); // w-36 (144px) + gap-32 (128px)
-    
+
     // If scrolled past the first set, reset to beginning
     if (scrollLeft >= singleSetWidth) {
       carouselRef.current.scrollLeft = scrollLeft - singleSetWidth;
     }
   };
 
-
-
-
   if (!shouldUseCarousel) {
-    // Static flexbox layout for 6 or fewer clients
+    // Responsive grid/flex layout for 6 or fewer clients
     return (
       <section className="py-16 px-8 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -86,9 +83,14 @@ const Clients = () => {
             </p>
           </div>
 
-          {/* Centered Client Logos with Flexbox */}
+          {/* Client Logos */}
           <div className="flex justify-center">
-            <div className="flex flex-nowrap justify-center gap-32 max-w-4xl">
+            <div
+              className="
+            grid grid-cols-2 grid-rows-3 gap-8
+            md:flex md:flex-nowrap md:justify-center md:gap-32 md:max-w-4xl
+          "
+            >
               {clientsData.map((client) => (
                 <div
                   key={client.id}
@@ -128,7 +130,7 @@ const Clients = () => {
         <div className="relative max-w-6xl mx-auto">
           {/* Carousel Track */}
           <div className="overflow-hidden">
-            <div 
+            <div
               ref={carouselRef}
               className="flex overflow-x-auto scrollbar-hide cursor-grab select-none"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -157,7 +159,6 @@ const Clients = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
