@@ -22,6 +22,7 @@ export { default as Philosophy } from './sections/Philosophy';
 export { default as MobileShowcase } from './sections/MobileShowcase';
 export { default as Services } from './sections/Services';
 export { default as Testimonials } from './sections/Testimonials';
-export { default as SocialMedia } from './sections/Blog';
+export { default as Blog } from './sections/Blog';
+export { default as SocialMedia } from './sections/SocialMedia';
 export { default as Clients } from './sections/Clients';
 export { default as AboutContent } from './sections/AboutContent_old';

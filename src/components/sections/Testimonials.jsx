@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
+import { getApiUrl } from '../../config/api';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Map categoryId to API category parameter
@@ -159,27 +160,28 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
-  // If a database URL is provided
-  if (imageUrl) {
-    // If it’s already a full URL, just return it
-    if (imageUrl.startsWith('http')) return imageUrl;
+    // If a database URL is provided
+    if (imageUrl) {
+      // If it's already a full URL, just return it
+      if (imageUrl.startsWith('http')) return imageUrl;
 
-    // If it's just a filename or relative path, prepend /server/uploads/testimonials/
-    return `/server/uploads/testimonials/${imageUrl}`;
-  }
+      // If it's just a filename or relative path, prepend the full API URL
+      const apiUrl = getApiUrl();
+      return `${apiUrl}/uploads/testimonials/${imageUrl}`;
+    }
 
-  // Otherwise, use static fallback images
-  const imageMap = {
-    'testimonial-1': Testimonial1,
-    'testimonial-2': Testimonial2,
-    'testimonial-3': Testimonial3,
-    'testimonial-4': Testimonial4,
-    'testimonial-5': Testimonial5,
-    'testimonial-6': Testimonial6,
+    // Otherwise, use static fallback images
+    const imageMap = {
+      'testimonial-1': Testimonial1,
+      'testimonial-2': Testimonial2,
+      'testimonial-3': Testimonial3,
+      'testimonial-4': Testimonial4,
+      'testimonial-5': Testimonial5,
+      'testimonial-6': Testimonial6,
+    };
+
+    return imageMap[imageName] || Testimonial2;
   };
-
-  return imageMap[imageName] || Testimonial2;
-};
 
 
   // Function to truncate quote to 2 lines
@@ -495,7 +497,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   >
                     <div className="h-64 w-full relative">
                       <img
-                        src={getTestimonialImagePath(imageName)}
+                        src={getTestimonialImagePath(imageName, null)}
                         alt={`${cat.name} - ${imageName}`}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         style={{ minHeight: '100%', minWidth: '100%' }}
@@ -523,7 +525,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                     >
                       <div className="h-64 w-full relative">
                         <img
-                          src={getTestimonialImagePath(imageName)}
+                          src={getTestimonialImagePath(imageName, null)}
                           alt={`${cat.name} - ${imageName}`}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           style={{ minHeight: '100%', minWidth: '100%' }}

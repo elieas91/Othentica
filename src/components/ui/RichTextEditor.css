@@ -1,0 +1,123 @@
+/* Rich Text Editor Styles */
+.rich-text-container {
+  position: relative;
+  z-index: 1;
+}
+
+.rich-text-editor {
+  position: relative;
+  z-index: 1;
+}
+
+  /* Fix dropdown z-index issues */
+.rich-text-editor .ql-toolbar {
+  z-index: 10;
+}
+
+.rich-text-editor .ql-toolbar .ql-picker {
+  z-index: 11;
+}
+
+.rich-text-editor .ql-toolbar .ql-picker-options {
+  z-index: 12;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 150px;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 15px;
+}
+
+.rich-text-editor .ql-toolbar {
+  border-top: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  background: #f9fafb;
+}
+
+.rich-text-editor .ql-container {
+  border-bottom: 1px solid #e5e7eb;
+  border-left: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  font-size: 14px;
+}
+
+.rich-text-editor .ql-editor.ql-blank::before {
+  color: #9ca3af;
+  font-style: normal;
+  left: 15px;
+  right: 15px;
+}
+
+.rich-text-editor .ql-toolbar .ql-stroke {
+  stroke: #6b7280;
+}
+
+.rich-text-editor .ql-toolbar .ql-fill {
+  fill: #6b7280;
+}
+
+.rich-text-editor .ql-toolbar button:hover .ql-stroke {
+  stroke: #3b82f6;
+}
+
+.rich-text-editor .ql-toolbar button:hover .ql-fill {
+  fill: #3b82f6;
+}
+
+.rich-text-editor .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #3b82f6;
+}
+
+.rich-text-editor .ql-toolbar button.ql-active .ql-fill {
+  fill: #3b82f6;
+}
+
+/* Focus styles */
+.rich-text-editor:focus-within .ql-toolbar {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.rich-text-editor:focus-within .ql-container {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+/* Ensure proper containment */
+.rich-text-container .ql-toolbar {
+  position: relative;
+  z-index: 2;
+}
+
+.rich-text-container .ql-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Prevent overflow issues */
+.rich-text-container {
+  overflow: visible;
+  margin-bottom: 1.5rem;
+}
+
+/* Ensure dropdowns are visible above other elements */
+.rich-text-editor .ql-toolbar .ql-picker-options {
+  position: absolute;
+  z-index: 9999;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix for Quill dropdown positioning */
+.rich-text-editor .ql-toolbar .ql-picker.ql-expanded .ql-picker-options {
+  display: block;
+  z-index: 9999;
+}

@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import apiService from '../services/api';
 import TestimonialsManager from '../components/admin/TestimonialsManager';
 import OptInManager from '../components/admin/OptInManager';
+import BlogManager from '../components/admin/BlogManager';
+import ContentManager from '../components/admin/ContentManager';
+import HomepageSectionsManager from '../components/admin/HomepageSectionsManager';
+import AboutManager from '../components/admin/AboutManager';
+import ServicesManager from '../components/admin/ServicesManager';
+import ServicesBannerManager from '../components/admin/ServicesBannerManager';
 import LogoWhite from '../assets/img/logo_white.webp';
 import { 
   Bars3Icon, 
@@ -14,7 +21,8 @@ import {
   Cog6ToothIcon,
   ChevronLeftIcon,
   BookmarkIcon,
-  UserPlusIcon
+  UserPlusIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 
@@ -24,13 +32,30 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
+  const [activePage, setActivePage] = useState('homepage');
+  const [activeHomepageSection, setActiveHomepageSection] = useState('hero');
   const [isHoveringSidebar, setIsHoveringSidebar] = useState(false);
+  const [blogCount, setBlogCount] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/admin');
+    } else {
+      // Fetch blog count for overview
+      fetchBlogCount();
     }
   }, [isAuthenticated, navigate]);
+
+  const fetchBlogCount = async () => {
+    try {
+      const response = await apiService.getAllBlogs();
+      if (response.success) {
+        setBlogCount(response.data.length);
+      }
+    } catch (error) {
+      console.error('Error fetching blog count:', error);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -52,19 +77,63 @@ const Dashboard = () => {
     return null; // Will redirect
   }
 
-  const navigationItems = [
+  // Website pages navigation
+  const websitePages = [
+    { id: 'homepage', name: 'Homepage', icon: HomeIcon, color: 'from-blue-500 to-blue-600', description: 'Main landing page' },
+    { id: 'about', name: 'About', icon: UsersIcon, color: 'from-green-500 to-emerald-600', description: 'About us page' },
+    { id: 'services', name: 'Services', icon: BookmarkIcon, color: 'from-purple-500 to-violet-600', description: 'Services page' },
+    { id: 'contact', name: 'Contact', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500', description: 'Contact page' },
+    { id: 'blog', name: 'Blog', icon: DocumentTextIcon, color: 'from-teal-500 to-cyan-600', description: 'Blog listing page' },
+  ];
+
+  // Homepage sections
+  const homepageSections = [
+    { id: 'hero', name: 'Hero Section', description: 'Main banner with call-to-action' },
+    { id: 'philosophy', name: 'Philosophy', description: 'What is Othentica section' },
+    { id: 'services', name: 'Services', description: 'Our Solutions section' },
+    { id: 'clients', name: 'Clients', description: 'Our Clients section' },
+    { id: 'features', name: 'Features', description: 'App Features & Benefits section' },
+    { id: 'security', name: 'Security', description: 'Enterprise Security section' },
+    { id: 'mobile_showcase', name: 'Mobile Showcase', description: 'Mobile Experience section' }
+  ];
+
+  // Admin sections
+  const adminSections = [
     { id: 'overview', name: 'Overview', icon: HomeIcon, color: 'from-blue-500 to-blue-600' },
+    { id: 'about_manager', name: 'About Page', icon: UsersIcon, color: 'from-green-500 to-emerald-600' },
     { id: 'testimonials', name: 'Testimonials', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500' },
+    { id: 'blogs', name: 'Blog Posts', icon: DocumentTextIcon, color: 'from-teal-500 to-cyan-600' },
     { id: 'optin', name: 'Opt-in Users', icon: UserPlusIcon, color: 'from-green-500 to-emerald-600' },
     { id: 'users', name: 'Users', icon: UsersIcon, color: 'from-purple-500 to-violet-600' },
-    { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'from-indigo-500 to-indigo-600' },
+    { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'from-gray-500 to-gray-600' },
     { id: 'settings', name: 'Settings', icon: Cog6ToothIcon, color: 'from-gray-500 to-gray-600' },
   ];
 
   const renderContent = () => {
+    // Handle website pages
+    if (activePage === 'homepage' && activeSection === 'homepage') {
+      return <HomepageSectionsManager activeSection={activeHomepageSection} onSectionChange={setActiveHomepageSection} />;
+    }
+    if (activePage === 'about' && activeSection === 'about') {
+      return <AboutManager />;
+    }
+    if (activePage === 'services' && activeSection === 'services') {
+      return (
+        <div className="space-y-8">
+          <ServicesBannerManager />
+          <ServicesManager />
+        </div>
+      );
+    }
+    
+    // Handle admin sections
     switch (activeSection) {
+      case 'about_manager':
+        return <AboutManager />;
       case 'testimonials':
         return <TestimonialsManager />;
+      case 'blogs':
+        return <BlogManager />;
       case 'optin':
         return <OptInManager />;
       case 'users':
@@ -127,14 +196,12 @@ const Dashboard = () => {
 
               <div className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional p-6 border border-accent/20 hover:shadow-xl-professional transition-all duration-300">
                 <div className="flex items-center">
-                  <div className="p-3 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl shadow-lg">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  <div className="p-3 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl shadow-lg">
+                    <DocumentTextIcon className="w-7 h-7 text-white" />
                   </div>
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Success Rate</p>
-                    <p className="text-3xl font-bold text-primary font-poppins">98.5%</p>
+                    <p className="text-sm font-medium text-gray-600">Blog Posts</p>
+                    <p className="text-3xl font-bold text-primary font-poppins">{blogCount}</p>
                   </div>
                 </div>
               </div>
@@ -161,6 +228,17 @@ const Dashboard = () => {
                       </div>
                     </button>
                     <button 
+                      onClick={() => setActiveSection('blogs')}
+                      className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                          <DocumentTextIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <p className="text-sm font-semibold text-primary font-poppins">Manage Blogs</p>
+                      </div>
+                    </button>
+                    <button 
                       onClick={() => setActiveSection('optin')}
                       className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
                     >
@@ -169,6 +247,17 @@ const Dashboard = () => {
                           <UserPlusIcon className="w-6 h-6 text-white" />
                         </div>
                         <p className="text-sm font-semibold text-primary font-poppins">Manage Opt-ins</p>
+                      </div>
+                    </button>
+                    <button 
+                      onClick={() => setActiveSection('content')}
+                      className="group p-6 bg-gradient-to-br from-white to-accent/5 border border-accent/20 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                          <BookmarkIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <p className="text-sm font-semibold text-primary font-poppins">Manage Content</p>
                       </div>
                     </button>
                     <button 
@@ -228,7 +317,7 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className={`transition-all duration-300 ease-in-out ${
         sidebarOpen ? 'w-80' : 'w-0'
-      } overflow-hidden`}>
+      } overflow-hidden flex-shrink-0`}>
         <div 
           className="w-80 h-full bg-gradient-to-br from-primary via-primary to-blue-900 shadow-xl"
           onMouseEnter={() => setIsHoveringSidebar(true)}
@@ -236,53 +325,103 @@ const Dashboard = () => {
         >
           <div className="flex flex-col h-full">
             {/* Sidebar Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/20">
+            <div className="flex items-center justify-between p-5 border-b border-white/20">
               <div className="flex items-center gap-3">
                 <img 
                   src={LogoWhite} 
                   alt="Othentica Logo" 
-                  className="h-8 w-auto"
+                  className="h-7 w-auto"
                 />
+                {/* <span className="text-white font-semibold font-poppins text-sm">Admin Panel</span> */}
               </div>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-md hover:bg-white/10 transition-colors"
               >
-                <ChevronLeftIcon className="w-5 h-5 text-white" />
+                <ChevronLeftIcon className="w-4 h-4 text-white" />
               </button>
             </div>
 
             {/* Sidebar Content */}
-            <div className="flex-1 overflow-y-auto bg-gradient-to-b from-white/5 to-transparent">
-              <div className="p-6">
-                <nav className="space-y-3">
-                  {navigationItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          setActiveSection(item.id);
-                          if (!sidebarPinned) setSidebarOpen(false);
-                        }}
-                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-left transition-all duration-300 group ${
-                          activeSection === item.id
-                            ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm'
-                            : 'text-white/80 hover:bg-white/10 hover:text-white'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg transition-all duration-300 ${
-                          activeSection === item.id
-                            ? `bg-gradient-to-r ${item.color} shadow-lg`
-                            : 'bg-white/20 group-hover:bg-white/30'
-                        }`}>
-                          <Icon className="w-5 h-5" />
+            <div className="flex-1 overflow-y-auto bg-gradient-to-b from-white/5 to-transparent scrollbar-hide">
+              <div className="p-5">
+                {/* Website Pages Section */}
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 font-poppins">
+                    Website Pages
+                  </h3>
+                  <nav className="space-y-1">
+                    {websitePages.map((page) => {
+                      const Icon = page.icon;
+                      const isActive = activePage === page.id && activeSection === page.id;
+                      return (
+                        <div key={page.id}>
+                          <button
+                            onClick={() => {
+                              setActivePage(page.id);
+                              setActiveSection(page.id);
+                              if (!sidebarPinned) setSidebarOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 group ${
+                              isActive
+                                ? 'bg-white/20 text-white shadow-md backdrop-blur-sm'
+                                : 'text-white/80 hover:bg-white/10 hover:text-white'
+                            }`}
+                          >
+                            <div className={`p-1.5 rounded-md transition-all duration-300 ${
+                              isActive
+                                ? `bg-gradient-to-r ${page.color} shadow-md`
+                                : 'bg-white/20 group-hover:bg-white/30'
+                            }`}>
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-medium font-poppins text-sm">{page.name}</div>
+                              <div className="text-xs text-white/60">{page.description}</div>
+                            </div>
+                          </button>
+                          
                         </div>
-                        <span className="font-medium font-poppins">{item.name}</span>
-                      </button>
-                    );
-                  })}
-                </nav>
+                      );
+                    })}
+                  </nav>
+                </div>
+
+                {/* Admin Sections */}
+                <div>
+                  <h3 className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 font-poppins">
+                    Admin Tools
+                  </h3>
+                  <nav className="space-y-1">
+                    {adminSections.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            setActiveSection(item.id);
+                            setActivePage('admin');
+                            if (!sidebarPinned) setSidebarOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-300 group ${
+                            activeSection === item.id && activePage === 'admin'
+                              ? 'bg-white/20 text-white shadow-md backdrop-blur-sm'
+                              : 'text-white/80 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          <div className={`p-1.5 rounded-md transition-all duration-300 ${
+                            activeSection === item.id && activePage === 'admin'
+                              ? `bg-gradient-to-r ${item.color} shadow-md`
+                              : 'bg-white/20 group-hover:bg-white/30'
+                          }`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className="font-medium font-poppins text-sm">{item.name}</span>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
               </div>
             </div>
 
@@ -307,32 +446,32 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-accent/20">
+        <div className="bg-white/90 backdrop-blur-sm shadow-sm border-b border-accent/10">
           <div className="px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6">
-              <div className="flex items-center gap-6">
+            <div className="flex justify-between items-center py-4">
+              <div className="flex items-center gap-4">
                 {!sidebarOpen && (
                   <button
                     onClick={() => setSidebarOpen(true)}
-                    className="p-3 rounded-xl bg-gradient-to-r from-primary to-blue-800 text-white hover:from-blue-800 hover:to-primary transition-all duration-300 shadow-lg hover:shadow-xl"
+                    className="p-2.5 rounded-lg bg-gradient-to-r from-primary to-blue-800 text-white hover:from-blue-800 hover:to-primary transition-all duration-300 shadow-md hover:shadow-lg"
                   >
-                    <Bars3Icon className="w-6 h-6" />
+                    <Bars3Icon className="w-5 h-5" />
                   </button>
                 )}
                 <div>
-                  <h1 className="text-3xl font-bold text-primary font-poppins">
+                  <h1 className="text-2xl font-bold text-primary font-poppins">
                     Admin Dashboard
                   </h1>
-                  <p className="text-gray-600 font-medium">
-                    Welcome back, <span className="text-secondary font-semibold">{user?.name || user?.username}</span>!
+                  <p className="text-gray-600 text-sm">
+                    Welcome back, <span className="text-secondary font-medium">{user?.name || user?.username}</span>!
                   </p>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium font-poppins"
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium font-poppins text-sm"
               >
                 Logout
               </button>
@@ -341,7 +480,7 @@ const Dashboard = () => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide">
           {renderContent()}
         </div>
       </div>

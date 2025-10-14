@@ -11,7 +11,7 @@ export const getApiUrl = () => {
   }
   
   // In development, use localhost
-  return 'http://localhost:5001';
+  return 'http://localhost:3001';
 };
 
 export const getApiBaseUrl = () => {

@@ -2,25 +2,69 @@ import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button';
 // import Flame from '../../assets/img/flame.webp';
 import Phone from '../../assets/img/phone.webp';
-import App1 from '../../assets/img/app-1.webp';
-import App2 from '../../assets/img/app-2.webp';
-import App3 from '../../assets/img/app-3.webp';
-import App4 from '../../assets/img/app-4.webp';
-import App5 from '../../assets/img/app-5.webp';
-import App6 from '../../assets/img/app-6.webp';
-import App7 from '../../assets/img/app-7.webp';
-import App8 from '../../assets/img/app-8.webp';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.webp';
 import DownloadAppCard from '../ui/DownloadAppCard';
+import apiService from '../../services/api';
 
 const MobileShowcase = () => {
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
+  const [appImages, setAppImages] = useState([]);
+  const [sectionData, setSectionData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSectionLoading, setIsSectionLoading] = useState(true);
 
-  // Array of all app images
-  const appImages = [App1, App2, App3, App4, App5, App6, App7, App8];
+  // Fetch mobile showcase section data from API
+  useEffect(() => {
+    const fetchSectionData = async () => {
+      try {
+        setIsSectionLoading(true);
+        const response = await apiService.getHomepageSections();
+        if (response.success) {
+          const mobileShowcaseSection = response.data.find(section => section.section_key === 'mobile_showcase');
+          setSectionData(mobileShowcaseSection || null);
+        } else {
+          console.error('Failed to fetch homepage sections:', response.message);
+          setSectionData(null);
+        }
+      } catch (error) {
+        console.error('Error fetching homepage sections:', error);
+        setSectionData(null);
+      } finally {
+        setIsSectionLoading(false);
+      }
+    };
+
+    fetchSectionData();
+  }, []);
+
+  // Fetch mobile showcase images from API
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        setIsLoading(true);
+        const response = await apiService.getMobileShowcaseImages();
+        if (response.success) {
+          setAppImages(response.data);
+        } else {
+          console.error('Failed to fetch mobile showcase images:', response.message);
+          // Fallback to empty array if API fails
+          setAppImages([]);
+        }
+      } catch (error) {
+        console.error('Error fetching mobile showcase images:', error);
+        setAppImages([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   // Auto-rotate through app images every 4 seconds
   useEffect(() => {
+    if (appImages.length === 0) return;
+    
     const interval = setInterval(() => {
       setCurrentAppImageIndex(
         (prevIndex) => (prevIndex + 1) % appImages.length
@@ -30,9 +74,8 @@ const MobileShowcase = () => {
   }, [appImages.length]);
 
   // Both app images change at the same time, but show different images
-  const currentAppImage = appImages[currentAppImageIndex % appImages.length];
-  const secondPhoneImage =
-    appImages[(currentAppImageIndex + 1) % appImages.length];
+  const currentAppImage = appImages.length > 0 ? appImages[currentAppImageIndex % appImages.length] : null;
+  const secondPhoneImage = appImages.length > 0 ? appImages[(currentAppImageIndex + 1) % appImages.length] : null;
 
   return (
     <section className="py-16 px-8 lg:px-16 bg-white dark:bg-gray-800 relative overflow-hidden">
@@ -50,13 +93,30 @@ const MobileShowcase = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Title */}
         <div className="text-center mb-2">
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Mobile App Showcase
-          </h2>
-          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Experience our innovative mobile solutions that transform ideas into
-            exceptional digital experiences
-          </p>
+          {isSectionLoading ? (
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 rounded-lg mb-4 max-w-md mx-auto"></div>
+              <div className="h-6 bg-gray-200 rounded-lg mb-2 max-w-2xl mx-auto"></div>
+              <div className="h-6 bg-gray-200 rounded-lg max-w-xl mx-auto"></div>
+            </div>
+          ) : (
+            <>
+              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
+                {sectionData?.title || 'Mobile App Showcase'}
+              </h2>
+              {sectionData?.description ? (
+                <div 
+                  className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed prose prose-lg"
+                  dangerouslySetInnerHTML={{ __html: sectionData.description }}
+                />
+              ) : (
+                <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                  Experience our innovative mobile solutions that transform ideas into
+                  exceptional digital experiences
+                </p>
+              )}
+            </>
+          )}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-20 items-center">
@@ -82,11 +142,21 @@ const MobileShowcase = () => {
               {/* App content overlay inside the phone screen */}
               <div className="absolute inset-0 flex items-center justify-center z-[-1]">
                 <div className="w-full h-full rounded-3xl flex justify-center items-center">
-                  <img
-                    src={currentAppImage}
-                    alt="App interface"
-                    className="absolute w-[92%] h-[98%] top-[0.3rem] md:h-[97%] object-contain transition-all duration-700 ease-in-out"
-                  />
+                  {isLoading ? (
+                    <div className="w-[92%] h-[98%] top-[0.3rem] md:h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                  ) : currentAppImage ? (
+                    <img
+                      src={currentAppImage.image_url}
+                      alt={currentAppImage.alt_text || currentAppImage.title || "App interface"}
+                      className="absolute w-[92%] h-[98%] top-[0.3rem] md:h-[97%] object-contain transition-all duration-700 ease-in-out"
+                    />
+                  ) : (
+                    <div className="w-[92%] h-[98%] top-[0.3rem] md:h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
+                      <span className="text-gray-500 text-sm">No images available</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -106,11 +176,21 @@ const MobileShowcase = () => {
               {/* App content overlay inside the phone screen */}
               <div className="absolute inset-0 flex items-center justify-center z-[-1]">
                 <div className="w-full h-full rounded-3xl flex justify-center items-center">
-                  <img
-                    src={secondPhoneImage}
-                    alt="App interface"
-                    className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
-                  />
+                  {isLoading ? (
+                    <div className="w-[92%] h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                    </div>
+                  ) : secondPhoneImage ? (
+                    <img
+                      src={secondPhoneImage.image_url}
+                      alt={secondPhoneImage.alt_text || secondPhoneImage.title || "App interface"}
+                      className="w-[92%] h-[97%] object-contain transition-all duration-700 ease-in-out"
+                    />
+                  ) : (
+                    <div className="w-[92%] h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
+                      <span className="text-gray-500 text-xs">No images available</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

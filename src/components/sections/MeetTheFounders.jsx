@@ -4,19 +4,78 @@ import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
 import EmailIcon from '../../assets/img/email_icon.webp';
 import WhatsAppButton from '../ui/WhatsappButton';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
 import hibaCalendarService from '../../services/hibaCalendarService';
+import apiService from '../../services/api';
 
 const MeetTheFounders = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [members, setMembers] = useState(teamData);
+  const [ceoData, setCeoData] = useState(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        // Fetch leadership section from about_sections table
+        const res = await apiService.getAboutSectionByKey('leadership');
+        if (res.success && res.data && res.data.content) {
+          let content = {};
+          try {
+            content = JSON.parse(res.data.content);
+          } catch (e) {
+            console.warn('Failed to parse leadership content:', e);
+            return;
+          }
+
+          // Process CEO data
+          const ceo = content.ceo_name || content.ceo_message || content.ceo_image_url
+            ? {
+                id: 1,
+                name: content.ceo_name || 'CEO',
+                role: content.ceo_title ? [content.ceo_title] : ['Co-founder & CEO'],
+                subtitle: 'A Message from Our CEO',
+                image: content.ceo_image_url || teamData[0]?.image,
+                socialMedia: teamData[0]?.socialMedia || { linkedin: '#', whatsapp: 'Hiba', email: 'info@othentica-app.com' },
+                flipped: false,
+                description: content.ceo_message ? content.ceo_message : ''
+              }
+            : null;
+
+          // Process COO data
+          const coo = content.coo_name || content.coo_message || content.coo_image_url
+            ? {
+                id: 2,
+                name: content.coo_name || 'COO',
+                role: content.coo_title ? [content.coo_title] : ['Co-founder & COO'],
+                subtitle: 'A Message from our COO',
+                image: content.coo_image_url || teamData[1]?.image,
+                socialMedia: teamData[1]?.socialMedia || { linkedin: '#', whatsapp: 'Tarek', email: 'info@othentica-app.com' },
+                flipped: true,
+                description: content.coo_message ? content.coo_message : ''
+              }
+            : null;
+
+          const dynamicMembers = [ceo, coo].filter(Boolean);
+          if (dynamicMembers.length) {
+            setMembers(dynamicMembers);
+            setCeoData(ceo); // Store CEO data for modal
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load leadership data from about_sections:', error);
+        // Fallback to static data if API fails
+      }
+    };
+    load();
+  }, []);
 
   // Get available time slots from Hiba's calendar service
   const timeSlots = hibaCalendarService.getAvailableTimeSlots(selectedDate);
@@ -151,7 +210,7 @@ const MeetTheFounders = () => {
         </AnimateOnScroll>
 
         {/* Team Members */}
-        {teamData.map((member, index) => (
+        {members.map((member, index) => (
           <AnimateOnScroll
             key={member.id}
             animation={index % 2 === 0 ? 'fadeInLeft' : 'fadeInRight'}
@@ -180,26 +239,34 @@ const MeetTheFounders = () => {
                     {member.name}
                   </span>
                 </div>
-                <h1 className="text-xl font-normal text-primary font-sans dark:text-neutral mb-6">
-                  {Array.isArray(member.description) &&
-                    member.description.map((paragraph, index) => (
-                      <p key={index} className={index === 0 ? '' : 'mt-3'}>
-                        {paragraph}
-                      </p>
-                    ))}
+                <div className="text-xl font-normal text-primary font-sans dark:text-neutral mb-6">
+                  {/* Description with HTML content */}
+                  {member.description && (
+                    <div 
+                      className="mb-6"
+                      dangerouslySetInnerHTML={{ __html: member.description }}
+                    />
+                  )}
 
                   {/* Name and role */}
-                  <p className="mt-6 font-bold">{member.name}</p>
-                  {Array.isArray(member.role) ? (
-                    member.role.map((role, idx) => (
-                      <p key={idx} className="font-bold">
-                        {role}
-                      </p>
-                    ))
-                  ) : (
-                    <p className="font-bold">{member.role}</p>
-                  )}
-                </h1>
+                  <div className="mt-6">
+                    <p className="font-bold">{member.name}</p>
+                    {Array.isArray(member.role) ? (
+                      member.role.map((role, idx) => (
+                        <div 
+                          key={idx} 
+                          className="font-bold"
+                          dangerouslySetInnerHTML={{ __html: role }}
+                        />
+                      ))
+                    ) : (
+                      <div 
+                        className="font-bold"
+                        dangerouslySetInnerHTML={{ __html: member.role }}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
 
               {/* Image Section - Position changes based on flipped property */}
@@ -291,7 +358,7 @@ const MeetTheFounders = () => {
               <div className="flex justify-between items-center p-6 border-b border-gray-200">
                 <div>
                   <h3 className="text-3xl font-bold text-gray-800">
-                    Book with Hiba Tarazi
+                    Book with {ceoData?.name || 'Hiba Tarazi'}
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
                     Available Monday-Thursday, 11:00 AM - 3:00 PM
@@ -316,12 +383,12 @@ const MeetTheFounders = () => {
                         <div className="flex items-center space-x-4">
                           <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
                             <span className="text-white font-bold text-2xl">
-                              H
+                              {ceoData?.name ? ceoData.name.charAt(0) : 'H'}
                             </span>
                           </div>
                           <div>
                             <h4 className="text-xl font-semibold text-gray-800">
-                              Hiba Tarazi
+                              {ceoData?.name || 'Hiba Taraziiii'}
                             </h4>
                             <p className="text-gray-600">
                               CEO & Co-founder, Othentica
@@ -405,7 +472,7 @@ const MeetTheFounders = () => {
                         What to Expect:
                       </h4>
                       <div className="space-y-4 text-gray-600">
-                        <p>• 45-minute consultation with Hiba Tarazi</p>
+                        <p>• 45-minute consultation with {ceoData?.name || 'Hiba Tarazi'}</p>
                         <p>
                           • Available Monday to Thursday, 11:00 AM - 3:00 PM
                         </p>

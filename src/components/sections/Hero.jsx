@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button';
 // import Logo from '../../assets/img/logo.webp';
 import Logo_o_white from '../../assets/img/logo_o.webp';
@@ -7,8 +7,74 @@ import Flame from '../../assets/img/flame.webp';
 // import HeroBg2 from '../../assets/img/hero_bg3.webp';
 import { Link } from 'react-router-dom';
 import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
+import apiService from '../../services/api';
 
 const Hero = () => {
+  // Function to get the correct background image URL
+  const getBackgroundImageUrl = (url) => {
+    if (!url) return HeroBg3;
+    
+    // If it's a relative path starting with /assets/, convert it to the correct import
+    if (url.startsWith('/assets/img/hero_bg3v3.webp')) {
+      return HeroBg3;
+    }
+    
+    // If it's a full URL or other path, use it as is
+    return url;
+  };
+
+  const [heroData, setHeroData] = useState({
+    title: 'Step into your authentic self',
+    description: 'Wellness is optional. Health is essential. Corporate health is the evolution. It\'s the foundation of energy, resilience, and performance.',
+    primaryButton: {
+      text: 'Onboard your Team',
+      link: '/contact',
+      variant: 'accent'
+    },
+    secondaryButton: {
+      text: 'What is Othentica',
+      link: '#philosophySec',
+      variant: 'secondary'
+    },
+    backgroundImage: HeroBg3
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHeroData = async () => {
+      try {
+        setIsLoading(true);
+        
+        const response = await apiService.getHomepageSectionByKey('hero');
+        
+        if (response.success && response.data) {
+          const sectionData = response.data;
+          const content = sectionData.content ? JSON.parse(sectionData.content) : {};
+          
+          // Combine subtitle and description into single description field
+          const combinedDescription = sectionData.subtitle && sectionData.description 
+            ? `${sectionData.subtitle} ${sectionData.description}`
+            : sectionData.description || heroData.description;
+
+          setHeroData({
+            title: sectionData.title || heroData.title,
+            description: combinedDescription,
+            primaryButton: content.primaryButton || heroData.primaryButton,
+            secondaryButton: content.secondaryButton || heroData.secondaryButton,
+            backgroundImage: getBackgroundImageUrl(sectionData.background_image_url)
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching hero data:', error);
+        // Keep default data on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHeroData();
+  }, []);
+
   // Function to scroll to philosophy section
   const scrollToPhilosophy = () => {
     const philosophySection = document.getElementById('philosophySec');
@@ -142,7 +208,7 @@ const Hero = () => {
     <section
       className="relative min-h-[90vh] sm:min-h-[85vh] flex items-center justify-start px-4 sm:px-8 lg:px-16 overflow-hidden"
       style={{
-        backgroundImage: `url(${HeroBg3})`,
+        backgroundImage: `url(${getBackgroundImageUrl(heroData.backgroundImage)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -150,7 +216,7 @@ const Hero = () => {
     >
       {/* LCP Image with fetchpriority high for immediate loading */}
       <img
-        src={HeroBg3}
+        src={getBackgroundImageUrl(heroData.backgroundImage)}
         alt="Othentica Hero Background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ display: 'none' }}
@@ -190,34 +256,45 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-xl w-full">
-        <h1 className="capitalize text-3xl sm:text-5xl lg:text-7xl font-bold text-white dark:text-white mb-6 sm:mb-8 leading-tight">
-          Step into your authentic self
-        </h1>
-        <p className="text-lg sm:text-xl lg:text-2xl text-white dark:text-gray-200 mb-8 sm:mb-10 leading-relaxed max-w-3xl">
-          Wellness is optional. Health is essential.
-          <br />
-          Corporate health is the evolution.
-          <br />
-          It's the foundation of energy, resilience, and performance.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Link to="/contact" target="_blank" className="w-full sm:w-auto">
-            <Button
-              variant="accent"
-              size="large"
-              className="w-full sm:w-auto">
-              Onboard your Team
-            </Button>
-          </Link>
-          <Button
-            variant="secondary"
-            size="large"
-            className="w-full sm:w-auto"
-            onClick={scrollToPhilosophy}
-          >
-            What is Othentica
-          </Button>
-        </div>
+        {isLoading ? (
+          <div className="animate-pulse">
+            <div className="h-16 bg-white/20 rounded mb-6"></div>
+            <div className="h-6 bg-white/20 rounded mb-4"></div>
+            <div className="h-6 bg-white/20 rounded mb-4"></div>
+            <div className="h-6 bg-white/20 rounded mb-8"></div>
+            <div className="flex gap-4">
+              <div className="h-12 bg-white/20 rounded w-32"></div>
+              <div className="h-12 bg-white/20 rounded w-32"></div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h1 className="capitalize text-3xl sm:text-5xl lg:text-7xl font-bold text-white dark:text-white mb-6 sm:mb-8 leading-tight">
+              {heroData.title}
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-white dark:text-gray-200 mb-8 sm:mb-10 leading-relaxed max-w-3xl">
+              <span dangerouslySetInnerHTML={{ __html: heroData.description }} />
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Link to={heroData.primaryButton.link} target="_blank" className="w-full sm:w-auto">
+                <Button
+                  variant={heroData.primaryButton.variant}
+                  size="large"
+                  className="w-full sm:w-auto">
+                  {heroData.primaryButton.text}
+                </Button>
+              </Link>
+              <Button
+                variant={heroData.secondaryButton.variant}
+                size="large"
+                className="w-full sm:w-auto"
+                onClick={scrollToPhilosophy}
+              >
+                {heroData.secondaryButton.text}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
+import { getApiUrl } from '../../config/api';
 
 // Service categories matching the Services.jsx data
 const SERVICE_CATEGORIES = [
@@ -92,6 +93,18 @@ const TestimonialsManager = () => {
     category: 'programs'
   });
   const [imagePreview, setImagePreview] = useState(null);
+
+  // Helper function to get testimonial image path
+  const getTestimonialImagePath = (imageUrl) => {
+    if (!imageUrl) return null;
+    
+    // If it's already a full URL, just return it
+    if (imageUrl.startsWith('http')) return imageUrl;
+
+    // If it's just a filename or relative path, prepend the full API URL
+    const apiUrl = getApiUrl();
+    return `${apiUrl}/uploads/testimonials/${imageUrl}`;
+  };
 
   const loadTestimonials = useCallback(async () => {
     try {
@@ -572,7 +585,7 @@ const TestimonialsManager = () => {
                   <div className="text-xs text-gray-400">
                     {testimonial.imageUrl ? (
                       <img
-                        src={testimonial.imageUrl}
+                        src={getTestimonialImagePath(testimonial.imageUrl)}
                         alt={testimonial.name}
                         className="w-8 h-8 object-cover rounded-full"
                       />
@@ -815,7 +828,7 @@ const TestimonialsManager = () => {
                 {viewingTestimonial.imageUrl ? (
                   <div className="space-y-3">
                     <img
-                      src={viewingTestimonial.imageUrl}
+                      src={getTestimonialImagePath(viewingTestimonial.imageUrl)}
                       alt={viewingTestimonial.name}
                       className="w-32 h-32 object-cover rounded-xl border border-accent/30 shadow-sm"
                     />

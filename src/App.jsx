@@ -14,7 +14,7 @@ import Disclaimers from './pages/Disclaimers';
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
-const SocialMedia = lazy(() => import('./pages/Blog'));
+const BlogPage = lazy(() => import('./pages/Blog'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -65,7 +65,7 @@ function App() {
                       <Route path="/" element={<Home />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/services" element={<Services />} />
-                      <Route path="/blog" element={<SocialMedia />} />
+                      <Route path="/blog" element={<BlogPage />} />
                       <Route path="/contact" element={<Contact />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/opt-in" element={<OptIn />} />
