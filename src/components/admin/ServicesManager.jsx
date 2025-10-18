@@ -88,15 +88,12 @@ const ServicesManager = () => {
         }
       } catch (adminErr) {
         // Fall back to public endpoint on auth errors or missing token
-        try {
-          const publicResponse = await apiService.getServices();
-          if (publicResponse && publicResponse.success !== false) {
-            setServices(publicResponse.data || publicResponse);
-            return;
-          }
-        } catch (publicErr) {
-          throw publicErr;
+        const publicResponse = await apiService.getServices();
+        if (publicResponse && publicResponse.success !== false) {
+          setServices(publicResponse.data || publicResponse);
+          return;
         }
+        throw adminErr;
       }
       await showErrorAlert('Error', 'Failed to load services');
     } catch (err) {
@@ -216,42 +213,19 @@ const ServicesManager = () => {
     }
   };
 
-  const toArray = (value) => {
-    if (Array.isArray(value)) return value;
-    if (typeof value === 'string' && value.trim().length) {
-      try {
-        const parsed = JSON.parse(value);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
-    }
-    return [];
-  };
 
   const handleEdit = (service) => {
     setEditingService(service);
     setFormData({
       title: service.title || '',
       description: service.description || '',
-      modal_description1: service.modal_description1 || '',
-      modal_description2: service.modal_description2 || '',
       quotation: service.quotation || '',
-      button_text: service.button_text || '',
-      section_id: service.section_id || '',
-      background_color: service.background_color || '#FEF0DC',
-      description_bullet_points: toArray(service.description_bullet_points),
-      modal_description_bullet_points: toArray(service.modal_description_bullet_points)
+      button_text: service.button_text || ''
     });
     
-    // Set image previews
+    // Set image preview
     const previews = {};
-    if (service.icon_url) previews.icon = service.icon_url;
-    if (service.image1_url) previews.image1 = service.image1_url;
-    if (service.image2_url) previews.image2 = service.image2_url;
-    if (service.mobile1_url) previews.mobile1 = service.mobile1_url;
-    if (service.mobile2_url) previews.mobile2 = service.mobile2_url;
-    if (service.mobile3_url) previews.mobile3 = service.mobile3_url;
+    if (service.image_url) previews.image = service.image_url;
     setImagePreviews(previews);
     setShowForm(true);
   };
@@ -275,14 +249,8 @@ const ServicesManager = () => {
     setFormData({
       title: '',
       description: '',
-      modal_description1: '',
-      modal_description2: '',
       quotation: '',
-      button_text: '',
-      section_id: '',
-      background_color: '#FEF0DC',
-      description_bullet_points: [],
-      modal_description_bullet_points: []
+      button_text: ''
     });
     setImagePreviews({});
     setShowForm(true);
@@ -296,9 +264,9 @@ const ServicesManager = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value, files, checked, type } = e.target;
+    const { name, value, files } = e.target;
     
-    if (name.includes('image') || name === 'icon' || name.includes('mobile')) {
+    if (name === 'image') {
       if (files && files[0]) {
         const file = files[0];
         
@@ -327,11 +295,6 @@ const ServicesManager = () => {
           [name]: previewUrl
         }));
       }
-    } else if (type === 'checkbox') {
-      setFormData(prev => ({
-        ...prev,
-        [name]: checked
-      }));
     } else {
       setFormData(prev => ({
         ...prev,
@@ -340,26 +303,6 @@ const ServicesManager = () => {
     }
   };
 
-  const addBulletPoint = (fieldName) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: [...(prev[fieldName] || []), '']
-    }));
-  };
-
-  const updateBulletPoint = (fieldName, index, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: prev[fieldName].map((item, i) => i === index ? value : item)
-    }));
-  };
-
-  const removeBulletPoint = (fieldName, index) => {
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: prev[fieldName].filter((_, i) => i !== index)
-    }));
-  };
 
   return (
     <div className="p-8">
@@ -390,7 +333,7 @@ const ServicesManager = () => {
       {/* Services Grid */}
       {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <div key={service.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -401,21 +344,23 @@ const ServicesManager = () => {
                     <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
                       {service.description || 'No description provided'}
                     </p>
-                    <p className="text-xs text-gray-500 mt-2">
-                      Section: {service.section_id || 'N/A'}
-                    </p>
+                    {service.quotation && (
+                      <p className="text-xs text-gray-500 mt-2 italic">
+                        "{service.quotation}"
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                {/* Icon Preview */}
-                {service.icon_url && (
+                {/* Image Preview */}
+                {service.image_url && (
                   <div className="mb-4">
                     <div 
                       className="relative cursor-pointer group"
-                      onClick={() => openImageModal(service.icon_url)}
+                      onClick={() => openImageModal(service.image_url)}
                     >
                       <img
-                        src={service.icon_url}
+                        src={service.image_url}
                         alt={service.title}
                         className="w-16 h-16 object-cover rounded-lg border border-accent/30 shadow-sm group-hover:opacity-90 transition-opacity"
                       />
@@ -488,36 +433,19 @@ const ServicesManager = () => {
                 handleCreate(formData);
               }
             }} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter service title"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Section ID *
-                  </label>
-                  <input
-                    type="text"
-                    name="section_id"
-                    value={formData.section_id || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="e.g., app, programs, talks, one-to-one"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title || ''}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                  placeholder="Enter service title"
+                  required
+                />
               </div>
 
               <div>
@@ -528,41 +456,11 @@ const ServicesManager = () => {
                   name="description"
                   value={formData.description || ''}
                   onChange={handleInputChange}
-                  rows={3}
+                  rows={4}
                   className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
                   placeholder="Enter service description..."
                   required
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Modal Description 1
-                  </label>
-                  <textarea
-                    name="modal_description1"
-                    value={formData.modal_description1 || ''}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                    placeholder="Enter modal description 1..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Modal Description 2
-                  </label>
-                  <textarea
-                    name="modal_description2"
-                    value={formData.modal_description2 || ''}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                    placeholder="Enter modal description 2..."
-                  />
-                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -595,224 +493,34 @@ const ServicesManager = () => {
                 </div>
               </div>
 
+              {/* Single Image Upload */}
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Background Color
+                  Service Image *
                 </label>
                 <input
-                  type="color"
-                  name="background_color"
-                  value={formData.background_color || '#FEF0DC'}
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                   onChange={handleInputChange}
-                  className="w-full h-12 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
+                  required
                 />
-              </div>
-
-              {/* Description Bullet Points */}
-              <div>
-                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Description Bullet Points
-                </label>
-                <div className="space-y-2">
-                  {(formData.description_bullet_points || []).map((point, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={point}
-                        onChange={(e) => updateBulletPoint('description_bullet_points', index, e.target.value)}
-                        className="flex-1 px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                        placeholder={`Bullet point ${index + 1}`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeBulletPoint('description_bullet_points', index)}
-                        className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addBulletPoint('description_bullet_points')}
-                    className="px-4 py-2 text-secondary hover:bg-secondary/10 rounded-lg transition-all duration-200 border border-secondary/30"
-                  >
-                    + Add Bullet Point
-                  </button>
-                </div>
-              </div>
-
-              {/* Modal Description Bullet Points */}
-              <div>
-                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Modal Description Bullet Points
-                </label>
-                <div className="space-y-2">
-                  {(formData.modal_description_bullet_points || []).map((point, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={point}
-                        onChange={(e) => updateBulletPoint('modal_description_bullet_points', index, e.target.value)}
-                        className="flex-1 px-4 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                        placeholder={`Modal bullet point ${index + 1}`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeBulletPoint('modal_description_bullet_points', index)}
-                        className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addBulletPoint('modal_description_bullet_points')}
-                    className="px-4 py-2 text-secondary hover:bg-secondary/10 rounded-lg transition-all duration-200 border border-secondary/30"
-                  >
-                    + Add Bullet Point
-                  </button>
-                </div>
-              </div>
-
-              {/* Image Uploads */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Icon Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="icon"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.icon && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.icon}
-                        alt="Icon preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Image 1 Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="image1"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.image1 && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.image1}
-                        alt="Image 1 preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Image 2 Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="image2"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.image2 && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.image2}
-                        alt="Image 2 preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Mobile 1 Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="mobile1"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.mobile1 && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.mobile1}
-                        alt="Mobile 1 preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Mobile 2 Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="mobile2"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.mobile2 && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.mobile2}
-                        alt="Mobile 2 preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Mobile 3 Upload
-                  </label>
-                  <input
-                    type="file"
-                    name="mobile3"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  />
-                  {imagePreviews.mobile3 && (
-                    <div className="mt-2">
-                      <img
-                        src={imagePreviews.mobile3}
-                        alt="Mobile 3 preview"
-                        className="w-16 h-16 object-cover rounded-lg border border-accent/30"
-                      />
-                    </div>
-                  )}
-                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                </p>
+                <p className="text-xs text-blue-600 font-medium">
+                  Recommended resolution: 800x600px for service images
+                </p>
+                {imagePreviews.image && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreviews.image}
+                      alt="Image preview"
+                      className="w-32 h-32 object-cover rounded-lg border border-accent/30"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-4 pt-6">
@@ -856,20 +564,11 @@ const ServicesManager = () => {
             </div>
 
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Title
-                  </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingService.title || 'Untitled Service'}</p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Section ID
-                  </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingService.section_id || 'N/A'}</p>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                  Title
+                </label>
+                <p className="text-lg font-medium text-gray-900">{viewingService.title || 'Untitled Service'}</p>
               </div>
 
               <div>
@@ -882,32 +581,6 @@ const ServicesManager = () => {
                   </p>
                 </div>
               </div>
-
-              {viewingService.modal_description1 && (
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Modal Description 1
-                  </label>
-                  <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
-                    <p className="text-gray-800 text-lg leading-relaxed">
-                      {viewingService.modal_description1}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {viewingService.modal_description2 && (
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Modal Description 2
-                  </label>
-                  <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
-                    <p className="text-gray-800 text-lg leading-relaxed">
-                      {viewingService.modal_description2}
-                    </p>
-                  </div>
-                </div>
-              )}
 
               {viewingService.quotation && (
                 <div>
@@ -927,20 +600,20 @@ const ServicesManager = () => {
                 </div>
               )}
 
-              {/* Images */}
-              {viewingService.icon_url && (
+              {/* Service Image */}
+              {viewingService.image_url && (
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Icon
+                    Service Image
                   </label>
                   <div 
                     className="relative cursor-pointer group inline-block"
-                    onClick={() => openImageModal(viewingService.icon_url)}
+                    onClick={() => openImageModal(viewingService.image_url)}
                   >
                     <img
-                      src={viewingService.icon_url}
+                      src={viewingService.image_url}
                       alt={viewingService.title}
-                      className="w-32 h-32 object-cover rounded-xl border border-accent/30 shadow-sm group-hover:opacity-90 transition-opacity"
+                      className="w-48 h-48 object-cover rounded-xl border border-accent/30 shadow-sm group-hover:opacity-90 transition-opacity"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-xl flex items-center justify-center">
                       <span className="text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">

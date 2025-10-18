@@ -53,7 +53,7 @@ const Services = () => {
         const images = (res && res.data) ? res.data : Array.isArray(res) ? res : [];
         const urls = images.filter(Boolean).map(img => img.image_url).filter(Boolean);
         setBannerImages(urls);
-      } catch (e) {
+      } catch {
         setBannerImages([]);
       }
     };

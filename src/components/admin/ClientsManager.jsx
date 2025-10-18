@@ -368,6 +368,12 @@ const ClientsManager = () => {
                     </span>
                   )}
                 </div>
+                <p className="text-xs text-gray-500">
+                  Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                </p>
+                <p className="text-xs text-blue-600 font-medium">
+                  Recommended resolution: 200x200px for optimal logo display
+                </p>
 
                 {/* Preview */}
                 {(previewUrl || formData.logo_url) && (

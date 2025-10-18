@@ -11,6 +11,8 @@ import HomepageSectionsManager from '../components/admin/HomepageSectionsManager
 import AboutManager from '../components/admin/AboutManager';
 import ServicesManager from '../components/admin/ServicesManager';
 import ServicesBannerManager from '../components/admin/ServicesBannerManager';
+import ContactManager from '../components/admin/ContactManager';
+import SettingsManager from '../components/admin/SettingsManager';
 import LogoWhite from '../assets/img/logo_white.webp';
 import { 
   Bars3Icon, 
@@ -82,20 +84,10 @@ const Dashboard = () => {
     { id: 'homepage', name: 'Homepage', icon: HomeIcon, color: 'from-blue-500 to-blue-600', description: 'Main landing page' },
     { id: 'about', name: 'About', icon: UsersIcon, color: 'from-green-500 to-emerald-600', description: 'About us page' },
     { id: 'services', name: 'Services', icon: BookmarkIcon, color: 'from-purple-500 to-violet-600', description: 'Services page' },
-    { id: 'contact', name: 'Contact', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500', description: 'Contact page' },
-    { id: 'blog', name: 'Blog', icon: DocumentTextIcon, color: 'from-teal-500 to-cyan-600', description: 'Blog listing page' },
+    // { id: 'contact', name: 'Contact', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500', description: 'Contact page' },
+    // { id: 'blog', name: 'Blog', icon: DocumentTextIcon, color: 'from-teal-500 to-cyan-600', description: 'Blog listing page' },
   ];
 
-  // Homepage sections
-  const homepageSections = [
-    { id: 'hero', name: 'Hero Section', description: 'Main banner with call-to-action' },
-    { id: 'philosophy', name: 'Philosophy', description: 'What is Othentica section' },
-    { id: 'services', name: 'Services', description: 'Our Solutions section' },
-    { id: 'clients', name: 'Clients', description: 'Our Clients section' },
-    { id: 'features', name: 'Features', description: 'App Features & Benefits section' },
-    { id: 'security', name: 'Security', description: 'Enterprise Security section' },
-    { id: 'mobile_showcase', name: 'Mobile Showcase', description: 'Mobile Experience section' }
-  ];
 
   // Admin sections
   const adminSections = [
@@ -104,6 +96,7 @@ const Dashboard = () => {
     { id: 'testimonials', name: 'Testimonials', icon: ChatBubbleLeftRightIcon, color: 'from-secondary to-orange-500' },
     { id: 'blogs', name: 'Blog Posts', icon: DocumentTextIcon, color: 'from-teal-500 to-cyan-600' },
     { id: 'optin', name: 'Opt-in Users', icon: UserPlusIcon, color: 'from-green-500 to-emerald-600' },
+    { id: 'contacts', name: 'Contact Management', icon: ChatBubbleLeftRightIcon, color: 'from-indigo-500 to-indigo-600' },
     { id: 'users', name: 'Users', icon: UsersIcon, color: 'from-purple-500 to-violet-600' },
     { id: 'analytics', name: 'Analytics', icon: ChartBarIcon, color: 'from-gray-500 to-gray-600' },
     { id: 'settings', name: 'Settings', icon: Cog6ToothIcon, color: 'from-gray-500 to-gray-600' },
@@ -136,12 +129,14 @@ const Dashboard = () => {
         return <BlogManager />;
       case 'optin':
         return <OptInManager />;
+      case 'contacts':
+        return <ContactManager />;
       case 'users':
         return <div className="p-6"><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Users Management</h2><p className="text-gray-600 dark:text-gray-400">Coming soon...</p></div>;
       case 'analytics':
         return <div className="p-6"><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics</h2><p className="text-gray-600 dark:text-gray-400">Coming soon...</p></div>;
       case 'settings':
-        return <div className="p-6"><h2 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h2><p className="text-gray-600 dark:text-gray-400">Coming soon...</p></div>;
+        return <SettingsManager />;
       default:
         return (
           <div className="p-8">

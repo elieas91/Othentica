@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -58,19 +58,33 @@ const FeaturesAndBenefitsManager = () => {
   const [originalBenefitsContent, setOriginalBenefitsContent] = useState('');
 
   // Function to convert array of items to HTML list
-  const convertArrayToHtmlList = (items) => {
-    if (!items || items.length === 0) return '';
+  const convertArrayToHtmlList = (items, type = null) => {
+    const itemType = type || activeTab;
+    console.log('convertArrayToHtmlList called with:', items);
+    console.log('itemType:', itemType);
     
-    const listItems = items
-      .filter(item => item.is_active)
-      .sort((a, b) => a.display_order - b.display_order)
+    if (!items || items.length === 0) {
+      console.log('No items or empty array, returning empty string');
+      return '';
+    }
+    
+    const filteredItems = items.filter(item => item.is_active === 1 || item.is_active === true);
+    console.log('Filtered active items:', filteredItems);
+    
+    const sortedItems = filteredItems.sort((a, b) => a.display_order - b.display_order);
+    console.log('Sorted items:', sortedItems);
+    
+    const listItems = sortedItems
       .map(item => {
-        const text = activeTab === 'features' ? item.feature : item.benefit;
+        const text = itemType === 'features' ? item.feature : item.benefit;
+        console.log(`Item: ${JSON.stringify(item)}, text: ${text}`);
         return `<li>${text}</li>`;
       })
       .join('');
     
-    return `<ul>${listItems}</ul>`;
+    const result = `<ul>${listItems}</ul>`;
+    console.log('Final HTML result:', result);
+    return result;
   };
 
   // Function to convert HTML list to array of items
@@ -107,26 +121,39 @@ const FeaturesAndBenefitsManager = () => {
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
+      console.log('Fetching features and benefits...');
+      
       const [featuresRes, benefitsRes] = await Promise.all([
         apiService.getAppFeatures(),
         apiService.getAppBenefits()
       ]);
 
+      console.log('Features response:', featuresRes);
+      console.log('Benefits response:', benefitsRes);
+
       if (featuresRes.success) {
+        console.log('Features data:', featuresRes.data);
         setFeatures(featuresRes.data);
-        const featuresHtml = convertArrayToHtmlList(featuresRes.data);
+        const featuresHtml = convertArrayToHtmlList(featuresRes.data, 'features');
+        console.log('Features HTML:', featuresHtml);
         setFeaturesContent(featuresHtml);
         setOriginalFeaturesContent(featuresHtml);
+      } else {
+        console.error('Features fetch failed:', featuresRes);
       }
       
       if (benefitsRes.success) {
+        console.log('Benefits data:', benefitsRes.data);
         setBenefits(benefitsRes.data);
-        const benefitsHtml = convertArrayToHtmlList(benefitsRes.data);
+        const benefitsHtml = convertArrayToHtmlList(benefitsRes.data, 'benefits');
+        console.log('Benefits HTML:', benefitsHtml);
         setBenefitsContent(benefitsHtml);
         setOriginalBenefitsContent(benefitsHtml);
+      } else {
+        console.error('Benefits fetch failed:', benefitsRes);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -134,11 +161,11 @@ const FeaturesAndBenefitsManager = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleSave = async () => {
     try {
@@ -202,6 +229,12 @@ const FeaturesAndBenefitsManager = () => {
 
   const currentContent = activeTab === 'features' ? featuresContent : benefitsContent;
   const currentData = activeTab === 'features' ? features : benefits;
+  
+  console.log('Render - activeTab:', activeTab);
+  console.log('Render - currentContent:', currentContent);
+  console.log('Render - currentData:', currentData);
+  console.log('Render - features:', features);
+  console.log('Render - benefits:', benefits);
 
   return (
     <div className="p-8">

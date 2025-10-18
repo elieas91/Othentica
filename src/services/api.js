@@ -1109,6 +1109,120 @@ class ApiService {
       throw error;
     }
   }
+
+  // Contact Management endpoints
+  async getContacts(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    const url = queryString ? `${this.baseURL}/contact?${queryString}` : `${this.baseURL}/contact`;
+    const response = await this.authenticatedRequest(url);
+    return response.json();
+  }
+
+  async getContactById(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/${id}`);
+    return response.json();
+  }
+
+  async updateContact(id, contactData) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(contactData),
+    });
+    return response.json();
+  }
+
+  async deleteContact(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  }
+
+  async bulkUpdateContacts(contactIds, action, data = null) {
+    console.log('API Service - bulkUpdateContacts called with:', { contactIds, action, data });
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/bulk`, {
+      method: 'POST',
+      body: JSON.stringify({ contactIds, action, data }),
+    });
+    const result = await response.json();
+    console.log('API Service - bulkUpdateContacts response:', result);
+    return result;
+  }
+
+  async toggleContactStar(id, isStarred) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/${id}/star`, {
+      method: 'PUT',
+      body: JSON.stringify({ is_starred: isStarred }),
+    });
+    return response.json();
+  }
+
+  async sendReply(replyData) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/reply`, {
+      method: 'POST',
+      body: JSON.stringify(replyData),
+    });
+    return response.json();
+  }
+
+  async getAllEmails() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/emails`, {
+      method: 'GET',
+    });
+    return response.json();
+  }
+
+  async sendBulkEmail(emailData) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/contact/bulk-email`, {
+      method: 'POST',
+      body: JSON.stringify(emailData),
+    });
+    return response.json();
+  }
+
+  // Settings API methods
+  async getAutoReplyMessage() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/auto-reply`, {
+      method: 'GET',
+    });
+    return response.json();
+  }
+
+  async updateAutoReplyMessage(message) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/auto-reply`, {
+      method: 'PUT',
+      body: JSON.stringify({ message }),
+    });
+    return response.json();
+  }
+
+  async getTestimonialEmailMessage() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/testimonial-email`, {
+      method: 'GET',
+    });
+    return response.json();
+  }
+
+  async updateTestimonialEmailMessage(message) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/testimonial-email`, {
+      method: 'PUT',
+      body: JSON.stringify({ message }),
+    });
+    return response.json();
+  }
+
+  async getTestimonialApprovalEmailMessage() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/testimonial-approval-email`);
+    return response.json();
+  }
+
+  async updateTestimonialApprovalEmailMessage(message) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/settings/testimonial-approval-email`, {
+      method: 'PUT',
+      body: JSON.stringify({ message }),
+    });
+    return response.json();
+  }
 }
 
 // Create and export a singleton instance

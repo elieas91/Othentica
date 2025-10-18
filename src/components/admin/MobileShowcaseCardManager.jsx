@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -79,9 +79,9 @@ const MobileShowcaseCardManager = () => {
     apple_link: '',
     android_link: ''
   });
-  const [stats, setStats] = useState({});
+  const [, setStats] = useState({});
 
-  const fetchCards = async () => {
+  const fetchCards = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await apiService.getMobileShowcaseCards();
@@ -98,11 +98,11 @@ const MobileShowcaseCardManager = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCards();
-  }, []);
+  }, [fetchCards]);
 
   const handleCreate = async (data) => {
     try {

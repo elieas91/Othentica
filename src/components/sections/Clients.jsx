@@ -5,7 +5,7 @@ import apiService from '../../services/api';
 const Clients = () => {
   const [clientsData, setClientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [, setError] = useState(null);
   const [sectionMeta, setSectionMeta] = useState({
     title: 'Our Clients',
     description: 'Trusted by leading companies across various industries'

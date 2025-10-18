@@ -90,7 +90,9 @@ const TestimonialsManager = () => {
     description: '',
     image: null,
     status: 'pending',
-    category: 'programs'
+    category: 'programs',
+    email: '',
+    is_anonymous: false
   });
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -176,7 +178,9 @@ const TestimonialsManager = () => {
         description: '',
         image: null,
         status: 'pending',
-        category: 'programs'
+        category: 'programs',
+        email: '',
+        is_anonymous: false
       });
       setImagePreview(null);
     }
@@ -200,7 +204,9 @@ const TestimonialsManager = () => {
           description: testimonial.description,
           image: null, // Reset file input
           status: testimonial.status || 'pending',
-          category: testimonial.category === 'app' ? 'programs' : (testimonial.category || 'programs')
+          category: testimonial.category === 'app' ? 'programs' : (testimonial.category || 'programs'),
+          email: testimonial.email || '',
+          is_anonymous: testimonial.is_anonymous || false
         });
         // Set image preview from existing image URL
         setImagePreview(testimonial.imageUrl || null);
@@ -209,7 +215,7 @@ const TestimonialsManager = () => {
   }, [editingTestimonial, testimonials]);
 
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type, checked } = e.target;
     
     if (name === 'image' && files && files[0]) {
       const file = files[0];
@@ -238,7 +244,7 @@ const TestimonialsManager = () => {
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: type === 'checkbox' ? checked : value
       }));
     }
   };
@@ -255,6 +261,8 @@ const TestimonialsManager = () => {
       submitData.append('description', formData.description);
       submitData.append('status', formData.status);
       submitData.append('category', formData.category);
+      submitData.append('email', formData.email || '');
+      submitData.append('is_anonymous', formData.is_anonymous);
       
       // Only append image if a new file is selected
       if (formData.image) {
@@ -284,7 +292,7 @@ const TestimonialsManager = () => {
         await loadStats();
         
         // Reset form and close modal
-        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'programs' });
+        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'programs', email: '', is_anonymous: false });
         setImagePreview(null);
         setShowForm(false);
         setEditingTestimonial(null);
@@ -655,6 +663,33 @@ const TestimonialsManager = () => {
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="Enter email address"
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="is_anonymous"
+                    checked={formData.is_anonymous}
+                    onChange={handleInputChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label className="ml-2 block text-sm font-semibold text-primary">
+                    Anonymous
+                  </label>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
                     Status
                   </label>
                   <select
@@ -707,6 +742,9 @@ const TestimonialsManager = () => {
                   />
                   <p className="text-xs text-gray-500">
                     Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                  </p>
+                  <p className="text-xs text-blue-600 font-medium">
+                    Recommended resolution: 400x400px for testimonial images
                   </p>
                   
                   {/* Image Preview */}

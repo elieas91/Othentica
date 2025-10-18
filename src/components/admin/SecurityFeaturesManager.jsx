@@ -314,7 +314,7 @@ const SecurityFeaturesManager = () => {
       {/* Features Grid */}
       {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
+          {features.map((feature) => (
             <div key={feature.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -453,6 +453,9 @@ const SecurityFeaturesManager = () => {
                   />
                   <p className="text-xs text-gray-500">
                     Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                  </p>
+                  <p className="text-xs text-blue-600 font-medium">
+                    Recommended resolution: 64x64px for security feature icons
                   </p>
                   
                   {/* Image Preview */}

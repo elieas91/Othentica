@@ -3,12 +3,14 @@ import WhatsAppButton from './WhatsappButton';
 import CalendarBooking from './CalendarBooking';
 import apiService from '../../services/api';
 import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
+import Swal from 'sweetalert2';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
+    company: '',
     subject: '',
     message: '',
   });
@@ -17,6 +19,7 @@ const ContactUs = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,30 +37,41 @@ const ContactUs = () => {
       const data = await response.json();
 
       if (response.ok) {
+        console.log('Form submitted successfully, showing success alert');
         // Show success alert
-        const { default: Swal } = await import('sweetalert2');
-        window.Swal.fire({
-          title: 'Message Sent!',
-          text: "Thank you! Your message has been sent successfully. We'll get back to you soon.",
+        Swal.fire({
+          title: 'Message Sent Successfully! 🎉',
+          text: "Thank you for contacting us! Your message has been sent and we'll get back to you within 24 hours.",
           icon: 'success',
-          confirmButtonText: 'Great!',
-          confirmButtonColor: '#3b82f6',
-          timer: 5000,
+          confirmButtonText: 'Awesome!',
+          confirmButtonColor: '#10b981',
+          timer: 6000,
           timerProgressBar: true,
           showConfirmButton: true,
           allowOutsideClick: false,
           allowEscapeKey: false,
+          customClass: {
+            popup: 'rounded-2xl',
+            title: 'font-poppins font-bold text-primary',
+            content: 'font-poppins',
+            confirmButton: 'rounded-xl font-medium'
+          }
         });
-        setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+        setForm({ name: '', email: '', phone: '', company: '', subject: '', message: '' });
       } else {
         // Show error alert
-        const { default: Swal } = await import('sweetalert2');
-        window.Swal.fire({
-          title: 'Error!',
-          text: 'Sorry, there was an error sending your message. Please try again later.',
+        Swal.fire({
+          title: 'Oops! Something went wrong',
+          text: 'Sorry, there was an error sending your message. Please try again or contact us directly.',
           icon: 'error',
           confirmButtonText: 'Try Again',
           confirmButtonColor: '#ef4444',
+          customClass: {
+            popup: 'rounded-2xl',
+            title: 'font-poppins font-bold text-primary',
+            content: 'font-poppins',
+            confirmButton: 'rounded-xl font-medium'
+          }
         });
         console.error('Error:', data.error);
       }
@@ -65,22 +79,33 @@ const ContactUs = () => {
       // Check if it's a connection refused error (no backend server)
       if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED')) {
         // Show fallback message for development
-        const { default: Swal } = await import('sweetalert2');
-        window.Swal.fire({
+        Swal.fire({
           title: 'Development Mode',
           text: 'Backend server is not running. In production, this would send your message. For now, please use the calendar booking or WhatsApp button.',
           icon: 'info',
           confirmButtonText: 'Got it!',
           confirmButtonColor: '#3b82f6',
+          customClass: {
+            popup: 'rounded-2xl',
+            title: 'font-poppins font-bold text-primary',
+            content: 'font-poppins',
+            confirmButton: 'rounded-xl font-medium'
+          }
         });
       } else {
         // Show network error alert
-        window.Swal.fire({
+        Swal.fire({
           title: 'Connection Error!',
           text: 'Please check your internet connection and try again.',
           icon: 'error',
           confirmButtonText: 'Try Again',
           confirmButtonColor: '#ef4444',
+          customClass: {
+            popup: 'rounded-2xl',
+            title: 'font-poppins font-bold text-primary',
+            content: 'font-poppins',
+            confirmButton: 'rounded-xl font-medium'
+          }
         });
         console.error('Network error:', error);
       }
@@ -134,6 +159,16 @@ const ContactUs = () => {
             />
           </div>
           <div>
+            <label className="block text-sm text-gray-500">Company</label>
+            <input
+              type="text"
+              name="company"
+              value={form.company}
+              onChange={handleChange}
+              className="w-full border-b border-gray-300 py-2 focus:outline-none"
+            />
+          </div>
+          <div>
             <label className="block text-sm text-gray-500">Subject</label>
             <input
               type="text"
@@ -155,6 +190,14 @@ const ContactUs = () => {
             />
           </div>
           <div className="md:col-span-2 flex justify-end mt-4 gap-x-4">
+            {/* <button
+              type="button"
+              onClick={testAlert}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full w-14 h-14 flex items-center justify-center transition-colors"
+              title="Test Alert"
+            >
+              🧪
+            </button> */}
             <WhatsAppButton className="w-14 h-14" />
             <CalendarBooking className="w-14 h-14" />
             <button

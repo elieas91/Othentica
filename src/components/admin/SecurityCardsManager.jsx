@@ -467,6 +467,9 @@ const SecurityCardsManager = () => {
                   <p className="text-xs text-gray-500">
                     Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
                   </p>
+                  <p className="text-xs text-blue-600 font-medium">
+                    Recommended resolution: 64x64px for security card icons
+                  </p>
                   
                   {/* Image Preview */}
                   {imagePreview && (

@@ -12,7 +12,7 @@ import {
 
 const ContentManager = () => {
   const [activeTab, setActiveTab] = useState('services');
-  const [homepageSections, setHomepageSections] = useState([]);
+  const [, setHomepageSections] = useState([]);
   const [services, setServices] = useState([]);
   const [clients, setClients] = useState([]);
   const [appFeatures, setAppFeatures] = useState([]);

@@ -45,7 +45,7 @@ const Philosophy = () => {
     };
 
     fetchPhilosophyData();
-  }, []);
+  }, [philosophyData.button_link, philosophyData.button_text, philosophyData.button_variant, philosophyData.description, philosophyData.image, philosophyData.title]);
 
   return (
     <section

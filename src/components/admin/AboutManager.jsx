@@ -295,6 +295,7 @@ const AboutManager = () => {
           />
         </div>
         <p className="text-xs text-gray-500">Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB</p>
+        <p className="text-xs text-blue-600 font-medium">Recommended resolution: 1920x1080px for banner images, 400x400px for profile images</p>
         {previewUrl && (
           <div className="mt-4">
             <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>

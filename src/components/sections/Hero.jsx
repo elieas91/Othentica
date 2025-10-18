@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     fetchHeroData();
-  }, []);
+  }, [heroData.description, heroData.primaryButton, heroData.secondaryButton, heroData.title]);
 
   // Function to scroll to philosophy section
   const scrollToPhilosophy = () => {

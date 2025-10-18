@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import apiService from '../../services/api';
-import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const ServicesBannerManager = () => {
   const [images, setImages] = useState([]);
@@ -19,7 +19,9 @@ const ServicesBannerManager = () => {
           setImages(res.data);
           return;
         }
-      } catch {}
+      } catch (error) {
+        console.error('Error fetching services banner images:', error);
+      }
       const res = await apiService.getServicesBannerImages();
       setImages(res.data || res || []);
     } finally {
@@ -110,45 +112,107 @@ const ServicesBannerManager = () => {
         </div>
       )}
 
+      {/* Modal Popup */}
       {formOpen && (
-        <form onSubmit={submit} className="mt-8 space-y-4 bg-white rounded-2xl p-6 border border-accent/20">
-          <div>
-            <label className="block text-sm font-medium mb-1">Title</label>
-            <input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
-            <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full border rounded-lg px-3 py-2" rows={3} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Alt text</label>
-            <input value={formData.alt_text} onChange={(e) => setFormData({ ...formData, alt_text: e.target.value })} className="w-full border rounded-lg px-3 py-2" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Images</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                setFormData({ ...formData, images: files });
-                setPreviewUrls(files.map((f) => URL.createObjectURL(f)));
-              }}
-            />
-          </div>
-          {previewUrls.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {previewUrls.map((url, idx) => (
-                <img key={idx} src={url} alt="preview" className="w-full h-24 object-cover rounded-lg border border-accent/20" />
-              ))}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900">
+                {editing ? 'Edit Image' : 'Add New Image'}
+              </h3>
+              <button
+                onClick={() => setFormOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <XMarkIcon className="w-5 h-5 text-gray-500" />
+              </button>
             </div>
-          )}
-          <div className="flex gap-2">
-            <button type="submit" className="px-4 py-2 rounded-lg bg-primary text-white">{editing ? 'Update' : 'Create'}</button>
-            <button type="button" onClick={() => setFormOpen(false)} className="px-4 py-2 rounded-lg bg-gray-100">Cancel</button>
+            
+            <form onSubmit={submit} className="p-6 space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                <input 
+                  value={formData.title} 
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  placeholder="Enter image title"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea 
+                  value={formData.description} 
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  rows={3}
+                  placeholder="Enter image description"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Alt text</label>
+                <input 
+                  value={formData.alt_text} 
+                  onChange={(e) => setFormData({ ...formData, alt_text: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  placeholder="Enter alt text for accessibility"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setFormData({ ...formData, images: files });
+                    setPreviewUrls(files.map((f) => URL.createObjectURL(f)));
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+                <div className="mt-2 space-y-1">
+                  <p className="text-xs text-gray-500">
+                    Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
+                  </p>
+                  <p className="text-xs text-blue-600 font-medium">
+                    Recommended resolution: 1920x1080px for services banner images
+                  </p>
+                </div>
+              </div>
+              
+              {previewUrls.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Preview</label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {previewUrls.map((url, idx) => (
+                      <img key={idx} src={url} alt="preview" className="w-full h-24 object-cover rounded-lg border border-gray-200" />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <button 
+                  type="submit" 
+                  className="flex-1 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors font-medium"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Processing...' : (editing ? 'Update Image' : 'Add Image')}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setFormOpen(false)} 
+                  className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       )}
     </div>
   );

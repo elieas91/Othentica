@@ -489,16 +489,15 @@ const BlogManager = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
+                  Description
                 </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  required
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Enter blog description"
+                  placeholder="Enter blog description (optional)"
                 />
               </div>
               
@@ -561,6 +560,9 @@ const BlogManager = () => {
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Supported formats: JPEG, JPG, PNG, GIF, WEBP (Max 5MB)
+                </p>
+                <p className="text-xs text-blue-600 font-medium">
+                  Recommended resolution: 1200x630px for optimal blog display
                 </p>
               </div>
               

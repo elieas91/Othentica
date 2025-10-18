@@ -239,7 +239,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
     if (propActiveSection && propActiveSection !== activeSection) {
       setActiveSection(propActiveSection);
     }
-  }, [propActiveSection]);
+  }, [propActiveSection, activeSection]);
 
   const getCurrentSectionData = () => {
     return sections.find(section => section.section_key === activeSection);
@@ -541,17 +541,6 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
   };
 
 
-  const getStatusIcon = (isActive) => {
-    return isActive ? 
-      <CheckCircleIcon className="w-4 h-4 text-green-500" /> : 
-      <XCircleIcon className="w-4 h-4 text-red-500" />;
-  };
-
-  const getStatusColor = (isActive) => {
-    return isActive ? 
-      'bg-green-100 text-green-800' : 
-      'bg-red-100 text-red-800';
-  };
 
   // Parse JSON content safely
   const parseJsonContent = (content) => {
@@ -1152,6 +1141,9 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                       <p className="text-xs text-gray-500">
                         Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
                       </p>
+                      <p className="text-xs text-blue-600 font-medium">
+                        Recommended resolution: 1920x1080px for background images, 800x600px for main images
+                      </p>
                       
                       {/* Image Preview */}
                       {imagePreview && (
@@ -1213,7 +1205,10 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                       <p className="text-xs text-gray-500">
                         Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB
                       </p>
-                      
+                      <p className="text-xs text-blue-600 font-medium">
+                        Recommended resolution: 1920x1080px for background images, 800x600px for main images
+                      </p>
+
                       {/* Background Image Preview */}
                       {backgroundImagePreview && (
                         <div className="mt-4">

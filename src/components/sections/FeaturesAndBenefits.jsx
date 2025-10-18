@@ -107,7 +107,7 @@ const FeaturesAndBenefits = () => {
   const [appFeaturesData, setAppFeaturesData] = useState([]);
   const [appBenefitsData, setAppBenefitsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
