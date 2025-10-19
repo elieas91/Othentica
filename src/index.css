@@ -1098,4 +1098,16 @@
       height: 1.5rem !important;
     }
   }
+  /* Line clamp utility */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Ensure SweetAlert2 is above any custom modals/overlays */
+.swal2-container {
+  z-index: 99999 !important;
 }

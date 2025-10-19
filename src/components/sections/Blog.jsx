@@ -1,258 +1,162 @@
-import React, { useCallback, useEffect } from 'react';
-// import { instagramData } from '../../data/instagramData'; // COMMENTED OUT FOR TESTING
+import React, { useState, useEffect } from 'react';
+import BlogModal from '../ui/BlogModal';
+import apiService from '../../services/api';
+import { getApiUrl } from '../../config/api';
 
-const SocialMedia = () => {
-  // const [activePlatform, setActivePlatform] = useState(null); // COMMENTED OUT FOR TESTING
+const Blog = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Debug logging
   useEffect(() => {
-    console.log('🔍 SocialMedia Component Mounted');
-    // console.log('🔍 Instagram Data:', instagramData); // COMMENTED OUT
-    // console.log('🔍 Active Platform:', activePlatform); // COMMENTED OUT
+    fetchBlogs();
   }, []);
 
-  const handleSocialClick = useCallback((platformKey, platform) => {
-    console.log('🔍 Social Click:', { platformKey, platform });
+  const fetchBlogs = async () => {
     try {
-      // INSTAGRAM LOGIC COMMENTED OUT FOR TESTING
-      // if (platformKey === 'instagram') {
-      //   console.log('🔍 Toggling Instagram platform');
-      //   setActivePlatform(activePlatform === 'instagram' ? null : 'instagram');
-      // } else 
-      if (platform?.url) {
-        console.log('🔍 Opening external link:', platform.url);
-        window.open(platform.url, '_blank', 'noopener,noreferrer');
+      setLoading(true);
+      const response = await apiService.getAllBlogs();
+      if (response.success) {
+        setBlogs(response.data);
+      } else {
+        setError('Failed to fetch blogs');
       }
-    } catch (error) {
-      console.error('❌ Error handling social click:', error);
+    } catch (err) {
+      console.error('Error fetching blogs:', err);
+      setError('Error loading blogs');
+    } finally {
+      setLoading(false);
     }
-  }, []); // REMOVED activePlatform DEPENDENCY
-
-  // Error boundary for component - COMMENTED OUT FOR TESTING
-  // if (!instagramData) {
-  //   return (
-  //     <section className="py-16 bg-white">
-  //       <div className="text-center">
-  //         <h2 className="text-3xl font-bold text-primary mb-4">
-  //           Othentica FZC LLC
-  //         </h2>
-  //         <p className="text-primary/70 text-lg">
-  //           Follow us on social media for updates and insights
-  //         </p>
-  //       </div>
-  //     </section>
-  //   );
-  // }
-
-  // Social platforms with direct links
-  const socialPlatforms = {
-    // INSTAGRAM COMMENTED OUT FOR TESTING
-    // instagram: {
-    //   name: 'Instagram',
-    //   icon: (() => {
-    //     console.log('🔍 Creating Instagram SVG icon');
-    //     try {
-    //       const icon = (
-    //         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-    //           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-    //         </svg>
-    //       );
-    //       return icon;
-    //     } catch (error) {
-    //       console.error('❌ Error creating Instagram icon:', error);
-    //       return <span>📷</span>;
-    //     }
-    //   })(),
-    //   color: 'bg-gradient-to-r from-purple-500 to-pink-500',
-    //   hoverColor: 'hover:from-purple-600 hover:to-pink-600',
-    //   url: 'https://www.instagram.com/othenticaapp',
-    // },
-    facebook: {
-      name: 'Facebook',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-        </svg>
-      ),
-      color: 'bg-blue-600',
-      hoverColor: 'hover:bg-blue-700',
-      url: 'https://www.facebook.com/share/1C2Qcrsj2d/',
-    },
-    linkedin: {
-      name: 'LinkedIn',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-        </svg>
-      ),
-      color: 'bg-blue-700',
-      hoverColor: 'hover:bg-blue-800',
-      url: 'https://www.linkedin.com/company/othentica-fzc-llc',
-    },
   };
 
-  console.log('🔍 Rendering SocialMedia component');
-  console.log('🔍 Social platforms:', Object.keys(socialPlatforms));
+  const handleBlogClick = (blog) => {
+    setSelectedBlog(blog);
+    setIsModalOpen(true);
+  };
 
-  try {
-  console.log('🔍 Rendering section element');
-  
-  return (
-    <section className="py-16 bg-white">
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedBlog(null);
+  };
 
-      {/* Social Media Icons - Direct Links */}
-      <div className="flex justify-center mb-12">
-        <div className="flex gap-6">
-          {(() => {
-            console.log('🔍 About to render social platform buttons');
-            return Object.entries(socialPlatforms).map(([key, platform]) => {
-              console.log('🔍 Rendering button for:', key, platform);
-              return (
-              <button
-                key={key}
-                onClick={() => {
-                  console.log('🔍 Button clicked:', key);
-                  handleSocialClick(key, platform);
-                }}
-                className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg text-white focus:outline-none border-0 border-transparent hover:scale-110 ${platform.color} ${platform.hoverColor}`}
-                aria-label={`Visit Othentica FZC LLC on ${platform.name}`}
-                  >
-                    {(() => {
-                      console.log('🔍 Rendering icon for:', key);
-                      return platform.icon;
-                    })()}
-              </button>
-              );
-            });
-          })()}
-        </div>
-      </div>
+  const getImageUrl = (imgPath) => {
+    if (imgPath.startsWith('http') || imgPath.startsWith('/assets')) {
+      return imgPath;
+    }
+    return `${getApiUrl()}/uploads/blogs/${imgPath}`;
+  };
 
-      {/* INSTAGRAM FEED DISPLAY COMMENTED OUT FOR TESTING */}
-      {/* {(() => {
-        console.log('🔍 Checking Instagram feed condition:', { activePlatform, hasInstagramData: !!instagramData });
-        return null;
-      })()}
-      {activePlatform === 'instagram' && instagramData && (
-        <div className="max-w-4xl mx-auto mb-12">
-          {(() => {
-            console.log('🔍 Rendering Instagram feed');
-            return null;
-          })()}
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-100">
-            <div className="flex items-center justify-center mb-8">
-              <div className="flex items-center space-x-4">
-                {instagramData.profilePictureUrl && (
-                  <img
-                    src={instagramData.profilePictureUrl}
-                    alt={`${instagramData.username || 'Instagram'} profile`}
-                    className="w-20 h-20 rounded-full border-4 border-white shadow-lg"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                )}
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold text-gray-800">
-                    @{instagramData.username || 'othenticaapp'}
-                  </h3>
-                  {instagramData.biography && (
-                    <p className="text-gray-600 text-sm mb-2">{instagramData.biography}</p>
-                  )}
-                  <div className="flex space-x-4 text-sm text-gray-500">
-                    <span><strong>{instagramData.followersCount || 0}</strong> followers</span>
-                    <span><strong>{instagramData.followsCount || 0}</strong> following</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {instagramData.posts && instagramData.posts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {instagramData.posts.map((post, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                    {post.imageUrl && (
-                      <img
-                        src={post.imageUrl}
-                        alt={`Instagram post ${index + 1}`}
-                        className="w-full h-64 object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    )}
-                    <div className="p-4">
-                      {post.caption && (
-                        <p className="text-gray-800 text-sm line-clamp-3">{post.caption}</p>
-                      )}
-                      <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-                        <span>{post.likesCount || 0} likes</span>
-                        <span>{post.timestamp ? new Date(post.timestamp).toLocaleDateString() : 'Recently'}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                  <svg className="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h4 className="text-xl font-semibold text-gray-700 mb-2">No Posts Yet</h4>
-                <p className="text-gray-500 mb-4">
-                  We're working on creating amazing content for you!
-                </p>
-                <p className="text-sm text-gray-400">
-                  Follow us on Instagram to be the first to see our wellness content when it's ready.
-                </p>
-                <a
-                  href="https://www.instagram.com/othenticaapp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-4 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
-                >
-                  Follow on Instagram
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
-      )} */}
-
-      {/* Company Info */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-primary mb-4">
-          Othentica FZC LLC
-        </h2>
-        <p className="text-primary/70 text-lg mb-4">
-          Follow us on social media for updates and insights
-        </p>
-        <p className="text-primary/50 text-sm">
-          Click on Instagram above to see our latest posts, or follow us for updates!
-        </p>
-      </div>
-    </section>
-    );
-  } catch (error) {
-    console.error('❌ Error rendering SocialMedia component:', error);
-    console.error('❌ Error stack:', error.stack);
+  if (loading) {
     return (
       <section className="py-16 bg-white">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-primary mb-4">
-            Othentica FZC LLC
-          </h2>
-          <p className="text-primary/70 text-lg">
-            Follow us on social media for updates and insights
-          </p>
-          <p className="text-red-500 text-sm mt-4">
-            Error loading social media section. Please refresh the page.
-          </p>
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading blogs...</p>
+          </div>
         </div>
       </section>
     );
   }
+
+  if (error) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <p className="text-red-600">{error}</p>
+            <button 
+              onClick={fetchBlogs}
+              className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (blogs.length === 0) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-primary mb-4">Our Blog</h2>
+            <p className="text-gray-600">No blog posts available at the moment.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-6">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-primary mb-4">Our Blog</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Stay updated with our latest insights, stories, and updates from the world of wellness and professional development.
+          </p>
+        </div>
+
+        {/* Blog Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogs.map((blog) => (
+            <div
+              key={blog.id}
+              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden border border-gray-100"
+              onClick={() => handleBlogClick(blog)}
+            >
+              {/* Blog Image */}
+              {blog.img && (
+                <div className="w-full h-48 overflow-hidden">
+                  <img
+                    src={getImageUrl(blog.img)}
+                    alt={blog.title}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              )}
+
+              {/* Blog Content */}
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-primary mb-3 line-clamp-2 hover:text-orange-600 transition-colors">
+                  {blog.title}
+                </h3>
+                
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  {blog.description}
+                </p>
+
+                {/* Date and Read More */}
+                <div className="flex items-center justify-between">
+                  {blog.date && (
+                    <span className="text-sm text-gray-500">
+                      {blog.date}
+                    </span>
+                  )}
+                  <span className="text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
+                    Read More →
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Blog Modal */}
+        <BlogModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          blog={selectedBlog}
+        />
+      </div>
+    </section>
+  );
 };
 
-export default SocialMedia;
+export default Blog;

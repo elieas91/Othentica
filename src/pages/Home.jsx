@@ -5,7 +5,7 @@ import Philosophy from '../components/sections/Philosophy';
 import MobileShowcase from '../components/sections/MobileShowcase';
 import Services from '../components/sections/Services';
 import Testimonials from '../components/sections/Testimonials';
-import SocialMedia from '../components/sections/Blog';
+import SocialMedia from '../components/sections/SocialMedia';
 import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';

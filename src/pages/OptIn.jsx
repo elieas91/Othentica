@@ -81,7 +81,6 @@ const OptIn = () => {
   };
   const [form, setForm] = useState(initialFormState);
 
-  // Modal for Terms and Conditions PDF
 
   const handleFormClose = () => {
     setShowForm(false);

@@ -3,7 +3,7 @@ import { missionVisionValuesData } from '../../../data/missionVisionValuesData';
 import CompassIcon from '../../../assets/img/compass.svg';
 import './CarouselMVV.css';
 
-const CarouselMVV = ({ className = '' }) => {
+const CarouselMVV = ({ className = '', items }) => {
   const [currentIndex, setCurrentIndex] = useState(0); // Start with Mission (id=1) - first item
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -32,7 +32,8 @@ const CarouselMVV = ({ className = '' }) => {
     return duplicated;
   };
 
-  const carouselItems = duplicateItems(missionVisionValuesData, 2); // Duplicate 2 times (6 total items)
+  const sourceItems = Array.isArray(items) && items.length > 0 ? items : missionVisionValuesData;
+  const carouselItems = duplicateItems(sourceItems, 2); // Duplicate 2 times (6 total items)
   const totalItems = carouselItems.length;
   const angleStep = 360 / totalItems;
   
@@ -264,9 +265,12 @@ const CarouselMVV = ({ className = '' }) => {
                   <div className="carousel-3d-overlay">
                     <h3 className="carousel-3d-title">{slide.title}</h3>
                     <div className="carousel-3d-description-container">
-                      <p className="carousel-3d-description">
-                        {truncated}
-                      </p>
+                      <div 
+                        className="carousel-3d-description"
+                        dangerouslySetInnerHTML={{ 
+                          __html: truncated
+                        }}
+                      />
                       {needsTruncation && (
                         <button
                           onClick={(e) => {

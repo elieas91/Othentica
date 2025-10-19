@@ -1,7 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { clientsData } from '../../data/clientsData';
+import { clientsData as fallbackClientsData } from '../../data/clientsData';
+import apiService from '../../services/api';
 
 const Clients = () => {
+  const [clientsData, setClientsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [, setError] = useState(null);
+  const [sectionMeta, setSectionMeta] = useState({
+    title: 'Our Clients',
+    description: 'Trusted by leading companies across various industries'
+  });
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const [clientsRes, sectionRes] = await Promise.all([
+          apiService.getClients(),
+          apiService.getHomepageSectionByKey ? apiService.getHomepageSectionByKey('clients') : Promise.resolve({ success: false })
+        ]);
+        
+        if (clientsRes.success && clientsRes.data) {
+          // Transform database clients to match component structure
+          const transformedClients = clientsRes.data.map(client => ({
+            id: client.id,
+            name: client.name,
+            logo: client.logo_url,
+            industry: client.industry,
+            website_url: client.website_url
+          }));
+          
+          setClientsData(transformedClients);
+        } else {
+          throw new Error(clientsRes.message || 'Failed to fetch clients');
+        }
+
+        // Load section metadata (use only description from DB, not subtitle)
+        if (sectionRes && sectionRes.success && sectionRes.data) {
+          setSectionMeta(prev => ({
+            title: sectionRes.data.title || prev.title,
+            description: sectionRes.data.description || prev.description
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+        setError(error.message);
+        // Fallback to static data
+        setClientsData(fallbackClientsData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
+
   const shouldUseCarousel = clientsData.length > 6;
 
   // Drag functionality
@@ -69,6 +124,23 @@ const Clients = () => {
     }
   };
 
+
+
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <section className="py-16 px-8 lg:px-16 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-primary font-medium">Loading clients...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (!shouldUseCarousel) {
     // Responsive grid/flex layout for 6 or fewer clients
     return (
@@ -76,10 +148,10 @@ const Clients = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-              Our Clients
+              {sectionMeta.title}
             </h2>
             <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Trusted by leading companies across various industries
+                <span dangerouslySetInnerHTML={{ __html: sectionMeta.description }} />
             </p>
           </div>
 
@@ -97,11 +169,26 @@ const Clients = () => {
                   className="text-center group w-36 aspect-square flex-shrink-0 relative"
                 >
                   <div className="w-full h-full flex items-center justify-center">
-                    <img
-                      src={client.logo}
-                      alt={`${client.name} logo`}
-                      className="w-full h-full cursor-pointer object-contain transition-all duration-300 group-hover:scale-105"
-                    />
+                    {client.website_url ? (
+                      <a
+                        href={client.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-full flex items-center justify-center"
+                      >
+                        <img
+                          src={client.logo}
+                          alt={`${client.name} logo`}
+                          className="w-full h-full cursor-pointer object-contain transition-all duration-300 group-hover:scale-105"
+                        />
+                      </a>
+                    ) : (
+                      <img
+                        src={client.logo}
+                        alt={`${client.name} logo`}
+                        className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105"
+                      />
+                    )}
                   </div>
                 </div>
               ))}
@@ -119,10 +206,10 @@ const Clients = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Our Clients
+            {sectionMeta.title}
           </h2>
           <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Trusted by leading organizations worldwide
+            {sectionMeta.description}
           </p>
         </div>
 
@@ -147,12 +234,28 @@ const Clients = () => {
                     className="text-center group w-36 aspect-square flex-shrink-0 relative"
                   >
                     <div className="w-full h-full flex items-center justify-center">
-                      <img
-                        src={client.logo}
-                        alt={`${client.name} logo`}
-                        className="w-full h-full object-contain cursor-pointer transition-all duration-300 group-hover:scale-105"
-                        draggable={false}
-                      />
+                      {client.website_url ? (
+                        <a
+                          href={client.website_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full h-full flex items-center justify-center"
+                        >
+                          <img
+                            src={client.logo}
+                            alt={`${client.name} logo`}
+                            className="w-full h-full object-contain cursor-pointer transition-all duration-300 group-hover:scale-105"
+                            draggable={false}
+                          />
+                        </a>
+                      ) : (
+                        <img
+                          src={client.logo}
+                          alt={`${client.name} logo`}
+                          className="w-full h-full object-contain transition-all duration-300 group-hover:scale-105"
+                          draggable={false}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}

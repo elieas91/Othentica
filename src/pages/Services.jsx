@@ -3,6 +3,7 @@ import { servicesData } from '../data/servicesData';
 import Button from '../components/ui/Button';
 import ServiceBlock from '../components/ui/ServiceBlock';
 import CarouselBanner from '../components/ui/CarouselBanner';
+import apiService from '../services/api';
 import CorporateHealth from '../assets/img/services/corporate_health.webp';
 import OneToOneGuidance from '../assets/img/services/one_to_one_img.webp';
 import Workshop from '../assets/img/services/workshop.webp';
@@ -13,6 +14,7 @@ import { Link } from 'react-router-dom';
 
 const Services = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [bannerImages, setBannerImages] = useState([]);
   const [visibleSections, setVisibleSections] = useState(new Set());
   const bannerRef = useRef(null);
   const ctaRef = useRef(null);
@@ -41,6 +43,21 @@ const Services = () => {
         observer.unobserve(currentBannerRef);
       }
     };
+  }, []);
+
+  // Load services banner images
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await apiService.getServicesBannerImages();
+        const images = (res && res.data) ? res.data : Array.isArray(res) ? res : [];
+        const urls = images.filter(Boolean).map(img => img.image_url).filter(Boolean);
+        setBannerImages(urls);
+      } catch {
+        setBannerImages([]);
+      }
+    };
+    load();
   }, []);
 
   // Intersection Observer for CTA section
@@ -80,7 +97,7 @@ const Services = () => {
           <CarouselBanner
             title="Our Services"
             description="Discover our comprehensive approach to wellness that nurtures every aspect of your being"
-            backgroundImages={[
+            backgroundImages={bannerImages.length ? bannerImages : [
               CorporateHealth,
               OneToOneGuidance,
               Workshop,

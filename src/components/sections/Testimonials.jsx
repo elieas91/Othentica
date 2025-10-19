@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Slider from 'react-slick';
+import { createPortal } from 'react-dom';
 import Flame from '../../assets/img/flame.webp';
 import Testimonial1 from '../../assets/img/testimonials/testimonial-1.webp';
 import Testimonial2 from '../../assets/img/testimonials/testimonial-2.webp';
@@ -15,6 +16,7 @@ import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
+import { getApiUrl } from '../../config/api';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Map categoryId to API category parameter
@@ -188,27 +190,28 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Function to get testimonial image path
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
-  // If a database URL is provided
-  if (imageUrl) {
-    // If it’s already a full URL, just return it
-    if (imageUrl.startsWith('http')) return imageUrl;
+    // If a database URL is provided
+    if (imageUrl) {
+      // If it's already a full URL, just return it
+      if (imageUrl.startsWith('http')) return imageUrl;
 
-    // If it's just a filename or relative path, prepend /server/uploads/testimonials/
-    return `/server/uploads/testimonials/${imageUrl}`;
-  }
+      // If it's just a filename or relative path, prepend the full API URL
+      const apiUrl = getApiUrl();
+      return `${apiUrl}/uploads/testimonials/${imageUrl}`;
+    }
 
-  // Otherwise, use static fallback images
-  const imageMap = {
-    'testimonial-1': Testimonial1,
-    'testimonial-2': Testimonial2,
-    'testimonial-3': Testimonial3,
-    'testimonial-4': Testimonial4,
-    'testimonial-5': Testimonial5,
-    'testimonial-6': Testimonial6,
+    // Otherwise, use static fallback images
+    const imageMap = {
+      'testimonial-1': Testimonial1,
+      'testimonial-2': Testimonial2,
+      'testimonial-3': Testimonial3,
+      'testimonial-4': Testimonial4,
+      'testimonial-5': Testimonial5,
+      'testimonial-6': Testimonial6,
+    };
+
+    return imageMap[imageName] || Testimonial2;
   };
-
-  return imageMap[imageName] || Testimonial2;
-};
 
 
   // Function to truncate quote to 2 lines
@@ -251,10 +254,13 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     try {
       // Create FormData for file upload
       const testimonialFormData = new FormData();
-      testimonialFormData.append('name', formData.name);
+      // Use "Anonymous" as name if anonymous is selected, otherwise use the provided name
+      testimonialFormData.append('name', formData.is_anonymous ? 'Anonymous' : formData.name);
       testimonialFormData.append('description', formData.description);
       testimonialFormData.append('status', 'pending');
       testimonialFormData.append('category', formData.category);
+      testimonialFormData.append('email', formData.email || '');
+      testimonialFormData.append('is_anonymous', formData.is_anonymous);
       
       // Add image if provided
       if (formData.image) {
@@ -291,6 +297,35 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
     setShowForm(false);
     setIsSubmitting(false);
   };
+
+  // Handle modal positioning, body scroll, and ESC key
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && showForm) {
+        handleCloseForm();
+      }
+    };
+
+    if (showForm) {
+      // Prevent body scrolling when modal is open
+      document.body.style.overflow = 'hidden';
+      // Ensure modal is positioned correctly
+      document.body.style.position = 'relative';
+      // Add ESC key listener
+      document.addEventListener('keydown', handleEscKey);
+    } else {
+      // Restore body scrolling when modal is closed
+      document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [showForm]);
 
   // Show loading state
   if (isLoading) {
@@ -356,12 +391,13 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   }
 
   return (
-    <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
-      {/* Subtle background pattern overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(244,223,196,0.03)_0%,transparent_50%)]"></div>
-      <div className="max-w-7xl mx-auto relative z-10">
+    <>
+      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+        {/* Subtle background pattern overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
+        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(244,223,196,0.03)_0%,transparent_50%)]"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
         <div
           className={`grid ${
             showPics ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
@@ -453,7 +489,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   >
                     <div className="h-64 w-full relative">
                       <img
-                        src={getTestimonialImagePath(imageName)}
+                        src={getTestimonialImagePath(imageName, null)}
                         alt={`${cat.name} - ${imageName}`}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         style={{ minHeight: '100%', minWidth: '100%' }}
@@ -481,7 +517,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                     >
                       <div className="h-64 w-full relative">
                         <img
-                          src={getTestimonialImagePath(imageName)}
+                          src={getTestimonialImagePath(imageName, null)}
                           alt={`${cat.name} - ${imageName}`}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           style={{ minHeight: '100%', minWidth: '100%' }}
@@ -504,25 +540,36 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
           )}
         </div>
       </div>
-      {/* Testimonial Form Modal */}
-      {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 relative w-full max-w-md mx-4">
+      </section>
+      
+      {/* Testimonial Form Modal - Rendered via Portal */}
+      {showForm && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 relative w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
             <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-2xl font-bold"
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white text-2xl font-bold z-10 bg-white dark:bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               onClick={handleCloseForm}
               aria-label="Close"
             >
               &times;
             </button>
-            <TestimonialForm
-              onSubmit={handleTestimonialSubmit}
-              isLoading={isSubmitting}
-            />
+            <div className="pr-8">
+              <h3 className="text-2xl font-bold text-primary font-poppins mb-2">
+                Share Your Experience
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Help others by sharing your experience with Othentica
+              </p>
+              <TestimonialForm
+                onSubmit={handleTestimonialSubmit}
+                isLoading={isSubmitting}
+              />
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </section>
+    </>
   );
 };
 
