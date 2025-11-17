@@ -392,7 +392,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   return (
     <>
-      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+      <section className="py-8 sm:py-12 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
         {/* Subtle background pattern overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
@@ -401,17 +401,17 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         <div
           className={`grid ${
             showPics ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
-          } gap-12 items-start`}
+          } gap-6 lg:gap-8 items-start`}
         >
           {/* Left Side - Testimonial with Carousel */}
           <div className="text-left">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-4 sm:mb-6">
               Testimonials
             </h2>
 
             {/* Category Badge */}
             {currentCategory && (
-              <div className="mb-6">
+              <div className="mb-4">
                 <span className="inline-block px-4 py-2 bg-primary/10 text-primary font-semibold rounded-full text-sm">
                   {currentCategory.name}
                 </span>
@@ -419,7 +419,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             )}
 
             {/* Slick Carousel Content */}
-            <div className="min-h-[200px] md:w-full">
+            <div className="md:w-full">
               <Slider {...sliderSettings}>
                 {filteredTestimonials.map((testimonial) => {
                   const { truncated, needsTruncation } = truncateQuote(testimonial.quote || '');
@@ -427,7 +427,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   
                   return (
                     <div key={testimonial.id} className="px-2">
-                      <div className="flex flex-col justify-center min-h-[200px]">
+                      <div className="flex flex-col justify-center">
                         <blockquote
                           className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium"
                           style={{ display: 'inline' }}
@@ -465,7 +465,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
 
             {/* Add Testimonial Button - Outside Carousel */}
-              <div className="mt-8">
+              <div className="mt-6">
                 <Button
                   variant="secondary"
                   className="w-full sm:w-auto"
@@ -478,7 +478,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
           {/* Right Side - Two Images from Different Categories */}
           {showPics && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 lg:mt-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6 lg:mt-0">
               {categoriesForImages.length > 0 ? categoriesForImages.map((cat, idx) => {
                 // Pick the first image from each category
                 const imageName = cat.images[0];
