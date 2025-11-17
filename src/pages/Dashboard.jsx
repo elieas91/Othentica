@@ -39,16 +39,8 @@ const Dashboard = () => {
   const [isHoveringSidebar, setIsHoveringSidebar] = useState(false);
   const [blogCount, setBlogCount] = useState(0);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/admin');
-    } else {
-      // Fetch blog count for overview
-      fetchBlogCount();
-    }
-  }, [isAuthenticated, navigate]);
-
-  const fetchBlogCount = async () => {
+  // Define before use to avoid potential TDZ in minified builds
+  async function fetchBlogCount() {
     try {
       const response = await apiService.getAllBlogs();
       if (response.success) {
@@ -57,7 +49,16 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error fetching blog count:', error);
     }
-  };
+  }
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/admin');
+    } else {
+      // Fetch blog count for overview
+      fetchBlogCount();
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
     logout();

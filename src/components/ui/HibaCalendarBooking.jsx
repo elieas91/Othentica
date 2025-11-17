@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import DatePickerWrapper from './DatePickerWrapper';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
@@ -164,7 +164,7 @@ const HibaCalendarBooking = ({ className = '', showText = false }) => {
                     <CalendarIcon className="w-4 h-4 inline mr-1" />
                     Select Date
                   </label>
-                  <DatePicker
+                  <DatePickerWrapper
                     selected={selectedDate}
                     onChange={(date) => setSelectedDate(date)}
                     minDate={new Date()}

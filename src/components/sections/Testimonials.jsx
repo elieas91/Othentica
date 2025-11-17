@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
-import { getApiUrl } from '../../config/api';
+import { getApiUrl, normalizeUploadUrl } from '../../config/api';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Map categoryId to API category parameter
@@ -192,12 +192,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const getTestimonialImagePath = (imageName, imageUrl = null) => {
     // If a database URL is provided
     if (imageUrl) {
-      // If it's already a full URL, just return it
-      if (imageUrl.startsWith('http')) return imageUrl;
-
-      // If it's just a filename or relative path, prepend the full API URL
-      const apiUrl = getApiUrl();
-      return `${apiUrl}/uploads/testimonials/${imageUrl}`;
+      return normalizeUploadUrl(imageUrl, 'testimonials');
     }
 
     // Otherwise, use static fallback images

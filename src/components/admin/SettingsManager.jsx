@@ -20,16 +20,6 @@ const SettingsManager = () => {
   const [isEditingTestimonial, setIsEditingTestimonial] = useState(false);
   const [isEditingTestimonialApproval, setIsEditingTestimonialApproval] = useState(false);
 
-  useEffect(() => {
-    if (activeSection === 'auto-reply') {
-      fetchAutoReplyMessage();
-    } else if (activeSection === 'testimonial-email') {
-      fetchTestimonialEmailMessage();
-    } else if (activeSection === 'testimonial-approval-email') {
-      fetchTestimonialApprovalEmailMessage();
-    }
-  }, [activeSection, fetchAutoReplyMessage, fetchTestimonialEmailMessage, fetchTestimonialApprovalEmailMessage]);
-
   const fetchAutoReplyMessage = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -46,34 +36,6 @@ const SettingsManager = () => {
       setIsLoading(false);
     }
   }, []);
-
-  const handleSaveAutoReply = async () => {
-    if (!autoReplyMessage.trim()) {
-      await showErrorAlert('Validation Error', 'Auto-reply message cannot be empty.');
-      return;
-    }
-
-    try {
-      setIsSaving(true);
-      const response = await apiService.updateAutoReplyMessage(autoReplyMessage);
-      if (response.success) {
-        await showSuccessAlert('Success', 'Auto-reply message updated successfully!');
-        setIsEditing(false);
-      } else {
-        throw new Error(response.error || 'Failed to update auto-reply message');
-      }
-    } catch (error) {
-      console.error('Update auto-reply message error:', error);
-      await showErrorAlert('Error', `Failed to update auto-reply message: ${error.message || 'Unknown error'}`);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    fetchAutoReplyMessage(); // Reset to original value
-  };
 
   const fetchTestimonialEmailMessage = useCallback(async () => {
     try {
@@ -108,6 +70,44 @@ const SettingsManager = () => {
       setIsLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (activeSection === 'auto-reply') {
+      fetchAutoReplyMessage();
+    } else if (activeSection === 'testimonial-email') {
+      fetchTestimonialEmailMessage();
+    } else if (activeSection === 'testimonial-approval-email') {
+      fetchTestimonialApprovalEmailMessage();
+    }
+  }, [activeSection, fetchAutoReplyMessage, fetchTestimonialEmailMessage, fetchTestimonialApprovalEmailMessage]);
+
+  const handleSaveAutoReply = async () => {
+    if (!autoReplyMessage.trim()) {
+      await showErrorAlert('Validation Error', 'Auto-reply message cannot be empty.');
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      const response = await apiService.updateAutoReplyMessage(autoReplyMessage);
+      if (response.success) {
+        await showSuccessAlert('Success', 'Auto-reply message updated successfully!');
+        setIsEditing(false);
+      } else {
+        throw new Error(response.error || 'Failed to update auto-reply message');
+      }
+    } catch (error) {
+      console.error('Update auto-reply message error:', error);
+      await showErrorAlert('Error', `Failed to update auto-reply message: ${error.message || 'Unknown error'}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    fetchAutoReplyMessage(); // Reset to original value
+  };
 
   const handleSaveTestimonialEmail = async () => {
     if (!testimonialEmailMessage.trim()) {

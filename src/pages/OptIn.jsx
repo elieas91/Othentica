@@ -1,3 +1,4 @@
+import React from 'react';
 import OptInCountdown from '../components/layout/OptInCountdown';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';

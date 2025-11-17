@@ -8,7 +8,7 @@ const initialState = {
   banner_subtitle: '',
   banner_description: '',
   banner_background_image_url: '',
-  ceo_name: '',
+  ceo_name: '', 
   ceo_title: '',
   ceo_message: '',
   ceo_image_url: '',

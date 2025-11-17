@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { missionVisionValuesData } from '../../../data/missionVisionValuesData';
 import CompassIcon from '../../../assets/img/compass.svg';
 import './CarouselMVV.css';

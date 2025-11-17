@@ -6,7 +6,7 @@ import WhatsAppButton from '../ui/WhatsappButton';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import DatePicker from 'react-datepicker';
+import DatePickerWrapper from '../ui/DatePickerWrapper';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
@@ -406,7 +406,7 @@ const MeetTheFounders = () => {
                           <CalendarIcon className="w-6 h-6 inline mr-2" />
                           Select Date
                         </label>
-                        <DatePicker
+                        <DatePickerWrapper
                           selected={selectedDate}
                           onChange={(date) => setSelectedDate(date)}
                           minDate={new Date()}

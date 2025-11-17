@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BlogModal from '../ui/BlogModal';
 import apiService from '../../services/api';
-import { getApiUrl } from '../../config/api';
+import { getApiUrl, normalizeUploadUrl } from '../../config/api';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -42,10 +42,10 @@ const Blog = () => {
   };
 
   const getImageUrl = (imgPath) => {
-    if (imgPath.startsWith('http') || imgPath.startsWith('/assets')) {
+    if (imgPath.startsWith('/assets')) {
       return imgPath;
     }
-    return `${getApiUrl()}/uploads/blogs/${imgPath}`;
+    return normalizeUploadUrl(imgPath, 'blogs');
   };
 
   if (loading) {

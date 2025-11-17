@@ -73,7 +73,7 @@ const Hero = () => {
     };
 
     fetchHeroData();
-  }, [heroData.description, heroData.primaryButton, heroData.secondaryButton, heroData.title]);
+  }, []); // Empty dependency array - only run once on mount
 
   // Function to scroll to philosophy section
   const scrollToPhilosophy = () => {
@@ -220,7 +220,7 @@ const Hero = () => {
         alt="Othentica Hero Background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ display: 'none' }}
-        fetchPriority="high"
+        fetchpriority="high"
         loading="eager"
       />
       {/* Animated Background with Logo and Flames */}

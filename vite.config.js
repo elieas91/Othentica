@@ -1,14 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { reactChildrenPolyfill } from './vite-plugin-react-children-polyfill.js'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic',
-      jsxImportSource: 'react',
     }),
+    reactChildrenPolyfill(),
     viteStaticCopy({
       targets: [
         {
@@ -21,53 +22,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // React core - keep together for better caching
-          if (id.includes('react/') || id.includes('react-dom/')) {
-            return 'react-core';
-          }
-          // React Router - separate chunk
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          // UI Libraries - split by usage frequency
-          if (id.includes('@heroicons/react/24/outline')) {
-            return 'heroicons-outline';
-          }
-          if (id.includes('@heroicons/react/24/solid')) {
-            return 'heroicons-solid';
-          }
-          if (id.includes('react-icons/fa')) {
-            return 'react-icons-fa';
-          }
-          if (id.includes('react-icons/')) {
-            return 'react-icons';
-          }
-          // Heavy libraries - separate chunks
-          if (id.includes('react-datepicker')) {
-            return 'datepicker';
-          }
-          if (id.includes('swiper')) {
-            return 'swiper';
-          }
-          if (id.includes('sweetalert2')) {
-            return 'sweetalert';
-          }
-          if (id.includes('googleapis')) {
-            return 'googleapis';
-          }
-          if (id.includes('next-themes')) {
-            return 'themes';
-          }
-          // Large vendor libraries
-          if (id.includes('node_modules')) {
-            // Keep small utilities together
-            if (id.includes('lodash') || id.includes('moment') || id.includes('date-fns')) {
-              return 'utils';
-            }
-            return 'vendor';
-          }
-        },
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
           // Font files
@@ -102,6 +56,10 @@ export default defineConfig({
     // JavaScript optimization
     target: 'es2020',
     sourcemap: false,
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true
+    }
   },
   css: {
     devSourcemap: false,
@@ -122,10 +80,16 @@ export default defineConfig({
       'swiper',
       'sweetalert2'
     ],
-    force: true
+    force: true,
+    esbuildOptions: {
+      target: 'es2020'
+    }
   },
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
     '__BUILD_TIME__': JSON.stringify(new Date().toISOString())
+  },
+  resolve: {
+    dedupe: ['react', 'react-dom', 'scheduler']
   }
 })

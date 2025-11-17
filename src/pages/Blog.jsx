@@ -4,7 +4,7 @@ import BannerBg from '../assets/img/blog/blog_bg.webp';
 import BlogModal from '../components/ui/BlogModal';
 import SocialMedia from '../components/sections/SocialMedia';
 import apiService from '../services/api';
-import { getApiUrl } from '../config/api';
+import { getApiUrl, normalizeUploadUrl } from '../config/api';
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -48,10 +48,10 @@ const BlogPage = () => {
   };
 
   const getImageUrl = (imgPath) => {
-    if (imgPath.startsWith('http') || imgPath.startsWith('/assets')) {
+    if (imgPath.startsWith('/assets')) {
       return imgPath;
     }
-    return `${getApiUrl()}/uploads/blogs/${imgPath}`;
+    return normalizeUploadUrl(imgPath, 'blogs');
   };
 
   if (loading) {

@@ -1,9 +1,24 @@
-import React, { useMemo } from 'react';
-import ReactQuill from 'react-quill';
+import React, { useEffect, useMemo, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import './RichTextEditor.css';
 
 const RichTextEditor = ({ value, onChange, placeholder = "Enter text...", height = "200px" }) => {
+  const [QuillComponent, setQuillComponent] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    import('react-quill').then((mod) => {
+      if (isMounted) {
+        setQuillComponent(() => mod.default);
+      }
+    }).catch(() => {
+      // Swallow import errors to avoid breaking the page; caller can handle missing editor
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const modules = useMemo(() => ({
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
@@ -20,6 +35,14 @@ const RichTextEditor = ({ value, onChange, placeholder = "Enter text...", height
     'header', 'bold', 'italic', 'underline', 'strike',
     'list', 'bullet', 'indent', 'link', 'align'
   ];
+
+  if (!QuillComponent) {
+    return (
+      <div className="rich-text-editor" style={{ height }} />
+    );
+  }
+
+  const ReactQuill = QuillComponent;
 
   return (
     <div className="rich-text-editor">

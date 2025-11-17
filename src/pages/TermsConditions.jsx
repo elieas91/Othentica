@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Banner from '../components/ui/Banner';
 import TermsAndConditionsBG from '../assets/img/terms-and-conditions.webp';
 
