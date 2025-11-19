@@ -53,7 +53,7 @@ const DownloadAppCard = () => {
     return (
       <div className="bg-white rounded-xl shadow-2xl p-8 relative">
         <div className="min-h-[200px] flex flex-col justify-center">
-          <h2 className="text-4xl lg:text-4xl font-bold text-primary dark:text-neutral">
+          <h2 className="text-2xl lg:text-4xl font-bold text-primary dark:text-neutral">
             Download Othentica App
           </h2>
           <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4">
@@ -84,12 +84,12 @@ const DownloadAppCard = () => {
   return (
     <div className="bg-white rounded-xl shadow-2xl p-8 relative">
       <div className="min-h-[200px] flex flex-col justify-center">
-        <h2 className="text-4xl lg:text-4xl font-bold text-primary dark:text-neutral">
+        <h2 className="text-3xl lg:text-4xl font-bold text-primary dark:text-neutral">
           {cardData?.title || 'Download Othentica App'}
         </h2>
         {cardData?.description ? (
           <div 
-            className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 prose prose-lg max-w-none"
+            className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed my-4 prose prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: cardData.description }}
           />
         ) : (
@@ -118,7 +118,7 @@ const DownloadAppCard = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center gap-4 mt-6">
+      <div className="flex flex-col md:flex-row items-center gap-4 mt-6">
         {/* Google Play */}
         {cardData?.android_link && (
           <a

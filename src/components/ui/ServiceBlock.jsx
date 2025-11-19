@@ -46,7 +46,7 @@ const ServiceBlock = ({ service, index }) => {
 
   return (
     <>
-      <div ref={sectionRef} className="flex flex-col md:flex-row items-center my-12 relative min-h-[500px]">
+      <div ref={sectionRef} className="flex flex-col lg:flex-row items-center md:my-12 relative min-h-[500px]">
         {/* Image Side */}
         <div
           className={`w-full relative z-10  ${
@@ -54,65 +54,54 @@ const ServiceBlock = ({ service, index }) => {
           }`}
         >
           {/* Main Image */}
-          <div className="w-full h-[600px] bg-[#e4e4e4] flex items-center justify-center">
+          <div className="w-full h-[600px] bg-[#e4e4e4] lg:rounded-2xl flex items-center justify-center">
             {service.mobile1 && service.mobile2 && service.mobile3 ? (
               // Three mobile images side by side for the app service with scroll animation
-              <div className="flex gap-12 w-full h-full items-center justify-center rounded-4xl">
-                <img
-                  src={service.mobile1}
-                  alt={`${service.title} - Mobile View 1`}
-                  className={`w-[15%] h-[50%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
-                    isVisible 
-                      ? 'opacity-100 transform translate-y-0 scale-100' 
-                      : 'opacity-0 transform translate-y-8 scale-95'
-                  }`}
-                  style={{ 
-                    maxHeight: '300px',
-                    transitionDelay: '0ms'
-                  }}
-                />
-                <img
-                  src={service.mobile2}
-                  alt={`${service.title} - Mobile View 2`}
-                  className={`w-[15%] h-[70%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
-                    isVisible 
-                      ? 'opacity-100 transform translate-y-0 scale-100' 
-                      : 'opacity-0 transform translate-y-8 scale-95'
-                  }`}
-                  style={{ 
-                    maxHeight: '600px',
-                    transitionDelay: '400ms'
-                  }}
-                />
-                <img
-                  src={service.mobile3}
-                  alt={`${service.title} - Mobile View 3`}
-                  className={`w-[15%] h-[50%] object-cover  rounded-2xl overflow-visible transition-all duration-1000 ease-out ${
-                    isVisible 
-                      ? 'opacity-100 transform translate-y-0 scale-100' 
-                      : 'opacity-0 transform translate-y-8 scale-95'
-                  }`}
-                  style={{ 
-                    maxHeight: '600px',
-                    transitionDelay: '800ms'
-                  }}
-                />
-              </div>
-            ) : (
-              // Single image for other services
+            <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-12 justify-center items-end rounded-4xl">
+              {/* Image 1 */}
               <img
-                src={service.image1}
-                alt={service.title}
-                className="w-full h-full object-cover  rounded-2xl transition-all duration-500 ease-out hover:scale-105 hover:shadow-2xl"
-                style={{ maxHeight: '600px' }}
+                src={service.mobile1}
+                alt={`${service.title} - Mobile View 1`}
+                className={`flex-shrink-0 w-[30%] sm:w-[20%] md:w-[15%] h-auto object-contain rounded-2xl transition-all duration-1000 ease-out ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                }`}
+                style={{ transitionDelay: '0ms' }}
               />
-            )}
+
+              {/* Image 2 */}
+              <img
+                src={service.mobile2}
+                alt={`${service.title} - Mobile View 2`}
+                className={`flex-shrink-0 w-[30%] sm:w-[20%] md:w-[15%] h-auto object-contain rounded-2xl transition-all duration-1000 ease-out ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                }`}
+                style={{ transitionDelay: '400ms' }}
+              />
+
+              {/* Image 3 */}
+              <img
+                src={service.mobile3}
+                alt={`${service.title} - Mobile View 3`}
+                className={`flex-shrink-0 w-[30%] sm:w-[20%] md:w-[15%] h-auto object-contain rounded-2xl transition-all duration-1000 ease-out ${
+                  isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                }`}
+                style={{ transitionDelay: '800ms' }}
+              />
+            </div>
+          ) : (
+            // Single image for other services
+            <img
+              src={service.image1}
+              alt={service.title}
+              className="w-full h-full object-cover lg:rounded-2xl transition-all duration-500 ease-out hover:shadow-2xl"
+            />
+          )}
           </div>
         </div>
 
         {/* Text Side with Background */}
         <div
-          className={`w-full md:w-3/4 h-[120vh] md:h-[600px] object-cover p-8 pb-64 flex flex-col justify-center relative top-[5rem]  ${
+          className={`w-full md:w-3/4 h-[120vh] md:h-[600px] object-cover p-8 pb-64 flex flex-col justify-center relative lg:top-[5rem]  ${
             isEven
               ? 'md:order-1 md:-mr-32 items-start'
               : 'md:order-2 md:-ml-32 items-end'
@@ -126,14 +115,14 @@ const ServiceBlock = ({ service, index }) => {
           ></div>
 
           {/* Content */}
-          <div className="relative z-10 flex flex-col justify-start w-[85%] h-auto top-[6rem]">
+          <div className="relative z-10 flex flex-col justify-start w-[100%] lg:w-[85%] h-auto top-[6rem]">
             <div className="flex items-center mb-4">
               <img
                 src={service.icon}
                 alt="Service Icon"
-                className="w-24 mr-3 transition-all duration-500 ease-out hover:scale-110 hover:rotate-3"
+                className="w-20 lg:w-24 mr-1 lg:mr-3 transition-all duration-500 ease-out hover:scale-110 hover:rotate-3"
               />
-              <h2 className="text-3xl font-bold transition-all duration-500 ease-out hover:scale-105">{service.title}</h2>
+              <h2 className="text-2xl lg:text-3xl font-bold transition-all duration-500 ease-out hover:scale-105">{service.title}</h2>
             </div>
             <ul className="text-gray-600 text-xl px-4 leading-[2.5rem]">
               {service.descriptionBulletPoints.map((point, idx) => (
@@ -149,76 +138,64 @@ const ServiceBlock = ({ service, index }) => {
             </ul>
 
             {/* CTA Buttons */}
-            <div className="flex justify-center items-center gap-6 mt-8 px-10">
-              <div className="flex items-center gap-16">
-                {/* Flame Button with Title */}
-                <div className="flex flex-col items-center">
-                  <Tooltip
-                    content={`Learn more about ${service.title}`}
-                    position="top"
+            <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 mt-8 px-4 md:px-10">
+              {/* Flame Button */}
+              <div className="flex flex-col items-center">
+                <Tooltip content={`Learn more about ${service.title}`} position="top">
+                  <button
+                    onClick={openModal}
+                    className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-16 md:h-16"
+                    aria-label={`Learn more about ${service.title}`}
                   >
-                    <button
-                      onClick={openModal}
-                      className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full"
-                      aria-label={`Learn more about ${service.title}`}
-                    >
-                      <div className="relative group cursor-pointer">
-                        <div className="w-16 h-16 lg:w-12 lg:h-12 relative">
-                          <img
-                            src={Flame}
-                            alt="Learn More"
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
+                    {/* Main Flame Image */}
+                    <img
+                      src={Flame}
+                      alt="Learn More"
+                      className="w-full h-full object-contain rounded-full"
+                    />
 
-                        {/* Static glow effects - no animations */}
-                        {/* <div
-                        className="absolute inset-0 w-16 h-16 lg:w-12 lg:h-12 bg-gradient-to-t from-orange-400 via-yellow-300 to-transparent rounded-full opacity-60 blur-sm"
-                      ></div> */}
-                        <div className="absolute inset-0 w-16 h-16 lg:w-12 lg:h-12 bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent cursor-pointer rounded-full opacity-40 blur-md"></div>
+                    {/* Glow Effect */}
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-t from-yellow-400 via-orange-300 to-transparent opacity-40 blur-md"></div>
 
-                        <div className="absolute -top-2 -left-1 w-18 h-18 lg:w-14 lg:h-14 bg-gradient-to-t from-orange-400 via-yellow-300 cursor-pointer to-transparent rounded-full opacity-50 blur-sm"></div>
-                        <div className="absolute -top-1 -right-1 w-16 h-16 lg:w-14 lg:h-14 bg-gradient-to-t from-yellow-400 via-orange-300 cursor-pointer to-transparent rounded-full opacity-40 blur-sm"></div>
+                    {/* Spark dots */}
+                    <div className="absolute -top-2 -left-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-yellow-300 opacity-80"></div>
+                    <div className="absolute top-2 right-2 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-400 opacity-60"></div>
+                    <div className="absolute top-4 left-3 w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-orange-300 opacity-70"></div>
+                  </button>
+                </Tooltip>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
+                  Learn more
+                </span>
+              </div>
 
-                        <div className="absolute -top-1 left-1/2 w-2 h-2 bg-yellow-300 cursor-pointer rounded-full opacity-80"></div>
-                        <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 cursor-pointer rounded-full opacity-60"></div>
-                        <div className="absolute top-4 left-3 w-1.5 h-1.5 bg-orange-300 cursor-pointer rounded-full opacity-70"></div>
-                      </div>
-                    </button>
-                  </Tooltip>
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Learn more</span>
+              {/* WhatsApp Button */}
+              <div className="flex flex-col items-center mt-4 md:mt-0">
+                <div className="relative group cursor-pointer transition-transform hover:scale-105 w-16 h-16 sm:w-20 sm:h-20 md:w-16 md:h-16">
+                  <WhatsAppButton className="w-full h-full aspect-square rounded-full" />
                 </div>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
+                  Get in Touch
+                </span>
+              </div>
 
-                {/* WhatsApp Button with Title */}
-                <div className="flex flex-col items-center">
-                  <div className="relative group cursor-pointer transition-transform hover:scale-105">
-                    <WhatsAppButton className="w-16 h-16 lg:w-12 lg:h-12" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Get in Touch</span>
-                </div>
-
-                {/* Message Icon with Title */}
-                <div className="flex flex-col items-center">
-                  <Tooltip
-                    content="Contact us for more information"
-                    position="top"
+              {/* Email Button */}
+              <div className="flex flex-col items-center mt-4 md:mt-0">
+                <Tooltip content="Contact us for more information" position="top">
+                  <button
+                    onClick={() => window.open('/contact', '_blank')}
+                    className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-16 md:h-16"
+                    aria-label="Contact us"
                   >
-                    <button
-                      onClick={() => window.open('/contact', '_blank')}
-                      className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 rounded-full"
-                      aria-label="Contact us"
-                    >
-                      <div className="w-16 h-16 lg:w-12 lg:h-12 relative">
-                        <img
-                          src={EmailIcon}
-                          alt="Contact Us"
-                          className="w-full h-full object-contain transition-all duration-300 ease-out group-hover:scale-110"
-                        />
-                      </div>
-                    </button>
-                  </Tooltip>
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">Contact Us</span>
-                </div>
+                    <img
+                      src={EmailIcon}
+                      alt="Contact Us"
+                      className="w-full h-full object-contain rounded-full"
+                    />
+                  </button>
+                </Tooltip>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
+                  Contact Us
+                </span>
               </div>
             </div>
           </div>

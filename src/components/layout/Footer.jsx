@@ -126,56 +126,66 @@ const Footer = ({ minimal = false }) => {
 
         {/* Bottom Footer */}
         <div
-          className={`border-t border-white/20 pt-8 ${
-            !minimal ? 'mt-8' : 'mt-0'
-          }`}
-        >
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-row items-center justify-center space-x-0 text-sm text-center">
-              <a
-                href="/terms-conditions"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                Terms & Conditions
-              </a>
-              <span className="text-gray-400">|</span>
-              <a
-                href="/privacy-policy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                Privacy Policy
-              </a>
-              <span className="text-gray-400">|</span>
-              <a
-                href="/disclaimers"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out"
-              >
-                Disclaimers
-              </a>
-              <span className="text-gray-400">|</span>
-              <span className="px-3 text-gray-200">
-                © 2025 Othentica. All rights reserved.
-              </span>
-            </div>
-            <a
-              href="https://horiverde.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 mt-6 text-gray-200 hover:text-neutral hover:scale-105 transition-all duration-300 ease-in-out text-sm font-medium"
-            >
-              Powered By{' '}
-              <span className="uppercase text-secondary hover:text-accent transition-colors duration-300">
-                Horiverde
-              </span>
-            </a>
-          </div>
-        </div>
+  className={`border-t border-white/20 pt-8 ${
+    !minimal ? "mt-8" : "mt-0"
+  }`}
+>
+  <div className="flex flex-col items-center justify-center">
+    {/* Links Row */}
+    <div className="flex flex-wrap items-center justify-center gap-3 md:gap-0 text-sm text-center">
+
+      <a
+        href="/terms-conditions"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all"
+      >
+        Terms & Conditions
+      </a>
+
+      <span className="text-gray-400 hidden md:inline">|</span>
+
+      <a
+        href="/privacy-policy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all"
+      >
+        Privacy Policy
+      </a>
+
+      <span className="text-gray-400 hidden md:inline">|</span>
+
+      <a
+        href="/disclaimers"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 text-gray-200 hover:text-neutral hover:scale-105 transition-all"
+      >
+        Disclaimers
+      </a>
+
+      <span className="text-gray-400 hidden md:inline">|</span>
+
+      <span className="px-3 text-gray-200 block">
+        © 2025 Othentica. All rights reserved.
+      </span>
+    </div>
+
+    {/* Powered By */}
+    <a
+      href="https://horiverde.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-3 mt-6 text-gray-200 hover:text-neutral hover:scale-105 transition-all text-sm font-medium"
+    >
+      Powered By{" "}
+      <span className="uppercase text-secondary hover:text-accent transition-colors">
+        Horiverde
+      </span>
+    </a>
+  </div>
+</div>
       </div>
     </footer>
   );

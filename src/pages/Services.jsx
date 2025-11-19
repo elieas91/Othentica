@@ -88,7 +88,7 @@ const Services = () => {
 
   return (
     <>
-      <div ref={bannerRef} className="min-h-screen dark:bg-primary">
+      <div ref={bannerRef} className="dark:bg-primary">
         <div className={`transition-all duration-1000 ease-out ${
           isVisible 
             ? 'opacity-100 transform translate-y-0' 
@@ -106,7 +106,7 @@ const Services = () => {
           />
         </div>
       </div>
-      <div className="min-h-screen  dark:bg-primary pb-20">
+      <div className="  dark:bg-primary pb-20">
         {servicesData.map((service, index) => {
           // const bgColors = ['bg-white', 'bg-neutral'];
           // const bgColor = bgColors[index % bgColors.length]; // Currently unused but kept for future styling
@@ -125,7 +125,7 @@ const Services = () => {
             <section
               key={service.id}
               id={service.sectionId}
-              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] py-4 transition-all duration-1000 ease-out hover:bg-gradient-to-r hover:from-transparent hover:via-gray-50/5 hover:to-transparent dark:hover:via-gray-800/5`}
+              className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] transition-all duration-1000 ease-out hover:bg-gradient-to-r hover:from-transparent hover:via-gray-50/5 hover:to-transparent dark:hover:via-gray-800/5`}
             >
               {/* Keep content centered */}
               <div className="max-w mx-auto">
@@ -166,7 +166,7 @@ const Services = () => {
           );
         })}
 
-        <div ref={ctaRef} className="max-w-7xl mx-auto">
+        <div ref={ctaRef} className="max-w-3xl lg:max-w-7xl mx-auto">
           <div className={`bg-neutral dark:bg-primary rounded-2xl p-12 text-center transition-all duration-1000 ease-out ${
             visibleSections.has('cta')
               ? 'opacity-100 transform translate-y-0 scale-100'

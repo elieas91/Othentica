@@ -23,11 +23,11 @@ const Features = ({ appFeaturesData, isLoading }) => {
 
   return (
     <AnimateOnScroll animation="fadeInLeft" delay={200} duration={800}>
-      <section className="py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
+      <section className="py-8 lg:py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="flex justify-center items-center mb-8">
-              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
+          <div className="text-center mb-0 lg:mb-8">
+            <div className="flex justify-center items-center mb-0 lg:mb-8">
+              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-6 py-4 lg:px-8 lg:py-6">
                 <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
                   Features
                 </h2>
@@ -35,7 +35,7 @@ const Features = ({ appFeaturesData, isLoading }) => {
             </div>
           </div>
           <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
-            <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">
+            <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
               {appFeaturesData.map((feature) => (
                 <li key={feature.id} className="flex items-start mb-2">
                   <img
@@ -72,11 +72,11 @@ const Benefits = ({ appBenefitsData, isLoading }) => {
 
   return (
     <AnimateOnScroll animation="fadeInRight" delay={400} duration={800}>
-      <section className="py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
+      <section className="py-8 lg:py-16 px-8 lg:px-16 rounded-3xl shadow-professional bg-white dark:bg-primary relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <div className="flex justify-center items-center mb-8">
-              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-8 py-6">
+          <div className="text-center mb-0 lg:mb-8">
+            <div className="flex justify-center items-center mb-0 lg:mb-8">
+              <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-6 py-4 lg:px-8 lg:py-6">
                 <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
                   Benefits
                 </h2>
@@ -84,7 +84,7 @@ const Benefits = ({ appBenefitsData, isLoading }) => {
             </div>
           </div>
           <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
-            <ul className="text-gray-600 text-xl text-left px-4 leading-[2.5rem] mx-auto">
+            <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
               {appBenefitsData.map((benefit) => (
                 <li key={benefit.id} className="flex items-start mb-2">
                   <img

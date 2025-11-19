@@ -79,7 +79,7 @@ const Security = () => {
         className="absolute left-8 lg:left-36 top-1/2 w-32 lg:w-44 opacity-30 pointer-events-none "
       />
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+        <div className="text-center mb-8 lg:mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
             Entreprise-Grade Security and Scale
           </h2>
@@ -100,7 +100,7 @@ const Security = () => {
             <p className="text-gray-600">Using fallback data...</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {securityCards.map((security) => {
               return (
                 <Card
