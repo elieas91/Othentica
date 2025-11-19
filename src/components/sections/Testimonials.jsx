@@ -387,14 +387,14 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   return (
     <>
-      <section className="py-12 sm:py-16 px-4 sm:px-8 lg:px-16 bg-white overflow-hidden">
+      <section className="py-6 lg:py-12 px-4 lg:px-16 bg-white overflow-hidden">
         {/* Subtle background pattern overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-10"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(212,118,68,0.01)_0%,transparent_50%)]"></div>
         <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(244,223,196,0.03)_0%,transparent_50%)]"></div>
         <div className="max-w-7xl mx-auto relative z-10">
         <div
-          className={`grid ${
+          className={`grid grid-cols-1 ${
             showPics ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
           } gap-12 items-start`}
         >

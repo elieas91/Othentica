@@ -144,7 +144,7 @@ const Clients = () => {
   if (!shouldUseCarousel) {
     // Responsive grid/flex layout for 6 or fewer clients
     return (
-      <section className="py-16 px-8 lg:px-16 bg-white">
+      <section className="py-8 px-8 lg:py-16 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
@@ -202,7 +202,7 @@ const Clients = () => {
   // Carousel layout for more than 6 clients
 
   return (
-    <section className="py-16 px-8 lg:px-16">
+    <section className="py-8 px-8 lg:py-16 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">

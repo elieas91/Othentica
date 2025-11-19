@@ -78,7 +78,7 @@ const SocialMedia = () => {
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-center mb-6">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary">
+              <div className="w-12 aspect-square shrink-0 rounded-full overflow-hidden border-2 border-primary">
                 <img 
                   src="https://cdn2.behold.pictures/NA1zpvlWxogplbcsNXeDviXQWKD2/17841477387220688/profile.webp" 
                   alt="Instagram Profile" 

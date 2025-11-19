@@ -7,7 +7,7 @@ const CarouselBanner = ({
   description,
   buttonText,
   buttonVariant = 'accent',
-  hasGradientTransparentBottom = true,
+  hasGradientTransparentBottom = false,
   minHeight = 'min-h-[100vh]',
   buttonOnClick,
   backgroundImages = [],
@@ -51,7 +51,7 @@ const CarouselBanner = ({
 
   return (
     <div
-      className={`relative ${minHeight} flex items-center justify-center overflow-hidden ${className}`}
+      className={`relative ${minHeight} flex items-center bg-blue-700 justify-center overflow-hidden ${className}`}
     >
       {/* Background images carousel */}
       {backgroundImages.length > 0 && (
@@ -87,7 +87,7 @@ const CarouselBanner = ({
       )}
 
       {/* Content */}
-      <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto">
+      <div className="relative z-20 text-center px-6 py-0 max-w-4xl mx-auto">
         {title && (
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight transition-all duration-700 ease-out hover:scale-105">
             {title}
@@ -124,9 +124,10 @@ const CarouselBanner = ({
       {/* Navigation arrows - only show if more than 1 image */}
       {backgroundImages.length > 1 && (
         <>
+          {/* Desktop arrows */}
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
+            className="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
             aria-label="Previous image"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,13 +136,35 @@ const CarouselBanner = ({
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
+            className="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
             aria-label="Next image"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
+
+          {/* Mobile arrows */}
+          <div className="flex justify-between mt-6 px-6 md:hidden absolute bottom-20 left-0 w-full z-30">
+            <button
+              onClick={goToPrevious}
+              className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
+              aria-label="Previous image"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={goToNext}
+              className="bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-all duration-300"
+              aria-label="Next image"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </>
       )}
 
@@ -164,10 +187,8 @@ const CarouselBanner = ({
       )} */}
 
       {/* Decorative elements */}
-      {hasGradientTransparentBottom ? (
+      {hasGradientTransparentBottom && (
         <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white dark:from-primary to-transparent z-30"></div>
-      ) : (
-        <div className="absolute bottom-0 left-0 w-full h-16 bg-white dark:bg-primary z-30"></div>
       )}
     </div>
   );
