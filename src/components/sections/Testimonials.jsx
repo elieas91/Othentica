@@ -23,7 +23,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const getApiCategory = (categoryId) => {
     const mapping = {
       'the-othentica-app': 'app',
-      'tailored-programs': 'programs', 
+      'tailored-programs': 'programs',
       'talks-workshops': 'talks',
       'one-to-one-guidance': 'one-to-one'
     };
