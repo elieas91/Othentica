@@ -22,6 +22,7 @@ import { getT } from '../../data/translations';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const { locale } = useContext(PublicLocaleContext);
+  const isArabic = locale === 'ar';
   const t = getT(locale);
   // Map categoryId to API category parameter
   const getApiCategory = (categoryId) => {
@@ -425,8 +426,8 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   const isExpanded = expandedQuotes[testimonial.id];
                   
                   return (
-                    <div key={testimonial.id} className="px-2">
-                      <div className="flex flex-col justify-center min-h-[200px]">
+                    <div key={testimonial.id} className="px-4 sm:px-6">
+                      <div className="flex flex-col justify-center min-h-[200px]" dir={isArabic ? 'rtl' : undefined}>
                         <blockquote
                           className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium"
                           style={{ display: 'inline' }}

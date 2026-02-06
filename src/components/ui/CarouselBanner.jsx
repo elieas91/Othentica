@@ -87,8 +87,8 @@ const CarouselBanner = ({
         </div>
       )}
 
-      {/* Content */}
-      <div className="relative z-20 text-center px-6 py-0 max-w-4xl mx-auto" dir={dir}>
+      {/* Content - generous horizontal padding so Arabic/RTL titles are not clipped */}
+      <div className="relative z-20 text-center px-6 sm:px-8 md:px-12 py-0 max-w-4xl mx-auto" dir={dir}>
         {title && (
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight transition-all duration-700 ease-out hover:scale-105">
             {title}

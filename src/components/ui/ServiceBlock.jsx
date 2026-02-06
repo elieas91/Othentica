@@ -114,8 +114,8 @@ const ServiceBlock = ({ service, index, dir }) => {
             }}
           ></div>
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col justify-start w-[100%] lg:w-[85%] h-auto top-[6rem]" dir={dir}>
+          {/* Content - extra horizontal padding so Arabic/RTL text is not cut off */}
+          <div className="relative z-10 flex flex-col justify-start w-[100%] lg:w-[85%] h-auto top-[6rem] px-4 sm:px-6" dir={dir}>
             <div className="flex items-center mb-4">
               <img
                 src={service.icon}

@@ -212,11 +212,11 @@ const Services = () => {
               className={`relative w-screen left-1/2 right-1/2 -mx-[50vw] transition-all duration-1000 ease-out hover:bg-gradient-to-r hover:from-transparent hover:via-gray-50/5 hover:to-transparent dark:hover:via-gray-800/5`}
               dir={service.dir}
             >
-              {/* Keep content centered */}
-              <div className="max-w mx-auto">
+              {/* Keep content centered with padding so Arabic/RTL text is not clipped */}
+              <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
                 <ServiceBlock service={service} index={index} dir={service.dir} />
               </div>
-              <div className="w-full flex justify-center items-center mt-32 mb-24" dir={service.dir}>
+              <div className="w-full flex justify-center items-center mt-32 mb-24 px-4 sm:px-8" dir={service.dir}>
                 <blockquote className="text-center italic text-2xl text-gray-700 max-w-2xl font-semibold transition-all duration-700 ease-out hover:scale-105 hover:text-gray-800 dark:hover:text-gray-200">
                   {`"${service.quotation}"`}
                 </blockquote>
