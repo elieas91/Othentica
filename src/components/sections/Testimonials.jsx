@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import Slider from 'react-slick';
 import { createPortal } from 'react-dom';
 import Flame from '../../assets/img/flame.webp';
@@ -16,9 +16,13 @@ import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import Button from '../ui/Button';
 import TestimonialForm from '../ui/TestimonialForm';
-import { getApiUrl, normalizeUploadUrl } from '../../config/api';
+import { normalizeUploadUrl } from '../../config/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   // Map categoryId to API category parameter
   const getApiCategory = (categoryId) => {
     const mapping = {
@@ -329,7 +333,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-primary font-medium">Loading testimonials...</p>
+            <p className="text-primary font-medium">{t('loadingTestimonials')}</p>
           </div>
         </div>
       </section>
@@ -343,17 +347,17 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
-              Testimonials
+              {t('testimonials')}
             </h2>
             <p className="text-gray-600 mb-8">
-              {/* {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'} */}
-              {error ? 'Unable to load testimonials. Please try again later.' : ''}
+              {/* {error ? t('unableToLoadTestimonials') : t('noTestimonialsAvailable')} */}
+              {error ? t('unableToLoadTestimonials') : ''}
             </p>
             <Button
               variant="secondary"
               onClick={() => setShowForm(true)}
             >
-              Add your Testimonial
+              {t('addYourTestimonial')}
             </Button>
           </div>
         </div>
@@ -368,16 +372,16 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
-              Testimonials
+              {t('testimonials')}
             </h2>
             <p className="text-gray-600 mb-8">
-              {error ? 'Unable to load testimonials. Please try again later.' : 'No testimonials available at the moment.'}
+              {error ? t('unableToLoadTestimonials') : t('noTestimonialsAvailable')}
             </p>
             <Button
               variant="secondary"
               onClick={() => setShowForm(true)}
             >
-              Add your Testimonial
+              {t('addYourTestimonial')}
             </Button>
           </div>
         </div>
@@ -401,7 +405,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
           {/* Left Side - Testimonial with Carousel */}
           <div className="text-left">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
-              Testimonials
+              {t('testimonials')}
             </h2>
 
             {/* Category Badge */}
@@ -466,7 +470,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   className="w-full sm:w-auto"
                   onClick={() => setShowForm(true)}
                 >
-                  Add your Testimonial
+                  {t('addYourTestimonial')}
                 </Button>
               </div>
           </div>
@@ -496,7 +500,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                       </h3>
                       <p className="text-gray-600 text-sm">{cat.description}</p>
                       <div className="mt-3 text-xs text-primary/70 font-medium">
-                        {cat.count} testimonials
+                        {cat.count} {t('testimonials')}
                       </div>
                     </div>
                   </div>
@@ -524,7 +528,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                         </h3>
                         <p className="text-gray-600 text-sm">{cat.description}</p>
                         <div className="mt-3 text-xs text-primary/70 font-medium">
-                          {cat.count} testimonials
+                          {cat.count} {t('testimonials')}
                         </div>
                       </div>
                     </div>

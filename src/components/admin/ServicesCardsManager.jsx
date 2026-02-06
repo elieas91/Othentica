@@ -1,15 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
   TrashIcon, 
   EyeIcon,
-  XMarkIcon
+  XMarkIcon,
+  LanguageIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
+import { translateText } from '../../utils/translate';
 
 const ServicesCardsManager = () => {
+  const { isArabic } = useContext(DashboardLanguageContext);
+  const prevIsArabic = useRef(isArabic);
+  const [translatingField, setTranslatingField] = useState(null);
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -74,6 +81,21 @@ const ServicesCardsManager = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState(null);
 
+  const handleTranslateToArabic = async (fieldName) => {
+    const value = (formData[fieldName] || '').trim();
+    if (!value) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
+
   const fetchCards = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -94,6 +116,14 @@ const ServicesCardsManager = () => {
   useEffect(() => {
     fetchCards();
   }, [fetchCards]);
+
+  // Refetch when dashboard language changes so cards show correct language
+  useEffect(() => {
+    if (prevIsArabic.current !== isArabic) {
+      prevIsArabic.current = isArabic;
+      fetchCards();
+    }
+  }, [isArabic, fetchCards]);
 
   // Handle modal positioning, body scroll, and ESC key
   useEffect(() => {
@@ -134,11 +164,13 @@ const ServicesCardsManager = () => {
     try {
       setIsLoading(true);
       
-      // Create data object for API call - only essential fields
       const submitData = {
         title: data.title || '',
+        title_ar: data.title_ar || '',
         description: data.description || '',
+        description_ar: data.description_ar || '',
         button_text: data.button_text || 'Explore Solution',
+        button_text_ar: data.button_text_ar || '',
         section_id: data.section_id || '',
         icon: data.icon || null
       };
@@ -165,11 +197,13 @@ const ServicesCardsManager = () => {
     try {
       setIsLoading(true);
       
-      // Create data object for API call - only essential fields
       const submitData = {
         title: data.title || '',
+        title_ar: data.title_ar || '',
         description: data.description || '',
+        description_ar: data.description_ar || '',
         button_text: data.button_text || 'Explore Solution',
+        button_text_ar: data.button_text_ar || '',
         section_id: data.section_id || '',
         icon: data.icon || null
       };
@@ -223,10 +257,13 @@ const ServicesCardsManager = () => {
     
     setFormData({
       title: card.title || '',
+      title_ar: card.title_ar || '',
       description: card.description || '',
+      description_ar: card.description_ar || '',
       button_text: card.button_text || 'Explore Solution',
+      button_text_ar: card.button_text_ar || '',
       section_id: card.section_id || '',
-      icon: null // Reset file input
+      icon: null
     });
     setImagePreview(card.icon_url || null);
     setShowForm(true);
@@ -250,8 +287,11 @@ const ServicesCardsManager = () => {
     setEditingCard(null);
     setFormData({
       title: '',
+      title_ar: '',
       description: '',
+      description_ar: '',
       button_text: 'Explore Solution',
+      button_text_ar: '',
       section_id: '',
       icon: null
     });
@@ -336,12 +376,12 @@ const ServicesCardsManager = () => {
             <div key={card.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
+                  <div className="flex-1" dir={isArabic ? 'rtl' : 'ltr'}>
                     <h4 className="text-lg font-bold text-primary font-poppins mb-2">
-                      {card.title || 'Untitled Card'}
+                      {isArabic ? (card.title_ar || card.title || 'Untitled Card') : (card.title || 'Untitled Card')}
                     </h4>
                     <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                      {card.description || 'No description provided'}
+                      {isArabic ? (card.description_ar || card.description || 'No description provided') : (card.description || 'No description provided')}
                     </p>
                     <p className="text-xs text-gray-500 mt-2">
                       Section ID: {card.section_id || 'N/A'}
@@ -437,19 +477,50 @@ const ServicesCardsManager = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Title
+                    Title (EN)
+                  </label>
+                  <div className="flex gap-2 items-start">
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title || ''}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="Enter card title"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('title')}
+                      disabled={translatingField === 'title' || !(formData.title || '').trim()}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'title' ? (
+                        <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <LanguageIcon className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Title (AR)
                   </label>
                   <input
                     type="text"
-                    name="title"
-                    value={formData.title || ''}
+                    name="title_ar"
+                    value={formData.title_ar || ''}
                     onChange={handleInputChange}
+                    dir="rtl"
                     className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter card title"
-                    required
+                    placeholder="العنوان بالعربية"
                   />
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
                     Section ID
@@ -468,31 +539,91 @@ const ServicesCardsManager = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Description
+                  Description (EN)
+                </label>
+                <div className="flex gap-2 items-start">
+                  <textarea
+                    name="description"
+                    value={formData.description || ''}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
+                    placeholder="Enter card description..."
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateToArabic('description')}
+                    disabled={translatingField === 'description' || !(formData.description || '').trim()}
+                    className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'description' ? (
+                      <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <LanguageIcon className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                  Description (AR)
                 </label>
                 <textarea
-                  name="description"
-                  value={formData.description || ''}
+                  name="description_ar"
+                  value={formData.description_ar || ''}
                   onChange={handleInputChange}
+                  dir="rtl"
                   rows={4}
                   className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                  placeholder="Enter card description..."
-                  required
+                  placeholder="الوصف بالعربية"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Button Text
-                </label>
-                <input
-                  type="text"
-                  name="button_text"
-                  value={formData.button_text || ''}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                  placeholder="e.g., Explore Solution"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Button Text (EN)
+                  </label>
+                  <div className="flex gap-2 items-start">
+                    <input
+                      type="text"
+                      name="button_text"
+                      value={formData.button_text || ''}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="e.g., Explore Solution"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('button_text')}
+                      disabled={translatingField === 'button_text' || !(formData.button_text || '').trim()}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'button_text' ? (
+                        <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <LanguageIcon className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Button Text (AR)
+                  </label>
+                  <input
+                    type="text"
+                    name="button_text_ar"
+                    value={formData.button_text_ar || ''}
+                    onChange={handleInputChange}
+                    dir="rtl"
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="نص الزر بالعربية"
+                  />
+                </div>
               </div>
 
               <div>
@@ -584,13 +715,15 @@ const ServicesCardsManager = () => {
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6" dir={isArabic ? 'rtl' : 'ltr'}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                     Title
                   </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingCard.title || 'Untitled Card'}</p>
+                  <p className="text-lg font-medium text-gray-900">
+                    {isArabic ? (viewingCard.title_ar || viewingCard.title || 'Untitled Card') : (viewingCard.title || 'Untitled Card')}
+                  </p>
                 </div>
 
                 <div>
@@ -607,7 +740,7 @@ const ServicesCardsManager = () => {
                 </label>
                 <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
                   <p className="text-gray-800 text-lg leading-relaxed">
-                    {viewingCard.description || 'No description provided'}
+                    {isArabic ? (viewingCard.description_ar || viewingCard.description || 'No description provided') : (viewingCard.description || 'No description provided')}
                   </p>
                 </div>
               </div>
@@ -616,7 +749,9 @@ const ServicesCardsManager = () => {
                 <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                   Button Text
                 </label>
-                <p className="text-lg font-medium text-gray-900">{viewingCard.button_text || 'Explore Solution'}</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {isArabic ? (viewingCard.button_text_ar || viewingCard.button_text || 'Explore Solution') : (viewingCard.button_text || 'Explore Solution')}
+                </p>
               </div>
 
               <div>

@@ -4,8 +4,10 @@ import WhatsappIcon from '../../assets/img/whatsapp_icon.webp';
 import EmailIcon from '../../assets/img/email_icon.webp';
 import WhatsAppButton from '../ui/WhatsappButton';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { createPortal } from 'react-dom';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 import DatePickerWrapper from '../ui/DatePickerWrapper';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
@@ -14,6 +16,8 @@ import hibaCalendarService from '../../services/hibaCalendarService';
 import apiService from '../../services/api';
 
 const MeetTheFounders = () => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [isBooking, setIsBooking] = useState(false);
@@ -35,31 +39,39 @@ const MeetTheFounders = () => {
             return;
           }
 
-          // Process CEO data
+          // Process CEO data (with Arabic fields from dashboard)
           const ceo = content.ceo_name || content.ceo_message || content.ceo_image_url
             ? {
                 id: 1,
                 name: content.ceo_name || 'CEO',
-                role: content.ceo_title ? [content.ceo_title] : ['Co-founder & CEO'],
+                name_ar: content.ceo_name_ar || '',
+                role: content.ceo_title ? [content.ceo_title] : [],
+                roleFallbackKey: 'coFounderCEO',
+                role_ar: content.ceo_title_ar || '',
                 subtitle: 'A Message from Our CEO',
                 image: content.ceo_image_url || teamData[0]?.image,
                 socialMedia: teamData[0]?.socialMedia || { linkedin: '#', whatsapp: 'Hiba', email: 'info@othentica-app.com' },
                 flipped: false,
-                description: content.ceo_message ? content.ceo_message : ''
+                description: content.ceo_message ? content.ceo_message : '',
+                description_ar: content.ceo_message_ar || ''
               }
             : null;
 
-          // Process COO data
+          // Process COO data (with Arabic fields from dashboard)
           const coo = content.coo_name || content.coo_message || content.coo_image_url
             ? {
                 id: 2,
                 name: content.coo_name || 'COO',
-                role: content.coo_title ? [content.coo_title] : ['Co-founder & COO'],
+                name_ar: content.coo_name_ar || '',
+                role: content.coo_title ? [content.coo_title] : [],
+                roleFallbackKey: 'coFounderCOO',
+                role_ar: content.coo_title_ar || '',
                 subtitle: 'A Message from our COO',
                 image: content.coo_image_url || teamData[1]?.image,
                 socialMedia: teamData[1]?.socialMedia || { linkedin: '#', whatsapp: 'Tarek', email: 'info@othentica-app.com' },
                 flipped: true,
-                description: content.coo_message ? content.coo_message : ''
+                description: content.coo_message ? content.coo_message : '',
+                description_ar: content.coo_message_ar || ''
               }
             : null;
 
@@ -198,13 +210,23 @@ const MeetTheFounders = () => {
     return day >= 1 && day <= 4; // Monday = 1, Thursday = 4
   };
 
+  const getSubtitle = (member) =>
+    isArabic ? (member.id === 1 ? t('messageFromCEO') : t('messageFromCOO')) : member.subtitle;
+  const getName = (member) => (isArabic && member.name_ar ? member.name_ar : member.name);
+  const getRoleLines = (member) => {
+    if (isArabic && member.role_ar) return [member.role_ar];
+    if (member.role?.length) return member.role;
+    return member.roleFallbackKey ? [t(member.roleFallbackKey)] : [];
+  };
+  const getDescription = (member) => (isArabic && member.description_ar ? member.description_ar : member.description);
+
   return (
     <section className="pt-20 px-0" id="meet">
-      <div className="max-w-[90%] w-full mx-auto">
+      <div className="max-w-[90%] w-full mx-auto" dir={isArabic ? 'rtl' : undefined}>
         <AnimateOnScroll animation="fadeInUp" delay={100}>
           <div className="text-center mb-16">
             <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
-              Meet the Founders
+              {t('meetTheFounders')}
             </h2>
           </div>
         </AnimateOnScroll>
@@ -224,47 +246,40 @@ const MeetTheFounders = () => {
                 index % 2 === 0 ? ' bg-white mb-16 p-4' : 'bg-white'
               } rounded-2xl `}
             >
-              {/* Text Content - Position changes based on flipped property */}
+              {/* Text Content - Position changes based on flipped property; extra spacing from buttons in RTL */}
               <div
                 className={`flex flex-col w-full md:w-1/2 ${
                   member.flipped ? 'order-1 md:order-2' : 'order-2 md:order-1'
-                }`}
+                } ${isArabic ? 'md:me-10' : ''}`}
               >
                 <h3 className="text-5xl text-center md:text-left font-bold font-poppins capitalize text-secondary dark:text-neutral mb-6">
-                  {member.subtitle}
+                  {getSubtitle(member)}
                 </h3>
                 {/* Name in outlined box */}
                 <div className="self-center md:self-start border-2 border-primary dark:border-neutral rounded-lg px-4 py-2 mb-6">
                   <span className="text-xl font-bold text-primary dark:text-neutral">
-                    {member.name}
+                    {getName(member)}
                   </span>
                 </div>
                 <div className="text-xl font-normal text-primary font-sans dark:text-neutral mb-6">
                   {/* Description with HTML content */}
-                  {member.description && (
-                    <div 
+                  {getDescription(member) && (
+                    <div
                       className="mb-6"
-                      dangerouslySetInnerHTML={{ __html: member.description }}
+                      dangerouslySetInnerHTML={{ __html: getDescription(member) }}
                     />
                   )}
 
                   {/* Name and role */}
                   <div className="mt-6">
-                    <p className="font-bold">{member.name}</p>
-                    {Array.isArray(member.role) ? (
-                      member.role.map((role, idx) => (
-                        <div 
-                          key={idx} 
-                          className="font-bold"
-                          dangerouslySetInnerHTML={{ __html: role }}
-                        />
-                      ))
-                    ) : (
-                      <div 
+                    <p className="font-bold">{getName(member)}</p>
+                    {getRoleLines(member).map((role, idx) => (
+                      <div
+                        key={idx}
                         className="font-bold"
-                        dangerouslySetInnerHTML={{ __html: member.role }}
+                        dangerouslySetInnerHTML={{ __html: role }}
                       />
-                    )}
+                    ))}
                   </div>
                 </div>
               </div>
@@ -278,7 +293,7 @@ const MeetTheFounders = () => {
                 <div className="relative h-fit overflow-visible rounded-lg flex justify-center items-center">
                   <img
                     src={member.image}
-                    alt={member.name}
+                    alt={getName(member)}
                     className="w-2/3 object-cover"
                     style={{
                       WebkitMaskImage: `
@@ -289,13 +304,13 @@ const MeetTheFounders = () => {
                       maskComposite: 'intersect', // for standard syntax
                     }}
                   />
-                  {/* Social Media Buttons */}
+                  {/* Social Media Buttons - extra margin in RTL to space from text */}
                   <div
                     className={`absolute top-1/2 transform -translate-y-1/2 space-y-3 ${
                       member.flipped
                         ? 'left-0 md:left-[10%] -translate-x-2 md:translate-x-0'
                         : 'right-0 -translate-x-2 md:translate-x-1/2'
-                    }`}
+                    } ${isArabic ? 'md:ms-6' : ''}`}
                   >
                     {/* Book a Meeting Button - Only for first founder (Hiba Tarazi) */}
                     {index === 0 && (

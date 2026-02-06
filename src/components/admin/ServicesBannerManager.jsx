@@ -1,14 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import apiService from '../../services/api';
 import { PlusIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { translateText } from '../../utils/translate';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
 
 const ServicesBannerManager = () => {
+  const { isArabic } = useContext(DashboardLanguageContext);
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [formData, setFormData] = useState({ title: '', description: '', images: [], alt_text: '' });
+  const [formData, setFormData] = useState({
+    title: '', description: '', images: [], alt_text: '',
+    title_ar: '', description_ar: '', alt_text_ar: ''
+  });
   const [previewUrls, setPreviewUrls] = useState([]);
+  const [translatingField, setTranslatingField] = useState(null);
+
+  const handleTranslateToArabic = async (fieldName) => {
+    const value = (formData[fieldName] || '').trim();
+    if (!value) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
 
   const load = async () => {
     setIsLoading(true);
@@ -33,14 +56,22 @@ const ServicesBannerManager = () => {
 
   const openCreate = () => {
     setEditing(null);
-    setFormData({ title: '', description: '', images: [], alt_text: '' });
+    setFormData({ title: '', description: '', images: [], alt_text: '', title_ar: '', description_ar: '', alt_text_ar: '' });
     setPreviewUrls([]);
     setFormOpen(true);
   };
 
   const openEdit = (img) => {
     setEditing(img);
-    setFormData({ title: img.title || '', description: img.description || '', images: [], alt_text: img.alt_text || '' });
+    setFormData({
+      title: img.title || '',
+      description: img.description || '',
+      images: [],
+      alt_text: img.alt_text || '',
+      title_ar: img.title_ar || '',
+      description_ar: img.description_ar || '',
+      alt_text_ar: img.alt_text_ar || ''
+    });
     setPreviewUrls([]);
     setFormOpen(true);
   };
@@ -50,14 +81,27 @@ const ServicesBannerManager = () => {
     setIsLoading(true);
     try {
       if (editing) {
-        await apiService.updateServicesBannerImageAdmin(editing.id, { title: formData.title, description: formData.description, alt_text: formData.alt_text, image: formData.images[0] || null });
+        await apiService.updateServicesBannerImageAdmin(editing.id, {
+          title: formData.title,
+          description: formData.description,
+          alt_text: formData.alt_text,
+          title_ar: formData.title_ar || '',
+          description_ar: formData.description_ar || '',
+          alt_text_ar: formData.alt_text_ar || '',
+          image: formData.images[0] || null
+        });
       } else {
-        // Create multiple images in one go
-        const payload = { title: formData.title, description: formData.description, alt_text: formData.alt_text };
+        const payload = {
+          title: formData.title,
+          description: formData.description,
+          alt_text: formData.alt_text,
+          title_ar: formData.title_ar || '',
+          description_ar: formData.description_ar || '',
+          alt_text_ar: formData.alt_text_ar || ''
+        };
         const fd = new FormData();
         Object.entries(payload).forEach(([k, v]) => { if (v !== undefined && v !== null) fd.append(k, v); });
         formData.images.forEach((file) => fd.append('image', file));
-        // Use the low-level authenticatedRequest to preserve multiple files
         await apiService.authenticatedRequest(`${apiService.baseURL}/content/admin/services-banner-images`, { method: 'POST', body: fd });
       }
       setFormOpen(false);
@@ -93,11 +137,11 @@ const ServicesBannerManager = () => {
           {images.map((img) => (
             <div key={img.id} className="rounded-2xl border border-accent/20 overflow-hidden bg-white">
               <div className="aspect-video bg-gray-100">
-                {img.image_url && <img src={img.image_url} alt={img.alt_text || ''} className="w-full h-full object-cover" />}
+                {img.image_url && <img src={img.image_url} alt={isArabic ? (img.alt_text_ar || img.alt_text || '') : (img.alt_text || '')} className="w-full h-full object-cover" />}
               </div>
-              <div className="p-4 space-y-2">
-                <div className="font-semibold">{img.title || 'Untitled'}</div>
-                <div className="text-sm text-gray-600">{img.description}</div>
+              <div className="p-4 space-y-2" dir={isArabic ? 'rtl' : 'ltr'}>
+                <div className="font-semibold">{isArabic ? (img.title_ar || img.title || 'Untitled') : (img.title || 'Untitled')}</div>
+                <div className="text-sm text-gray-600">{isArabic ? (img.description_ar || img.description || '') : (img.description || '')}</div>
                 <div className="flex gap-2 pt-2">
                   <button onClick={() => openEdit(img)} className="px-3 py-2 rounded-lg bg-yellow-100 text-yellow-700">
                     <PencilIcon className="w-4 h-4" />
@@ -130,7 +174,18 @@ const ServicesBannerManager = () => {
             
             <form onSubmit={submit} className="p-6 space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-sm font-medium text-gray-700">Title</label>
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateToArabic('title')}
+                    disabled={!formData.title?.trim() || translatingField === 'title'}
+                    className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'title' ? <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" /> : 'AR'}
+                  </button>
+                </div>
                 <input 
                   value={formData.title} 
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
@@ -138,9 +193,30 @@ const ServicesBannerManager = () => {
                   placeholder="Enter image title"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Title (AR)</label>
+                <input 
+                  value={formData.title_ar} 
+                  onChange={(e) => setFormData({ ...formData, title_ar: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  placeholder="العنوان بالعربية"
+                  dir="rtl"
+                />
+              </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-sm font-medium text-gray-700">Description</label>
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateToArabic('description')}
+                    disabled={!formData.description?.trim() || translatingField === 'description'}
+                    className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'description' ? <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" /> : 'AR'}
+                  </button>
+                </div>
                 <textarea 
                   value={formData.description} 
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
@@ -149,14 +225,46 @@ const ServicesBannerManager = () => {
                   placeholder="Enter image description"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description (AR)</label>
+                <textarea 
+                  value={formData.description_ar} 
+                  onChange={(e) => setFormData({ ...formData, description_ar: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  rows={3}
+                  placeholder="الوصف بالعربية"
+                  dir="rtl"
+                />
+              </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Alt text</label>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-sm font-medium text-gray-700">Alt text</label>
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateToArabic('alt_text')}
+                    disabled={!formData.alt_text?.trim() || translatingField === 'alt_text'}
+                    className="flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'alt_text' ? <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" /> : 'AR'}
+                  </button>
+                </div>
                 <input 
                   value={formData.alt_text} 
                   onChange={(e) => setFormData({ ...formData, alt_text: e.target.value })} 
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
                   placeholder="Enter alt text for accessibility"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Alt text (AR)</label>
+                <input 
+                  value={formData.alt_text_ar} 
+                  onChange={(e) => setFormData({ ...formData, alt_text_ar: e.target.value })} 
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                  placeholder="النص البديل بالعربية"
+                  dir="rtl"
                 />
               </div>
               

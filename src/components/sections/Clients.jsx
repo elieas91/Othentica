@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { clientsData as fallbackClientsData } from '../../data/clientsData';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const Clients = () => {
+  const { locale, isArabic } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [clientsData, setClientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [, setError] = useState(null);
   const [sectionMeta, setSectionMeta] = useState({
-    title: 'Our Clients',
-    description: 'Trusted by leading companies across various industries'
+    title: '',
+    title_ar: '',
+    description: '',
+    description_ar: ''
   });
 
   useEffect(() => {
@@ -16,14 +22,13 @@ const Clients = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+        const t2 = getT(locale);
         const [clientsRes, sectionRes] = await Promise.all([
           apiService.getClients(),
           apiService.getHomepageSectionByKey ? apiService.getHomepageSectionByKey('clients') : Promise.resolve({ success: false })
         ]);
         
         if (clientsRes.success && clientsRes.data) {
-          // Transform database clients to match component structure
           const transformedClients = clientsRes.data.map(client => ({
             id: client.id,
             name: client.name,
@@ -31,31 +36,35 @@ const Clients = () => {
             industry: client.industry,
             website_url: client.website_url
           }));
-          
           setClientsData(transformedClients);
         } else {
           throw new Error(clientsRes.message || 'Failed to fetch clients');
         }
 
-        // Load section metadata (use only description from DB, not subtitle)
         if (sectionRes && sectionRes.success && sectionRes.data) {
-          setSectionMeta(prev => ({
-            title: sectionRes.data.title || prev.title,
-            description: sectionRes.data.description || prev.description
-          }));
+          const d = sectionRes.data;
+          setSectionMeta({
+            title: d.title || t2('ourClients'),
+            title_ar: d.title_ar || '',
+            description: d.description || t2('ourClientsSubtitle'),
+            description_ar: d.description_ar || ''
+          });
+        } else {
+          setSectionMeta({ title: t2('ourClients'), title_ar: '', description: t2('ourClientsSubtitle'), description_ar: '' });
         }
       } catch (error) {
         console.error('Error fetching clients:', error);
         setError(error.message);
-        // Fallback to static data
         setClientsData(fallbackClientsData);
+        const tFallback = getT(locale);
+        setSectionMeta({ title: tFallback('ourClients'), title_ar: '', description: tFallback('ourClientsSubtitle'), description_ar: '' });
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchClients();
-  }, []);
+  }, [locale]);
 
   const shouldUseCarousel = clientsData.length > 6;
 
@@ -134,7 +143,7 @@ const Clients = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-primary font-medium">Loading clients...</p>
+            <p className="text-primary font-medium">{t('loadingClients')}</p>
           </div>
         </div>
       </section>
@@ -147,11 +156,11 @@ const Clients = () => {
       <section className="py-8 px-8 lg:py-16 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-              {sectionMeta.title}
+            <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8" dir={isArabic ? 'rtl' : 'ltr'}>
+              {isArabic && (sectionMeta.title_ar?.trim?.() || sectionMeta.title_ar) ? sectionMeta.title_ar : (sectionMeta.title || t('ourClients'))}
             </h2>
-            <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-                <span dangerouslySetInnerHTML={{ __html: sectionMeta.description }} />
+            <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed" dir={isArabic ? 'rtl' : 'ltr'}>
+                <span dangerouslySetInnerHTML={{ __html: (isArabic && (sectionMeta.description_ar?.trim?.() || sectionMeta.description_ar) ? sectionMeta.description_ar : (sectionMeta.description || t('ourClientsSubtitle'))) || '' }} />
             </p>
           </div>
 
@@ -205,11 +214,11 @@ const Clients = () => {
     <section className="py-8 px-8 lg:py-16 lg:px-16">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            {sectionMeta.title}
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8" dir={isArabic ? 'rtl' : 'ltr'}>
+            {isArabic && (sectionMeta.title_ar?.trim?.() || sectionMeta.title_ar) ? sectionMeta.title_ar : (sectionMeta.title || t('ourClients'))}
           </h2>
-          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            {sectionMeta.description}
+          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed" dir={isArabic ? 'rtl' : 'ltr'}>
+            <span dangerouslySetInnerHTML={{ __html: (isArabic && (sectionMeta.description_ar?.trim?.() || sectionMeta.description_ar) ? sectionMeta.description_ar : (sectionMeta.description || t('ourClientsSubtitle'))) || '' }} />
           </p>
         </div>
 

@@ -1,51 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../ui/Button';
 import OthenticaImg from '../../assets/img/philosophy/othentica-bg.webp';
 import { Link } from 'react-router-dom';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
 
-const Philosophy = () => {
-  const [philosophyData, setPhilosophyData] = useState({
-    title: 'What is Othentica?',
-    description: 'Othentica is a gamified wellness platform that helps people step into their authentic selves through science-backed, engaging daily quests. Designed as a treasure map for growth, it blends brain health, emotional resilience, and simple everyday practices into an interactive journey.',
-    // All copy is now managed from description (rich text editor). No additional content JSON.
-    button_text: 'Explore Corporate Packages',
-    button_link: '/contact',
-    button_variant: 'secondary',
-    image: OthenticaImg
-  });
+const defaultPhilosophyData = {
+  title: 'What is Othentica?',
+  title_ar: '',
+  description: 'Othentica is a gamified wellness platform that helps people step into their authentic selves through science-backed, engaging daily quests. Designed as a treasure map for growth, it blends brain health, emotional resilience, and simple everyday practices into an interactive journey.',
+  description_ar: '',
+  button_text: 'Explore Corporate Packages',
+  button_text_ar: '',
+  button_link: '/contact',
+  button_variant: 'secondary',
+  image: OthenticaImg
+};
+
+const Philosophy = ({ sectionData: sectionDataProp }) => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const [philosophyData, setPhilosophyData] = useState(defaultPhilosophyData);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (sectionDataProp) {
+      const sectionData = sectionDataProp;
+      setPhilosophyData({
+        title: sectionData.title || defaultPhilosophyData.title,
+        title_ar: sectionData.title_ar ?? defaultPhilosophyData.title_ar,
+        description: sectionData.description || defaultPhilosophyData.description,
+        description_ar: sectionData.description_ar ?? defaultPhilosophyData.description_ar,
+        button_text: sectionData.button_text || defaultPhilosophyData.button_text,
+        button_text_ar: sectionData.button_text_ar ?? defaultPhilosophyData.button_text_ar,
+        button_link: sectionData.button_link || defaultPhilosophyData.button_link,
+        button_variant: sectionData.button_variant || defaultPhilosophyData.button_variant,
+        image: sectionData.image_url || defaultPhilosophyData.image
+      });
+      setIsLoading(false);
+      return;
+    }
     const fetchPhilosophyData = async () => {
       try {
         setIsLoading(true);
-        
-        const response = await apiService.getHomepageSectionByKey('philosophy');
-        
+        const response = await apiService.getHomepageSectionByKey('philosophy', locale);
         if (response.success && response.data) {
           const sectionData = response.data;
-          // Philosophy no longer uses the content JSON column
-          
           setPhilosophyData({
-            title: sectionData.title || philosophyData.title,
-            description: sectionData.description || philosophyData.description,
-            button_text: sectionData.button_text || philosophyData.button_text,
-            button_link: sectionData.button_link || philosophyData.button_link,
-            button_variant: sectionData.button_variant || philosophyData.button_variant,
-            image: sectionData.image_url || philosophyData.image
+            title: sectionData.title || defaultPhilosophyData.title,
+            title_ar: sectionData.title_ar ?? defaultPhilosophyData.title_ar,
+            description: sectionData.description || defaultPhilosophyData.description,
+            description_ar: sectionData.description_ar ?? defaultPhilosophyData.description_ar,
+            button_text: sectionData.button_text || defaultPhilosophyData.button_text,
+            button_text_ar: sectionData.button_text_ar ?? defaultPhilosophyData.button_text_ar,
+            button_link: sectionData.button_link || defaultPhilosophyData.button_link,
+            button_variant: sectionData.button_variant || defaultPhilosophyData.button_variant,
+            image: sectionData.image_url || defaultPhilosophyData.image
           });
         }
       } catch (error) {
         console.error('Error fetching philosophy data:', error);
-        // Keep default data on error
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchPhilosophyData();
-  }, [philosophyData.button_link, philosophyData.button_text, philosophyData.button_variant, philosophyData.description, philosophyData.image, philosophyData.title]);
+  }, [sectionDataProp, locale]);
 
   return (
     <section
@@ -83,14 +102,14 @@ const Philosophy = () => {
           ) : (
             <>
               <div className="space-y-6 sm:space-y-8">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary dark:text-neutral font-sans">
-                  {philosophyData.title}
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary dark:text-neutral font-sans" dir={isArabic ? 'rtl' : 'ltr'}>
+                  {isArabic && philosophyData.title_ar ? philosophyData.title_ar : philosophyData.title}
                 </h2>
                 <div 
                   className="text-base sm:text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: philosophyData.description }}
+                  dir={isArabic ? 'rtl' : 'ltr'}
+                  dangerouslySetInnerHTML={{ __html: isArabic && philosophyData.description_ar ? philosophyData.description_ar : philosophyData.description }}
                 />
-                {/* No additional content paragraph. All copy comes from description rich text. */}
               </div>
               <div className="mt-6 sm:mt-8">
                 <Link
@@ -102,8 +121,9 @@ const Philosophy = () => {
                     variant={philosophyData.button_variant}
                     size="large"
                     className="w-full sm:w-auto"
+                    style={isArabic ? { direction: 'rtl' } : undefined}
                   >
-                    {philosophyData.button_text}
+                    {isArabic && philosophyData.button_text_ar ? philosophyData.button_text_ar : philosophyData.button_text}
                   </Button>
                 </Link>
               </div>

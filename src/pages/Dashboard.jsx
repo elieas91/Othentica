@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import apiService from '../services/api';
+import { DashboardLanguageContext } from '../contexts/DashboardLanguageContext';
 import TestimonialsManager from '../components/admin/TestimonialsManager';
 import OptInManager from '../components/admin/OptInManager';
 import BlogManager from '../components/admin/BlogManager';
@@ -31,6 +32,7 @@ import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 const Dashboard = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { language, setLanguage, isArabic } = useContext(DashboardLanguageContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
@@ -465,17 +467,44 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium font-poppins text-sm"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center rounded-lg border border-accent/20 overflow-hidden bg-white/80">
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('en')}
+                    className={`px-3 py-2 text-sm font-medium font-poppins transition-all ${
+                      language === 'en'
+                        ? 'bg-gradient-to-r from-primary to-blue-800 text-white'
+                        : 'text-gray-600 hover:bg-accent/10'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLanguage('ar')}
+                    className={`px-3 py-2 text-sm font-medium font-poppins transition-all ${
+                      language === 'ar'
+                        ? 'bg-gradient-to-r from-primary to-blue-800 text-white'
+                        : 'text-gray-600 hover:bg-accent/10'
+                    }`}
+                    style={{ fontFamily: language === 'ar' ? 'inherit' : undefined }}
+                  >
+                    عربي
+                  </button>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg font-medium font-poppins text-sm"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Content Area */}
+        {/* Content Area - always LTR; only DB content (section title/description) uses RTL when Arabic */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide">
           {renderContent()}
         </div>

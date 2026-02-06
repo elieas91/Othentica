@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import SEO from '../components/ui/SEO';
 import Hero from '../components/sections/Hero';
 import Philosophy from '../components/sections/Philosophy';
@@ -11,6 +11,8 @@ import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';
 import FeaturesAndBenefits from '../components/sections/FeaturesAndBenefits';
 import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { PublicLocaleContext } from '../contexts/PublicLocaleContext';
+import apiService from '../services/api';
 
 // Hook to detect mobile devices
 const useIsMobile = () => {
@@ -30,6 +32,32 @@ const useIsMobile = () => {
 };
 
 const Home = () => {
+  const { locale } = useContext(PublicLocaleContext);
+  // Section data fetched by language (hero, philosophy, services, etc.)
+  const [sectionData, setSectionData] = useState({ hero: null, philosophy: null, services: null });
+
+  // Fetch homepage section data (hero raw so we get both EN and AR; philosophy/services by locale)
+  useEffect(() => {
+    setSectionData({ hero: null, philosophy: null, services: null });
+    const fetchSections = async () => {
+      try {
+        const [heroRes, philosophyRes, servicesRes] = await Promise.all([
+          apiService.getHomepageSectionByKey('hero'),
+          apiService.getHomepageSectionByKey('philosophy', locale),
+          apiService.getHomepageSectionByKey('services') // raw = title_ar, description_ar for client-side language
+        ]);
+        setSectionData({
+          hero: heroRes.success ? heroRes.data : null,
+          philosophy: philosophyRes.success ? philosophyRes.data : null,
+          services: servicesRes.success ? servicesRes.data : null
+        });
+      } catch (err) {
+        console.error('Error fetching homepage sections by locale:', err);
+      }
+    };
+    fetchSections();
+  }, [locale]);
+
   // Mobile detection
   const isMobile = useIsMobile();
   
@@ -193,7 +221,7 @@ const Home = () => {
           ? 'opacity-100 transform translate-y-0' 
           : 'opacity-0 transform translate-y-8'
       }`}>
-        <Hero />
+        <Hero sectionData={sectionData.hero} />
       </div>
 
       {/* Testimonials Section */}
@@ -211,7 +239,7 @@ const Home = () => {
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
       }`}>
-        <Philosophy />
+        <Philosophy sectionData={sectionData.philosophy} />
       </div>
 
       {/* Mobile Showcase Section */}
@@ -238,7 +266,7 @@ const Home = () => {
           ? 'opacity-100 transform translate-y-0'
           : 'opacity-0 transform translate-y-8'
       }`}>
-        <Services />
+        <Services sectionData={sectionData.services} />
       </div>
 
       {/* Second Testimonials Section */}

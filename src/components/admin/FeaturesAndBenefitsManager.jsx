@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -7,13 +7,20 @@ import {
   XMarkIcon,
   CheckCircleIcon,
   XCircleIcon,
-  ClockIcon
+  ClockIcon,
+  LanguageIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import RichTextEditor from '../ui/RichTextEditor';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
+import { translateText } from '../../utils/translate';
 
 const FeaturesAndBenefitsManager = () => {
+  const { isArabic } = useContext(DashboardLanguageContext);
+  const prevIsArabic = useRef(isArabic);
+  const [translatingList, setTranslatingList] = useState(false);
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -54,55 +61,41 @@ const FeaturesAndBenefitsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [featuresContent, setFeaturesContent] = useState('');
   const [benefitsContent, setBenefitsContent] = useState('');
+  const [featuresContentAr, setFeaturesContentAr] = useState('');
+  const [benefitsContentAr, setBenefitsContentAr] = useState('');
   const [originalFeaturesContent, setOriginalFeaturesContent] = useState('');
   const [originalBenefitsContent, setOriginalBenefitsContent] = useState('');
+  const [originalFeaturesContentAr, setOriginalFeaturesContentAr] = useState('');
+  const [originalBenefitsContentAr, setOriginalBenefitsContentAr] = useState('');
 
-  // Function to convert array of items to HTML list
-  const convertArrayToHtmlList = (items, type = null) => {
+  // Function to convert array of items to HTML list (useArabic: use feature_ar/benefit_ar only, no fallback to EN)
+  const convertArrayToHtmlList = (items, type = null, useArabic = false) => {
     const itemType = type || activeTab;
-    console.log('convertArrayToHtmlList called with:', items);
-    console.log('itemType:', itemType);
-    
-    if (!items || items.length === 0) {
-      console.log('No items or empty array, returning empty string');
-      return '';
-    }
-    
+    if (!items || items.length === 0) return '';
     const filteredItems = items.filter(item => item.is_active === 1 || item.is_active === true);
-    console.log('Filtered active items:', filteredItems);
-    
     const sortedItems = filteredItems.sort((a, b) => a.display_order - b.display_order);
-    console.log('Sorted items:', sortedItems);
-    
     const listItems = sortedItems
       .map(item => {
-        const text = itemType === 'features' ? item.feature : item.benefit;
-        console.log(`Item: ${JSON.stringify(item)}, text: ${text}`);
-        return `<li>${text}</li>`;
+        const text = itemType === 'features'
+          ? (useArabic ? (item.feature_ar ?? '') : item.feature)
+          : (useArabic ? (item.benefit_ar ?? '') : item.benefit);
+        return `<li>${text || ''}</li>`;
       })
       .join('');
-    
-    const result = `<ul>${listItems}</ul>`;
-    console.log('Final HTML result:', result);
-    return result;
+    return `<ul>${listItems}</ul>`;
   };
 
-  // Function to convert HTML list to array of items
-  const convertHtmlListToArray = (htmlContent, type) => {
+  // Function to convert HTML list to array of items (fieldKey: 'feature' | 'benefit' | 'feature_ar' | 'benefit_ar')
+  const convertHtmlListToArray = (htmlContent, fieldKey) => {
     if (!htmlContent) return [];
-    
-    // Extract list items from HTML
     const listItemRegex = /<li[^>]*>(.*?)<\/li>/gi;
     const matches = htmlContent.match(listItemRegex);
-    
     if (!matches) return [];
-    
     return matches.map((match, index) => {
-      // Remove HTML tags and get clean text
       const text = match.replace(/<[^>]*>/g, '').trim();
       return {
         id: `temp_${index}`,
-        [type]: text,
+        [fieldKey]: text,
         category: '',
         is_active: true,
         display_order: index + 1,
@@ -112,46 +105,69 @@ const FeaturesAndBenefitsManager = () => {
     });
   };
 
-  // Function to check if content has changed
+  // Function to check if content has changed (EN or AR)
   const hasContentChanged = () => {
     if (activeTab === 'features') {
-      return featuresContent !== originalFeaturesContent;
+      return featuresContent !== originalFeaturesContent || featuresContentAr !== originalFeaturesContentAr;
     } else {
-      return benefitsContent !== originalBenefitsContent;
+      return benefitsContent !== originalBenefitsContent || benefitsContentAr !== originalBenefitsContentAr;
+    }
+  };
+
+  const handleTranslateListToArabic = async () => {
+    const enContent = activeTab === 'features' ? featuresContent : benefitsContent;
+    const items = convertHtmlListToArray(enContent, activeTab === 'features' ? 'feature' : 'benefit');
+    if (!items.length) return;
+    setTranslatingList(true);
+    try {
+      const translated = await Promise.all(
+        items.map((item) => {
+          const text = activeTab === 'features' ? item.feature : item.benefit;
+          return text ? translateText(text, 'ar', 'en') : Promise.resolve('');
+        })
+      );
+      const arListItems = translated.map((t) => `<li>${t}</li>`).join('');
+      const arHtml = `<ul>${arListItems}</ul>`;
+      if (activeTab === 'features') {
+        setFeaturesContentAr(arHtml);
+      } else {
+        setBenefitsContentAr(arHtml);
+      }
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingList(false);
     }
   };
 
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
-      console.log('Fetching features and benefits...');
-      
       const [featuresRes, benefitsRes] = await Promise.all([
         apiService.getAppFeatures(),
         apiService.getAppBenefits()
       ]);
 
-      console.log('Features response:', featuresRes);
-      console.log('Benefits response:', benefitsRes);
-
       if (featuresRes.success) {
-        console.log('Features data:', featuresRes.data);
         setFeatures(featuresRes.data);
-        const featuresHtml = convertArrayToHtmlList(featuresRes.data, 'features');
-        console.log('Features HTML:', featuresHtml);
+        const featuresHtml = convertArrayToHtmlList(featuresRes.data, 'features', false);
+        const featuresHtmlAr = convertArrayToHtmlList(featuresRes.data, 'features', true);
         setFeaturesContent(featuresHtml);
+        setFeaturesContentAr(featuresHtmlAr);
         setOriginalFeaturesContent(featuresHtml);
+        setOriginalFeaturesContentAr(featuresHtmlAr);
       } else {
         console.error('Features fetch failed:', featuresRes);
       }
       
       if (benefitsRes.success) {
-        console.log('Benefits data:', benefitsRes.data);
         setBenefits(benefitsRes.data);
-        const benefitsHtml = convertArrayToHtmlList(benefitsRes.data, 'benefits');
-        console.log('Benefits HTML:', benefitsHtml);
+        const benefitsHtml = convertArrayToHtmlList(benefitsRes.data, 'benefits', false);
+        const benefitsHtmlAr = convertArrayToHtmlList(benefitsRes.data, 'benefits', true);
         setBenefitsContent(benefitsHtml);
+        setBenefitsContentAr(benefitsHtmlAr);
         setOriginalBenefitsContent(benefitsHtml);
+        setOriginalBenefitsContentAr(benefitsHtmlAr);
       } else {
         console.error('Benefits fetch failed:', benefitsRes);
       }
@@ -167,14 +183,25 @@ const FeaturesAndBenefitsManager = () => {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    if (prevIsArabic.current !== isArabic) {
+      prevIsArabic.current = isArabic;
+      fetchData();
+    }
+  }, [isArabic, fetchData]);
+
   const handleSave = async () => {
     try {
       setIsLoading(true);
-      
-      const currentContent = activeTab === 'features' ? featuresContent : benefitsContent;
-      const items = convertHtmlListToArray(currentContent, activeTab === 'features' ? 'feature' : 'benefit');
-      
-      // First, delete all existing items
+      const fieldKey = activeTab === 'features' ? 'feature' : 'benefit';
+      const fieldKeyAr = activeTab === 'features' ? 'feature_ar' : 'benefit_ar';
+      const enItems = convertHtmlListToArray(activeTab === 'features' ? featuresContent : benefitsContent, fieldKey);
+      const arItems = convertHtmlListToArray(activeTab === 'features' ? featuresContentAr : benefitsContentAr, fieldKeyAr);
+      const merged = enItems.map((en, i) => ({
+        ...en,
+        [fieldKeyAr]: arItems[i]?.[fieldKeyAr] ?? ''
+      }));
+
       const existingItems = activeTab === 'features' ? features : benefits;
       for (const item of existingItems) {
         if (activeTab === 'features') {
@@ -183,12 +210,12 @@ const FeaturesAndBenefitsManager = () => {
           await apiService.deleteAppBenefit(item.id);
         }
       }
-      
-      // Then create new items from the rich text editor content
-      for (const item of items) {
+
+      for (const item of merged) {
         if (activeTab === 'features') {
           await apiService.createAppFeature({
             feature: item.feature,
+            feature_ar: item.feature_ar ?? '',
             category: item.category,
             display_order: item.display_order,
             is_active: true
@@ -196,17 +223,17 @@ const FeaturesAndBenefitsManager = () => {
         } else {
           await apiService.createAppBenefit({
             benefit: item.benefit,
+            benefit_ar: item.benefit_ar ?? '',
             category: item.category,
             display_order: item.display_order,
             is_active: true
           });
         }
       }
-      
+
       await showSuccessAlert('Success!', `${activeTab === 'features' ? 'Features' : 'Benefits'} updated successfully!`);
       await fetchData();
       setIsEditing(false);
-      
     } catch (err) {
       await showErrorAlert('Error', `Failed to save ${activeTab === 'features' ? 'features' : 'benefits'}: ${err.message}`);
     } finally {
@@ -217,8 +244,10 @@ const FeaturesAndBenefitsManager = () => {
   const handleCancel = () => {
     if (activeTab === 'features') {
       setFeaturesContent(originalFeaturesContent);
+      setFeaturesContentAr(originalFeaturesContentAr);
     } else {
       setBenefitsContent(originalBenefitsContent);
+      setBenefitsContentAr(originalBenefitsContentAr);
     }
     setIsEditing(false);
   };
@@ -227,14 +256,10 @@ const FeaturesAndBenefitsManager = () => {
     setIsEditing(true);
   };
 
-  const currentContent = activeTab === 'features' ? featuresContent : benefitsContent;
+  const currentContent = isArabic
+    ? (activeTab === 'features' ? featuresContentAr : benefitsContentAr)
+    : (activeTab === 'features' ? featuresContent : benefitsContent);
   const currentData = activeTab === 'features' ? features : benefits;
-  
-  console.log('Render - activeTab:', activeTab);
-  console.log('Render - currentContent:', currentContent);
-  console.log('Render - currentData:', currentData);
-  console.log('Render - features:', features);
-  console.log('Render - benefits:', benefits);
 
   return (
     <div className="p-8">
@@ -274,7 +299,7 @@ const FeaturesAndBenefitsManager = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex flex-wrap items-center gap-4">
         {!isEditing ? (
           <button
             onClick={handleEdit}
@@ -304,6 +329,20 @@ const FeaturesAndBenefitsManager = () => {
               <XMarkIcon className="w-5 h-5" />
               Cancel
             </button>
+            <button
+              type="button"
+              onClick={handleTranslateListToArabic}
+              disabled={translatingList || !(activeTab === 'features' ? featuresContent : benefitsContent).trim()}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Translate list to Arabic"
+            >
+              {translatingList ? (
+                <ArrowPathIcon className="w-4 h-4 animate-spin" />
+              ) : (
+                <LanguageIcon className="w-4 h-4" />
+              )}
+              Translate to Arabic
+            </button>
           </>
         )}
       </div>
@@ -332,22 +371,38 @@ const FeaturesAndBenefitsManager = () => {
           </div>
 
           {isEditing ? (
-            <div className="rich-text-container">
-              <RichTextEditor
-                value={currentContent}
-                onChange={(value) => {
-                  if (activeTab === 'features') {
-                    setFeaturesContent(value);
-                  } else {
-                    setBenefitsContent(value);
-                  }
-                }}
-                placeholder={`Enter your ${activeTab === 'features' ? 'features' : 'benefits'} as a list. Each list item will become a separate ${activeTab === 'features' ? 'feature' : 'benefit'}...`}
-                height="400px"
-              />
+            <div className="rich-text-container space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                  English list
+                </label>
+                <RichTextEditor
+                  value={activeTab === 'features' ? featuresContent : benefitsContent}
+                  onChange={(value) => {
+                    if (activeTab === 'features') setFeaturesContent(value);
+                    else setBenefitsContent(value);
+                  }}
+                  placeholder={`Enter your ${activeTab === 'features' ? 'features' : 'benefits'} as a list (EN)...`}
+                  height="280px"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-2 font-poppins" dir="rtl">
+                  القائمة بالعربية
+                </label>
+                <RichTextEditor
+                  value={activeTab === 'features' ? featuresContentAr : benefitsContentAr}
+                  onChange={(value) => {
+                    if (activeTab === 'features') setFeaturesContentAr(value);
+                    else setBenefitsContentAr(value);
+                  }}
+                  placeholder="القائمة بالعربية..."
+                  height="280px"
+                />
+              </div>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
+            <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30" dir={isArabic ? 'rtl' : 'ltr'}>
               <div 
                 className="text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: currentContent || `<p class="text-gray-400 italic">No ${activeTab} available. Click "Edit" to add some.</p>` }}

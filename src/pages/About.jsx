@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import SEO from '../components/ui/SEO';
 import Banner from '../components/ui/Banner';
+import { PublicLocaleContext } from '../contexts/PublicLocaleContext';
+import { getT } from '../data/translations';
 // import AboutContent from '../components/sections/AboutContent';
 import ParallaxSection from '../components/ui/ParallaxSection';
 import AnimateOnScroll from '../components/ui/AnimateOnScroll';
@@ -25,6 +27,8 @@ import MeetTheFounders from '../components/sections/MeetTheFounders';
 import CarouselMVV from '../components/ui/CarouselMVV/CarouselMVV';
 
 const About = () => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [about, setAbout] = useState(null);
   const [mvvItems, setMvvItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,15 +46,17 @@ const About = () => {
         
         if (bannerRes?.success && bannerRes.data) {
           let backgroundImageUrl = bannerRes.data.background_image_url || '';
-          // Fix URL path if it's pointing to wrong directory
           if (backgroundImageUrl && backgroundImageUrl.includes('/uploads/homepage/')) {
             backgroundImageUrl = backgroundImageUrl.replace('/uploads/homepage/', '/uploads/about/');
           }
-          
+          const d = bannerRes.data;
           bannerData = {
-            banner_title: bannerRes.data.title || '',
-            banner_subtitle: bannerRes.data.subtitle || '',
-            banner_description: bannerRes.data.description || '',
+            banner_title: d.title || '',
+            banner_title_ar: d.title_ar || '',
+            banner_subtitle: d.subtitle || '',
+            banner_subtitle_ar: d.subtitle_ar || '',
+            banner_description: d.description || '',
+            banner_description_ar: d.description_ar || '',
             banner_background_image_url: backgroundImageUrl
           };
         } else {
@@ -63,10 +69,14 @@ const About = () => {
               backgroundImageUrl = backgroundImageUrl.replace('/uploads/homepage/', '/uploads/about/');
             }
             
+            const fd = fallback.data;
             bannerData = {
-              banner_title: fallback.data.title || '',
+              banner_title: fd.title || '',
+              banner_title_ar: fd.title_ar || '',
               banner_subtitle: '',
-              banner_description: fallback.data.description || '',
+              banner_subtitle_ar: '',
+              banner_description: fd.description || '',
+              banner_description_ar: fd.description_ar || '',
               banner_background_image_url: backgroundImageUrl
             };
           }
@@ -89,50 +99,49 @@ const About = () => {
           
           // Build MVV items for Carousel from about_sections data
           
-          // Mission
+          let contentAr = {};
+          try {
+            contentAr = mvvData.description_ar ? (typeof mvvData.description_ar === 'string' && mvvData.description_ar.trim().startsWith('{') ? JSON.parse(mvvData.description_ar) : {}) : {};
+          } catch (_) {}
           if (content.mission_text) {
             let missionImageUrl = content.mission_image_url || MissionImg;
-            // Fix URL path if it's pointing to wrong directory
             if (missionImageUrl && missionImageUrl.includes('/uploads/homepage/')) {
               missionImageUrl = missionImageUrl.replace('/uploads/homepage/', '/uploads/about/');
             }
-            
-            items.push({ 
-              id: 1, 
-              title: 'Mission', 
-              description: content.mission_text, 
+            items.push({
+              id: 1,
+              title: 'Mission',
+              title_ar: content.mission_title_ar || contentAr.mission_title_ar || '',
+              description: content.mission_text,
+              description_ar: content.mission_text_ar || contentAr.mission_text || '',
               image: missionImageUrl
             });
           }
-          
-          // Vision
           if (content.vision_text) {
             let visionImageUrl = content.vision_image_url || VisionImg;
-            // Fix URL path if it's pointing to wrong directory
             if (visionImageUrl && visionImageUrl.includes('/uploads/homepage/')) {
               visionImageUrl = visionImageUrl.replace('/uploads/homepage/', '/uploads/about/');
             }
-            
-            items.push({ 
-              id: 2, 
-              title: 'Vision', 
-              description: content.vision_text, 
+            items.push({
+              id: 2,
+              title: 'Vision',
+              title_ar: content.vision_title_ar || contentAr.vision_title_ar || '',
+              description: content.vision_text,
+              description_ar: content.vision_text_ar || contentAr.vision_text || '',
               image: visionImageUrl
             });
           }
-          
-          // Values
           if (content.values_text) {
             let valuesImageUrl = content.values_image_url || ValuesImg;
-            // Fix URL path if it's pointing to wrong directory
             if (valuesImageUrl && valuesImageUrl.includes('/uploads/homepage/')) {
               valuesImageUrl = valuesImageUrl.replace('/uploads/homepage/', '/uploads/about/');
             }
-            
-            items.push({ 
-              id: 3, 
-              title: 'Values', 
-              description: content.values_text, 
+            items.push({
+              id: 3,
+              title: 'Values',
+              title_ar: content.values_title_ar || contentAr.values_title_ar || '',
+              description: content.values_text,
+              description_ar: content.values_text_ar || contentAr.values_text || '',
               image: valuesImageUrl
             });
           }
@@ -297,7 +306,7 @@ const About = () => {
       <div className="min-h-screen dark:bg-primary flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-primary dark:text-neutral text-lg">Loading about page...</p>
+          <p className="text-primary dark:text-neutral text-lg">{t('loadingAbout')}</p>
         </div>
       </div>
     );
@@ -327,13 +336,14 @@ const About = () => {
       <SEO {...seoData} />
 
       <Banner
-        title={about?.banner_title || 'About Othentica'}
-        subtitle={about?.banner_subtitle || 'Crafting Corporate Health'}
-        description={about?.banner_description || "Othentica is a gamified wellness app that guides people to step into their authentic selves by balancing mind, body, and purpose through brain-health-based tools and experiences."}
+        title={isArabic && about?.banner_title_ar ? about.banner_title_ar : (about?.banner_title || t('aboutOthentica'))}
+        subtitle={isArabic && about?.banner_subtitle_ar ? about.banner_subtitle_ar : (about?.banner_subtitle || t('craftingCorporateHealth'))}
+        description={isArabic && about?.banner_description_ar ? about.banner_description_ar : (about?.banner_description || (isArabic ? '' : "Othentica is a gamified wellness app that guides people to step into their authentic selves by balancing mind, body, and purpose through brain-health-based tools and experiences."))}
         buttonText=""
         buttonVariant="accent"
         buttonOnClick={handleLearnMore}
         backgroundImage={about?.banner_background_image_url || PhilosophyBg}
+        dir={isArabic ? 'rtl' : undefined}
       />
 
       <AnimateOnScroll animation="fadeInUp" delay={200}>
@@ -353,17 +363,27 @@ const About = () => {
       </AnimateOnScroll>
 
       <AnimateOnScroll animation="fadeInUp" delay={300}>
-        <div className="max-w-[90%] w-full mx-auto mt-32">
+        <div className="max-w-[90%] w-full mx-auto mt-32" dir={isArabic ? 'rtl' : undefined}>
           <div className="text-center mb-16">
             <h2 className="text-6xl font-bold text-primary dark:text-neutral mb-4">
-              Mission Vision Values
+              {t('missionVisionValues')}
             </h2>
           </div>
         </div>
       </AnimateOnScroll>
 
       <AnimateOnScroll animation="scaleIn" delay={400} duration={800}>
-        <CarouselMVV className="my-24" items={mvvItems} />
+        <CarouselMVV
+          className="my-24"
+          items={mvvItems.map((item) => {
+            const titleKey = item.id === 1 ? 'mission' : item.id === 2 ? 'vision' : 'values';
+            return {
+              ...item,
+              title: isArabic ? (item.title_ar || t(titleKey)) : item.title,
+              description: isArabic && item.description_ar ? item.description_ar : item.description
+            };
+          })}
+        />
       </AnimateOnScroll>
 
       {/* <AboutContent

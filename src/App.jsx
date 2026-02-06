@@ -4,6 +4,8 @@ import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ui/ScrollToTop';
 import Unsubscribe from './pages/Unsubscribe';
 import { AuthProvider } from './contexts/AuthContext';
+import { DashboardLanguageProvider } from './contexts/DashboardLanguageContext';
+import { PublicLocaleProvider } from './contexts/PublicLocaleContext';
 import AdminLayout from './components/layout/AdminLayout';
 import './App.css';
 import TermsConditions from './pages/TermsConditions';
@@ -48,20 +50,23 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <AdminLayout>
-                  <Suspense fallback={<PageLoader />}>
-                    <Dashboard />
-                  </Suspense>
-                </AdminLayout>
+                <DashboardLanguageProvider>
+                  <AdminLayout>
+                    <Suspense fallback={<PageLoader />}>
+                      <Dashboard />
+                    </Suspense>
+                  </AdminLayout>
+                </DashboardLanguageProvider>
               }
             />
             <Route path="/unsubscribe/:id" element={<Unsubscribe />} />
             <Route
               path="/*"
               element={
-                <Layout>
-                  <Suspense fallback={<PageLoader />}>
-                    <Routes>
+                <PublicLocaleProvider>
+                  <Layout>
+                    <Suspense fallback={<PageLoader />}>
+                      <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/about" element={<About />} />
                       <Route path="/services" element={<Services />} />
@@ -78,9 +83,10 @@ function App() {
                         element={<PrivacyPolicy />}
                       />
                       <Route path="/disclaimers" element={<Disclaimers />} />
-                    </Routes>
-                  </Suspense>
-                </Layout>
+                      </Routes>
+                    </Suspense>
+                  </Layout>
+                </PublicLocaleProvider>
               }
             />
           </Routes>

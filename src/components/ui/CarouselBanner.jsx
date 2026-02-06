@@ -16,6 +16,7 @@ const CarouselBanner = ({
   className = '',
   children,
   autoSlideInterval = 2000, // 2 seconds default
+  dir, // 'rtl' | 'ltr' for Arabic/English
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -87,7 +88,7 @@ const CarouselBanner = ({
       )}
 
       {/* Content */}
-      <div className="relative z-20 text-center px-6 py-0 max-w-4xl mx-auto">
+      <div className="relative z-20 text-center px-6 py-0 max-w-4xl mx-auto" dir={dir}>
         {title && (
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight transition-all duration-700 ease-out hover:scale-105">
             {title}

@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Flame from '../../assets/img/flame.webp';
 import { appFeaturesData as fallbackAppFeaturesData } from '../../data/appFeaturesData';
 import { appBenefitsData as fallbackAppBenefitsData } from '../../data/appBenefitsData';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const Features = ({ appFeaturesData, isLoading }) => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   if (isLoading) {
     return (
       <AnimateOnScroll animation="fadeInLeft" delay={200} duration={800}>
@@ -13,7 +17,7 @@ const Features = ({ appFeaturesData, isLoading }) => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-primary font-medium">Loading features...</p>
+              <p className="text-primary font-medium">{t('loadingFeatures')}</p>
             </div>
           </div>
         </section>
@@ -29,23 +33,26 @@ const Features = ({ appFeaturesData, isLoading }) => {
             <div className="flex justify-center items-center mb-0 lg:mb-8">
               <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-6 py-4 lg:px-8 lg:py-6">
                 <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
-                  Features
+                  {t('features')}
                 </h2>
               </span>
             </div>
           </div>
-          <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
+          <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]" dir={isArabic ? 'rtl' : 'ltr'}>
             <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
-              {appFeaturesData.map((feature) => (
-                <li key={feature.id} className="flex items-start mb-2">
-                  <img
-                    src={Flame}
-                    alt="Bullet Icon"
-                    className="w-auto h-7 mr-3 mt-1"
-                  />
-                  <span>{feature.feature}</span>
-                </li>
-              ))}
+              {appFeaturesData.map((feature) => {
+                const text = isArabic && (feature.feature_ar?.trim?.() || feature.feature_ar) ? feature.feature_ar : feature.feature;
+                return (
+                  <li key={feature.id} className="flex items-start mb-2">
+                    <img
+                      src={Flame}
+                      alt="Bullet Icon"
+                      className="w-auto h-7 mr-3 mt-1 flex-shrink-0"
+                    />
+                    <span>{text}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -55,6 +62,8 @@ const Features = ({ appFeaturesData, isLoading }) => {
 };
 
 const Benefits = ({ appBenefitsData, isLoading }) => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   if (isLoading) {
     return (
       <AnimateOnScroll animation="fadeInRight" delay={400} duration={800}>
@@ -62,7 +71,7 @@ const Benefits = ({ appBenefitsData, isLoading }) => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-primary font-medium">Loading benefits...</p>
+              <p className="text-primary font-medium">{t('loadingBenefits')}</p>
             </div>
           </div>
         </section>
@@ -78,23 +87,26 @@ const Benefits = ({ appBenefitsData, isLoading }) => {
             <div className="flex justify-center items-center mb-0 lg:mb-8">
               <span className="flex items-center justify-center w-full max-w-md bg-secondary rounded-lg shadow-md px-6 py-4 lg:px-8 lg:py-6">
                 <h2 className="text-xl lg:text-3xl font-bold text-white dark:text-neutral">
-                  Benefits
+                  {t('benefits')}
                 </h2>
               </span>
             </div>
           </div>
-          <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]">
+          <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]" dir={isArabic ? 'rtl' : 'ltr'}>
             <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
-              {appBenefitsData.map((benefit) => (
-                <li key={benefit.id} className="flex items-start mb-2">
-                  <img
-                    src={Flame}
-                    alt="Bullet Icon"
-                    className="w-auto h-7 mr-3 mt-1"
-                  />
-                  <span>{benefit.benefit}</span>
-                </li>
-              ))}
+              {appBenefitsData.map((benefit) => {
+                const text = isArabic && (benefit.benefit_ar?.trim?.() || benefit.benefit_ar) ? benefit.benefit_ar : benefit.benefit;
+                return (
+                  <li key={benefit.id} className="flex items-start mb-2">
+                    <img
+                      src={Flame}
+                      alt="Bullet Icon"
+                      className="w-auto h-7 mr-3 mt-1 flex-shrink-0"
+                    />
+                    <span>{text}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -126,6 +138,7 @@ const FeaturesAndBenefits = () => {
           const transformedFeatures = featuresResponse.data.map(feature => ({
             id: feature.id,
             feature: feature.feature,
+            feature_ar: feature.feature_ar || null,
             category: feature.category
           }));
           setAppFeaturesData(transformedFeatures);
@@ -139,6 +152,7 @@ const FeaturesAndBenefits = () => {
           const transformedBenefits = benefitsResponse.data.map(benefit => ({
             id: benefit.id,
             benefit: benefit.benefit,
+            benefit_ar: benefit.benefit_ar || null,
             category: benefit.category
           }));
           setAppBenefitsData(transformedBenefits);

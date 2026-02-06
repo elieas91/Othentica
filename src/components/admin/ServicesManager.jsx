@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { 
   PlusIcon, 
@@ -6,12 +6,18 @@ import {
   TrashIcon, 
   EyeIcon,
   XMarkIcon,
-  PhotoIcon
+  PhotoIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
+import { translateFieldsToArabic, translateText } from '../../utils/translate';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
+import { getT } from '../../data/translations';
 
 const ServicesManager = () => {
+  const { language, isArabic } = useContext(DashboardLanguageContext);
+  const t = getT(language);
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -75,6 +81,39 @@ const ServicesManager = () => {
   const [imagePreviews, setImagePreviews] = useState({});
   const [showImageModal, setShowImageModal] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState(null);
+  const [translatingField, setTranslatingField] = useState(null);
+
+  const handleTranslateToArabic = async (fieldName) => {
+    const value = (formData[fieldName] || '').trim();
+    if (!value) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
+
+  const handleTranslateBulletPointsToArabic = async (fieldName) => {
+    const lines = formData[fieldName] || [];
+    if (!Array.isArray(lines) || lines.length === 0) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await Promise.all(
+        lines.map((text) => (text && String(text).trim() ? translateText(text, 'ar', 'en') : Promise.resolve('')))
+      );
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
 
   const fetchServices = useCallback(async () => {
     try {
@@ -214,13 +253,32 @@ const ServicesManager = () => {
   };
 
 
+  const parseBulletPoints = (val) => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val.map(s => (s && String(s).trim()) || '').filter(Boolean);
+    try {
+      const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+      return Array.isArray(parsed) ? parsed.map(s => (s && String(s).trim()) || '').filter(Boolean) : [];
+    } catch {
+      return [];
+    }
+  };
+
   const handleEdit = (service) => {
     setEditingService(service);
     setFormData({
       title: service.title || '',
+      title_ar: service.title_ar || '',
       description: service.description || '',
+      description_ar: service.description_ar || '',
       quotation: service.quotation || '',
-      button_text: service.button_text || ''
+      quotation_ar: service.quotation_ar || '',
+      button_text: service.button_text || '',
+      button_text_ar: service.button_text_ar || '',
+      description_bullet_points: parseBulletPoints(service.description_bullet_points),
+      modal_description_bullet_points: parseBulletPoints(service.modal_description_bullet_points),
+      description_bullet_points_ar: parseBulletPoints(service.description_bullet_points_ar),
+      modal_description_bullet_points_ar: parseBulletPoints(service.modal_description_bullet_points_ar),
     });
     
     // Set image preview
@@ -248,9 +306,17 @@ const ServicesManager = () => {
     setEditingService(null);
     setFormData({
       title: '',
+      title_ar: '',
       description: '',
+      description_ar: '',
       quotation: '',
-      button_text: ''
+      quotation_ar: '',
+      button_text: '',
+      button_text_ar: '',
+      description_bullet_points: [],
+      modal_description_bullet_points: [],
+      description_bullet_points_ar: [],
+      modal_description_bullet_points_ar: [],
     });
     setImagePreviews({});
     setShowForm(true);
@@ -263,7 +329,7 @@ const ServicesManager = () => {
     setImagePreviews({});
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, files } = e.target;
     
     if (name === 'image') {
@@ -296,10 +362,33 @@ const ServicesManager = () => {
         }));
       }
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      setFormData(prev => {
+        const updated = {
+          ...prev,
+          [name]: value
+        };
+        
+        // Auto-translate to Arabic when English fields change
+        if (name === 'title' || name === 'description' || name === 'quotation' || name === 'button_text') {
+          if (value && value.trim() !== '') {
+            translateFieldsToArabic({ [name]: value }, [name])
+              .then(translations => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  ...translations
+                }));
+              })
+              .catch(error => {
+                console.error('Auto-translation error:', error);
+              });
+          } else {
+            // Clear Arabic field if English field is empty
+            updated[`${name}_ar`] = '';
+          }
+        }
+        
+        return updated;
+      });
     }
   };
 
@@ -309,16 +398,16 @@ const ServicesManager = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h3 className="text-3xl font-bold text-primary font-poppins mb-2">
-            Services Management
+            {t('servicesManagement')}
           </h3>
-          <p className="text-gray-600">Manage services and solutions for the website</p>
+          <p className="text-gray-600">{t('servicesManagementSubtitle')}</p>
         </div>
         <button
           onClick={openCreateForm}
           className="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-secondary to-orange-500 text-white rounded-xl hover:from-orange-500 hover:to-secondary transition-all duration-300 shadow-lg hover:shadow-xl font-medium font-poppins"
         >
           <PlusIcon className="w-5 h-5" />
-          Add Service
+          {t('addService')}
         </button>
       </div>
 
@@ -326,27 +415,31 @@ const ServicesManager = () => {
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
-          <span className="ml-2 text-gray-600">Loading services...</span>
+          <span className="ml-2 text-gray-600">{t('loadingServices')}</span>
         </div>
       )}
 
       {/* Services Grid */}
       {!isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
+          {services.map((service) => {
+            const displayTitle = isArabic && service.title_ar ? service.title_ar : (service.title || t('untitledService'));
+            const displayDescription = isArabic && service.description_ar ? service.description_ar : (service.description || t('noDescriptionProvided'));
+            const displayQuotation = isArabic && service.quotation_ar ? service.quotation_ar : service.quotation;
+            return (
             <div key={service.id} className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-professional border border-accent/20 hover:shadow-xl-professional transition-all duration-300 group">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
+                  <div className="flex-1" dir={isArabic ? 'rtl' : undefined}>
                     <h4 className="text-lg font-bold text-primary font-poppins mb-2">
-                      {service.title || 'Untitled Service'}
+                      {displayTitle}
                     </h4>
                     <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                      {service.description || 'No description provided'}
+                      {displayDescription}
                     </p>
-                    {service.quotation && (
+                    {displayQuotation && (
                       <p className="text-xs text-gray-500 mt-2 italic">
-                        "{service.quotation}"
+                        "{displayQuotation}"
                       </p>
                     )}
                   </div>
@@ -361,7 +454,7 @@ const ServicesManager = () => {
                     >
                       <img
                         src={service.image_url}
-                        alt={service.title}
+                        alt={displayTitle}
                         className="w-16 h-16 object-cover rounded-lg border border-accent/30 shadow-sm group-hover:opacity-90 transition-opacity"
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
@@ -400,7 +493,8 @@ const ServicesManager = () => {
                 </div>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
 
@@ -433,62 +527,266 @@ const ServicesManager = () => {
                 handleCreate(formData);
               }
             }} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Title (English) *
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title || ''}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="Enter service title"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('title')}
+                      disabled={!formData.title?.trim() || translatingField === 'title'}
+                      className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'title' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Title (Arabic)
+                  </label>
+                  <input
+                    type="text"
+                    name="title_ar"
+                    value={formData.title_ar || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="Translate or type Arabic title"
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Description (English) *
+                  </label>
+                  <div className="flex gap-2">
+                    <textarea
+                      name="description"
+                      value={formData.description || ''}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
+                      placeholder="Enter service description..."
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('description')}
+                      disabled={!formData.description?.trim() || translatingField === 'description'}
+                      className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'description' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Description (Arabic)
+                  </label>
+                  <textarea
+                    name="description_ar"
+                    value={formData.description_ar || ''}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
+                    placeholder="Translate or type Arabic description"
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+
+              {/* Description bullet points (English) */}
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Title *
+                  Description bullet points (English) – one per line
                 </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title || ''}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                  placeholder="Enter service title"
-                  required
+                <div className="flex gap-2">
+                  <textarea
+                    name="description_bullet_points"
+                    value={(formData.description_bullet_points || []).join('\n')}
+                    onChange={(e) => {
+                      const lines = e.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+                      setFormData(prev => ({ ...prev, description_bullet_points: lines }));
+                    }}
+                    rows={5}
+                    className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                    placeholder={'Gamified learning and quick science-backed practices\nDaily mind cookies and inspiring stories\nBuilds focus, energy, and balance...'}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateBulletPointsToArabic('description_bullet_points')}
+                    disabled={!(formData.description_bullet_points || []).length || translatingField === 'description_bullet_points'}
+                    className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'description_bullet_points' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Each line becomes one bullet on the service page.</p>
+              </div>
+
+              {/* Description bullet points (Arabic) */}
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                  Description bullet points (Arabic) – one per line
+                </label>
+                <textarea
+                  name="description_bullet_points_ar"
+                  value={(formData.description_bullet_points_ar || []).join('\n')}
+                  onChange={(e) => {
+                    const lines = e.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+                    setFormData(prev => ({ ...prev, description_bullet_points_ar: lines }));
+                  }}
+                  rows={5}
+                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                  placeholder="نقاط بالعربية – سطر واحد لكل نقطة"
+                  dir="rtl"
                 />
               </div>
 
+              {/* Modal description bullet points (English) */}
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Description *
+                  Modal description bullet points (English) – one per line
+                </label>
+                <div className="flex gap-2">
+                  <textarea
+                    name="modal_description_bullet_points"
+                    value={(formData.modal_description_bullet_points || []).join('\n')}
+                    onChange={(e) => {
+                      const lines = e.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+                      setFormData(prev => ({ ...prev, modal_description_bullet_points: lines }));
+                    }}
+                    rows={6}
+                    className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                    placeholder={'Designed to inspire teams and foster thriving cultures\nEncourage a shift from coping to thriving\n...'}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateBulletPointsToArabic('modal_description_bullet_points')}
+                    disabled={!(formData.modal_description_bullet_points || []).length || translatingField === 'modal_description_bullet_points'}
+                    className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'modal_description_bullet_points' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Shown in the &quot;Learn more&quot; modal. Each line = one bullet.</p>
+              </div>
+
+              {/* Modal description bullet points (Arabic) */}
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                  Modal description bullet points (Arabic) – one per line
                 </label>
                 <textarea
-                  name="description"
-                  value={formData.description || ''}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                  placeholder="Enter service description..."
-                  required
+                  name="modal_description_bullet_points_ar"
+                  value={(formData.modal_description_bullet_points_ar || []).join('\n')}
+                  onChange={(e) => {
+                    const lines = e.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+                    setFormData(prev => ({ ...prev, modal_description_bullet_points_ar: lines }));
+                  }}
+                  rows={6}
+                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                  placeholder="نقاط النافذة المنبثقة بالعربية – سطر واحد لكل نقطة"
+                  dir="rtl"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Quotation
+                    Quotation (English)
                   </label>
-                  <input
-                    type="text"
-                    name="quotation"
-                    value={formData.quotation || ''}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter quotation..."
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="quotation"
+                      value={formData.quotation || ''}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="Enter quotation..."
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('quotation')}
+                      disabled={!formData.quotation?.trim() || translatingField === 'quotation'}
+                      className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'quotation' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                    </button>
+                  </div>
                 </div>
-
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Button Text
+                    Quotation (Arabic)
                   </label>
                   <input
                     type="text"
-                    name="button_text"
-                    value={formData.button_text || ''}
+                    name="quotation_ar"
+                    value={formData.quotation_ar || ''}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter button text..."
+                    placeholder="Translate or type Arabic quotation"
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Button Text (English)
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="button_text"
+                      value={formData.button_text || ''}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="Enter button text..."
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('button_text')}
+                      disabled={!formData.button_text?.trim() || translatingField === 'button_text'}
+                      className="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-3 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl border border-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'button_text' ? <ArrowPathIcon className="w-4 h-4 animate-spin" /> : 'AR'}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Button Text (Arabic)
+                  </label>
+                  <input
+                    type="text"
+                    name="button_text_ar"
+                    value={formData.button_text_ar || ''}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="Translate or type Arabic button text"
+                    dir="rtl"
                   />
                 </div>
               </div>
@@ -545,7 +843,18 @@ const ServicesManager = () => {
       )}
 
       {/* View Modal */}
-      {viewingService && createPortal(
+      {viewingService && (() => {
+        const viewTitle = isArabic && viewingService.title_ar ? viewingService.title_ar : (viewingService.title || t('untitledService'));
+        const viewDesc = isArabic && viewingService.description_ar ? viewingService.description_ar : (viewingService.description || t('noDescriptionProvided'));
+        const viewQuotation = isArabic && viewingService.quotation_ar ? viewingService.quotation_ar : viewingService.quotation;
+        const viewButtonText = isArabic && viewingService.button_text_ar ? viewingService.button_text_ar : viewingService.button_text;
+        const viewDescBullets = parseBulletPoints(viewingService.description_bullet_points);
+        const viewModalBullets = parseBulletPoints(viewingService.modal_description_bullet_points);
+        const viewDescBulletsAr = parseBulletPoints(viewingService.description_bullet_points_ar);
+        const viewModalBulletsAr = parseBulletPoints(viewingService.modal_description_bullet_points_ar);
+        const displayDescBullets = isArabic && viewDescBulletsAr.length ? viewDescBulletsAr : viewDescBullets;
+        const displayModalBullets = isArabic && viewModalBulletsAr.length ? viewModalBulletsAr : viewModalBullets;
+        return createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-xl-professional border border-accent/20 p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
@@ -563,12 +872,12 @@ const ServicesManager = () => {
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6" dir={isArabic ? 'rtl' : undefined}>
               <div>
                 <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                   Title
                 </label>
-                <p className="text-lg font-medium text-gray-900">{viewingService.title || 'Untitled Service'}</p>
+                <p className="text-lg font-medium text-gray-900">{viewTitle}</p>
               </div>
 
               <div>
@@ -577,26 +886,52 @@ const ServicesManager = () => {
                 </label>
                 <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
                   <p className="text-gray-800 text-lg leading-relaxed">
-                    {viewingService.description || 'No description provided'}
+                    {viewDesc}
                   </p>
                 </div>
               </div>
 
-              {viewingService.quotation && (
+              {displayDescBullets.length > 0 && (
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                    Description bullet points
+                  </label>
+                  <ul className="list-disc list-inside space-y-1 text-gray-800" dir={isArabic && viewDescBulletsAr.length ? 'rtl' : undefined}>
+                    {displayDescBullets.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {displayModalBullets.length > 0 && (
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                    Modal description bullet points
+                  </label>
+                  <ul className="list-disc list-inside space-y-1 text-gray-800" dir={isArabic && viewModalBulletsAr.length ? 'rtl' : undefined}>
+                    {displayModalBullets.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {viewQuotation && (
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                     Quotation
                   </label>
-                  <p className="text-lg font-medium text-gray-900 italic">"{viewingService.quotation}"</p>
+                  <p className="text-lg font-medium text-gray-900 italic">"{viewQuotation}"</p>
                 </div>
               )}
 
-              {viewingService.button_text && (
+              {viewButtonText && (
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                     Button Text
                   </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingService.button_text}</p>
+                  <p className="text-lg font-medium text-gray-900">{viewButtonText}</p>
                 </div>
               )}
 
@@ -612,7 +947,7 @@ const ServicesManager = () => {
                   >
                     <img
                       src={viewingService.image_url}
-                      alt={viewingService.title}
+                      alt={viewTitle}
                       className="w-48 h-48 object-cover rounded-xl border border-accent/30 shadow-sm group-hover:opacity-90 transition-opacity"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-xl flex items-center justify-center">
@@ -636,7 +971,8 @@ const ServicesManager = () => {
           </div>
         </div>,
         document.body
-      )}
+      );
+      })()}
 
       {/* Image Modal */}
       {showImageModal && createPortal(

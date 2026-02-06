@@ -389,8 +389,11 @@ class ApiService {
     return response.json();
   }
 
-  async getHomepageSectionByKey(sectionKey) {
-    const response = await fetch(`${this.baseURL}/content/homepage-sections/${sectionKey}`);
+  async getHomepageSectionByKey(sectionKey, locale) {
+    const url = locale
+      ? `${this.baseURL}/content/homepage-sections/${sectionKey}?locale=${encodeURIComponent(locale)}`
+      : `${this.baseURL}/content/homepage-sections/${sectionKey}`;
+    const response = await fetch(url);
     return response.json();
   }
 
@@ -423,10 +426,11 @@ class ApiService {
     return data;
   }
 
-  async upsertAboutSection(formData) {
+  async upsertAboutSection(formDataOrPayload) {
+    const isFormData = formDataOrPayload instanceof FormData;
     const response = await this.authenticatedRequest(`${this.baseURL}/content/about-sections`, {
       method: 'POST',
-      body: formData
+      body: isFormData ? formDataOrPayload : JSON.stringify(formDataOrPayload)
     });
     return response.json();
   }
@@ -850,13 +854,21 @@ class ApiService {
     return response.json();
   }
   async updateServicesBannerImageAdmin(id, imageData) {
-    const formData = new FormData();
-    Object.keys(imageData).forEach(key => {
-      if (imageData[key] !== null && imageData[key] !== undefined) {
-        formData.append(key, imageData[key]);
-      }
-    });
-    const response = await this.authenticatedRequest(`${this.baseURL}/content/admin/services-banner-images/${id}`, { method: 'PUT', body: formData });
+    const hasFile = imageData.image && imageData.image instanceof File;
+    if (hasFile) {
+      const formData = new FormData();
+      Object.keys(imageData).forEach(key => {
+        if (imageData[key] !== null && imageData[key] !== undefined && imageData[key] instanceof File === false) {
+          formData.append(key, imageData[key]);
+        }
+      });
+      formData.append('image', imageData.image);
+      const response = await this.authenticatedRequest(`${this.baseURL}/content/admin/services-banner-images/${id}`, { method: 'PUT', body: formData });
+      return response.json();
+    }
+    const payload = { ...imageData };
+    delete payload.image;
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/admin/services-banner-images/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
     return response.json();
   }
   async deleteServicesBannerImageAdmin(id) {
@@ -1221,6 +1233,28 @@ class ApiService {
       method: 'PUT',
       body: JSON.stringify({ message }),
     });
+    return response.json();
+  }
+
+  // Translation API methods
+  async translateText(text) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/translation/translate`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    });
+    return response.json();
+  }
+
+  async translateFields(fields, fieldNames) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/translation/translate-fields`, {
+      method: 'POST',
+      body: JSON.stringify({ fields, fieldNames }),
+    });
+    return response.json();
+  }
+
+  async checkTranslationStatus() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/translation/status`);
     return response.json();
   }
 }

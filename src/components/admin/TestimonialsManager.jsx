@@ -12,6 +12,7 @@ import {
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import { getApiUrl } from '../../config/api';
+import { translateFieldsToArabic } from '../../utils/translate';
 
 // Service categories matching the Services.jsx data
 const SERVICE_CATEGORIES = [
@@ -87,7 +88,9 @@ const TestimonialsManager = () => {
   const [stats, setStats] = useState({});
   const [formData, setFormData] = useState({
     name: '',
+    name_ar: '',
     description: '',
+    description_ar: '',
     image: null,
     status: 'pending',
     category: 'programs',
@@ -175,7 +178,9 @@ const TestimonialsManager = () => {
     if (showForm && !editingTestimonial) {
       setFormData({
         name: '',
+        name_ar: '',
         description: '',
+        description_ar: '',
         image: null,
         status: 'pending',
         category: 'programs',
@@ -201,7 +206,9 @@ const TestimonialsManager = () => {
         
         setFormData({
           name: testimonial.name,
+          name_ar: testimonial.name_ar || '',
           description: testimonial.description,
+          description_ar: testimonial.description_ar || '',
           image: null, // Reset file input
           status: testimonial.status || 'pending',
           category: testimonial.category === 'app' ? 'programs' : (testimonial.category || 'programs'),
@@ -214,7 +221,7 @@ const TestimonialsManager = () => {
     }
   }, [editingTestimonial, testimonials]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value, files, type, checked } = e.target;
     
     if (name === 'image' && files && files[0]) {
@@ -242,10 +249,33 @@ const TestimonialsManager = () => {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
+      setFormData(prev => {
+        const updated = {
+          ...prev,
+          [name]: type === 'checkbox' ? checked : value
+        };
+        
+        // Auto-translate to Arabic when English fields change
+        if (name === 'name' || name === 'description') {
+          if (value && value.trim() !== '') {
+            translateFieldsToArabic({ [name]: value }, [name])
+              .then(translations => {
+                setFormData(prevData => ({
+                  ...prevData,
+                  ...translations
+                }));
+              })
+              .catch(error => {
+                console.error('Auto-translation error:', error);
+              });
+          } else {
+            // Clear Arabic field if English field is empty
+            updated[`${name}_ar`] = '';
+          }
+        }
+        
+        return updated;
+      });
     }
   };
 
@@ -258,7 +288,9 @@ const TestimonialsManager = () => {
       // Create FormData for file upload
       const submitData = new FormData();
       submitData.append('name', formData.name);
+      submitData.append('name_ar', formData.name_ar || '');
       submitData.append('description', formData.description);
+      submitData.append('description_ar', formData.description_ar || '');
       submitData.append('status', formData.status);
       submitData.append('category', formData.category);
       submitData.append('email', formData.email || '');
@@ -292,7 +324,7 @@ const TestimonialsManager = () => {
         await loadStats();
         
         // Reset form and close modal
-        setFormData({ name: '', description: '', image: null, status: 'pending', category: 'programs', email: '', is_anonymous: false });
+        setFormData({ name: '', name_ar: '', description: '', description_ar: '', image: null, status: 'pending', category: 'programs', email: '', is_anonymous: false });
         setImagePreview(null);
         setShowForm(false);
         setEditingTestimonial(null);
@@ -645,10 +677,10 @@ const TestimonialsManager = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Name
+                    Name (English)
                   </label>
                   <input
                     type="text"
@@ -660,6 +692,23 @@ const TestimonialsManager = () => {
                     required
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Name (Arabic) - Auto-translated
+                  </label>
+                  <input
+                    type="text"
+                    name="name_ar"
+                    value={formData.name_ar}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="Auto-translated from English"
+                    dir="rtl"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
@@ -776,19 +825,35 @@ const TestimonialsManager = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
-                  placeholder="Enter the testimonial description..."
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Description (English)
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    rows={6}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
+                    placeholder="Enter the testimonial description..."
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Description (Arabic) - Auto-translated
+                  </label>
+                  <textarea
+                    name="description_ar"
+                    value={formData.description_ar}
+                    onChange={handleInputChange}
+                    rows={6}
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-none"
+                    placeholder="Auto-translated from English"
+                    dir="rtl"
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end gap-4 pt-6">

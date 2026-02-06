@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import './RichTextEditor.css';
 
-const RichTextEditor = ({ value, onChange, placeholder = "Enter text...", height = "200px" }) => {
+const RichTextEditor = ({ value, onChange, placeholder = "Enter text...", height = "200px", dir }) => {
   const [QuillComponent, setQuillComponent] = useState(null);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const RichTextEditor = ({ value, onChange, placeholder = "Enter text...", height
   const ReactQuill = QuillComponent;
 
   return (
-    <div className="rich-text-editor">
+    <div className="rich-text-editor" dir={dir} style={dir === 'rtl' ? { textAlign: 'right' } : undefined}>
       <ReactQuill
         theme="snow"
         value={value || ''}

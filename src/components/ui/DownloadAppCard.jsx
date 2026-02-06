@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import GooglePlayBadge from '../../assets/img/stores_badges/google_play_badge.webp';
 import AppStoreBadge from '../../assets/img/stores_badges/app_store_badge.webp';
 import Button from './Button';
 import { Link } from 'react-router-dom';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const DownloadAppCard = () => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [cardData, setCardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,27 +56,17 @@ const DownloadAppCard = () => {
   if (error) {
     return (
       <div className="bg-white rounded-xl shadow-2xl p-8 relative">
-        <div className="min-h-[200px] flex flex-col justify-center">
+        <div className="min-h-[200px] flex flex-col justify-center" dir={isArabic ? 'rtl' : 'ltr'}>
           <h2 className="text-2xl lg:text-4xl font-bold text-primary dark:text-neutral">
-            Download Othentica App
+            {t('downloadOthenticaApp')}
           </h2>
-          <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4">
-            Experience seamless access to our services, exclusive offers, and the
-            latest updates, all in one place.
-          </p>
-          <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-            The Othentica app is available on both the App Store and Google Play.
-          </p>
-          <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
-            Get it to begin your journey today!
+          <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 mb-4">
+            {t('downloadCardFallback')}
           </p>
           <div className="flex justify-center md:justify-start">
             <Link to="/contact" target="_blank">
-              <Button
-                variant="secondary"
-                size="large"
-              >
-                Book a Demo
+              <Button variant="secondary" size="large">
+                {t('bookADemo')}
               </Button>
             </Link>
           </div>
@@ -81,38 +75,29 @@ const DownloadAppCard = () => {
     );
   }
 
+  const displayTitle = isArabic && (cardData?.title_ar?.trim?.() || cardData?.title_ar) ? cardData.title_ar : (cardData?.title || t('downloadOthenticaApp'));
+  const displayDescription = isArabic && (cardData?.description_ar?.trim?.() || cardData?.description_ar) ? cardData.description_ar : cardData?.description;
+
   return (
     <div className="bg-white rounded-xl shadow-2xl p-8 relative">
-      <div className="min-h-[200px] flex flex-col justify-center">
+      <div className="min-h-[200px] flex flex-col justify-center" dir={isArabic ? 'rtl' : 'ltr'}>
         <h2 className="text-3xl lg:text-4xl font-bold text-primary dark:text-neutral">
-          {cardData?.title || 'Download Othentica App'}
+          {displayTitle}
         </h2>
-        {cardData?.description ? (
+        {displayDescription ? (
           <div 
             className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed my-4 prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: cardData.description }}
+            dangerouslySetInnerHTML={{ __html: displayDescription }}
           />
         ) : (
-          <>
-            <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4">
-              Experience seamless access to our services, exclusive offers, and the
-              latest updates, all in one place.
-            </p>
-            <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed">
-              The Othentica app is available on both the App Store and Google Play.
-            </p>
-            <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mb-4">
-              Get it to begin your journey today!
-            </p>
-          </>
+          <p className="text-lg lg:text-xl text-primary dark:text-gray-200 leading-relaxed mt-4 mb-4">
+            {t('downloadCardFallback')}
+          </p>
         )}
         <div className="flex justify-center md:justify-start">
           <Link to="/contact" target="_blank">
-            <Button
-              variant="secondary"
-              size="large"
-            >
-              Book a Demo
+            <Button variant="secondary" size="large">
+              {t('bookADemo')}
             </Button>
           </Link>
         </div>
@@ -129,7 +114,7 @@ const DownloadAppCard = () => {
           >
             <img
               src={GooglePlayBadge}
-              alt="Get it on Google Play"
+              alt={t('getItOnGooglePlay')}
               className="h-12"
             />
           </a>
@@ -145,7 +130,7 @@ const DownloadAppCard = () => {
           >
             <img
               src={AppStoreBadge}
-              alt="Download on the App Store"
+              alt={t('downloadOnAppStore')}
               className="h-12"
             />
           </a>

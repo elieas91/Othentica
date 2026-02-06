@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -7,13 +7,20 @@ import {
   XMarkIcon,
   CheckCircleIcon,
   XCircleIcon,
-  ClockIcon
+  ClockIcon,
+  LanguageIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
 import RichTextEditor from '../ui/RichTextEditor';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
+import { translateText } from '../../utils/translate';
 
 const MobileShowcaseCardManager = () => {
+  const { isArabic } = useContext(DashboardLanguageContext);
+  const prevIsArabic = useRef(isArabic);
+  const [translatingField, setTranslatingField] = useState(null);
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -75,11 +82,35 @@ const MobileShowcaseCardManager = () => {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
+    title_ar: '',
     description: '',
+    description_ar: '',
     apple_link: '',
     android_link: ''
   });
   const [, setStats] = useState({});
+
+  const stripHtml = (html) => {
+    if (!html || typeof html !== 'string') return '';
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return (div.textContent || div.innerText || '').trim();
+  };
+
+  const handleTranslateToArabic = async (fieldName) => {
+    const value = fieldName === 'description' ? stripHtml(formData.description || '') : (formData[fieldName] || '').trim();
+    if (!value) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
 
   const fetchCards = useCallback(async () => {
     try {
@@ -104,10 +135,25 @@ const MobileShowcaseCardManager = () => {
     fetchCards();
   }, [fetchCards]);
 
+  useEffect(() => {
+    if (prevIsArabic.current !== isArabic) {
+      prevIsArabic.current = isArabic;
+      fetchCards();
+    }
+  }, [isArabic, fetchCards]);
+
   const handleCreate = async (data) => {
     try {
       setIsLoading(true);
-      const response = await apiService.createMobileShowcaseCard(data);
+      const payload = {
+        title: String(data.title ?? ''),
+        title_ar: String(data.title_ar ?? ''),
+        description: data.description ?? '',
+        description_ar: String(data.description_ar ?? ''),
+        apple_link: data.apple_link ?? '',
+        android_link: data.android_link ?? ''
+      };
+      const response = await apiService.createMobileShowcaseCard(payload);
       
       if (response.success) {
         await showSuccessAlert('Success!', 'Mobile showcase card created successfully!');
@@ -115,7 +161,9 @@ const MobileShowcaseCardManager = () => {
         setShowForm(false);
         setFormData({
           title: '',
+          title_ar: '',
           description: '',
+          description_ar: '',
           apple_link: '',
           android_link: ''
         });
@@ -132,7 +180,24 @@ const MobileShowcaseCardManager = () => {
   const handleUpdate = async (data) => {
     try {
       setIsLoading(true);
-      const response = await apiService.updateMobileShowcaseCard(editingCard.id, data);
+      const payload = {
+        title: String(data.title ?? ''),
+        title_ar: String(data.title_ar ?? ''),
+        description: data.description ?? '',
+        description_ar: String(data.description_ar ?? ''),
+        apple_link: data.apple_link ?? '',
+        android_link: data.android_link ?? ''
+      };
+      // DEBUG: trace Arabic fields before send
+      console.log('[MobileShowcaseCard] handleUpdate formData (data):', {
+        title_ar: data.title_ar,
+        description_ar: data.description_ar ? `${String(data.description_ar).slice(0, 80)}...` : data.description_ar
+      });
+      console.log('[MobileShowcaseCard] handleUpdate payload sent:', {
+        title_ar: payload.title_ar,
+        description_ar: payload.description_ar ? `${payload.description_ar.slice(0, 80)}...` : payload.description_ar
+      });
+      const response = await apiService.updateMobileShowcaseCard(editingCard.id, payload);
       
       if (response.success) {
         await showSuccessAlert('Success!', 'Mobile showcase card updated successfully!');
@@ -140,7 +205,9 @@ const MobileShowcaseCardManager = () => {
         setEditingCard(null);
         setFormData({
           title: '',
+          title_ar: '',
           description: '',
+          description_ar: '',
           apple_link: '',
           android_link: ''
         });
@@ -184,7 +251,9 @@ const MobileShowcaseCardManager = () => {
     setEditingCard(card);
     setFormData({
       title: card.title || '',
+      title_ar: card.title_ar || '',
       description: card.description || '',
+      description_ar: card.description_ar || '',
       apple_link: card.apple_link || '',
       android_link: card.android_link || ''
     });
@@ -201,7 +270,9 @@ const MobileShowcaseCardManager = () => {
     setViewingCard(null);
     setFormData({
       title: '',
+      title_ar: '',
       description: '',
+      description_ar: '',
       apple_link: '',
       android_link: ''
     });
@@ -219,6 +290,13 @@ const MobileShowcaseCardManager = () => {
     setFormData(prev => ({
       ...prev,
       description: value
+    }));
+  };
+
+  const handleDescriptionArChange = (value) => {
+    setFormData(prev => ({
+      ...prev,
+      description_ar: value
     }));
   };
 
@@ -262,12 +340,13 @@ const MobileShowcaseCardManager = () => {
                           ID: {card.id}
                         </span>
                       </div>
-                      <h4 className="text-lg font-bold text-primary font-poppins mb-2">
-                        {card.title || 'Untitled Card'}
+                      <h4 className="text-lg font-bold text-primary font-poppins mb-2" dir={isArabic ? 'rtl' : 'ltr'}>
+                        {isArabic ? (card.title_ar || card.title || 'Untitled Card') : (card.title || 'Untitled Card')}
                       </h4>
                       <div 
                         className="text-gray-600 text-sm leading-relaxed line-clamp-3"
-                        dangerouslySetInnerHTML={{ __html: card.description || 'No description provided' }}
+                        dir={isArabic ? 'rtl' : 'ltr'}
+                        dangerouslySetInnerHTML={{ __html: isArabic ? (card.description_ar || card.description || 'No description provided') : (card.description || 'No description provided') }}
                       />
                       <div className="flex gap-4 mt-3">
                         {card.apple_link && (
@@ -339,7 +418,7 @@ const MobileShowcaseCardManager = () => {
       {/* Add/Edit Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-xl-professional border border-accent/20 p-8 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-gradient-to-br from-white to-accent/10 rounded-2xl shadow-xl-professional border border-accent/20 p-8 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-2xl font-bold text-primary font-poppins">
@@ -365,31 +444,90 @@ const MobileShowcaseCardManager = () => {
                 handleCreate(formData);
               }
             }} className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Title *
-                </label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                  placeholder="Enter card title"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Title (EN) *
+                  </label>
+                  <div className="flex gap-2 items-start">
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      className="flex-1 min-w-0 px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="Enter card title"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleTranslateToArabic('title')}
+                      disabled={translatingField === 'title' || !(formData.title || '').trim()}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title="Translate to Arabic"
+                    >
+                      {translatingField === 'title' ? (
+                        <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <LanguageIcon className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                    Title (AR)
+                  </label>
+                  <input
+                    type="text"
+                    name="title_ar"
+                    value={formData.title_ar}
+                    onChange={handleInputChange}
+                    dir="rtl"
+                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                    placeholder="العنوان بالعربية"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Description
+                  Description (EN)
                 </label>
-                <div className="rich-text-container">
+                <div className="flex gap-2 items-start">
+                  <div className="flex-1 min-w-0 rich-text-container">
+                    <RichTextEditor
+                      value={formData.description}
+                      onChange={handleDescriptionChange}
+                      placeholder="Enter card description... (Use the toolbar for formatting)"
+                      height="180px"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleTranslateToArabic('description')}
+                    disabled={translatingField === 'description' || !stripHtml(formData.description || '').trim()}
+                    className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
+                    title="Translate to Arabic"
+                  >
+                    {translatingField === 'description' ? (
+                      <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <LanguageIcon className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                  Description (AR)
+                </label>
+                <div className="rich-text-container" dir="rtl">
                   <RichTextEditor
-                    value={formData.description}
-                    onChange={handleDescriptionChange}
-                    placeholder="Enter card description... (Use the toolbar for formatting)"
-                    height="200px"
+                    value={formData.description_ar}
+                    onChange={handleDescriptionArChange}
+                    placeholder="الوصف بالعربية..."
+                    height="180px"
                   />
                 </div>
               </div>
@@ -463,12 +601,14 @@ const MobileShowcaseCardManager = () => {
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6" dir={isArabic ? 'rtl' : 'ltr'}>
               <div>
                 <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
                   Title
                 </label>
-                <p className="text-lg font-medium text-gray-900">{viewingCard.title || 'Untitled Card'}</p>
+                <p className="text-lg font-medium text-gray-900">
+                  {isArabic ? (viewingCard.title_ar || viewingCard.title || 'Untitled Card') : (viewingCard.title || 'Untitled Card')}
+                </p>
               </div>
 
               <div>
@@ -478,7 +618,7 @@ const MobileShowcaseCardManager = () => {
                 <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
                   <div 
                     className="text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: viewingCard.description || 'No description provided' }}
+                    dangerouslySetInnerHTML={{ __html: isArabic ? (viewingCard.description_ar || viewingCard.description || 'No description provided') : (viewingCard.description || 'No description provided') }}
                   />
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { 
   PlusIcon, 
   PencilIcon, 
@@ -8,10 +8,14 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ClockIcon,
-  PhotoIcon
+  PhotoIcon,
+  LanguageIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
+import { DashboardLanguageContext } from '../../contexts/DashboardLanguageContext';
+import { translateText } from '../../utils/translate';
 import MobileShowcaseImagesManager from './MobileShowcaseImagesManager';
 import MobileShowcaseCardManager from './MobileShowcaseCardManager';
 import SecurityCardsManager from './SecurityCardsManager';
@@ -21,6 +25,8 @@ import FeaturesAndBenefitsManager from './FeaturesAndBenefitsManager';
 import RichTextEditor from '../ui/RichTextEditor';
 
 const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionChange }) => {
+  const { isArabic } = useContext(DashboardLanguageContext);
+
   // SweetAlert helper functions for consistent styling
   const showSuccessAlert = (title, text) => {
     return Swal.fire({
@@ -94,15 +100,55 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
   const [showClientsManager, setShowClientsManager] = useState(false);
   const [showFeaturesAndBenefitsManager, setShowFeaturesAndBenefitsManager] = useState(false);
   const [originalFormData, setOriginalFormData] = useState(null);
+  const [translatingField, setTranslatingField] = useState(null); // 'title' | 'subtitle' | 'description' | 'button_text'
+  const [translatingJsonButton, setTranslatingJsonButton] = useState(null); // 'primaryButton' | 'secondaryButton'
+
+  // Strip HTML for plain-text translation (e.g. for rich text description)
+  const stripHtml = (html) => {
+    if (!html || typeof html !== 'string') return '';
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return (div.textContent || div.innerText || '').trim();
+  };
+
+  const handleTranslateToArabic = async (fieldName) => {
+    const value = fieldName === 'description' ? stripHtml(formData.description || '') : (formData[fieldName] || '');
+    if (!value.trim()) return;
+    setTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setFormData(prev => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingField(null);
+    }
+  };
+
+  const handleTranslateButtonTextToArabic = async (fieldKey) => {
+    const content = parseJsonContent(formData.content);
+    const text = content[fieldKey]?.text || '';
+    if (!text.trim()) return;
+    setTranslatingJsonButton(fieldKey);
+    try {
+      const translated = await translateText(text, 'ar', 'en');
+      handleJsonFieldChange(fieldKey, 'text_ar', translated);
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setTranslatingJsonButton(null);
+    }
+  };
 
   // Function to check if form data has changed
   const hasFormDataChanged = () => {
     if (!originalFormData || !editingItem) return false;
     
-    // Compare all relevant fields except file inputs
+    // Compare all relevant fields except file inputs (including Arabic)
     const fieldsToCompare = [
-      'title', 'subtitle', 'description', 'content', 'button_text', 
-      'button_link', 'button_variant'
+      'title', 'title_ar', 'subtitle', 'subtitle_ar', 'description', 'description_ar',
+      'content', 'content_ar', 'button_text', 'button_text_ar', 'button_link', 'button_variant'
     ];
     
     for (const field of fieldsToCompare) {
@@ -182,7 +228,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       hasMainImage: false,
       hasBackgroundImage: false,
       hasSubtitle: false,
-      usesDescription: false
+      usesDescription: true
     },
     { 
       key: 'mobile_showcase', 
@@ -234,6 +280,15 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
     fetchSections();
   }, [fetchSections]);
 
+  // When user clicks Arabic/English, refetch sections from DB so we have latest title_ar, description_ar, etc.
+  const prevIsArabic = useRef(isArabic);
+  useEffect(() => {
+    if (prevIsArabic.current !== isArabic) {
+      prevIsArabic.current = isArabic;
+      fetchSections();
+    }
+  }, [isArabic, fetchSections]);
+
   // Sync with parent component
   useEffect(() => {
     if (propActiveSection && propActiveSection !== activeSection) {
@@ -258,13 +313,18 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       const submitData = new FormData();
       submitData.append('section_key', activeSection);
       submitData.append('title', data.title || '');
+      submitData.append('title_ar', data.title_ar || '');
       submitData.append('subtitle', data.subtitle || '');
+      submitData.append('subtitle_ar', data.subtitle_ar || '');
       submitData.append('description', data.description || '');
+      submitData.append('description_ar', data.description_ar || '');
       // Philosophy and services no longer use JSON content; send content only for other sections
       if (activeSection !== 'philosophy' && activeSection !== 'services') {
         submitData.append('content', data.content || '');
+        submitData.append('content_ar', data.content_ar || '');
       }
       submitData.append('button_text', data.button_text || '');
+      submitData.append('button_text_ar', data.button_text_ar || '');
       submitData.append('button_link', data.button_link || '');
       submitData.append('button_variant', data.button_variant || 'primary');
       
@@ -316,13 +376,18 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       const submitData = new FormData();
       submitData.append('section_key', activeSection);
       submitData.append('title', data.title || '');
+      submitData.append('title_ar', data.title_ar || '');
       submitData.append('subtitle', data.subtitle || '');
+      submitData.append('subtitle_ar', data.subtitle_ar || '');
       submitData.append('description', data.description || '');
+      submitData.append('description_ar', data.description_ar || '');
       // Philosophy and services no longer use JSON content; send content only for other sections
       if (activeSection !== 'philosophy' && activeSection !== 'services') {
         submitData.append('content', data.content || '');
+        submitData.append('content_ar', data.content_ar || '');
       }
       submitData.append('button_text', data.button_text || '');
+      submitData.append('button_text_ar', data.button_text_ar || '');
       submitData.append('button_link', data.button_link || '');
       submitData.append('button_variant', data.button_variant || 'primary');
       
@@ -393,13 +458,18 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       setEditingItem(currentSection);
       const initialFormData = {
         title: currentSection.title || '',
+        title_ar: currentSection.title_ar || '',
         subtitle: currentSection.subtitle || '',
+        subtitle_ar: currentSection.subtitle_ar || '',
         description: currentSection.description || '',
+        description_ar: currentSection.description_ar || '',
         // Philosophy and services no longer use JSON content
         content: (activeSection === 'philosophy' || activeSection === 'services') ? '' : (currentSection.content || ''),
+        content_ar: (activeSection === 'philosophy' || activeSection === 'services') ? '' : (currentSection.content_ar || ''),
         image: null, // Reset file input
         background_image: null, // Reset file input
         button_text: currentSection.button_text || '',
+        button_text_ar: currentSection.button_text_ar || '',
         button_link: currentSection.button_link || '',
         button_variant: currentSection.button_variant || 'primary',
         // Preserve existing image URLs for server-side processing
@@ -553,10 +623,9 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
     }
   };
 
-  // Render dynamic content fields based on section type
+  // Render dynamic content fields based on section type (use formData so typing updates the displayed value)
   const renderDynamicContentFields = () => {
-    const currentSection = getCurrentSectionData();
-    const jsonContent = parseJsonContent(currentSection?.content || formData.content);
+    const jsonContent = parseJsonContent(formData.content);
     
     // Define field configurations for each section type
     const fieldConfigs = {
@@ -566,7 +635,8 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
           label: 'Primary Button',
           type: 'object',
           fields: [
-            { key: 'text', label: 'Button Text', type: 'text' },
+            { key: 'text', label: 'Button Text', type: 'text', translateToAr: true },
+            { key: 'text_ar', label: 'Button Text (Arabic)', type: 'text' },
             { key: 'link', label: 'Button Link', type: 'text' },
             { key: 'variant', label: 'Button Variant', type: 'select', options: ['primary', 'secondary', 'accent'] }
           ]
@@ -576,7 +646,8 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
           label: 'Secondary Button',
           type: 'object',
           fields: [
-            { key: 'text', label: 'Button Text', type: 'text' },
+            { key: 'text', label: 'Button Text', type: 'text', translateToAr: true },
+            { key: 'text_ar', label: 'Button Text (Arabic)', type: 'text' },
             { key: 'link', label: 'Button Link', type: 'text' },
             { key: 'variant', label: 'Button Variant', type: 'select', options: ['primary', 'secondary', 'accent'] }
           ]
@@ -635,9 +706,26 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                 <div className="space-y-3">
                   {field.fields.map((subField) => (
                     <div key={subField.key}>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">
-                        {subField.label}
-                      </label>
+                      <div className="flex items-center gap-2 mb-1">
+                        <label className="block text-xs font-medium text-gray-600">
+                          {subField.label}
+                        </label>
+                        {subField.translateToAr && (
+                          <button
+                            type="button"
+                            onClick={() => handleTranslateButtonTextToArabic(field.key)}
+                            disabled={!jsonContent[field.key]?.text?.trim() || translatingJsonButton === field.key}
+                            className="flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Translate to Arabic"
+                          >
+                            {translatingJsonButton === field.key ? (
+                              <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              'AR'
+                            )}
+                          </button>
+                        )}
+                      </div>
                       {subField.type === 'select' ? (
                         <select
                           value={jsonContent[field.key]?.[subField.key] || ''}
@@ -655,7 +743,8 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                           value={jsonContent[field.key]?.[subField.key] || ''}
                           onChange={(e) => handleJsonFieldChange(field.key, subField.key, e.target.value)}
                           className="w-full px-3 py-2 border border-accent/30 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent bg-white text-sm"
-                          placeholder={`Enter ${subField.label.toLowerCase()}`}
+                          placeholder={subField.key === 'text_ar' ? 'نص الزر بالعربية' : `Enter ${subField.label.toLowerCase()}`}
+                          dir={subField.key === 'text_ar' ? 'rtl' : undefined}
                         />
                       )}
                     </div>
@@ -922,11 +1011,15 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                         {getCurrentSectionData().section_key}
                       </span>
                     </div>
-                    <h4 className="text-lg font-bold text-primary font-poppins mb-2">
-                      {getCurrentSectionData().title || 'Untitled Section'}
+                    <h4 className="text-lg font-bold text-primary font-poppins mb-2" dir={isArabic ? 'rtl' : 'ltr'}>
+                      {isArabic
+                        ? (getCurrentSectionData().title_ar || getCurrentSectionData().title || 'Untitled Section')
+                        : (getCurrentSectionData().title || 'Untitled Section')}
                     </h4>
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                      {getCurrentSectionData().description || 'No description provided'}
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3" dir={isArabic ? 'rtl' : 'ltr'}>
+                      {isArabic
+                        ? (getCurrentSectionData().description_ar || getCurrentSectionData().description || 'No description provided')
+                        : (getCurrentSectionData().description || 'No description provided')}
                     </p>
                   </div>
                 </div>
@@ -1057,27 +1150,124 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                 handleCreate(formData);
               }
             }} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title || ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
-                    className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
-                    placeholder="Enter section title"
-                    required
-                  />
-                </div>
+              {/* Title fields: order by dashboard language; show both EN and AR */}
+              <div className="space-y-6">
+                {isArabic ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                        Title (Arabic)
+                      </label>
+                      <input
+                        type="text"
+                        name="title_ar"
+                        value={formData.title_ar || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                        className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                        placeholder="عنوان القسم"
+                        dir="rtl"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <label className="text-sm font-semibold text-primary font-poppins">
+                          Title (English)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => handleTranslateToArabic('title')}
+                          disabled={translatingField === 'title' || !(formData.title || '').trim()}
+                          className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Translate to Arabic"
+                        >
+                          {translatingField === 'title' ? (
+                            <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <LanguageIcon className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        name="title"
+                        value={formData.title || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                        className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                        placeholder="Enter section title"
+                        required
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <label className="text-sm font-semibold text-primary font-poppins">
+                          Title (English)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => handleTranslateToArabic('title')}
+                          disabled={translatingField === 'title' || !(formData.title || '').trim()}
+                          className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Translate to Arabic"
+                        >
+                          {translatingField === 'title' ? (
+                            <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <LanguageIcon className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        name="title"
+                        value={formData.title || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                        className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                        placeholder="Enter section title"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                        Title (Arabic)
+                      </label>
+                      <input
+                        type="text"
+                        name="title_ar"
+                        value={formData.title_ar || ''}
+                        onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                        className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                        placeholder="عنوان القسم"
+                        dir="rtl"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
 
-                {getCurrentSectionConfig().hasSubtitle && (
+              {getCurrentSectionConfig().hasSubtitle && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                      Subtitle
-                    </label>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <label className="text-sm font-semibold text-primary font-poppins">
+                        Subtitle (English)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleTranslateToArabic('subtitle')}
+                        disabled={translatingField === 'subtitle' || !(formData.subtitle || '').trim()}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Translate to Arabic"
+                      >
+                        {translatingField === 'subtitle' ? (
+                          <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <LanguageIcon className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
                     <input
                       type="text"
                       name="subtitle"
@@ -1087,22 +1277,116 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                       placeholder="Enter section subtitle"
                     />
                   </div>
-                )}
-              </div>
-
-              {getCurrentSectionConfig().usesDescription && (
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Description
-                  </label>
-                  <div className="rich-text-container">
-                    <RichTextEditor
-                      value={formData.description || ''}
-                      onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-                      placeholder="Enter section description... (Use the toolbar for formatting)"
-                      height="200px"
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                      Subtitle (Arabic)
+                    </label>
+                    <input
+                      type="text"
+                      name="subtitle_ar"
+                      value={formData.subtitle_ar || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                      className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="العنوان الفرعي"
+                      dir="rtl"
                     />
                   </div>
+                </div>
+              )}
+
+              {getCurrentSectionConfig().usesDescription && (
+                <div className="space-y-6">
+                  {isArabic ? (
+                    <>
+                      <div>
+                        <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                          Description (Arabic)
+                        </label>
+                        <div className="rich-text-container">
+                          <RichTextEditor
+                            value={formData.description_ar || ''}
+                            onChange={(value) => setFormData(prev => ({ ...prev, description_ar: value }))}
+                            placeholder="وصف القسم... (استخدم شريط الأدوات للتنسيق)"
+                            height="200px"
+                            dir="rtl"
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <div className="flex items-center justify-between gap-2 mb-3 mt-1">
+                          <label className="text-sm font-semibold text-primary font-poppins">
+                            Description (English)
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => handleTranslateToArabic('description')}
+                            disabled={translatingField === 'description' || !stripHtml(formData.description || '').trim()}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Translate to Arabic"
+                          >
+                            {translatingField === 'description' ? (
+                              <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <LanguageIcon className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                        <div className="rich-text-container">
+                          <RichTextEditor
+                            value={formData.description || ''}
+                            onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                            placeholder="Enter section description... (Use the toolbar for formatting)"
+                            height="200px"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="pt-2">
+                        <div className="flex items-center justify-between gap-2 mb-3 mt-1">
+                          <label className="text-sm font-semibold text-primary font-poppins">
+                            Description (English)
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => handleTranslateToArabic('description')}
+                            disabled={translatingField === 'description' || !stripHtml(formData.description || '').trim()}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Translate to Arabic"
+                          >
+                            {translatingField === 'description' ? (
+                              <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <LanguageIcon className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                        <div className="rich-text-container">
+                          <RichTextEditor
+                            value={formData.description || ''}
+                            onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
+                            placeholder="Enter section description... (Use the toolbar for formatting)"
+                            height="200px"
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                          Description (Arabic)
+                        </label>
+                        <div className="rich-text-container">
+                          <RichTextEditor
+                            value={formData.description_ar || ''}
+                            onChange={(value) => setFormData(prev => ({ ...prev, description_ar: value }))}
+                            placeholder="وصف القسم... (استخدم شريط الأدوات للتنسيق)"
+                            height="200px"
+                            dir="rtl"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -1251,13 +1535,28 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                 )}
               </div>
 
-              {/* Button Fields - Only show for sections that use buttons */}
+              {/* Button Fields - Only show for sections that use buttons (max 2 per row) */}
               {(activeSection === 'philosophy') && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                      Button Text
-                    </label>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <label className="text-sm font-semibold text-primary font-poppins">
+                        Button Text (English)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleTranslateToArabic('button_text')}
+                        disabled={translatingField === 'button_text' || !(formData.button_text || '').trim()}
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Translate to Arabic"
+                      >
+                        {translatingField === 'button_text' ? (
+                          <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <LanguageIcon className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
                     <input
                       type="text"
                       name="button_text"
@@ -1265,6 +1564,21 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                       onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
                       className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
                       placeholder="Enter button text"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                      Button Text (Arabic)
+                    </label>
+                    <input
+                      type="text"
+                      name="button_text_ar"
+                      value={formData.button_text_ar || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                      className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200"
+                      placeholder="نص الزر"
+                      dir="rtl"
                     />
                   </div>
 
@@ -1355,32 +1669,58 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Title
+                    {isArabic ? 'Title (Arabic)' : 'Title (English)'}
                   </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingItem.title || 'Untitled Section'}</p>
+                  <p className="text-lg font-medium text-gray-900" dir={isArabic ? 'rtl' : 'ltr'}>
+                    {isArabic ? (viewingItem.title_ar || viewingItem.title || 'Untitled Section') : (viewingItem.title || 'Untitled Section')}
+                  </p>
                 </div>
-
-              </div>
-
-              {getCurrentSectionConfig().hasSubtitle && viewingItem.subtitle && (
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                    Subtitle
+                    {isArabic ? 'Title (English)' : 'Title (Arabic)'}
                   </label>
-                  <p className="text-lg font-medium text-gray-900">{viewingItem.subtitle}</p>
+                  <p className="text-lg font-medium text-gray-900" dir={isArabic ? 'ltr' : 'rtl'}>
+                    {isArabic ? (viewingItem.title || 'Untitled Section') : (viewingItem.title_ar || viewingItem.title || '—')}
+                  </p>
+                </div>
+              </div>
+
+              {getCurrentSectionConfig().hasSubtitle && (viewingItem.subtitle || viewingItem.subtitle_ar) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-2 font-poppins">Subtitle (English)</label>
+                    <p className="text-lg font-medium text-gray-900">{viewingItem.subtitle || '—'}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-2 font-poppins">Subtitle (Arabic)</label>
+                    <p className="text-lg font-medium text-gray-900" dir="rtl">{viewingItem.subtitle_ar || '—'}</p>
+                  </div>
                 </div>
               )}
 
               {getCurrentSectionConfig().usesDescription && (
-                <div>
-                  <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                    Description
-                  </label>
-                  <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30">
-                    <div 
-                      className="text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none"
-                      dangerouslySetInnerHTML={{ __html: viewingItem.description || 'No description provided' }}
-                    />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                      {isArabic ? 'Description (Arabic)' : 'Description (English)'}
+                    </label>
+                    <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30" dir={isArabic ? 'rtl' : 'ltr'}>
+                      <div 
+                        className="text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none"
+                        dangerouslySetInnerHTML={{ __html: isArabic ? (viewingItem.description_ar || viewingItem.description || 'No description provided') : (viewingItem.description || 'No description provided') }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
+                      {isArabic ? 'Description (English)' : 'Description (Arabic)'}
+                    </label>
+                    <div className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl p-6 border border-accent/30" dir={isArabic ? 'ltr' : 'rtl'}>
+                      <div 
+                        className="text-gray-800 text-lg leading-relaxed prose prose-lg max-w-none"
+                        dangerouslySetInnerHTML={{ __html: isArabic ? (viewingItem.description || '—') : (viewingItem.description_ar || '—') }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -1408,16 +1748,24 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
               )}
 
               {/* Button Fields - Only show for sections that use buttons */}
-              {getCurrentSectionConfig().hasButtons && (viewingItem.button_text || viewingItem.button_link) && (
+              {getCurrentSectionConfig().hasButtons && (viewingItem.button_text || viewingItem.button_text_ar || viewingItem.button_link) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {viewingItem.button_text && (
-                    <div>
-                      <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
-                        Button Text
-                      </label>
-                      <p className="text-lg font-medium text-gray-900">{viewingItem.button_text}</p>
-                    </div>
-                  )}
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                      {isArabic ? 'Button Text (Arabic)' : 'Button Text (English)'}
+                    </label>
+                    <p className="text-lg font-medium text-gray-900" dir={isArabic ? 'rtl' : 'ltr'}>
+                      {isArabic ? (viewingItem.button_text_ar || viewingItem.button_text || '—') : (viewingItem.button_text || '—')}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-primary mb-2 font-poppins">
+                      {isArabic ? 'Button Text (English)' : 'Button Text (Arabic)'}
+                    </label>
+                    <p className="text-lg font-medium text-gray-900" dir={isArabic ? 'ltr' : 'rtl'}>
+                      {isArabic ? (viewingItem.button_text || '—') : (viewingItem.button_text_ar || '—')}
+                    </p>
+                  </div>
 
                   {viewingItem.button_link && (
                     <div>

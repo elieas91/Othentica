@@ -17,6 +17,7 @@ const Banner = ({
   className = '',
   children,
   textInRectangle = false,
+  dir,
 }) => {
   // If backgroundImages is provided and is an array, render them as columns
   const hasMultipleImages =
@@ -73,7 +74,7 @@ const Banner = ({
       )}
 
       {/* Content */}
-      <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto">
+      <div className="relative z-20 text-center px-6 py-16 max-w-4xl mx-auto" dir={dir}>
         {title &&
           (textInRectangle ? (
             <div
@@ -97,9 +98,7 @@ const Banner = ({
         )}
 
         {description && (
-          <p className="text-lg md:text-xl text-neutral/90 dark:text-neutral/80 mb-8 leading-relaxed max-w-3xl mx-auto">
-            {description}
-          </p>
+          <div className="text-lg md:text-xl text-neutral/90 dark:text-neutral/80 mb-8 leading-relaxed max-w-3xl mx-auto prose prose-lg prose-p:max-w-none" dangerouslySetInnerHTML={{ __html: description }} />
         )}
 
         {buttonText && (

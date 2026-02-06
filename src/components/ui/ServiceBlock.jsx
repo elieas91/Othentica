@@ -6,7 +6,7 @@ import WhatsAppButton from './WhatsappButton';
 import Tooltip from './Tooltip';
 import EmailIcon from '../../assets/img/email_icon.webp';
 
-const ServiceBlock = ({ service, index }) => {
+const ServiceBlock = ({ service, index, dir }) => {
   const isEven = index % 2 === 0; // alternate layout
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -115,7 +115,7 @@ const ServiceBlock = ({ service, index }) => {
           ></div>
 
           {/* Content */}
-          <div className="relative z-10 flex flex-col justify-start w-[100%] lg:w-[85%] h-auto top-[6rem]">
+          <div className="relative z-10 flex flex-col justify-start w-[100%] lg:w-[85%] h-auto top-[6rem]" dir={dir}>
             <div className="flex items-center mb-4">
               <img
                 src={service.icon}
@@ -204,7 +204,7 @@ const ServiceBlock = ({ service, index }) => {
 
       {/* Service Info Modal */}
       <Modal isOpen={isModalOpen} onClose={closeModal} title={service.title}>
-        <div className="space-y-6">
+        <div className="space-y-6" dir={dir}>
           <div className=" mb-6">
             <div className="flex items-center justify-center mb-4">
               <img

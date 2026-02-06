@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BlogModal from '../ui/BlogModal';
 import apiService from '../../services/api';
-import { getApiUrl, normalizeUploadUrl } from '../../config/api';
+import { normalizeUploadUrl } from '../../config/api';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);

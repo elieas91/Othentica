@@ -10,15 +10,6 @@
  * This version works by patching the global React object before React is imported.
  */
 
-// Helper function to check if a value is a valid React element
-const isValidElement = (object) => {
-  return (
-    typeof object === 'object' &&
-    object !== null &&
-    object.$$typeof === Symbol.for('react.element')
-  );
-};
-
 // Helper function to check if a value is a valid React child
 const isValidChild = (child) => {
   return child !== null && child !== undefined;

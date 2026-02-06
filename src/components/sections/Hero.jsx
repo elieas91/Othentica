@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../ui/Button';
 // import Logo from '../../assets/img/logo.webp';
 import Logo_o_white from '../../assets/img/logo_o.webp';
@@ -8,72 +8,85 @@ import Flame from '../../assets/img/flame.webp';
 import { Link } from 'react-router-dom';
 import HeroBg3 from '../../assets/img/hero_bg3v3.webp';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
 
-const Hero = () => {
+const defaultHeroData = {
+  title: 'Step into your authentic self',
+  title_ar: '',
+  description: 'Wellness is optional. Health is essential. Corporate health is the evolution. It\'s the foundation of energy, resilience, and performance.',
+  description_ar: '',
+  primaryButton: {
+    text: 'Onboard your Team',
+    link: '/contact',
+    variant: 'accent'
+  },
+  secondaryButton: {
+    text: 'What is Othentica',
+    link: '#philosophySec',
+    variant: 'secondary'
+  },
+  backgroundImage: HeroBg3
+};
+
+const Hero = ({ sectionData: sectionDataProp }) => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
   // Function to get the correct background image URL
   const getBackgroundImageUrl = (url) => {
     if (!url) return HeroBg3;
-    
-    // If it's a relative path starting with /assets/, convert it to the correct import
-    if (url.startsWith('/assets/img/hero_bg3v3.webp')) {
-      return HeroBg3;
-    }
-    
-    // If it's a full URL or other path, use it as is
+    if (url.startsWith('/assets/img/hero_bg3v3.webp')) return HeroBg3;
     return url;
   };
 
-  const [heroData, setHeroData] = useState({
-    title: 'Step into your authentic self',
-    description: 'Wellness is optional. Health is essential. Corporate health is the evolution. It\'s the foundation of energy, resilience, and performance.',
-    primaryButton: {
-      text: 'Onboard your Team',
-      link: '/contact',
-      variant: 'accent'
-    },
-    secondaryButton: {
-      text: 'What is Othentica',
-      link: '#philosophySec',
-      variant: 'secondary'
-    },
-    backgroundImage: HeroBg3
-  });
+  const [heroData, setHeroData] = useState(defaultHeroData);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Use section data from Home (raw section with title_ar, description_ar) or fetch once
   useEffect(() => {
+    const applySection = (sectionData) => {
+      if (!sectionData) return;
+      const content = sectionData.content ? (typeof sectionData.content === 'string' ? JSON.parse(sectionData.content || '{}') : sectionData.content) : {};
+      const contentAr = sectionData.content_ar ? (typeof sectionData.content_ar === 'string' ? JSON.parse(sectionData.content_ar || '{}') : sectionData.content_ar) : {};
+      const subtitle = sectionData.subtitle || '';
+      const subtitleAr = sectionData.subtitle_ar || '';
+      const desc = sectionData.description || defaultHeroData.description;
+      const descAr = sectionData.description_ar || '';
+      const combinedDesc = subtitle && desc ? `${subtitle} ${desc}`.trim() : desc;
+      const combinedDescAr = (subtitleAr && descAr ? `${subtitleAr} ${descAr}`.trim() : descAr) || combinedDesc;
+      const primaryBtn = content.primaryButton || defaultHeroData.primaryButton;
+      const secondaryBtn = content.secondaryButton || defaultHeroData.secondaryButton;
+      const primaryBtnAr = contentAr.primaryButton || primaryBtn;
+      const secondaryBtnAr = contentAr.secondaryButton || secondaryBtn;
+      setHeroData({
+        title: sectionData.title || defaultHeroData.title,
+        title_ar: sectionData.title_ar || '',
+        description: combinedDesc,
+        description_ar: combinedDescAr,
+        primaryButton: primaryBtn,
+        primaryButtonAr: primaryBtnAr,
+        secondaryButton: secondaryBtn,
+        secondaryButtonAr: secondaryBtnAr,
+        backgroundImage: getBackgroundImageUrl(sectionData.background_image_url)
+      });
+      setIsLoading(false);
+    };
+
+    if (sectionDataProp) {
+      applySection(sectionDataProp);
+      return;
+    }
     const fetchHeroData = async () => {
       try {
         setIsLoading(true);
-        
         const response = await apiService.getHomepageSectionByKey('hero');
-        
-        if (response.success && response.data) {
-          const sectionData = response.data;
-          const content = sectionData.content ? JSON.parse(sectionData.content) : {};
-          
-          // Combine subtitle and description into single description field
-          const combinedDescription = sectionData.subtitle && sectionData.description 
-            ? `${sectionData.subtitle} ${sectionData.description}`
-            : sectionData.description || heroData.description;
-
-          setHeroData({
-            title: sectionData.title || heroData.title,
-            description: combinedDescription,
-            primaryButton: content.primaryButton || heroData.primaryButton,
-            secondaryButton: content.secondaryButton || heroData.secondaryButton,
-            backgroundImage: getBackgroundImageUrl(sectionData.background_image_url)
-          });
-        }
+        if (response.success && response.data) applySection(response.data);
       } catch (error) {
         console.error('Error fetching hero data:', error);
-        // Keep default data on error
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchHeroData();
-  }, []); // Empty dependency array - only run once on mount
+  }, [sectionDataProp]);
 
   // Function to scroll to philosophy section
   const scrollToPhilosophy = () => {
@@ -269,28 +282,32 @@ const Hero = () => {
           </div>
         ) : (
           <>
-            <h1 className="capitalize text-3xl sm:text-5xl lg:text-7xl font-bold text-white dark:text-white mb-6 sm:mb-8 leading-tight">
-              {heroData.title}
+            <h1 className="capitalize text-3xl sm:text-5xl lg:text-7xl font-bold text-white dark:text-white mb-6 sm:mb-8 leading-tight" dir={isArabic ? 'rtl' : 'ltr'}>
+              {isArabic && (heroData.title_ar?.trim?.() || heroData.title_ar) ? heroData.title_ar : heroData.title}
             </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl text-white dark:text-gray-200 mb-8 sm:mb-10 leading-relaxed max-w-3xl">
-              <span dangerouslySetInnerHTML={{ __html: heroData.description }} />
+            <p className="text-lg sm:text-xl lg:text-2xl text-white dark:text-gray-200 mb-8 sm:mb-10 leading-relaxed max-w-3xl" dir={isArabic ? 'rtl' : 'ltr'}>
+              <span dangerouslySetInnerHTML={{ __html: (isArabic && (heroData.description_ar?.trim?.() || heroData.description_ar) ? heroData.description_ar : heroData.description) || '' }} />
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Link to={heroData.primaryButton.link} target="_blank" className="w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4" dir={isArabic ? 'rtl' : undefined}>
+              <Link to={(heroData.primaryButtonAr || heroData.primaryButton)?.link || heroData.primaryButton?.link} target="_blank" className="w-full sm:w-auto">
                 <Button
-                  variant={heroData.primaryButton.variant}
+                  variant={(heroData.primaryButtonAr || heroData.primaryButton)?.variant || heroData.primaryButton?.variant}
                   size="large"
                   className="w-full sm:w-auto">
-                  {heroData.primaryButton.text}
+                  {isArabic
+                    ? (heroData.primaryButton?.text_ar?.trim?.() || heroData.primaryButtonAr?.text || heroData.primaryButton?.text)
+                    : heroData.primaryButton?.text}
                 </Button>
               </Link>
               <Button
-                variant={heroData.secondaryButton.variant}
+                variant={(heroData.secondaryButtonAr || heroData.secondaryButton)?.variant || heroData.secondaryButton?.variant}
                 size="large"
                 className="w-full sm:w-auto"
                 onClick={scrollToPhilosophy}
               >
-                {heroData.secondaryButton.text}
+                {isArabic
+                  ? (heroData.secondaryButton?.text_ar?.trim?.() || heroData.secondaryButtonAr?.text || heroData.secondaryButton?.text)
+                  : heroData.secondaryButton?.text}
               </Button>
             </div>
           </>

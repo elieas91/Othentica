@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // import { useTheme } from '../../contexts/useTheme'; // Commented out to prevent TDZ issues
 import Logo from '../../assets/img/logo.png';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
 
 const Navigation = () => {
+  const { locale, setLocale } = useContext(PublicLocaleContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
@@ -258,8 +261,55 @@ const Navigation = () => {
             })}
           </div>
 
-          {/* Theme Toggle and CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Language toggle and CTA */}
+          <div className="hidden md:flex items-center md:ml-8">
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                onBlur={() => setTimeout(() => setIsLangDropdownOpen(false), 150)}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-primary dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              >
+                <span>{locale === 'en' ? 'EN' : 'عربي'}</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {isLangDropdownOpen && (
+                <div
+                  className="absolute right-0 top-full mt-2 w-28 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-50"
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <button
+                    type="button"
+                    onClick={() => { setLocale('en'); setIsLangDropdownOpen(false); }}
+                    className={`block w-full text-left px-4 py-2 text-sm font-poppins transition-colors ${
+                      locale === 'en'
+                        ? 'bg-secondary text-white dark:bg-secondary dark:text-white'
+                        : 'text-primary dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setLocale('ar'); setIsLangDropdownOpen(false); }}
+                    className={`block w-full text-left px-4 py-2 text-sm font-poppins transition-colors ${
+                      locale === 'ar'
+                        ? 'bg-secondary text-white dark:bg-secondary dark:text-white'
+                        : 'text-primary dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    عربي
+                  </button>
+                </div>
+              )}
+            </div>
             {/* Theme Toggle Button */}
             {/* <button
               onClick={toggleTheme}
@@ -287,10 +337,50 @@ const Navigation = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex md:hidden items-center space-x-2">
-            {/* Theme Toggle Button for Mobile */}
-            
-
+          <div className="flex md:hidden items-center gap-3">
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                onBlur={() => setTimeout(() => setIsLangDropdownOpen(false), 150)}
+                className="flex items-center gap-1 px-2 py-1 text-xs font-medium rounded border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-primary dark:text-gray-100"
+              >
+                <span>{locale === 'en' ? 'EN' : 'عربي'}</span>
+                <svg
+                  className={`w-3 h-3 transition-transform ${isLangDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {isLangDropdownOpen && (
+                <div
+                  className="absolute right-0 top-full mt-1 w-24 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-50"
+                  onMouseDown={(e) => e.preventDefault()}
+                >
+                  <button
+                    type="button"
+                    onClick={() => { setLocale('en'); setIsLangDropdownOpen(false); }}
+                    className={`block w-full text-left px-3 py-2 text-xs font-poppins ${
+                      locale === 'en' ? 'bg-secondary text-white' : 'text-primary dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setLocale('ar'); setIsLangDropdownOpen(false); }}
+                    className={`block w-full text-left px-3 py-2 text-xs font-poppins ${
+                      locale === 'ar' ? 'bg-secondary text-white' : 'text-primary dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    عربي
+                  </button>
+                </div>
+              )}
+            </div>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-primary dark:text-gray-100 hover:text-secondary dark:hover:text-secondary focus:outline-none focus:text-secondary"

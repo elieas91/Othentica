@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../ui/Button';
 // import Flame from '../../assets/img/flame.webp';
 import Phone from '../../assets/img/phone.webp';
 import LogoPattern from '../../assets/img/logo_patterns/logo_pattern_2.1_2.webp';
 import DownloadAppCard from '../ui/DownloadAppCard';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const MobileShowcase = () => {
+  const { locale, isArabic } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [currentAppImageIndex, setCurrentAppImageIndex] = useState(0);
   const [appImages, setAppImages] = useState([]);
   const [sectionData, setSectionData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSectionLoading, setIsSectionLoading] = useState(true);
 
-  // Fetch mobile showcase section data from API
+  // Fetch mobile showcase section data (raw = both title/title_ar, description/description_ar)
   useEffect(() => {
     const fetchSectionData = async () => {
       try {
         setIsSectionLoading(true);
-        const response = await apiService.getHomepageSections();
-        if (response.success) {
-          const mobileShowcaseSection = response.data.find(section => section.section_key === 'mobile_showcase');
-          setSectionData(mobileShowcaseSection || null);
+        const response = await apiService.getHomepageSectionByKey('mobile_showcase');
+        if (response.success && response.data) {
+          setSectionData(response.data);
         } else {
-          console.error('Failed to fetch homepage sections:', response.message);
           setSectionData(null);
         }
       } catch (error) {
@@ -101,18 +103,20 @@ const MobileShowcase = () => {
             </div>
           ) : (
             <>
-              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-                {sectionData?.title || 'Mobile App Showcase'}
+              <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8" dir={isArabic ? 'rtl' : 'ltr'}>
+                {isArabic && (sectionData?.title_ar?.trim?.() || sectionData?.title_ar)
+                  ? sectionData.title_ar
+                  : (sectionData?.title || t('mobileExperience'))}
               </h2>
-              {sectionData?.description ? (
+              {(isArabic && (sectionData?.description_ar?.trim?.() || sectionData?.description_ar)) || sectionData?.description ? (
                 <div 
                   className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed prose prose-lg"
-                  dangerouslySetInnerHTML={{ __html: sectionData.description }}
+                  dir={isArabic ? 'rtl' : 'ltr'}
+                  dangerouslySetInnerHTML={{ __html: (isArabic && (sectionData?.description_ar?.trim?.() || sectionData?.description_ar) ? sectionData.description_ar : (sectionData?.description || t('mobileExperienceSubtitle'))) || '' }}
                 />
               ) : (
-                <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-                  Experience our innovative mobile solutions that transform ideas into
-                  exceptional digital experiences
+                <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed" dir={isArabic ? 'rtl' : 'ltr'}>
+                  {t('mobileExperienceSubtitle')}
                 </p>
               )}
             </>
@@ -154,7 +158,7 @@ const MobileShowcase = () => {
                     />
                   ) : (
                     <div className="w-[92%] h-[98%] top-[0.3rem] md:h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">No images available</span>
+                      <span className="text-gray-500 text-sm">{t('noImagesAvailable')}</span>
                     </div>
                   )}
                 </div>
@@ -188,7 +192,7 @@ const MobileShowcase = () => {
                     />
                   ) : (
                     <div className="w-[92%] h-[97%] bg-gray-200 rounded-3xl flex items-center justify-center">
-                      <span className="text-gray-500 text-xs">No images available</span>
+                      <span className="text-gray-500 text-xs">{t('noImagesAvailable')}</span>
                     </div>
                   )}
                 </div>

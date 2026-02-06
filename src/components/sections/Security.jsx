@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { securityData } from '../../data/securityData';
 import Card from '../ui/Card';
 import FlameSolid from '../../assets/img/flame_solid.webp';
 import apiService from '../../services/api';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const Security = () => {
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [securityCards, setSecurityCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,24 +84,23 @@ const Security = () => {
       />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 lg:mb-20">
-          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8">
-            Entreprise-Grade Security and Scale
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary dark:text-neutral mb-8" dir={isArabic ? 'rtl' : 'ltr'}>
+            {t('enterpriseSecurity')}
           </h2>
-          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Our platform is built to protect your organization at every layer,
-            combining advanced security with seamless scalability.
+          <p className="text-xl text-primary dark:text-gray-200 max-w-3xl mx-auto leading-relaxed" dir={isArabic ? 'rtl' : 'ltr'}>
+            {t('enterpriseSecuritySubtitle')}
           </p>
         </div>
         
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
-            <span className="ml-2 text-gray-600">Loading security features...</span>
+            <span className="ml-2 text-gray-600">{t('loadingSecurity')}</span>
           </div>
         ) : error ? (
           <div className="text-center py-12">
-            <p className="text-red-600 mb-4">Error loading security features: {error}</p>
-            <p className="text-gray-600">Using fallback data...</p>
+            <p className="text-red-600 mb-4">{t('errorLoadingSecurity')} {error}</p>
+            <p className="text-gray-600">{t('usingFallbackData')}</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
@@ -128,13 +131,13 @@ const Security = () => {
                         </div>
                       )}
                     </div>
-                    <h3 className="text-xl font-semibold text-primary dark:text-neutral mb-4">
-                      {security.title}
+                    <h3 className="text-xl font-semibold text-primary dark:text-neutral mb-4" dir={isArabic ? 'rtl' : 'ltr'}>
+                      {isArabic && (security.title_ar?.trim?.() || security.title_ar) ? security.title_ar : security.title}
                     </h3>
-                    <div className="text-primary dark:text-gray-200 mb-8 leading-relaxed h-[200px] overflow-y-auto px-2">
-                      {typeof security.description === 'string'
-                        ? security.description
-                        : String(security.description)}
+                    <div className="text-primary dark:text-gray-200 mb-8 leading-relaxed h-[200px] overflow-y-auto px-2" dir={isArabic ? 'rtl' : 'ltr'}>
+                      {isArabic && (security.description_ar?.trim?.() || security.description_ar)
+                        ? (typeof security.description_ar === 'string' ? security.description_ar : String(security.description_ar))
+                        : (typeof security.description === 'string' ? security.description : String(security.description ?? ''))}
                     </div>
                   </div>
                 </Card>
