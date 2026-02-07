@@ -294,9 +294,12 @@ class ApiService {
     return { response, data };
   }
 
-  // Admin opt-in management endpoints
-  async getAllOptinUsers() {
-    const response = await this.authenticatedRequest(`${this.baseURL}/optin`);
+  // Admin opt-in management endpoints (?companyId= optional)
+  async getAllOptinUsers(companyId = null) {
+    const url = companyId != null
+      ? `${this.baseURL}/optin?companyId=${companyId}`
+      : `${this.baseURL}/optin`;
+    const response = await this.authenticatedRequest(url);
     return response.json();
   }
 
@@ -335,8 +338,62 @@ class ApiService {
     return response.json();
   }
 
-  async getOptinCount() {
-    const response = await fetch(`${this.baseURL}/optin/count`);
+  async getOptinCount(companySlug = null) {
+    const url = companySlug
+      ? `${this.baseURL}/optin/count?company=${encodeURIComponent(companySlug)}`
+      : `${this.baseURL}/optin/count`;
+    const response = await fetch(url);
+    return response.json();
+  }
+
+  async getOptinCompanyBySlug(slug) {
+    const response = await fetch(`${this.baseURL}/optin/company/${encodeURIComponent(slug)}`);
+    return response.json();
+  }
+
+  async getAllOptinCompanies() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/companies/list`);
+    return response.json();
+  }
+
+  async getOptinCompanyById(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/companies/${id}`);
+    return response.json();
+  }
+
+  async createOptinCompany(data) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/companies`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    const text = await response.text();
+    if (!response.ok) {
+      if (text.trimStart().startsWith('<')) {
+        throw new Error('API returned HTML (404). Ensure the backend is running on the correct port (e.g. 5002) and restart it so the /api/optin/companies route is loaded.');
+      }
+      try {
+        const json = JSON.parse(text);
+        throw new Error(json.error || json.message || `Request failed: ${response.status}`);
+      } catch (e) {
+        if (e instanceof SyntaxError) throw new Error(text || `Request failed: ${response.status}`);
+        throw e;
+      }
+    }
+    return text ? JSON.parse(text) : {};
+  }
+
+  async updateOptinCompany(id, data) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/companies/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+
+  async deleteOptinCompany(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/optin/companies/${id}`, {
+      method: 'DELETE',
+    });
     return response.json();
   }
 
@@ -545,6 +602,61 @@ class ApiService {
 
   async deleteClient(id) {
     const response = await this.authenticatedRequest(`${this.baseURL}/content/clients/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  }
+
+  // Video Testimonials (public + admin)
+  async getVideoTestimonials() {
+    const response = await fetch(`${this.baseURL}/content/video-testimonials`);
+    return response.json();
+  }
+
+  async createVideoTestimonial(data) {
+    const hasFile = data.video instanceof File;
+    if (hasFile) {
+      const formData = new FormData();
+      ['title', 'title_ar', 'video_url', 'display_order'].forEach(key => {
+        if (data[key] !== undefined && data[key] !== null && data[key] !== '') formData.append(key, data[key]);
+      });
+      formData.append('video', data.video);
+      const response = await this.authenticatedRequest(`${this.baseURL}/content/video-testimonials`, {
+        method: 'POST',
+        body: formData,
+      });
+      return response.json();
+    }
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/video-testimonials`, {
+      method: 'POST',
+      body: JSON.stringify({ title: data.title, title_ar: data.title_ar, video_url: data.video_url, display_order: data.display_order }),
+    });
+    return response.json();
+  }
+
+  async updateVideoTestimonial(id, data) {
+    const hasFile = data.video instanceof File;
+    if (hasFile) {
+      const formData = new FormData();
+      ['title', 'title_ar', 'video_url', 'display_order'].forEach(key => {
+        if (data[key] !== undefined && data[key] !== null && data[key] !== '') formData.append(key, data[key]);
+      });
+      formData.append('video', data.video);
+      const response = await this.authenticatedRequest(`${this.baseURL}/content/video-testimonials/${id}`, {
+        method: 'PUT',
+        body: formData,
+      });
+      return response.json();
+    }
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/video-testimonials/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ title: data.title, title_ar: data.title_ar, video_url: data.video_url, display_order: data.display_order }),
+    });
+    return response.json();
+  }
+
+  async deleteVideoTestimonial(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/video-testimonials/${id}`, {
       method: 'DELETE',
     });
     return response.json();

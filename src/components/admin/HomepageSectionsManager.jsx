@@ -22,6 +22,7 @@ import SecurityCardsManager from './SecurityCardsManager';
 import ServicesCardsManager from './ServicesCardsManager';
 import ClientsManager from './ClientsManager';
 import FeaturesAndBenefitsManager from './FeaturesAndBenefitsManager';
+import VideoTestimonialsManager from './VideoTestimonialsManager';
 import RichTextEditor from '../ui/RichTextEditor';
 
 const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionChange }) => {
@@ -234,6 +235,16 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       key: 'mobile_showcase', 
       label: 'Mobile Showcase', 
       description: 'Mobile Experience section',
+      hasButtons: false,
+      hasMainImage: false,
+      hasBackgroundImage: false,
+      hasSubtitle: false,
+      usesDescription: true
+    },
+    {
+      key: 'video_testimonials',
+      label: 'Video Testimonials',
+      description: 'Homepage video testimonial carousel',
       hasButtons: false,
       hasMainImage: false,
       hasBackgroundImage: false,
@@ -997,7 +1008,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
         </div>
       )}
 
-      {/* Current Section Content */}
+      {/* Current Section Content (includes section title/description for video_testimonials; videos list is below) */}
       {!isLoading && (
         <div className="space-y-6">
           {/* Current Section Data */}
@@ -1115,10 +1126,30 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
               <p className="text-gray-500 mb-4">
                 No data exists for the "{sectionConfigs.find(s => s.key === activeSection)?.label}" section.
               </p>
+              {activeSection === 'video_testimonials' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingItem(null);
+                    setFormData({ title: '', title_ar: '', description: '', description_ar: '' });
+                    setShowForm(true);
+                  }}
+                  className="px-4 py-2 bg-primary text-white rounded-xl hover:opacity-90 font-medium font-poppins"
+                >
+                  Set section title & description
+                </button>
+              )}
             </div>
           )}
         </div>
       )}
+
+        {/* Video Testimonials: show manager below section card when tab is selected */}
+        {!isLoading && activeSection === 'video_testimonials' && (
+          <div className="mt-4">
+            <VideoTestimonialsManager />
+          </div>
+        )}
 
 
       {/* Add/Edit Modal */}

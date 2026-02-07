@@ -6,6 +6,7 @@ import MobileShowcase from '../components/sections/MobileShowcase';
 import Services from '../components/sections/Services';
 import Testimonials from '../components/sections/Testimonials';
 import SocialMedia from '../components/sections/SocialMedia';
+import VideoTestimonials from '../components/sections/VideoTestimonials';
 import Clients from '../components/sections/Clients';
 import Logo from '../assets/img/logo.webp';
 import Security from '../components/sections/Security';
@@ -75,6 +76,7 @@ const Home = () => {
   const secondTestimonialsRef = useRef(null);
   const clientsRef = useRef(null);
   const securityRef = useRef(null);
+  const videoTestimonialsRef = useRef(null);
 
   // Intersection Observer for Hero section (desktop only)
   useEffect(() => {
@@ -110,7 +112,7 @@ const Home = () => {
   // Individual intersection observers for each section (desktop only)
   useEffect(() => {
     if (isMobile) {
-      setVisibleSections(new Set(['testimonials', 'philosophy', 'mobileShowcase', 'features', 'services', 'secondTestimonials', 'clients', 'security']));
+      setVisibleSections(new Set(['testimonials', 'philosophy', 'mobileShowcase', 'features', 'services', 'secondTestimonials', 'clients', 'security', 'videoTestimonials']));
       return;
     }
 
@@ -150,7 +152,8 @@ const Home = () => {
       { ref: servicesRef, key: 'services' },
       { ref: secondTestimonialsRef, key: 'secondTestimonials' },
       { ref: clientsRef, key: 'clients' },
-      { ref: securityRef, key: 'security' }
+      { ref: securityRef, key: 'security' },
+      { ref: videoTestimonialsRef, key: 'videoTestimonials' }
     ];
 
     refs.forEach(({ ref, key }) => {
@@ -294,6 +297,15 @@ const Home = () => {
           : 'opacity-0 transform translate-y-8'
       }`}>
         <Security />
+      </div>
+
+      {/* Video Testimonials Section */}
+      <div ref={videoTestimonialsRef} className={isMobile ? '' : `transition-all duration-1000 ease-out delay-[1000ms] hover:scale-[1.01] ${
+        visibleSections.has('videoTestimonials')
+          ? 'opacity-100 transform translate-y-0'
+          : 'opacity-0 transform translate-y-8'
+      }`}>
+        <VideoTestimonials />
       </div>
 
       <ErrorBoundary>

@@ -64,6 +64,10 @@ export const translations = {
     // Testimonials
     testimonials: 'Testimonials',
     addYourTestimonial: 'Add your Testimonial',
+    videoTestimonials: 'Video Testimonials',
+    videoTestimonialsSubtitle: 'Hear from our clients in their own words.',
+    videoTestimonialsWatch: 'Watch what others have to say about',
+    videoTestimonialsBrand: 'Othentica',
     loadingTestimonials: 'Loading testimonials...',
     unableToLoadTestimonials: 'Unable to load testimonials. Please try again later.',
     noTestimonialsAvailable: 'No testimonials available at the moment.',
@@ -132,6 +136,10 @@ export const translations = {
     // Testimonials
     testimonials: 'شهادات',
     addYourTestimonial: 'أضف شهادتك',
+    videoTestimonials: 'شهادات فيديو',
+    videoTestimonialsSubtitle: 'استمع إلى عملائنا بأصواتهم.',
+    videoTestimonialsWatch: 'شاهد ما يقوله الآخرون عن',
+    videoTestimonialsBrand: 'أوثنتيكا',
     loadingTestimonials: 'جاري تحميل الشهادات...',
     unableToLoadTestimonials: 'تعذر تحميل الشهادات. يرجى المحاولة لاحقاً.',
     noTestimonialsAvailable: 'لا توجد شهادات متاحة في الوقت الحالي.',
