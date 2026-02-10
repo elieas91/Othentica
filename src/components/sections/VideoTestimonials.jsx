@@ -101,7 +101,7 @@ const VideoTestimonials = () => {
       <div className="container mx-auto px-4 md:px-6 max-w-4xl relative">
         {/* Section title & description (from CMS or fallback to translations) */}
         <div className="text-center mb-10 md:mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary font-poppins" dir={isArabic ? 'rtl' : 'ltr'}>
+          <h2 className="text-3xl md:text-3xl text-primary font-poppins max-w-2xl mx-auto mb-3 mt-2 prose prose-p:my-1 prose-p:leading-relaxed" dir={isArabic ? 'rtl' : 'ltr'}>
             {sectionMeta.title ? (
               sectionMeta.title
             ) : (
@@ -113,7 +113,7 @@ const VideoTestimonials = () => {
           </h2>
           {sectionMeta.description && (
             <div
-              className="text-lg md:text-xl text-gray-600 font-poppins max-w-2xl mx-auto mt-2 prose prose-p:my-1 prose-p:leading-relaxed"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary font-poppins"
               dir={isArabic ? 'rtl' : 'ltr'}
               dangerouslySetInnerHTML={{ __html: sectionMeta.description }}
             />

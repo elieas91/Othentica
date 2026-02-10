@@ -593,12 +593,12 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             >
               &times;
             </button>
-            <div className="pr-8">
+            <div className="pr-8" dir={isArabic ? 'rtl' : 'ltr'}>
               <h3 className="text-2xl font-bold text-primary font-poppins mb-2">
-                Share Your Experience
+                {t('testimonialFormTitle')}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Help others by sharing your experience with Othentica
+                {t('testimonialFormSubtitle')}
               </p>
               <TestimonialForm
                 onSubmit={handleTestimonialSubmit}

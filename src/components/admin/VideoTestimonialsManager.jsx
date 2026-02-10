@@ -161,11 +161,21 @@ export default function VideoTestimonialsManager() {
       return;
     }
     if (name === 'display_order') {
-      setFormData((prev) => ({ ...prev, [name]: value === '' ? '' : parseInt(value, 10) }));
+      const num = value === '' ? '' : parseInt(value, 10);
+      setFormData((prev) => ({ ...prev, [name]: num }));
       return;
     }
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  // Orders currently taken by other videos (id -> order), for dropdown hint
+  const orderTakenBy = list.reduce((acc, item) => {
+    if (editingId && item.id === editingId) return acc;
+    acc[item.display_order] = item.title || item.title_ar || 'Untitled';
+    return acc;
+  }, {});
+  const maxOrder = editingId ? Math.max(0, list.length - 1) : list.length; // new: 0..list.length; edit: 0..list.length-1
+  const orderOptions = Array.from({ length: maxOrder + 1 }, (_, i) => i);
 
   if (loading) {
     return (
@@ -293,16 +303,26 @@ export default function VideoTestimonialsManager() {
               </div>
             )}
 
-            <div className="w-32">
+            <div className="w-48">
               <label className="block text-sm font-medium text-gray-700 mb-1 font-poppins">Display order</label>
-              <input
-                type="number"
+              <select
                 name="display_order"
                 value={formData.display_order}
                 onChange={handleInputChange}
-                min={0}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              />
+              >
+                {orderOptions.map((n) => (
+                  <option key={n} value={n}>
+                    Position {n}
+                    {orderTakenBy[n] ? ` (currently: ${orderTakenBy[n]})` : ''}
+                  </option>
+                ))}
+              </select>
+              {orderTakenBy[formData.display_order] && (
+                <p className="text-xs text-amber-600 mt-1 font-poppins">
+                  Saving will swap positions with “{orderTakenBy[formData.display_order]}”.
+                </p>
+              )}
             </div>
 
             <div className="flex gap-3 pt-4">
@@ -330,14 +350,19 @@ export default function VideoTestimonialsManager() {
               key={item.id}
               className="flex items-center justify-between gap-4 p-4 bg-white rounded-xl border border-accent/20 hover:shadow-sm transition-shadow"
             >
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide font-poppins mb-0.5">Title</p>
-                <p className="font-medium text-gray-900 font-poppins truncate">
-                  {item.title || item.title_ar || 'Untitled'}
-                </p>
-                <p className="text-sm text-gray-500 truncate mt-1">
-                  {item.video_url ? 'YouTube / link' : item.video_file ? 'Uploaded video' : '—'}
-                </p>
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                <span className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary font-semibold text-sm font-poppins" title="Display order">
+                  {item.display_order ?? 0}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide font-poppins mb-0.5">Title</p>
+                  <p className="font-medium text-gray-900 font-poppins truncate">
+                    {item.title || item.title_ar || 'Untitled'}
+                  </p>
+                  <p className="text-sm text-gray-500 truncate mt-1">
+                    {item.video_url ? 'YouTube / link' : item.video_file ? 'Uploaded video' : '—'}
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button

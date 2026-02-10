@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import InstagramFeed from '../ui/InstagramFeed';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const SocialMedia = () => {
   const [showInstagramFeed, setShowInstagramFeed] = useState(false);
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
 
   // Social platforms with direct links
   const socialPlatforms = {
@@ -88,7 +92,7 @@ const SocialMedia = () => {
               <div>
                 <h3 className="text-xl font-bold text-primary">@othenticaapp</h3>
                 <p className="text-sm text-gray-600">
-                  Othentica is a gamified wellness platform blending science, daily quests, and mindful practices to unlock authentic growth and resilience.
+                  {t('instagramSubtitle')}
                 </p>
               </div>
             </div>
@@ -135,7 +139,11 @@ const SocialMedia = () => {
           </div>
           
           <div className="text-center mt-6">
-            <p className="text-sm text-gray-500">Follow us on Instagram for daily wellness tips and updates</p>
+            <p className="text-sm text-gray-500">
+              {locale === 'ar'
+                ? 'تابعونا على إنستغرام للحصول على نصائح يومية حول العافية وآخر التحديثات'
+                : 'Follow us on Instagram for daily wellness tips and updates'}
+            </p>
           </div>
         </div>
       </div>

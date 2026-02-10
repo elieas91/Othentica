@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import Button from './Button';
-
-// Service categories matching the Services.jsx data
-const SERVICE_CATEGORIES = [
-  { value: 'app', label: 'The Othentica App'},
-  { value: 'programs', label: 'Tailored Programs' },
-  { value: 'talks', label: 'Talks & Workshops' },
-  { value: 'one-to-one', label: '1:1 Guidance' }
-];
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
+  const isArabic = locale === 'ar';
+
+  // Service categories matching the Services.jsx data
+  const serviceCategories = useMemo(
+    () => [
+      { value: 'app', label: t('theOthenticaApp') || 'The Othentica App' },
+      { value: 'programs', label: t('tailoredPrograms') || 'Tailored Programs' },
+      { value: 'talks', label: t('talksAndWorkshops') || 'Talks & Workshops' },
+      { value: 'one-to-one', label: t('oneToOneGuidance') || '1:1 Guidance' },
+    ],
+    [t]
+  );
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -58,7 +67,11 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
   }, [success]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6"
+      dir={isArabic ? 'rtl' : 'ltr'}
+    >
       {/* Success Message */}
       {success && (
         <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl">
@@ -66,7 +79,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            Testimonial submitted successfully! Thank you for your feedback.
+            {t('testimonialSuccessMessage')}
           </div>
         </div>
       )}
@@ -86,7 +99,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
       {/* Name */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          Name *
+          {t('testimonialNameLabel')} *
         </label>
         <input
           type="text"
@@ -96,7 +109,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           className={`w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200 ${
             formData.is_anonymous ? 'bg-gray-100 dark:bg-gray-600 cursor-not-allowed' : ''
           }`}
-          placeholder="Enter your full name"
+          placeholder={t('testimonialNamePlaceholder')}
           required={!formData.is_anonymous}
           disabled={isLoading || formData.is_anonymous}
         />
@@ -113,7 +126,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           disabled={isLoading}
         />
         <label className="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
-          Submit anonymously
+          {t('testimonialAnonymousLabel')}
         </label>
       </div>
 
@@ -121,7 +134,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
       {!formData.is_anonymous && (
         <div>
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Email *
+            {t('testimonialEmailLabel')} *
           </label>
           <input
             type="email"
@@ -131,7 +144,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200"
             required={!formData.is_anonymous}
             disabled={isLoading}
-            placeholder="your.email@example.com"
+            placeholder={t('testimonialEmailPlaceholder')}
           />
         </div>
       )}
@@ -139,7 +152,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
       {/* Category */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          Service Category *
+          {t('testimonialCategoryLabel')} *
         </label>
         <select
           name="category"
@@ -149,7 +162,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           required
           disabled={isLoading}
         >
-          {SERVICE_CATEGORIES.map(category => (
+          {serviceCategories.map(category => (
             <option 
               key={category.value} 
               value={category.value}
@@ -163,14 +176,14 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
       {/* Description */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          Testimonial *
+          {t('testimonialDescriptionLabel')} *
         </label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-xl h-32 resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200"
-          placeholder="Share your experience with Othentica..."
+          placeholder={t('testimonialDescriptionPlaceholder')}
           required
           disabled={isLoading}
         />
@@ -179,7 +192,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
       {/* Picture Upload */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-          Upload Picture (Optional)
+          {t('testimonialUploadLabel')}
         </label>
         <input
           type="file"
@@ -190,7 +203,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           disabled={isLoading}
         />
         <p className="text-xs text-gray-500 mt-1">
-          Supported formats: JPEG, PNG, GIF, WEBP (Max 5MB)
+          {t('testimonialUploadHelp')}
         </p>
       </div>
 
@@ -203,7 +216,7 @@ const TestimonialForm = ({ onSubmit, isLoading, error, success }) => {
           disabled={isLoading}
           className="px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:scale-105"
         >
-          {isLoading ? 'Submitting...' : 'Submit Testimonial'}
+          {isLoading ? t('testimonialSubmitting') : t('testimonialSubmit')}
         </Button>
       </div>
     </form>
