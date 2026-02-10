@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import WhatsAppButton from './WhatsappButton';
 import CalendarBooking from './CalendarBooking';
 import apiService from '../../services/api';
 import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import Swal from 'sweetalert2';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+
+const DEFAULT_LABELS = {
+  formTitle: 'Send us a Message',
+  sectionTitle: 'Contact Information',
+  name: 'Your Name',
+  email: 'Email Address',
+  phone: 'Phone',
+  company: 'Company',
+  subject: 'Subject',
+  message: 'Message'
+};
+
+const DEFAULT_ADDRESS = 'Amber Gem Tower, Mezzanine Floor, Sheikh Khalifa Street, Ajman, United Arab Emirates';
+const DEFAULT_PHONE = '(971) 503-680-320';
+const DEFAULT_EMAIL = 'info@othentica-app.com';
 
 const ContactUs = () => {
+  const { locale } = useContext(PublicLocaleContext);
+  const [contactInfo, setContactInfo] = useState(null);
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -15,6 +33,28 @@ const ContactUs = () => {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    apiService.getContactPageInfo(locale).then((res) => {
+      if (!cancelled && res.success && res.data) {
+        setContactInfo(res.data);
+      }
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [locale]);
+
+  const labels = contactInfo
+    ? {
+        ...DEFAULT_LABELS,
+        ...contactInfo.form_labels,
+        formTitle: contactInfo.form_title || DEFAULT_LABELS.formTitle,
+        sectionTitle: contactInfo.contact_section_title || DEFAULT_LABELS.sectionTitle
+      }
+    : DEFAULT_LABELS;
+  const address = contactInfo?.address ?? DEFAULT_ADDRESS;
+  const phone = contactInfo?.phone ?? DEFAULT_PHONE;
+  const email = contactInfo?.email ?? DEFAULT_EMAIL;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,7 +159,7 @@ const ContactUs = () => {
       {/* Form Section */}
       <div className="flex-1 p-8">
         <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6">
-          Send us a Message
+          {labels.formTitle}
         </h2>
 
         <form
@@ -127,7 +167,7 @@ const ContactUs = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <div>
-            <label className="block text-sm text-gray-500">Your Name</label>
+            <label className="block text-sm text-gray-500">{labels.name}</label>
             <input
               type="text"
               name="name"
@@ -138,7 +178,7 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500">Email Address</label>
+            <label className="block text-sm text-gray-500">{labels.email}</label>
             <input
               type="email"
               name="email"
@@ -149,7 +189,7 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500">Phone</label>
+            <label className="block text-sm text-gray-500">{labels.phone}</label>
             <input
               type="text"
               name="phone"
@@ -159,7 +199,7 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500">Company</label>
+            <label className="block text-sm text-gray-500">{labels.company}</label>
             <input
               type="text"
               name="company"
@@ -169,7 +209,7 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500">Subject</label>
+            <label className="block text-sm text-gray-500">{labels.subject}</label>
             <input
               type="text"
               name="subject"
@@ -179,7 +219,7 @@ const ContactUs = () => {
             />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm text-gray-500">Message</label>
+            <label className="block text-sm text-gray-500">{labels.message}</label>
             <textarea
               name="message"
               value={form.message}
@@ -247,21 +287,19 @@ const ContactUs = () => {
       {/* Contact Info Section */}
       <div className="bg-blue-900 text-white flex-1 p-8 flex flex-col justify-between">
         <div>
-          <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
+          <h3 className="text-xl font-semibold mb-4">{labels.sectionTitle}</h3>
           <ul className="space-y-4">
             <li className="flex items-center gap-x-4">
-              <MapPinIcon className="w-6" />
-              Amber Gem Tower, Mezzanine Floor, Sheikh
-              <br />
-              Khalifa Street, Ajman, United Arab Emirates
+              <MapPinIcon className="w-6 flex-shrink-0" />
+              <span className="whitespace-pre-line">{address}</span>
             </li>
             <li className="flex items-center gap-x-4">
-              <PhoneIcon className="w-6" />
-              (971) 503-680-320
+              <PhoneIcon className="w-6 flex-shrink-0" />
+              <a href={`tel:${phone.replace(/\s/g, '')}`} className="hover:underline">{phone}</a>
             </li>
             <li className="flex items-center gap-x-4">
-              <InboxIcon className="w-6" />
-              info@othentica-app.com
+              <InboxIcon className="w-6 flex-shrink-0" />
+              <a href={`mailto:${email}`} className="hover:underline">{email}</a>
             </li>
           </ul>
         </div>

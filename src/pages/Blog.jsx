@@ -1,21 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Banner from '../components/ui/Banner';
 import BannerBg from '../assets/img/blog/blog_bg.webp';
 import BlogModal from '../components/ui/BlogModal';
 import SocialMedia from '../components/sections/SocialMedia';
 import apiService from '../services/api';
 import { normalizeUploadUrl } from '../config/api';
+import { PublicLocaleContext } from '../contexts/PublicLocaleContext';
+
+const DEFAULT_HERO = {
+  title: 'Ideas That Matter',
+  subtitle: 'Dive into in-depth blogs, fresh perspectives, and expert insights',
+};
 
 const BlogPage = () => {
+  const { locale, isArabic } = useContext(PublicLocaleContext);
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hero, setHero] = useState(null);
 
   useEffect(() => {
     fetchBlogs();
   }, []);
+
+  useEffect(() => {
+    apiService.getHomepageSectionByKey('blog_hero', locale).then((res) => {
+      if (res.success && res.data) setHero(res.data);
+    }).catch(() => {});
+  }, [locale]);
 
   const fetchBlogs = async () => {
     try {
@@ -54,20 +68,25 @@ const BlogPage = () => {
     return normalizeUploadUrl(imgPath, 'blogs');
   };
 
+  const heroTitle = hero?.title ?? DEFAULT_HERO.title;
+  const heroSubtitle = hero?.subtitle ?? DEFAULT_HERO.subtitle;
+  const heroBg = hero?.background_image_url || BannerBg;
+
   if (loading) {
     return (
       <>
         <div className="bg-blue-400/40">
           <Banner
-            title="Ideas That Matter"
-            subtitle="Dive into in-depth blogs, fresh perspectives, and expert insights"
+            title={heroTitle}
+            subtitle={heroSubtitle}
             description=""
             buttonText=""
             buttonVariant="accent"
             hasGradientTransparentBottom={false}
-            backgroundImage={BannerBg}
+            backgroundImage={heroBg}
             hasTransparentSides={false}
             hasOverlay={true}
+            dir={isArabic ? 'rtl' : undefined}
           />
         </div>
         <div className="py-16 bg-white">
@@ -87,15 +106,16 @@ const BlogPage = () => {
       <>
         <div className="bg-blue-400/40">
           <Banner
-            title="Ideas That Matter"
-            subtitle="Dive into in-depth blogs, fresh perspectives, and expert insights"
+            title={heroTitle}
+            subtitle={heroSubtitle}
             description=""
             buttonText=""
             buttonVariant="accent"
             hasGradientTransparentBottom={false}
-            backgroundImage={BannerBg}
+            backgroundImage={heroBg}
             hasTransparentSides={false}
             hasOverlay={true}
+            dir={isArabic ? 'rtl' : undefined}
           />
         </div>
         <div className="py-16 bg-white">
@@ -120,15 +140,16 @@ const BlogPage = () => {
       <>
         <div className="bg-blue-400/40">
           <Banner
-            title="Ideas That Matter"
-            subtitle="Dive into in-depth blogs, fresh perspectives, and expert insights"
+            title={heroTitle}
+            subtitle={heroSubtitle}
             description=""
             buttonText=""
             buttonVariant="accent"
             hasGradientTransparentBottom={false}
-            backgroundImage={BannerBg}
+            backgroundImage={heroBg}
             hasTransparentSides={false}
             hasOverlay={true}
+            dir={isArabic ? 'rtl' : undefined}
           />
         </div>
         <div className="py-16 bg-white">
@@ -147,15 +168,16 @@ const BlogPage = () => {
     <>
       <div className="bg-blue-400/40">
         <Banner
-          title="Ideas That Matter"
-          subtitle="Dive into in-depth blogs, fresh perspectives, and expert insights"
+          title={heroTitle}
+          subtitle={heroSubtitle}
           description=""
           buttonText=""
           buttonVariant="accent"
           hasGradientTransparentBottom={false}
-          backgroundImage={BannerBg}
+          backgroundImage={heroBg}
           hasTransparentSides={false}
           hasOverlay={true}
+          dir={isArabic ? 'rtl' : undefined}
         />
       </div>
       

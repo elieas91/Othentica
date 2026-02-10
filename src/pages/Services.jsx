@@ -12,12 +12,14 @@ import TailoredPrograms from '../assets/img/services/programs_img.webp';
 import Testimonials from '../components/sections/Testimonials';
 import FlameSolid from '../assets/img/flame-outline.webp';
 import { Link } from 'react-router-dom';
+import { getT } from '../data/translations';
 
 const DEFAULT_TITLE = 'Our Services';
 const DEFAULT_DESCRIPTION = 'Discover our comprehensive approach to wellness that nurtures every aspect of your being';
 
 const Services = () => {
-  const { isArabic } = useContext(PublicLocaleContext);
+  const { isArabic, locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [isVisible, setIsVisible] = useState(false);
   const [bannerImageList, setBannerImageList] = useState([]); // full objects { title, title_ar, description, description_ar, image_url }
   const [servicesFromApi, setServicesFromApi] = useState([]);
@@ -258,16 +260,15 @@ const Services = () => {
               : 'opacity-0 transform translate-y-8 scale-95'
           }`}>
             <h2 className="text-3xl font-bold text-primary dark:text-neutral mb-6 transition-all duration-700 ease-out hover:scale-105">
-              Ready to Start Your Journey?
+              {t('readyToStartJourney')}
             </h2>
             <p className="text-lg text-primary dark:text-gray-200 mb-8 transition-all duration-700 ease-out hover:text-primary/80 dark:hover:text-gray-300">
-              Book a consultation and discover how our services can transform
-              your wellness journey.
+              {t('bookConsultationSubtitle')}
             </p>
             <div className="transition-all duration-500 ease-out hover:scale-105">
               <Button variant="primary" size="large">
                 <Link to="/contact" target="_blank">
-                  Book Consultation
+                  {t('bookConsultation')}
                 </Link>
               </Button>
             </div>

@@ -500,6 +500,36 @@ class ApiService {
     return response.json();
   }
 
+  async updateHomepageSectionByKey(sectionKey, sectionData) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/homepage-sections/${encodeURIComponent(sectionKey)}`, {
+      method: 'PUT',
+      body: sectionData, // FormData or object
+    });
+    return response.json();
+  }
+
+  // Contact page info (address, phone, email, form labels)
+  async getContactPageInfo(locale) {
+    const url = locale
+      ? `${this.baseURL}/content/contact-page-info?locale=${encodeURIComponent(locale)}`
+      : `${this.baseURL}/content/contact-page-info`;
+    const response = await fetch(url);
+    return response.json();
+  }
+
+  async getContactPageInfoRaw() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/contact-page-info/raw`);
+    return response.json();
+  }
+
+  async updateContactPageInfo(data) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/content/contact-page-info`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+
   // Services
   async getServices() {
     const response = await fetch(`${this.baseURL}/content/services`);

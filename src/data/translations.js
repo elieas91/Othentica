@@ -72,6 +72,18 @@ export const translations = {
     unableToLoadTestimonials: 'Unable to load testimonials. Please try again later.',
     noTestimonialsAvailable: 'No testimonials available at the moment.',
 
+    // Service block CTAs
+    contactUs: 'Contact Us',
+    getInTouch: 'Get in Touch',
+    learnMore: 'Learn more',
+    learnMoreAbout: 'Learn more about',
+    contactUsTooltip: 'Contact us for more information',
+
+    // Services page CTA
+    readyToStartJourney: 'Ready to Start Your Journey?',
+    bookConsultationSubtitle: 'Book a consultation and discover how our services can transform your wellness journey.',
+    bookConsultation: 'Book Consultation',
+
     // Generic
     loading: 'Loading...',
   },
@@ -143,6 +155,18 @@ export const translations = {
     loadingTestimonials: 'جاري تحميل الشهادات...',
     unableToLoadTestimonials: 'تعذر تحميل الشهادات. يرجى المحاولة لاحقاً.',
     noTestimonialsAvailable: 'لا توجد شهادات متاحة في الوقت الحالي.',
+
+    // Service block CTAs
+    contactUs: 'تواصل معنا',
+    getInTouch: 'تواصل معنا',
+    learnMore: 'اعرف المزيد',
+    learnMoreAbout: 'اعرف المزيد عن',
+    contactUsTooltip: 'تواصل معنا للمزيد من المعلومات',
+
+    // Services page CTA
+    readyToStartJourney: 'مستعد لبدء رحلتك؟',
+    bookConsultationSubtitle: 'احجز استشارة واكتشف كيف يمكن لخدماتنا أن تحول رحلة صحتك.',
+    bookConsultation: 'احجز استشارة',
 
     // Generic
     loading: 'جاري التحميل...',

@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import Flame from '../../assets/img/flame.webp';
 import Modal from './Modal';
 import Button from './Button';
 import WhatsAppButton from './WhatsappButton';
 import Tooltip from './Tooltip';
 import EmailIcon from '../../assets/img/email_icon.webp';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const ServiceBlock = ({ service, index, dir }) => {
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const isEven = index % 2 === 0; // alternate layout
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -141,16 +145,16 @@ const ServiceBlock = ({ service, index, dir }) => {
             <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 mt-8 px-4 md:px-10">
               {/* Flame Button */}
               <div className="flex flex-col items-center">
-                <Tooltip content={`Learn more about ${service.title}`} position="top">
+                <Tooltip content={`${t('learnMoreAbout')} ${service.title}`} position="top">
                   <button
                     onClick={openModal}
                     className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-opacity-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-16 md:h-16"
-                    aria-label={`Learn more about ${service.title}`}
+                    aria-label={`${t('learnMoreAbout')} ${service.title}`}
                   >
                     {/* Main Flame Image */}
                     <img
                       src={Flame}
-                      alt="Learn More"
+                      alt={t('learnMore')}
                       className="w-full h-full object-contain rounded-full"
                     />
 
@@ -164,7 +168,7 @@ const ServiceBlock = ({ service, index, dir }) => {
                   </button>
                 </Tooltip>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
-                  Learn more
+                  {t('learnMore')}
                 </span>
               </div>
 
@@ -174,27 +178,27 @@ const ServiceBlock = ({ service, index, dir }) => {
                   <WhatsAppButton className="w-full h-full aspect-square rounded-full" />
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
-                  Get in Touch
+                  {t('getInTouch')}
                 </span>
               </div>
 
               {/* Email Button */}
               <div className="flex flex-col items-center mt-4 md:mt-0">
-                <Tooltip content="Contact us for more information" position="top">
+                <Tooltip content={t('contactUsTooltip')} position="top">
                   <button
                     onClick={() => window.open('/contact', '_blank')}
                     className="relative group cursor-pointer transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 rounded-full w-16 h-16 sm:w-20 sm:h-20 md:w-16 md:h-16"
-                    aria-label="Contact us"
+                    aria-label={t('contactUs')}
                   >
                     <img
                       src={EmailIcon}
-                      alt="Contact Us"
+                      alt={t('contactUs')}
                       className="w-full h-full object-contain rounded-full"
                     />
                   </button>
                 </Tooltip>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-2">
-                  Contact Us
+                  {t('contactUs')}
                 </span>
               </div>
             </div>
@@ -257,7 +261,7 @@ const ServiceBlock = ({ service, index, dir }) => {
               }}
               className="px-8 py-3"
             >
-              Book Consultation
+              {t('bookConsultation')}
             </Button>
           </div>
         </div>
