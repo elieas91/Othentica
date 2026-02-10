@@ -48,6 +48,7 @@ export const translations = {
 
     // Meet the Founders (CEO / COO)
     meetTheFounders: 'Meet the Founders',
+    bookWithHiba: 'Book with Hiba',
     messageFromCEO: 'A Message from Our CEO',
     messageFromCOO: 'A Message from our COO',
     coFounderCEO: 'Co-founder & CEO',
@@ -71,6 +72,10 @@ export const translations = {
     loadingTestimonials: 'Loading testimonials...',
     unableToLoadTestimonials: 'Unable to load testimonials. Please try again later.',
     noTestimonialsAvailable: 'No testimonials available at the moment.',
+
+    // Contact page section titles
+    formTitle: 'Send us a Message',
+    contactSectionTitle: 'Contact Information',
 
     // Service block CTAs
     contactUs: 'Contact Us',
@@ -132,6 +137,7 @@ export const translations = {
 
     // Meet the Founders (CEO / COO)
     meetTheFounders: 'تعرف على المؤسسين',
+    bookWithHiba: 'احجز مع هبة',
     messageFromCEO: 'رسالة من مديرنا التنفيذي',
     messageFromCOO: 'رسالة من مدير العمليات',
     coFounderCEO: 'الشريك المؤسس والمدير التنفيذي',
@@ -155,6 +161,10 @@ export const translations = {
     loadingTestimonials: 'جاري تحميل الشهادات...',
     unableToLoadTestimonials: 'تعذر تحميل الشهادات. يرجى المحاولة لاحقاً.',
     noTestimonialsAvailable: 'لا توجد شهادات متاحة في الوقت الحالي.',
+
+    // Contact page section titles
+    formTitle: 'أرسل لنا رسالة',
+    contactSectionTitle: 'معلومات الاتصال',
 
     // Service block CTAs
     contactUs: 'تواصل معنا',

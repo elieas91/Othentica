@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import DatePickerWrapper from './DatePickerWrapper';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
 import hibaCalendarService from '../../services/hibaCalendarService';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const HibaCalendarBooking = ({ className = '', showText = false }) => {
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [isBooking, setIsBooking] = useState(false);
@@ -120,7 +124,7 @@ const HibaCalendarBooking = ({ className = '', showText = false }) => {
         <CalendarIcon className="w-6 h-6" />
         {showText && (
           <span className="ml-2 font-semibold text-sm">
-            Book with Hiba
+            {t('bookWithHiba')}
           </span>
         )}
       </button>
@@ -269,7 +273,7 @@ const HibaCalendarBooking = ({ className = '', showText = false }) => {
                         Booking...
                       </div>
                     ) : (
-                      'Book with Hiba'
+                      {t('bookWithHiba')}
                     )}
                   </button>
                 </div>

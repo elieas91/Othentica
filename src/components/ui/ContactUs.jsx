@@ -5,6 +5,7 @@ import apiService from '../../services/api';
 import { InboxIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import Swal from 'sweetalert2';
 import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const DEFAULT_LABELS = {
   formTitle: 'Send us a Message',
@@ -23,6 +24,7 @@ const DEFAULT_EMAIL = 'info@othentica-app.com';
 
 const ContactUs = () => {
   const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [contactInfo, setContactInfo] = useState(null);
   const [form, setForm] = useState({
     name: '',
@@ -48,10 +50,10 @@ const ContactUs = () => {
     ? {
         ...DEFAULT_LABELS,
         ...contactInfo.form_labels,
-        formTitle: contactInfo.form_title || DEFAULT_LABELS.formTitle,
-        sectionTitle: contactInfo.contact_section_title || DEFAULT_LABELS.sectionTitle
+        formTitle: contactInfo.form_title || t('formTitle'),
+        sectionTitle: contactInfo.contact_section_title || t('contactSectionTitle')
       }
-    : DEFAULT_LABELS;
+    : { ...DEFAULT_LABELS, formTitle: t('formTitle'), sectionTitle: t('contactSectionTitle') };
   const address = contactInfo?.address ?? DEFAULT_ADDRESS;
   const phone = contactInfo?.phone ?? DEFAULT_PHONE;
   const email = contactInfo?.email ?? DEFAULT_EMAIL;
