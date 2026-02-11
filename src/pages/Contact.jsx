@@ -43,7 +43,7 @@ const Contact = () => {
       </div>
 
       {/* ContactUs overlapping top half */}
-      <div className="relative z-40 w-[70%] mx-auto top-[-9rem]">
+      <div className="relative z-40 w-[95%] md:w-[70%] mx-auto lg:top-[-9rem]">
         <ContactUs />
       </div>
 
