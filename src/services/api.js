@@ -1378,6 +1378,70 @@ class ApiService {
     return response.json();
   }
 
+  // Email composer: send, schedule, automations
+  async sendComposedEmail({ subject, message, emails }) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/send`, {
+      method: 'POST',
+      body: JSON.stringify({ subject, message, emails }),
+    });
+    return response.json();
+  }
+
+  async scheduleEmail({ subject, message, emails, scheduledAt }) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/schedule`, {
+      method: 'POST',
+      body: JSON.stringify({ subject, message, emails, scheduledAt }),
+    });
+    return response.json();
+  }
+
+  async getScheduledEmails() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/scheduled`);
+    return response.json();
+  }
+
+  async getSentEmails(params = {}) {
+    const qs = new URLSearchParams(params).toString();
+    const url = qs ? `${this.baseURL}/email/sent?${qs}` : `${this.baseURL}/email/sent`;
+    const response = await this.authenticatedRequest(url);
+    return response.json();
+  }
+
+  async deleteScheduledEmail(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/scheduled/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  }
+
+  async createEmailAutomation(data) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/automations`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+
+  async getEmailAutomations() {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/automations`);
+    return response.json();
+  }
+
+  async updateEmailAutomation(id, data) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/automations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  }
+
+  async deleteEmailAutomation(id) {
+    const response = await this.authenticatedRequest(`${this.baseURL}/email/automations/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
+  }
+
   // Translation API methods
   async translateText(text) {
     const response = await this.authenticatedRequest(`${this.baseURL}/translation/translate`, {

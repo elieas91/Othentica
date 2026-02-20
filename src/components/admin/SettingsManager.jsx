@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Swal from 'sweetalert2';
 import apiService from '../../services/api';
+import EmailComposerManager from './EmailComposerManager';
 
 const SettingsManager = () => {
   const [activeSection, setActiveSection] = useState('main'); // 'main', 'auto-reply', 'testimonial-email', 'testimonial-approval-email'
@@ -196,6 +197,11 @@ const SettingsManager = () => {
     );
   }
 
+  // Email composer (compose, schedule, automations)
+  if (activeSection === 'email-composer') {
+    return <EmailComposerManager onBack={() => setActiveSection('main')} />;
+  }
+
   // Main Settings Menu
   if (activeSection === 'main') {
     return (
@@ -272,25 +278,25 @@ const SettingsManager = () => {
             </button>
           </div>
 
-          {/* Email Settings */}
+          {/* Compose & schedule emails */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                <Cog6ToothIcon className="w-7 h-7 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center">
+                <EnvelopeIcon className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900">Email Settings</h3>
-                <p className="text-gray-600 text-sm">SMTP and email preferences</p>
+                <h3 className="text-xl font-bold text-gray-900">Compose & schedule emails</h3>
+                <p className="text-gray-600 text-sm">Send to contacts or opt-in users</p>
               </div>
             </div>
             <p className="text-gray-500 text-sm mb-4">
-              Configure email server settings and delivery preferences.
+              Compose emails, send to individuals or company opt-in lists, schedule sends, and automate recurring emails (e.g. every 2 weeks).
             </p>
             <button
-              disabled
-              className="w-full px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed font-medium"
+              onClick={() => setActiveSection('email-composer')}
+              className="w-full px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors font-medium"
             >
-              Coming Soon
+              Open email composer
             </button>
           </div>
 
