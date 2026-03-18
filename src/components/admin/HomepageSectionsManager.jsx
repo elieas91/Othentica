@@ -22,7 +22,7 @@ import SecurityCardsManager from './SecurityCardsManager';
 import ServicesCardsManager from './ServicesCardsManager';
 import ClientsManager from './ClientsManager';
 import FeaturesAndBenefitsManager from './FeaturesAndBenefitsManager';
-import RichTextEditor from '../ui/RichTextEditor';
+import VideoTestimonialsManager from './VideoTestimonialsManager';
 
 const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionChange }) => {
   const { isArabic } = useContext(DashboardLanguageContext);
@@ -234,6 +234,16 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
       key: 'mobile_showcase', 
       label: 'Mobile Showcase', 
       description: 'Mobile Experience section',
+      hasButtons: false,
+      hasMainImage: false,
+      hasBackgroundImage: false,
+      hasSubtitle: false,
+      usesDescription: true
+    },
+    {
+      key: 'video_testimonials',
+      label: 'Video Testimonials',
+      description: 'Homepage video testimonial carousel',
       hasButtons: false,
       hasMainImage: false,
       hasBackgroundImage: false,
@@ -461,8 +471,8 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
         title_ar: currentSection.title_ar || '',
         subtitle: currentSection.subtitle || '',
         subtitle_ar: currentSection.subtitle_ar || '',
-        description: currentSection.description || '',
-        description_ar: currentSection.description_ar || '',
+        description: stripHtml(currentSection.description || ''),
+        description_ar: stripHtml(currentSection.description_ar || ''),
         // Philosophy and services no longer use JSON content
         content: (activeSection === 'philosophy' || activeSection === 'services') ? '' : (currentSection.content || ''),
         content_ar: (activeSection === 'philosophy' || activeSection === 'services') ? '' : (currentSection.content_ar || ''),
@@ -997,7 +1007,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
         </div>
       )}
 
-      {/* Current Section Content */}
+      {/* Current Section Content (includes section title/description for video_testimonials; videos list is below) */}
       {!isLoading && (
         <div className="space-y-6">
           {/* Current Section Data */}
@@ -1115,10 +1125,30 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
               <p className="text-gray-500 mb-4">
                 No data exists for the "{sectionConfigs.find(s => s.key === activeSection)?.label}" section.
               </p>
+              {activeSection === 'video_testimonials' && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingItem(null);
+                    setFormData({ title: '', title_ar: '', description: '', description_ar: '' });
+                    setShowForm(true);
+                  }}
+                  className="px-4 py-2 bg-primary text-white rounded-xl hover:opacity-90 font-medium font-poppins"
+                >
+                  Set section title & description
+                </button>
+              )}
             </div>
           )}
         </div>
       )}
+
+        {/* Video Testimonials: show manager below section card when tab is selected */}
+        {!isLoading && activeSection === 'video_testimonials' && (
+          <div className="mt-4">
+            <VideoTestimonialsManager />
+          </div>
+        )}
 
 
       {/* Add/Edit Modal */}
@@ -1302,15 +1332,15 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                         <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
                           Description (Arabic)
                         </label>
-                        <div className="rich-text-container">
-                          <RichTextEditor
-                            value={formData.description_ar || ''}
-                            onChange={(value) => setFormData(prev => ({ ...prev, description_ar: value }))}
-                            placeholder="وصف القسم... (استخدم شريط الأدوات للتنسيق)"
-                            height="200px"
-                            dir="rtl"
-                          />
-                        </div>
+                        <textarea
+                          name="description_ar"
+                          value={formData.description_ar || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description_ar: e.target.value }))}
+                          placeholder="وصف القسم..."
+                          rows={5}
+                          dir="rtl"
+                          className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                        />
                       </div>
                       <div className="pt-2">
                         <div className="flex items-center justify-between gap-2 mb-3 mt-1">
@@ -1320,7 +1350,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                           <button
                             type="button"
                             onClick={() => handleTranslateToArabic('description')}
-                            disabled={translatingField === 'description' || !stripHtml(formData.description || '').trim()}
+                            disabled={translatingField === 'description' || !(formData.description || '').trim()}
                             className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Translate to Arabic"
                           >
@@ -1331,14 +1361,14 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                             )}
                           </button>
                         </div>
-                        <div className="rich-text-container">
-                          <RichTextEditor
-                            value={formData.description || ''}
-                            onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-                            placeholder="Enter section description... (Use the toolbar for formatting)"
-                            height="200px"
-                          />
-                        </div>
+                        <textarea
+                          name="description"
+                          value={formData.description || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                          placeholder="Enter section description..."
+                          rows={5}
+                          className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                        />
                       </div>
                     </>
                   ) : (
@@ -1351,7 +1381,7 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                           <button
                             type="button"
                             onClick={() => handleTranslateToArabic('description')}
-                            disabled={translatingField === 'description' || !stripHtml(formData.description || '').trim()}
+                            disabled={translatingField === 'description' || !(formData.description || '').trim()}
                             className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Translate to Arabic"
                           >
@@ -1362,28 +1392,28 @@ const HomepageSectionsManager = ({ activeSection: propActiveSection, onSectionCh
                             )}
                           </button>
                         </div>
-                        <div className="rich-text-container">
-                          <RichTextEditor
-                            value={formData.description || ''}
-                            onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-                            placeholder="Enter section description... (Use the toolbar for formatting)"
-                            height="200px"
-                          />
-                        </div>
+                        <textarea
+                          name="description"
+                          value={formData.description || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                          placeholder="Enter section description..."
+                          rows={5}
+                          className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                        />
                       </div>
                       <div className="pt-2">
                         <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
                           Description (Arabic)
                         </label>
-                        <div className="rich-text-container">
-                          <RichTextEditor
-                            value={formData.description_ar || ''}
-                            onChange={(value) => setFormData(prev => ({ ...prev, description_ar: value }))}
-                            placeholder="وصف القسم... (استخدم شريط الأدوات للتنسيق)"
-                            height="200px"
-                            dir="rtl"
-                          />
-                        </div>
+                        <textarea
+                          name="description_ar"
+                          value={formData.description_ar || ''}
+                          onChange={(e) => setFormData(prev => ({ ...prev, description_ar: e.target.value }))}
+                          placeholder="وصف القسم..."
+                          rows={5}
+                          dir="rtl"
+                          className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 resize-y"
+                        />
                       </div>
                     </>
                   )}

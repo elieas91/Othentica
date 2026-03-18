@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import Slider from 'react-slick';
 import { createPortal } from 'react-dom';
 import Flame from '../../assets/img/flame.webp';
@@ -22,6 +22,7 @@ import { getT } from '../../data/translations';
 
 const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const { locale } = useContext(PublicLocaleContext);
+  const isArabic = locale === 'ar';
   const t = getT(locale);
   // Map categoryId to API category parameter
   const getApiCategory = (categoryId) => {
@@ -83,7 +84,43 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   const [testimonialsData, setTestimonialsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [servicesList, setServicesList] = useState([]);
   // const [sliderRef, setSliderRef] = useState(null);
+
+  // Fetch services (same source as Services Cards Management) for program titles and Arabic
+  useEffect(() => {
+    let cancelled = false;
+    apiService.getServices().then((res) => {
+      if (cancelled || !res?.success || !Array.isArray(res.data)) return;
+      setServicesList(res.data);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  // Section order matching testimonial categories
+  const SECTION_IDS_ORDER = ['app', 'programs', 'talks', 'one-to-one'];
+
+  // Build display categories from backend services; fallback to static when API not loaded
+  const displayCategories = useMemo(() => {
+    if (!servicesList?.length) return testimonialCategories;
+    const bySectionId = {};
+    servicesList.forEach((s) => { bySectionId[s.section_id] = s; });
+    return SECTION_IDS_ORDER.map((sectionId) => {
+      const categoryId = getCategoryIdFromApi(sectionId);
+      const staticCat = testimonialCategories.find((c) => c.id === categoryId);
+      const service = bySectionId[sectionId];
+      if (!service && !staticCat) return null;
+      if (!service) return staticCat;
+      return {
+        id: categoryId,
+        name: service.title || staticCat?.name || '',
+        name_ar: (service.title_ar && service.title_ar.trim()) ? service.title_ar : (service.title || ''),
+        description: service.description || staticCat?.description || '',
+        description_ar: (service.description_ar && service.description_ar.trim()) ? service.description_ar : (service.description || ''),
+        images: staticCat?.images || [],
+      };
+    }).filter(Boolean);
+  }, [servicesList]);
 
   // Function to fetch testimonials
   const fetchTestimonials = useCallback(async () => {
@@ -132,7 +169,7 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
 
   // Get the first testimonial and its category for the right side images
   const firstTestimonial = filteredTestimonials[0];
-  const currentCategory = testimonialCategories.find(
+  const currentCategory = displayCategories.find(
     (cat) => cat.id === firstTestimonial?.categoryId
   );
 
@@ -179,16 +216,14 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
   // Get two different categories for the right side images
   const getTwoDifferentCategories = () => {
     if (!currentCategory) {
-      // If no current category, return first two categories
-      return testimonialCategories.slice(0, 2);
+      return displayCategories.slice(0, 2);
     }
-    if (testimonialCategories.length < 2) return [currentCategory];
-    // Pick current category and next one (wrap around)
-    const currentIdx = testimonialCategories.findIndex(
+    if (displayCategories.length < 2) return [currentCategory];
+    const currentIdx = displayCategories.findIndex(
       (cat) => cat.id === currentCategory.id
     );
-    const nextIdx = (currentIdx + 1) % testimonialCategories.length;
-    return [testimonialCategories[currentIdx], testimonialCategories[nextIdx]];
+    const nextIdx = (currentIdx + 1) % displayCategories.length;
+    return [displayCategories[currentIdx], displayCategories[nextIdx]];
   };
   const categoriesForImages = getTwoDifferentCategories();
 
@@ -403,16 +438,16 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
           } gap-12 items-start`}
         >
           {/* Left Side - Testimonial with Carousel */}
-          <div className="text-left">
+          <div className={isArabic ? 'text-right' : 'text-left'} dir={isArabic ? 'rtl' : 'ltr'}>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary mb-6 sm:mb-8">
               {t('testimonials')}
             </h2>
 
             {/* Category Badge */}
             {currentCategory && (
-              <div className="mb-6">
+              <div className="mb-6" dir={isArabic ? 'rtl' : 'ltr'}>
                 <span className="inline-block px-4 py-2 bg-primary/10 text-primary font-semibold rounded-full text-sm">
-                  {currentCategory.name}
+                  {isArabic ? (currentCategory.name_ar || currentCategory.name) : (currentCategory.name || currentCategory.name_ar)}
                 </span>
               </div>
             )}
@@ -425,8 +460,8 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
                   const isExpanded = expandedQuotes[testimonial.id];
                   
                   return (
-                    <div key={testimonial.id} className="px-2">
-                      <div className="flex flex-col justify-center min-h-[200px]">
+                    <div key={testimonial.id} className="px-4 sm:px-6">
+                      <div className="flex flex-col justify-center min-h-[200px]" dir={isArabic ? 'rtl' : undefined}>
                         <blockquote
                           className="text-sm md:text-xl lg:text-2xl text-primary mb-6 sm:mb-8 leading-relaxed font-medium"
                           style={{ display: 'inline' }}
@@ -479,56 +514,62 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
           {showPics && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-8 lg:mt-0">
               {categoriesForImages.length > 0 ? categoriesForImages.map((cat, idx) => {
-                // Pick the first image from each category
-                const imageName = cat.images[0];
+                const imageName = cat.images?.[0];
+                const displayName = isArabic ? (cat.name_ar || cat.name) : (cat.name || cat.name_ar);
+                const displayDesc = isArabic ? (cat.description_ar || cat.description) : (cat.description || cat.description_ar);
+                const count = testimonialsData.filter((t) => t.categoryId === cat.id).length;
                 return (
                   <div
-                    key={`${cat.id}-${imageName}-${idx}`}
+                    key={`${cat.id}-${imageName || idx}-${idx}`}
                     className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                    dir={isArabic ? 'rtl' : 'ltr'}
                   >
                     <div className="h-64 w-full relative">
                       <img
-                        src={getTestimonialImagePath(imageName, null)}
-                        alt={`${cat.name} - ${imageName}`}
+                        src={getTestimonialImagePath(imageName || 'testimonial-1', null)}
+                        alt={`${displayName} - ${imageName || ''}`}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         style={{ minHeight: '100%', minWidth: '100%' }}
                       />
                     </div>
                     <div className="p-6 text-start">
                       <h3 className="text-xl font-bold text-primary mb-2">
-                        {cat.name}
+                        {displayName}
                       </h3>
-                      <p className="text-gray-600 text-sm">{cat.description}</p>
+                      <p className="text-gray-600 text-sm">{displayDesc}</p>
                       <div className="mt-3 text-xs text-primary/70 font-medium">
-                        {cat.count} {t('testimonials')}
+                        {count} {t('testimonials')}
                       </div>
                     </div>
                   </div>
                 );
               }) : (
-                // Fallback: show first two categories from testimonialCategories
-                testimonialCategories.slice(0, 2).map((cat, idx) => {
-                  const imageName = cat.images[0];
+                displayCategories.slice(0, 2).map((cat, idx) => {
+                  const imageName = cat.images?.[0];
+                  const displayName = isArabic ? (cat.name_ar || cat.name) : (cat.name || cat.name_ar);
+                  const displayDesc = isArabic ? (cat.description_ar || cat.description) : (cat.description || cat.description_ar);
+                  const count = testimonialsData.filter((t) => t.categoryId === cat.id).length;
                   return (
                     <div
-                      key={`fallback-${cat.id}-${imageName}-${idx}`}
+                      key={`fallback-${cat.id}-${idx}`}
                       className="rounded-2xl shadow-lg overflow-hidden transition-all duration-700 ease-in-out group hover:shadow-xl bg-gradient-to-br from-primary/5 to-primary/10"
+                      dir={isArabic ? 'rtl' : 'ltr'}
                     >
                       <div className="h-64 w-full relative">
                         <img
-                          src={getTestimonialImagePath(imageName, null)}
-                          alt={`${cat.name} - ${imageName}`}
+                          src={getTestimonialImagePath(imageName || 'testimonial-1', null)}
+                          alt={`${displayName} - ${imageName || ''}`}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           style={{ minHeight: '100%', minWidth: '100%' }}
                         />
                       </div>
                       <div className="p-6 text-start">
                         <h3 className="text-xl font-bold text-primary mb-2">
-                          {cat.name}
+                          {displayName}
                         </h3>
-                        <p className="text-gray-600 text-sm">{cat.description}</p>
+                        <p className="text-gray-600 text-sm">{displayDesc}</p>
                         <div className="mt-3 text-xs text-primary/70 font-medium">
-                          {cat.count} {t('testimonials')}
+                          {count} {t('testimonials')}
                         </div>
                       </div>
                     </div>
@@ -552,12 +593,12 @@ const Testimonials = ({ showPics = true, currentCategoryId = null }) => {
             >
               &times;
             </button>
-            <div className="pr-8">
+            <div className="pr-8" dir={isArabic ? 'rtl' : 'ltr'}>
               <h3 className="text-2xl font-bold text-primary font-poppins mb-2">
-                Share Your Experience
+                {t('testimonialFormTitle')}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Help others by sharing your experience with Othentica
+                {t('testimonialFormSubtitle')}
               </p>
               <TestimonialForm
                 onSubmit={handleTestimonialSubmit}

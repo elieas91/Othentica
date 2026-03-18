@@ -219,6 +219,7 @@ const Hero = ({ sectionData: sectionDataProp }) => {
 
   return (
     <section
+      dir="ltr"
       className="relative min-h-[90vh] sm:min-h-[85vh] flex items-center justify-start px-4 sm:px-8 lg:px-16 overflow-hidden"
       style={{
         backgroundImage: `url(${getBackgroundImageUrl(heroData.backgroundImage)})`,

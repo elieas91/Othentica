@@ -39,17 +39,18 @@ const Features = ({ appFeaturesData, isLoading }) => {
             </div>
           </div>
           <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]" dir={isArabic ? 'rtl' : 'ltr'}>
-            <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
+            <ul className={`text-gray-600 text-lg md:text-xl md:px-4 leading-[2.5rem] mx-auto list-none w-full ${isArabic ? 'text-right' : 'text-left'}`}>
               {appFeaturesData.map((feature) => {
                 const text = isArabic && (feature.feature_ar?.trim?.() || feature.feature_ar) ? feature.feature_ar : feature.feature;
                 return (
-                  <li key={feature.id} className="flex items-start mb-2">
-                    <img
-                      src={Flame}
-                      alt="Bullet Icon"
-                      className="w-auto h-7 mr-3 mt-1 flex-shrink-0"
-                    />
-                    <span>{text}</span>
+                  <li key={feature.id} className="flex items-start mb-2 gap-3">
+                    {isArabic && (
+                      <img src={Flame} alt="Bullet Icon" className="w-auto h-7 mt-1 flex-shrink-0 order-first" />
+                    )}
+                    {!isArabic && (
+                      <img src={Flame} alt="Bullet Icon" className="w-auto h-7 mt-1 flex-shrink-0" />
+                    )}
+                    <span className={isArabic ? 'flex-1 min-w-0 text-right order-last' : ''}>{text}</span>
                   </li>
                 );
               })}
@@ -93,17 +94,18 @@ const Benefits = ({ appBenefitsData, isLoading }) => {
             </div>
           </div>
           <div className="relative z-10 flex flex-col justify-start h-[300px] overflow-y-auto top-[2rem]" dir={isArabic ? 'rtl' : 'ltr'}>
-            <ul className="text-gray-600 text-lg md:text-xl text-left md:px-4 leading-[2.5rem] mx-auto">
+            <ul className={`text-gray-600 text-lg md:text-xl md:px-4 leading-[2.5rem] mx-auto list-none w-full ${isArabic ? 'text-right' : 'text-left'}`}>
               {appBenefitsData.map((benefit) => {
                 const text = isArabic && (benefit.benefit_ar?.trim?.() || benefit.benefit_ar) ? benefit.benefit_ar : benefit.benefit;
                 return (
-                  <li key={benefit.id} className="flex items-start mb-2">
-                    <img
-                      src={Flame}
-                      alt="Bullet Icon"
-                      className="w-auto h-7 mr-3 mt-1 flex-shrink-0"
-                    />
-                    <span>{text}</span>
+                  <li key={benefit.id} className="flex items-start mb-2 gap-3">
+                    {isArabic && (
+                      <img src={Flame} alt="Bullet Icon" className="w-auto h-7 mt-1 flex-shrink-0 order-first" />
+                    )}
+                    {!isArabic && (
+                      <img src={Flame} alt="Bullet Icon" className="w-auto h-7 mt-1 flex-shrink-0" />
+                    )}
+                    <span className={isArabic ? 'flex-1 min-w-0 text-right order-last' : ''}>{text}</span>
                   </li>
                 );
               })}

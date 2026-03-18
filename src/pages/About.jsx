@@ -375,6 +375,7 @@ const About = () => {
       <AnimateOnScroll animation="scaleIn" delay={400} duration={800}>
         <CarouselMVV
           className="my-24"
+          isRtl={isArabic}
           items={mvvItems.map((item) => {
             const titleKey = item.id === 1 ? 'mission' : item.id === 2 ? 'vision' : 'values';
             return {

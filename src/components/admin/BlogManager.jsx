@@ -9,8 +9,14 @@ import {
   EyeIcon,
   ArrowTopRightOnSquareIcon,
   CalendarIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  PhotoIcon,
+  LanguageIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
+import { translateText } from '../../utils/translate';
+
+const BLOG_HERO_SECTION_KEY = 'blog_hero';
 
 const BlogManager = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,8 +33,32 @@ const BlogManager = () => {
   });
   const [imagePreview, setImagePreview] = useState(null);
 
+  // Blog page hero (banner) section
+  const [heroData, setHeroData] = useState(null);
+  const [heroForm, setHeroForm] = useState({ title: '', title_ar: '', subtitle: '', subtitle_ar: '', backgroundFile: null });
+  const [heroFormPreview, setHeroFormPreview] = useState(null);
+  const [heroSaving, setHeroSaving] = useState(false);
+  const [heroTranslatingField, setHeroTranslatingField] = useState(null);
+
   useEffect(() => {
     fetchBlogs();
+  }, []);
+
+  useEffect(() => {
+    apiService.getHomepageSectionByKey(BLOG_HERO_SECTION_KEY).then((res) => {
+      if (res.success && res.data) {
+        const d = res.data;
+        setHeroData(d);
+        setHeroForm({
+          title: d.title ?? '',
+          title_ar: d.title_ar ?? '',
+          subtitle: d.subtitle ?? '',
+          subtitle_ar: d.subtitle_ar ?? '',
+          backgroundFile: null
+        });
+        setHeroFormPreview(d.background_image_url || null);
+      }
+    }).catch(() => {});
   }, []);
 
   // Handle unsaved changes when leaving the page
@@ -282,6 +312,74 @@ const BlogManager = () => {
     return `${getApiUrl()}/uploads/blogs/${imgPath}`;
   };
 
+  const heroBackgroundPreviewUrl = heroFormPreview || heroData?.background_image_url || null;
+
+  const handleHeroFieldChange = (e) => {
+    const { name, value } = e.target;
+    setHeroForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleHeroTranslateToArabic = async (fieldName) => {
+    const value = (heroForm[fieldName] || '').trim();
+    if (!value) return;
+    setHeroTranslatingField(fieldName);
+    try {
+      const translated = await translateText(value, 'ar', 'en');
+      const arField = `${fieldName}_ar`;
+      setHeroForm((prev) => ({ ...prev, [arField]: translated }));
+    } catch (err) {
+      console.error('Translation error:', err);
+    } finally {
+      setHeroTranslatingField(null);
+    }
+  };
+
+  const handleHeroBackgroundChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (heroForm.backgroundFile && heroFormPreview && heroFormPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(heroFormPreview);
+      }
+      setHeroForm((prev) => ({ ...prev, backgroundFile: file }));
+      setHeroFormPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const saveHero = async (e) => {
+    e.preventDefault();
+    setHeroSaving(true);
+    try {
+      const form = new FormData();
+      form.append('section_key', BLOG_HERO_SECTION_KEY);
+      form.append('title', heroForm.title || '');
+      form.append('title_ar', heroForm.title_ar || '');
+      form.append('subtitle', heroForm.subtitle || '');
+      form.append('subtitle_ar', heroForm.subtitle_ar || '');
+      if (heroForm.backgroundFile) {
+        form.append('background_image', heroForm.backgroundFile);
+      } else if (heroData?.background_image_url) {
+        form.append('existing_background_image_url', heroData.background_image_url);
+      }
+      const response = await apiService.updateHomepageSectionByKey(BLOG_HERO_SECTION_KEY, form);
+      if (response.success) {
+        setHeroData(response.data);
+        setHeroForm((prev) => ({ ...prev, backgroundFile: null }));
+        if (heroFormPreview && heroFormPreview.startsWith('blob:')) {
+          URL.revokeObjectURL(heroFormPreview);
+        }
+        setHeroFormPreview(response.data?.background_image_url || null);
+        await Swal.fire({ title: 'Saved', text: 'Blog page hero updated successfully.', icon: 'success', timer: 2000, showConfirmButton: false });
+      } else {
+        await Swal.fire({ title: 'Error', text: response.message || 'Failed to save hero.', icon: 'error' });
+      }
+    } catch (err) {
+      console.error('Error saving blog hero:', err);
+      await Swal.fire({ title: 'Error', text: err.message || 'Failed to save blog hero.', icon: 'error' });
+    } finally {
+      setHeroSaving(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-6">
@@ -370,6 +468,123 @@ const BlogManager = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Blog page hero section */}
+      <div className="bg-white rounded-2xl shadow-professional border border-accent/20 overflow-hidden mb-8">
+        <div className="px-6 py-4 border-b border-accent/20 flex items-center gap-2">
+          <PhotoIcon className="w-6 h-6 text-primary" />
+          <h3 className="text-xl font-bold text-primary font-poppins">Blog Page Hero</h3>
+        </div>
+        <form onSubmit={saveHero} className="p-6">
+          <p className="text-gray-600 text-sm mb-4">Edit the banner shown at the top of the blog page (/blog).</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title (English)</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  name="title"
+                  value={heroForm.title}
+                  onChange={handleHeroFieldChange}
+                  className="flex-1 min-w-0 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="e.g. Ideas That Matter"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleHeroTranslateToArabic('title')}
+                  disabled={heroTranslatingField === 'title' || !(heroForm.title || '').trim()}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Translate to Arabic"
+                >
+                  {heroTranslatingField === 'title' ? (
+                    <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <LanguageIcon className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title (Arabic)</label>
+              <input
+                type="text"
+                name="title_ar"
+                value={heroForm.title_ar}
+                onChange={handleHeroFieldChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="e.g. أفكار ذات أهمية"
+                dir="rtl"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Subtitle (English)</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  name="subtitle"
+                  value={heroForm.subtitle}
+                  onChange={handleHeroFieldChange}
+                  className="flex-1 min-w-0 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="e.g. Dive into in-depth blogs, fresh perspectives..."
+                />
+                <button
+                  type="button"
+                  onClick={() => handleHeroTranslateToArabic('subtitle')}
+                  disabled={heroTranslatingField === 'subtitle' || !(heroForm.subtitle || '').trim()}
+                  className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Translate to Arabic"
+                >
+                  {heroTranslatingField === 'subtitle' ? (
+                    <ArrowPathIcon className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <LanguageIcon className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Subtitle (Arabic)</label>
+              <input
+                type="text"
+                name="subtitle_ar"
+                value={heroForm.subtitle_ar}
+                onChange={handleHeroFieldChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="e.g. انغمس في مدونات معمقة ووجهات نظر جديدة..."
+                dir="rtl"
+              />
+            </div>
+          </div>
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Background Image</label>
+            {heroBackgroundPreviewUrl && (
+              <div className="mb-3">
+                <img
+                  src={heroBackgroundPreviewUrl}
+                  alt="Hero background preview"
+                  className="w-full max-w-md h-32 object-cover rounded-lg border border-gray-300"
+                />
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleHeroBackgroundChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+            />
+            <p className="text-xs text-gray-500 mt-1">Optional. Leave empty to keep current image. Max 5MB.</p>
+          </div>
+          <div className="mt-6 flex justify-end">
+            <button
+              type="submit"
+              disabled={heroSaving}
+              className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+            >
+              {heroSaving ? 'Saving...' : 'Save Blog Hero'}
+            </button>
+          </div>
+        </form>
       </div>
 
       {/* Blog List */}

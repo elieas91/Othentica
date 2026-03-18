@@ -3,7 +3,7 @@ import { missionVisionValuesData } from '../../../data/missionVisionValuesData';
 import CompassIcon from '../../../assets/img/compass.svg';
 import './CarouselMVV.css';
 
-const CarouselMVV = ({ className = '', items }) => {
+const CarouselMVV = ({ className = '', items, isRtl = false }) => {
   const [currentIndex, setCurrentIndex] = useState(0); // Start with Mission (id=1) - first item
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -331,7 +331,11 @@ const CarouselMVV = ({ className = '', items }) => {
       {/* Modal for full content */}
       {showModal && modalContent && (
         <div className="carousel-3d-modal-overlay" onClick={closeModal}>
-          <div className="carousel-3d-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="carousel-3d-modal"
+            dir={isRtl ? 'rtl' : 'ltr'}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="carousel-3d-modal-header">
               <h2 className="carousel-3d-modal-title">{modalContent.title}</h2>
               <button 

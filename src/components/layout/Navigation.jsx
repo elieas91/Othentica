@@ -163,12 +163,13 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 shrink-0">
             <img src={Logo} alt="Othentica Logo" className="h-14 w-auto" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8 items-center ml-auto">
+          {/* Desktop Navigation + Language */}
+          <div className="hidden md:flex items-center md:ml-8 flex-1 justify-end">
+          <div className="flex gap-8 items-center">
             {navItems.map((item) => {
               if (item.hasDropdown) {
                 const isDropdownOpen =
@@ -262,7 +263,7 @@ const Navigation = () => {
           </div>
 
           {/* Language toggle and CTA */}
-          <div className="hidden md:flex items-center md:ml-8">
+          <div className="flex items-center ml-8">
             <div className="relative">
               <button
                 type="button"
@@ -334,6 +335,7 @@ const Navigation = () => {
             >
               Start Your Journey
             </Link> */}
+          </div>
           </div>
 
           {/* Mobile menu button */}

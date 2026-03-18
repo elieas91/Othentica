@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import DatePickerWrapper from './DatePickerWrapper';
 import 'react-datepicker/dist/react-datepicker.css';
 import Swal from 'sweetalert2';
 import { CalendarIcon, ClockIcon } from '@heroicons/react/24/solid';
 import calendarService from '../../services/calendarService';
+import { PublicLocaleContext } from '../../contexts/PublicLocaleContext';
+import { getT } from '../../data/translations';
 
 const CalendarBooking = ({ className = '', showText = false }) => {
+  const { locale } = useContext(PublicLocaleContext);
+  const t = getT(locale);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState('');
   const [isBooking, setIsBooking] = useState(false);
@@ -17,10 +21,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
       Swal.fire({
-        title: 'Missing Information',
-        text: 'Please select both date and time for your appointment.',
+        title: t('missingInformation'),
+        text: t('missingInformationText'),
         icon: 'warning',
-        confirmButtonText: 'OK',
+        confirmButtonText: t('ok'),
         confirmButtonColor: '#3b82f6',
       });
       return;
@@ -41,10 +45,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
       );
       if (!validation.valid) {
         Swal.fire({
-          title: 'Invalid Appointment Time',
+          title: t('invalidAppointmentTime'),
           text: validation.message,
           icon: 'warning',
-          confirmButtonText: 'OK',
+          confirmButtonText: t('ok'),
           confirmButtonColor: '#3b82f6',
         });
         return;
@@ -59,10 +63,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
         window.open(result, '_blank');
 
         Swal.fire({
-          title: 'Calendar Opened!',
-          text: 'Google Calendar has opened in a new tab. Please add the event to your calendar.',
+          title: t('calendarOpened'),
+          text: t('calendarOpenedText'),
           icon: 'success',
-          confirmButtonText: 'Great!',
+          confirmButtonText: t('great'),
           confirmButtonColor: '#3b82f6',
           timer: 5000,
           timerProgressBar: true,
@@ -70,10 +74,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
       } else {
         // Direct calendar event creation was successful
         Swal.fire({
-          title: 'Appointment Booked!',
-          text: 'Your appointment has been successfully added to our calendar. You will receive a confirmation email shortly.',
+          title: t('appointmentBooked'),
+          text: t('appointmentBookedText'),
           icon: 'success',
-          confirmButtonText: 'Great!',
+          confirmButtonText: t('great'),
           confirmButtonColor: '#3b82f6',
           timer: 5000,
           timerProgressBar: true,
@@ -88,14 +92,14 @@ const CalendarBooking = ({ className = '', showText = false }) => {
 
       // Check if it's a network error or API error
       const errorMessage = error.message.includes('HTTP error')
-        ? 'Unable to connect to the booking service. Please try again later.'
-        : 'There was an error booking your appointment. Please try again.';
+        ? t('bookingErrorConnect')
+        : t('bookingErrorTryAgain');
 
       Swal.fire({
-        title: 'Booking Error!',
+        title: t('bookingError'),
         text: errorMessage,
         icon: 'error',
-        confirmButtonText: 'Try Again',
+        confirmButtonText: t('tryAgain'),
         confirmButtonColor: '#ef4444',
       });
     } finally {
@@ -121,11 +125,11 @@ const CalendarBooking = ({ className = '', showText = false }) => {
         className={`${className} ${
           showText ? 'rounded-lg' : 'rounded-full'
         } bg-orange-500 text-white flex items-center justify-center transition-colors shadow-lg hover:shadow-xl`}
-        title="Book an Appointment"
+        title={t('bookAnAppointment')}
       >
         <CalendarIcon className="w-6 h-6" />
         {showText && (
-          <span className="ml-2 font-semibold text-sm">Book Meeting</span>
+          <span className="ml-2 font-semibold text-sm">{t('bookMeeting')}</span>
         )}
       </button>
 
@@ -136,7 +140,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-800">
-                  Book an Appointment
+                  {t('bookAnAppointment')}
                 </h3>
                 <button
                   onClick={closeModal}
@@ -151,7 +155,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <CalendarIcon className="w-4 h-4 inline mr-1" />
-                    Select Date
+                    {t('selectDate')}
                   </label>
                   <DatePickerWrapper
                     selected={selectedDate}
@@ -160,7 +164,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                     maxDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)} // 90 days from now
                     dateFormat="dd/MM/yyyy"
                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholderText="Choose a date"
+                    placeholderText={t('chooseDate')}
                     showPopperArrow={false}
                   />
                 </div>
@@ -169,14 +173,14 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <ClockIcon className="w-4 h-4 inline mr-1" />
-                    Select Time
+                    {t('selectTime')}
                   </label>
                   <select
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
-                    <option value="">Choose a time</option>
+                    <option value="">{t('chooseTime')}</option>
                     {timeSlots.map((time) => (
                       <option key={time} value={time}>
                         {time}
@@ -189,17 +193,17 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                 {selectedDate && selectedTime && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <h4 className="font-semibold text-green-800 mb-2">
-                      Appointment Details:
+                      {t('appointmentDetails')}
                     </h4>
                     <p className="text-green-700">
-                      <strong>Date:</strong>{' '}
-                      {selectedDate.toLocaleDateString('en-GB')}
+                      <strong>{t('date')}</strong>{' '}
+                      {selectedDate.toLocaleDateString(locale === 'ar' ? 'ar-AE' : 'en-GB')}
                     </p>
                     <p className="text-green-700">
-                      <strong>Time:</strong> {selectedTime}
+                      <strong>{t('time')}</strong> {selectedTime}
                     </p>
                     <p className="text-green-700">
-                      <strong>Duration:</strong> 1 hour
+                      <strong>{t('duration')}</strong> {t('durationHour')}
                     </p>
                   </div>
                 )}
@@ -210,7 +214,7 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                     onClick={closeModal}
                     className="flex-1 px-4 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
-                    Cancel
+                    {t('cancel')}
                   </button>
                   <button
                     onClick={handleBooking}
@@ -242,10 +246,10 @@ const CalendarBooking = ({ className = '', showText = false }) => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        Booking...
+                        {t('booking')}
                       </div>
                     ) : (
-                      'Book Appointment'
+                      t('bookAppointment')
                     )}
                   </button>
                 </div>

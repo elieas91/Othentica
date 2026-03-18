@@ -1,3 +1,5 @@
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { PublicLocaleContext } from '../contexts/PublicLocaleContext';
 import OptInCountdown from '../components/layout/OptInCountdown';
@@ -11,8 +13,22 @@ import ClockAnimation from '../components/ui/ClockAnimation';
 import apiService from '../services/api';
 import Terms from '../components/ui/Terms';
 
+
+// Read hash from URL on load (used so refresh keeps the correct company)
+const getHashSlugFromUrl = () => {
+  if (typeof window === 'undefined') return '';
+  return (window.location.hash || '').replace(/^#/, '').trim();
+};
+
 const OptIn = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  // Initial slug from URL hash so refresh shows correct company immediately
   const [showForm, setShowForm] = useState(false);
+  const [companySlug, setCompanySlug] = useState(() => getHashSlugFromUrl() || 'othentica');
+  const [companyConfig, setCompanyConfig] = useState(null);
+  const [companyConfigLoading, setCompanyConfigLoading] = useState(true);
+  const [companyConfigError, setCompanyConfigError] = useState(null);
   // Show form by default if ?earlyaccess=1 is in the URL (for new tab)
   const getShowFormFromQuery = () => {
     if (typeof window !== 'undefined') {
@@ -71,6 +87,44 @@ const OptIn = () => {
   useEffect(() => {
     detectCountry();
   }, []);
+
+  // Only allow opt-in when URL has a hash (e.g. /opt-in#company). No hash → redirect home.
+  useEffect(() => {
+    const slug = getHashSlugFromUrl();
+    if (!slug) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
+
+  // Use hash from URL (so refresh keeps correct company); fallback to location.hash for in-app navigation
+  const hashSlug = getHashSlugFromUrl() || (location.hash && location.hash.slice(1).trim()) || 'othentica';
+
+  // Fetch company data from DB when page loads or hash changes
+  useEffect(() => {
+    const slug = hashSlug;
+    if (!slug) return;
+    setCompanySlug(slug);
+    setCompanyConfigLoading(true);
+    setCompanyConfigError(null);
+    const fetchCompany = async () => {
+      try {
+        const config = await apiService.getOptinCompanyBySlug(slug);
+        if (config && !config.error) {
+          setCompanyConfig(config);
+          setCompanyConfigError(null);
+        } else {
+          setCompanyConfig(null);
+          setCompanyConfigError(config?.error || 'Company not found');
+        }
+      } catch (err) {
+        setCompanyConfig(null);
+        setCompanyConfigError(err?.message || 'Failed to load company');
+      } finally {
+        setCompanyConfigLoading(false);
+      }
+    };
+    fetchCompany();
+  }, [hashSlug]);
 
   const initialFormState = {
     firstName: '',
@@ -225,6 +279,7 @@ const OptIn = () => {
         company: company.trim(),
         country: country.trim(),
         industry: industry.trim(),
+        ...(companySlug ? { companySlug } : {}),
       };
 
       const { response, data } = await apiService.optIn(formData);
@@ -314,9 +369,27 @@ const OptIn = () => {
     }
   }, []);
 
+  const videoUrl = companyConfig?.video_url || null;
+  const showVideo = Boolean(videoUrl);
+
+  // Only show opt-in when URL has a hash (e.g. /opt-in#company); otherwise we redirect
+  if (!getHashSlugFromUrl()) {
+    return null;
+  }
+
   return (
     <>
-      <OptInCountdown />
+      <OptInCountdown companySlug={companySlug} />
+      {companyConfigLoading && (
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400 py-2">
+          Loading…
+        </div>
+      )}
+      {!companyConfigLoading && companyConfigError && hashSlug !== 'othentica' && (
+        <div className="text-center text-sm text-amber-600 dark:text-amber-400 py-2">
+          Company &quot;{hashSlug}&quot; not found – showing default experience.
+        </div>
+      )}
       <div className="my-16 dark:bg-primary">
         <div className="px-6">
           {/* Desktop layout: columns, Mobile layout: stacked */}
@@ -327,18 +400,20 @@ const OptIn = () => {
                 Welcome! You’ve chosen to step into your authentic self.
               </h2>
             </div>
-            {/* Mobile: iframe */}
-            <div className="block md:hidden w-full mb-6 aspect-video">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/_8tP35o0kHI"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full rounded-lg shadow-lg"
-              ></iframe>
-            </div>
+            {/* Mobile: iframe – only when company has a video */}
+            {showVideo && (
+              <div className="block md:hidden w-full mb-6 aspect-video">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={videoUrl}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full rounded-lg shadow-lg"
+                />
+              </div>
+            )}
             {/* Mobile: Register text and button */}
             <div className="block md:hidden w-full">
               <p className="text-xl mb-2">
@@ -383,18 +458,20 @@ const OptIn = () => {
                 Yes, I Want Early Access
               </Button>
             </div>
-            {/* Desktop: Right column: iframe */}
-            <div className="hidden md:block w-full md:w-2/3 max-w-3xl aspect-video order-2">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/_8tP35o0kHI"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full rounded-lg shadow-lg"
-              ></iframe>
-            </div>
+            {/* Desktop: Right column: iframe – only when company has a video */}
+            {showVideo && (
+              <div className="hidden md:block w-full md:w-2/3 max-w-3xl aspect-video order-2">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={videoUrl}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full rounded-lg shadow-lg"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

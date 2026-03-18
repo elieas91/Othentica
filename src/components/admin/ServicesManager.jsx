@@ -794,7 +794,7 @@ const ServicesManager = () => {
               {/* Single Image Upload */}
               <div>
                 <label className="block text-sm font-semibold text-primary mb-3 font-poppins">
-                  Service Image *
+                  Service Image
                 </label>
                 <input
                   type="file"
@@ -802,7 +802,6 @@ const ServicesManager = () => {
                   accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-accent/30 rounded-xl focus:ring-2 focus:ring-secondary focus:border-transparent bg-white/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-secondary file:text-white hover:file:bg-orange-500"
-                  required
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Supported formats: JPEG, PNG, GIF, WEBP. Maximum size: 5MB

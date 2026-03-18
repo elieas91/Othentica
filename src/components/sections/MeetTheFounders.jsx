@@ -321,7 +321,7 @@ const MeetTheFounders = () => {
                       >
                         <CalendarIcon className="w-6 h-6" />
                         <span className="ml-2 font-semibold text-sm">
-                          Book with Hiba
+                          {t('bookWithHiba')}
                         </span>
                       </button>
                     )}
@@ -543,7 +543,7 @@ const MeetTheFounders = () => {
                         Booking...
                       </div>
                     ) : (
-                      'Book with Hiba'
+                      t('bookWithHiba')
                     )}
                   </button>
                 </div>
