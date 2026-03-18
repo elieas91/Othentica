@@ -1,4 +1,5 @@
-import React from 'react';
+import { useContext } from 'react';
+import { PublicLocaleContext } from '../contexts/PublicLocaleContext';
 import OptInCountdown from '../components/layout/OptInCountdown';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
@@ -27,6 +28,8 @@ const OptIn = () => {
   const [isDetectingCountry, setIsDetectingCountry] = useState(false);
   const errorRef = useRef(null);
   const formRef = useRef(null);
+
+  const { locale, isArabic } = useContext(PublicLocaleContext);
 
   // Scroll to error message when submitError changes
   useEffect(() => {
@@ -79,9 +82,9 @@ const OptIn = () => {
     industry: '',
     acknowledge: false,
     termsAgree: false,
+    healthDisclaimerAgree: false,
   };
   const [form, setForm] = useState(initialFormState);
-
 
   const handleFormClose = () => {
     setShowForm(false);
@@ -143,7 +146,7 @@ const OptIn = () => {
 
     // Check if email matches any personal email pattern
     const isPersonalEmailDomain = personalEmailPatterns.some((pattern) =>
-      pattern.test(emailLower)
+      pattern.test(emailLower),
     );
 
     // If it matches personal patterns, it's ACCEPTED
@@ -182,7 +185,8 @@ const OptIn = () => {
       !country.trim() ||
       !industry.trim() ||
       !acknowledge ||
-      !form.termsAgree
+      !form.termsAgree ||
+      !form.healthDisclaimerAgree
     ) {
       setSubmitError('Please fill in all fields.');
       return;
@@ -191,7 +195,7 @@ const OptIn = () => {
     // Validate phoneCountryCode format: must start with + and only contain numbers after
     if (!/^\+[0-9]+$/.test(phoneCountryCode.trim())) {
       setSubmitError(
-        'Phone country code must start with + and contain only numbers after it.'
+        'Phone country code must start with + and contain only numbers after it.',
       );
       return;
     }
@@ -205,7 +209,7 @@ const OptIn = () => {
     // Validate email: must be personal email (not business)
     if (!isPersonalEmail(email.trim())) {
       setSubmitError(
-        'Please use a personal email address (like Gmail, Yahoo, Outlook, etc.). Business emails are not accepted.'
+        'Please use a personal email address (like Gmail, Yahoo, Outlook, etc.). Business emails are not accepted.',
       );
       return;
     }
@@ -236,7 +240,7 @@ const OptIn = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitError(
-        'Network error. Please check your connection and try again.'
+        'Network error. Please check your connection and try again.',
       );
     } finally {
       setIsSubmitting(false);
@@ -274,27 +278,27 @@ const OptIn = () => {
     switch (platform) {
       case 'twitter':
         shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          text
+          text,
         )}&url=${encodeURIComponent(currentUrl)}`;
         break;
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          currentUrl
+          currentUrl,
         )}`;
         break;
       case 'linkedin':
         shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-          currentUrl
+          currentUrl,
         )}`;
         break;
       case 'whatsapp':
         shareUrl = `https://wa.me/?text=${encodeURIComponent(
-          text + ' ' + currentUrl
+          text + ' ' + currentUrl,
         )}`;
         break;
       case 'telegram':
         shareUrl = `https://t.me/share/url?url=${encodeURIComponent(
-          currentUrl
+          currentUrl,
         )}&text=${encodeURIComponent(text)}`;
         break;
       default:
@@ -646,8 +650,9 @@ const OptIn = () => {
                       htmlFor="acknowledge"
                       className="text-sm text-gray-700 dark:text-gray-300"
                     >
-                      I acknowledge that my information will be used to notify
-                      me about Othentica and for early access purposes.
+                      {isArabic
+                        ? 'أؤكد أن المعلومات التي أقدمها صحيحة وأوافق على تلقي التحديثات والعروض عبر البريد الإلكتروني'
+                        : 'I confirm my information is accurate and agree to receive updates and offers by email.'}
                     </label>
                   </div>
 
